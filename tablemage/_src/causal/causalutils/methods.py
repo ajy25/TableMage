@@ -149,6 +149,10 @@ def compute_bootstrapped_ipw_estimator(
         A_series=A_series,
     )
 
+    X_df_temp = X_df.reset_index(drop=True)
+    Y_series_temp = Y_series.reset_index(drop=True)
+    A_series_temp = A_series.reset_index(drop=True)
+
     def bootstrap_sample(idx, seed):
         idx = idx + 1
         if idx % 20 == 0:
@@ -156,10 +160,10 @@ def compute_bootstrapped_ipw_estimator(
                 f"IPW estimator bootstrap sample {idx}/{n_bootstraps}", type="UPDATE"
             )
         np.random.seed(seed)
-        idx = np.random.choice(X_df.index, size=len(X_df), replace=True)
-        X_indexed = X_df.iloc[idx].reset_index(drop=True)
-        Y_indexed = Y_series.iloc[idx].reset_index(drop=True)
-        A_indexed = A_series.iloc[idx].reset_index(drop=True)
+        idx = np.random.choice(X_df_temp.index, size=len(X_df_temp), replace=True)
+        X_indexed = X_df_temp.loc[idx].reset_index(drop=True)
+        Y_indexed = Y_series_temp.loc[idx].reset_index(drop=True)
+        A_indexed = A_series_temp.loc[idx].reset_index(drop=True)
         return _single_ipw_estimator(
             estimand=estimand,
             propensity_score_estimator=propensity_score_estimator,

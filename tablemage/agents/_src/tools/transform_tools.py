@@ -100,6 +100,9 @@ def drop_highly_missing_vars_function(
         "The dataset has been transformed: "
         + "columns with high missing values have been dropped: "
         + ", ".join(dropped_cols)
+        + ". "
+        + "All variables in current dataset state: "
+        + ", ".join(cols_after_drop)
         + "."
     )
 
@@ -377,6 +380,49 @@ def build_engineer_categorical_feature_tool(context: ToolingContext) -> Function
     )
 
 
+class _ForceBinaryInput(BaseModel):
+    var: str = Field(description="The variable to force to binary (0 or 1).")
+    pos_label: str = Field(
+        description="The positive label to use for the binary variable. "
+        "If empty string, the positive label will be the most frequent value."
+    )
+
+
+@tool_try_except_thought_decorator
+def force_binary_function(var: str, pos_label: str, context: ToolingContext) -> str:
+    context.add_thought("I am going to force the variable " + var + " to binary.")
+    context.add_code(
+        f"analyzer.force_binary(var='{var}', pos_label='{pos_label}', ignore_multiclass=True, rename=True)"
+    )
+    if pos_label == "":
+        pos_label = (
+            context.data_container.analyzer.datahandler()
+            .df_train()[var]
+            .value_counts()
+            .idxmax()
+        )
+    context.data_container.analyzer.force_binary(
+        var=var, pos_label=pos_label, ignore_multiclass=True, rename=True
+    )
+    context.data_container.update_df()
+    new_var_name = var + "::" + pos_label
+
+    return (
+        "The dataset has been transformed: "
+        + f"Variable {var} forced to binary with positive label {pos_label}. "
+        + f"The new binary variable is named {new_var_name}."
+    )
+
+
+def build_force_binary_tool(context: ToolingContext) -> FunctionTool:
+    return FunctionTool.from_defaults(
+        fn=partial(force_binary_function, context=context),
+        name="force_binary_tool",
+        description="Forces a variable to binary numeric (0 or 1).",
+        fn_schema=_ForceBinaryInput,
+    )
+
+
 class _OnehotEncodeInput(BaseModel):
     vars: str = Field(
         description="A comma delimited string of variables to one-hot encode. "
@@ -394,20 +440,19 @@ def onehot_encode_function(vars: str, dropfirst: bool, context: ToolingContext) 
     context.add_thought(
         "I am going to one-hot encode the following variables: " + vars + "."
     )
-    context.add_code(
-        f"analyzer.onehot(include_vars={vars}, dropfirst={dropfirst})"
-    )
+    context.add_code(f"analyzer.onehot(include_vars={vars}, dropfirst={dropfirst})")
 
     vars_list = parse_str_list_from_str(vars)
-    context.data_container.analyzer.onehot(
-        include_vars=vars_list, 
-        dropfirst=dropfirst
-    )
+    context.data_container.analyzer.onehot(include_vars=vars_list, dropfirst=dropfirst)
     context.data_container.update_df()
-    return "The dataset has been transformed: " + \
-        f"Variables {vars_list} one-hot encoded. " + \
-        f"The original variables are retained. " + \
-        f"Drop first level/category: {dropfirst}."
+    return (
+        "The dataset has been transformed: "
+        + f"Variables {vars_list} one-hot encoded. "
+        + f"The original variables are retained. "
+        + f"Drop first level/category (True or False)? {dropfirst}. "
+        + f"All variables in current dataset state: "
+        + f"{context.data_container.analyzer.vars()}."
+    )
 
 
 def build_onehot_encode_tool(context: ToolingContext) -> FunctionTool:
@@ -437,9 +482,20 @@ def drop_na_function(vars: str, context: ToolingContext) -> str:
     context.add_code(f"analyzer.dropna(include_vars={vars})")
 
     vars_list = parse_str_list_from_str(vars)
+    train_shape_before = context.data_container.analyzer.datahandler().df_train().shape
+    test_shape_before = context.data_container.analyzer.datahandler().df_test().shape
     context.data_container.analyzer.dropna(include_vars=vars_list)
     context.data_container.update_df()
-    return "The dataset has been transformed: " + "Rows with missing values dropped."
+    train_shape_after = context.data_container.analyzer.datahandler().df_train().shape
+    test_shape_after = context.data_container.analyzer.datahandler().df_test().shape
+    rows_dropped_train = train_shape_before[0] - train_shape_after[0]
+    rows_dropped_test = test_shape_before[0] - test_shape_after[0]
+    return (
+        "The dataset has been transformed: "
+        + f"{rows_dropped_train + rows_dropped_test} rows with missing values dropped. "
+        + f"Train shape before: {train_shape_before}, after: {train_shape_after}. "
+        + f"Test shape before: {test_shape_before}, after: {test_shape_after}."
+    )
 
 
 def build_drop_na_tool(context: ToolingContext) -> FunctionTool:
@@ -468,15 +524,17 @@ def scale_function(vars: str, method: str, context: ToolingContext) -> str:
     vars_list = parse_str_list_from_str(vars)
     context.data_container.analyzer.scale(include_vars=vars_list, strategy=method)
     context.data_container.update_df()
-    return "The dataset has been transformed: " + \
-        f"Variables {vars_list} scaled using the {method} method."
+    return (
+        "The dataset has been transformed: "
+        + f"Variables {vars_list} scaled using the {method} method."
+    )
 
 
 def build_scale_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(scale_function, context=context),
         name="scale_tool",
-        description="Scales numeric variable values in the dataset based on a specified strategy. " +\
-            "Standardization (scale to mean = 0, std = 1) and min-max scaling are supported.",
+        description="Scales numeric variable values in the dataset based on a specified strategy. "
+        + "Standardization (scale to mean = 0, std = 1) and min-max scaling are supported.",
         fn_schema=_ScaleInput,
     )

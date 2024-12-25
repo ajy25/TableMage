@@ -79,6 +79,38 @@ class CausalReport:
             # Calculate p-value from standard error
             self._p_value = 2 * (1 - norm.cdf(abs(self._estimate) / self._estimate_se))
 
+    def effect(self):
+        """Returns the estimate of the causal effect."""
+        return self._estimate
+
+    def se(self):
+        """Returns the standard error of the estimator."""
+        return self._estimate_se
+
+    def n_units(self):
+        """Returns the number of units in the data."""
+        return self._n_units
+
+    def p_val(self):
+        """Returns the p-value of the estimator."""
+        return self._p_value
+
+    def _to_dict(self):
+        """Converts the CausalReport object to a dictionary."""
+        return {
+            "estimand": self._estimand,
+            "estimate": self._estimate,
+            "se": self._estimate_se,
+            "p_value": self._p_value,
+            "n_units": self._n_units,
+            "n_units_treated": self._n_units_treated,
+            "outcome_var": self._outcome_var,
+            "treatment_var": self._treatment_var,
+            "confounders": self._confounders,
+            "method": self._method,
+            "method_description": self._method_description,
+        }
+
     def __str__(self):
         max_width = print_options._max_line_width
         n_dec = print_options._n_decimals

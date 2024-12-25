@@ -46,6 +46,11 @@ def parse_model_list_from_str(
             elif model_str == "Lasso":
                 output.append(LinearR("l1", name=model_str, n_jobs=n_jobs))
                 output_code.append(f"LinearR('l1', name='Lasso', n_jobs={n_jobs})")
+            elif model_str == "ElasticNet":
+                output.append(LinearR("elasticnet", name=model_str, n_jobs=n_jobs))
+                output_code.append(
+                    f"LinearR('elasticnet', name='ElasticNet', n_jobs={n_jobs})"
+                )
             elif model_str == "RF":
                 output.append(TreesR("random_forest", name=model_str, n_jobs=n_jobs))
                 output_code.append(
@@ -75,6 +80,11 @@ def parse_model_list_from_str(
             elif model_str == "Lasso":
                 output.append(LinearC("l1", name=model_str, n_jobs=n_jobs))
                 output_code.append(f"LinearC('l1', name='Lasso', n_jobs={n_jobs})")
+            elif model_str == "ElasticNet":
+                output.append(LinearC("elasticnet", name=model_str, n_jobs=n_jobs))
+                output_code.append(
+                    f"LinearC('elasticnet', name='ElasticNet', n_jobs={n_jobs})"
+                )
             elif model_str == "RF":
                 output.append(TreesC("random_forest", name=model_str, n_jobs=n_jobs))
                 output_code.append(
@@ -106,25 +116,23 @@ def parse_predictor_list_from_str(predictors_str: str) -> list[str]:
 
 class _MLRegressionInput(BaseModel):
     models: str = Field(
-        description="""A comma delimited string of machine learning models to evaluate.
-        The available models are (in 'Model Name': Description format)...
-
-        1. 'OLS': Ordinary least squares regression
-        2. 'Ridge': Linear regression with L2 penalty
-        3. 'Lasso': Linear regression with L1 penalty
-        4. 'RF': Random forest regressor
-        5. 'XGBoost': XGBoost regressor
-        6. 'SVM': Support vector machine regressor with radial basis function kernel
-        7. 'MLP': Multilayer perceptron regressor
-
-        An example input (without the quotes) is: 'OLS, Lasso, XGBoost'.
+        description="""\
+A comma delimited string of machine learning models to evaluate.
+The available models are (in 'Model Name': Description format)...
+1. 'OLS': Ordinary least squares regression
+2. 'Ridge': Linear regression with L2 penalty
+3. 'Lasso': Linear regression with L1 penalty
+4. 'ElasticNet': Linear regression with L1 and L2 penalty
+5. 'RF': Random forest regressor
+6. 'XGBoost': XGBoost regressor
+7. 'SVM': Support vector machine regressor with radial basis function kernel
+8. 'MLP': Multilayer perceptron regressor
+An example input (without the quotes) is: 'OLS, Lasso, RF'.
         """
     )
-    target: str = Field(
-        description="The target variable, i.e. the variable to predict."
-    )
+    target: str = Field(description="The target variable.")
     predictors: str = Field(
-        description="A comma delimited string of variables used by the models to predict the target. "
+        description="A comma delimited string of features/predictors. "
         "An example input (without the quotes) is: 'var1, var2, var3'."
     )
 
@@ -181,25 +189,23 @@ def build_ml_regression_tool(context: ToolingContext) -> FunctionTool:
 
 class _MLClassificationInput(BaseModel):
     models: str = Field(
-        description="""A comma delimited string of machine learning models to evaluate.
-        The available models are (in 'Model Name': Description format)...
-
-        1. 'Logistic': Logistic regression
-        2. 'Ridge': Logistic regression with L2 penalty
-        3. 'Lasso': Logistic regression with L1 penalty
-        4. 'RF': Random forest classifier
-        5. 'XGBoost': XGBoost classifier
-        6. 'SVM': Support vector machine classifier with radial basis function kernel
-        7. 'MLP': Multilayer perceptron classifier
-
-        An example input (without the quotes) is: 'Logistic, RF, XGBoost'.
+        description="""\
+A comma delimited string of machine learning models to evaluate.
+The available models are (in 'Model Name': Description format)...
+1. 'Logistic': Logistic regression
+2. 'Ridge': Logistic regression with L2 penalty
+3. 'Lasso': Logistic regression with L1 penalty
+4. 'ElasticNet': Logistic regression with L1 and L2 penalty
+5. 'RF': Random forest classifier
+6. 'XGBoost': XGBoost classifier
+7. 'SVM': Support vector machine classifier with radial basis function kernel
+8. 'MLP': Multilayer perceptron classifier
+An example input (without the quotes) is: 'Logistic, RF, MLP'.
         """
     )
-    target: str = Field(
-        description="The target variable, i.e. the variable to predict."
-    )
+    target: str = Field(description="The target variable.")
     predictors: str = Field(
-        description="A comma delimited string of variables used by the models to predict the target. "
+        description="A comma delimited string of features/predictors. "
         "An example input (without the quotes) is: 'var1, var2, var3'."
     )
 
@@ -259,22 +265,20 @@ def build_ml_classification_tool(context: ToolingContext) -> FunctionTool:
 
 class _FeatureSelectionInput(BaseModel):
     feature_selector: str = Field(
-        description="""The feature selection method to use. The available methods are...
+        description="""\
+The feature selection method to use. The available methods are:
 
-        1. 'Boruta': Boruta method (automatically selects the number of features)
-        2. 'Select{N}Best': Select N best features based on the F-score, where you replace {N} with the number of features you want to select.
+1. 'Boruta': Boruta method (automatically selects the number of features)
+2. 'Select{N}Best': Select N best features based on the F-score, where you replace {N} with the number of features you want to select.
 
-        Two example inputs (without the quotes) are: 'Boruta' and 'Select5Best'.
+Two example inputs (without the quotes) are: 'Boruta' and 'Select5Best'.
         """
     )
-    target: str = Field(
-        description="The target variable, i.e. the variable to predict."
-    )
+    target: str = Field(description="The target variable.")
     predictors: str = Field(
-        description="""A comma delimited string of variables used by the models 
-        to predict the target.
-
-        An example input (without the quotes) is: 'var1, var2, var3'.
+        description="""\
+A comma delimited string of variables used by the models to predict the target.
+An example input (without the quotes) is: 'var1, var2, var3'.
         """
     )
 
@@ -348,11 +352,13 @@ def build_feature_selection_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(_feature_selection_function, context=context),
         name="feature_selection_tool",
-        description="""Performs feature selection with a specified method. 
-        Selects the best features/predictors/variables from a list of predictor variables to predict the target variable. 
-        Returns a string describing the selected features.
-        Categorical variables are one-hot encoded before feature selection.
-        If a category is selected, the output would be '<variable_name>::<category>'.
+        description="""\
+Performs feature selection with a specified method. 
+Automatically detecs if the target variable is categorical or continuous.
+Selects the best features/predictors/variables from a list of predictor variables to predict the target variable. 
+Returns a string describing the selected features.
+Categorical variables are one-hot encoded before feature selection.
+If a category is selected, the output would be '<variable_name>::<category>'.
         """,
         fn_schema=_FeatureSelectionInput,
     )
@@ -360,17 +366,19 @@ def build_feature_selection_tool(context: ToolingContext) -> FunctionTool:
 
 class _ClusteringInput(BaseModel):
     features: str = Field(
-        description="""A comma delimited string of variables to use for clustering.
-        An example input (without the quotes) is: 'var1, var2, var3'.
+        description="""\
+A comma delimited string of variables/features to use for clustering.
+An example input (without the quotes) is: 'var1, var2, var3'.
         """
     )
     model: str = Field(
-        description="""The available models are (in 'Model Name': Description format)...
+        description="""\
+The available models are (in 'Model Name': Description format)...
 
-        1. 'KMeans': KMeans clustering
-        2. 'GMM': Gaussian mixture model clustering
+1. 'KMeans': KMeans clustering
+2. 'GMM': Gaussian mixture model clustering
 
-        An example input (without the quotes) is: 'KMeans'.
+An example input (without the quotes) is: 'KMeans'.
         """
     )
     n_clusters: int = Field(
@@ -382,12 +390,13 @@ class _ClusteringInput(BaseModel):
         "This is only used if 'n_clusters' is left blank (empty str). Leave blank if 'n_clusters' is specified."
     )
     vis_type: str = Field(
-        description="""The type of visualization to use. The available types are...
+        description="""\
+The type of visualization to use. The available types are...
 
-        1. 'PCA': Principal component analysis
-        2. 'TSNE': t-distributed stochastic neighbor embedding
+1. 'PCA': Principal component analysis
+2. 'TSNE': t-distributed stochastic neighbor embedding
 
-        An example input (without the quotes) is: 'PCA'.
+An example input (without the quotes) is: 'PCA'.
         """
     )
 
@@ -460,8 +469,8 @@ def build_clustering_tool(context: ToolingContext) -> FunctionTool:
         fn=partial(_clustering_function, context=context),
         name="clustering_tool",
         description="""Performs clustering with a specified method. 
-        Clusters the data using a list of variables. 
-        Returns a figure showing the clusters.
+Clusters the data using a list of variables. 
+Returns a figure showing the clusters.
         """,
         fn_schema=_ClusteringInput,
     )

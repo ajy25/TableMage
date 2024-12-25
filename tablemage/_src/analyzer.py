@@ -1049,10 +1049,10 @@ class Analyzer:
             Returns self for method chaining.
         """
         self._datahandler.onehot(
-            include_vars=include_vars, 
-            exclude_vars=exclude_vars, 
+            include_vars=include_vars,
+            exclude_vars=exclude_vars,
             dropfirst=dropfirst,
-            keep_original=keep_original
+            keep_original=keep_original,
         )
         return self
 
@@ -1126,8 +1126,8 @@ class Analyzer:
         self,
         var: str,
         pos_label: str | None = None,
-        ignore_multiclass: bool = False,
-        rename: bool = False,
+        ignore_multiclass: bool = True,
+        rename: bool = True,
     ) -> "Analyzer":
         """Forces variables to be binary (0 and 1 valued numeric variables).
         Does nothing if the data contains more than two classes unless
@@ -1140,15 +1140,15 @@ class Analyzer:
             Name of variable to force to binary.
 
         pos_labels : str
-            Default: None. The positive labels.
-            If None, the first class for each var is the positive label.
+            Default: None. The positive label.
+            If None, the most common class is labeled as the positive class.
 
         ignore_multiclass : bool
             Default: False. If True, all classes except pos_label are labeled with
             zero. Otherwise raises ValueError.
 
         rename : bool
-            Default: False. If True, the variables are renamed to
+            Default: True. If True, the variable is renamed to
             {var}::{pos_label}.
 
         Returns
@@ -1156,6 +1156,9 @@ class Analyzer:
         Analyzer
             Returns self for method chaining.
         """
+        if pos_label is None:
+            # set the positive label to the most common class
+            pos_label = self._datahandler.df_all()[var].value_counts().index[0]
         self._datahandler.force_binary(
             vars=[var],
             pos_labels=[pos_label],

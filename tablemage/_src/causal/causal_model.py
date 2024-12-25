@@ -91,6 +91,17 @@ class CausalModel:
         else:
             raise ValueError("Invalid dataset.")
 
+        if len(self._X_df) == 0:
+            raise ValueError("No data left after dropping missing values.")
+        if treatment not in self._X_df.columns:
+            raise ValueError("Treatment variable not found in data.")
+        if self._X_df[treatment].nunique() != 2:
+            raise ValueError("Treatment variable must be binary.")
+        if not self._X_df[treatment].isin([0, 1]).all():
+            raise ValueError(
+                "Treatment variable must be binary numeric (0 or 1 valued)."
+            )
+
     def estimate_ate(
         self,
         method: Literal[

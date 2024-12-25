@@ -436,9 +436,14 @@ class BaseR(BasePredictModel):
         dict
             A dictionary representation of the model.
         """
-        return {
-            "name": self._name,
-            "predictors": self._predictors,
-            self._feature_importance_type_str: self.feature_importance().to_dict(),
-            "fitting_details": self._hyperparam_searcher._to_dict(),
-        }
+        output = {"name": self._name, "predictors": self._predictors}
+
+        if self.feature_importance() is not None:
+            output[self._feature_importance_type_str] = (
+                self.feature_importance().to_dict()
+            )
+
+        if self._hyperparam_searcher is not None:
+            output["fitting_details"] = self._hyperparam_searcher._to_dict()
+
+        return output

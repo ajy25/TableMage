@@ -139,7 +139,9 @@ def python_env_code_run(
         "Input code: \n" + code
     )
     context.add_thought("I am going to write Python code to solve this problem.")
-    context.add_code("df_train, df_test, df_all = analyzer.df_train(), analyzer.df_test(), analyzer.df_all()")
+    context.add_code(
+        "df_train, df_test, df_all = analyzer.df_train(), analyzer.df_test(), analyzer.df_all()"
+    )
     context.add_code(code)
     df_train = context.data_container.analyzer.df_train()
     df_test = context.data_container.analyzer.df_test()
@@ -183,17 +185,21 @@ def python_env_code_run(
 
 
 python_env_code_run_descr = """\
+NOTE:
+Use this tool only if your other tools cannot solve your problem.
+
+DESCRIPTION:
 Executes a Python code snippet in a separate subprocess \
 with train DataFrame named 'df_train' preloaded, and \
 test DataFrame named 'df_test' preloaded. \
 'df_all', the concatenation of 'df_train' and 'df_test', is also preloaded. \
 Work with 'df_all' unless you need to work with 'df_train' or 'df_test'. \
 The result must be saved in the 'result' variable. \
-The result must be a number, string, list, dictionary, or DataFrame.
-A string containing the stdout, stderr, and str(result) is returned.
+The result must be a number, string, list, dictionary, or DataFrame. \
+A string containing the stdout, stderr, and str(result) is returned to you. \
 Never make plots with this tool.
 
-Example input:
+EXAMPLE INPUT:
 df_all = pd.concat([df_train, df_test], axis=0)
 result = df_all.describe()
 """

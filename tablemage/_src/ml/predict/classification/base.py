@@ -621,12 +621,20 @@ class BaseC(BasePredictModel):
         dict
             A dictionary representation of the model.
         """
-        return {
+        output = {
             "name": self._name,
             "predictors": self._predictors,
-            self._feature_importance_type_str: self.feature_importance().to_dict(),
-            "fitting_details": self._hyperparam_searcher._to_dict(),
         }
+
+        if self.feature_importance() is not None:
+            output[self._feature_importance_type_str] = (
+                self.feature_importance().to_dict()
+            )
+
+        if self._hyperparam_searcher is not None:
+            output["fitting_details"] = self._hyperparam_searcher._to_dict()
+
+        return output
 
     def _validate_inputs(self):
         """Ensures that the inputs are valid.

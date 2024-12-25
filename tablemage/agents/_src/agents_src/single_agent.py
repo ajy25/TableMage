@@ -31,9 +31,7 @@ from ..tools.eda_tools import (
     build_correlation_matrix_tool,
 )
 from ..tools.linear_regression_tools import build_ols_tool, build_logit_tool
-from ..tools.data_tools import (
-    build_dataset_summary_tool
-)
+from ..tools.data_tools import build_dataset_summary_tool
 from ..tools.transform_tools import (
     build_drop_highly_missing_vars_tool,
     build_drop_na_tool,
@@ -42,9 +40,13 @@ from ..tools.transform_tools import (
     build_impute_tool,
     build_scale_tool,
     build_onehot_encode_tool,
+    build_force_binary_tool,
     build_revert_to_original_tool,
+    build_load_state_tool,
+    build_save_state_tool,
 )
 from ..tools.experimental_tools import build_python_env_code_run_tool
+from ..tools.causal_tools import build_estimate_causal_effect_tool
 from ..tools.tooling_context import ToolingContext
 
 from .prompt.single_agent_system_prompt import SINGLE_SYSTEM_PROMPT
@@ -133,6 +135,7 @@ def build_agent(
     )
 
     tools = [
+        build_estimate_causal_effect_tool(context),
         build_feature_selection_tool(context),
         build_ml_regression_tool(context),
         build_ml_classification_tool(context),
@@ -152,12 +155,13 @@ def build_agent(
         build_impute_tool(context),
         build_scale_tool(context),
         build_onehot_encode_tool(context),
-        build_revert_to_original_tool(context),
+        build_force_binary_tool(context),
         dataset_summary_tool,
     ]
 
     tools_to_persist = [
         build_python_env_code_run_tool(context),
+        build_revert_to_original_tool(context),
     ]
 
     if tool_rag:

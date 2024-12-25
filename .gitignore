@@ -6,12 +6,12 @@ __pycache__/
 demo/regression/ignored*
 
 
-tablemage/mage/_src/io/_img_store/*
-tablemage/mage/_src/io/_table_store/*
-tablemage/mage/_src/io/_vector_store/*
-tablemage/mage/_src/io/_vector_memory/*
-tablemage/mage/_src/io/_log/*
-tablemage/mage/_src/_debug/_debug_log.log
+tablemage/agents/_src/io/_img_store/*
+tablemage/agents/_src/io/_table_store/*
+tablemage/agents/_src/io/_vector_store/*
+tablemage/agents/_src/io/_vector_memory/*
+tablemage/agents/_src/io/_log/*
+tablemage/agents/_src/_debug/_debug_log.log
 
 .env
 
