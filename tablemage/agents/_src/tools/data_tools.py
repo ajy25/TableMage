@@ -61,7 +61,6 @@ def _dataset_summary_function(context: ToolingContext) -> str:
     context.add_code("analyzer.shape('test')")
     context.add_code("analyzer.numeric_vars()")
     context.add_code("analyzer.categorical_vars()")
-    context._data_container.analyzer
     output_dict = {}
     output_dict["train_shape"] = {
         "n_rows": context._data_container.analyzer.datahandler().df_train().shape[0],

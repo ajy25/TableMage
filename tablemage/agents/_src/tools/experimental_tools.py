@@ -54,6 +54,7 @@ import sys
 # Preload the DataFrames
 df_train = pd.read_pickle(sys.argv[1])
 df_test = pd.read_pickle(sys.argv[2])
+df_all = pd.concat([df_train, df_test], axis=0)
 
 # Placeholder for the result
 result = None
@@ -138,7 +139,7 @@ def python_env_code_run(
         "Input code: \n" + code
     )
     context.add_thought("I am going to write Python code to solve this problem.")
-    context.add_code("df_train, df_test = analyzer.df_train(), analyzer.df_test()")
+    context.add_code("df_train, df_test, df_all = analyzer.df_train(), analyzer.df_test(), analyzer.df_all()")
     context.add_code(code)
     df_train = context.data_container.analyzer.df_train()
     df_test = context.data_container.analyzer.df_test()
@@ -182,8 +183,12 @@ def python_env_code_run(
 
 
 python_env_code_run_descr = """\
-Executes a Python code snippet in a separate subprocess with train DataFrame named 'df_train' preloaded, and \
-test DataFrame named 'df_test' preloaded. The result must be saved in the 'result' variable. \
+Executes a Python code snippet in a separate subprocess \
+with train DataFrame named 'df_train' preloaded, and \
+test DataFrame named 'df_test' preloaded. \
+'df_all', the concatenation of 'df_train' and 'df_test', is also preloaded. \
+Work with 'df_all' unless you need to work with 'df_train' or 'df_test'. \
+The result must be saved in the 'result' variable. \
 The result must be a number, string, list, dictionary, or DataFrame.
 A string containing the stdout, stderr, and str(result) is returned.
 Never make plots with this tool.

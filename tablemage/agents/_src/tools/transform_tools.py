@@ -45,14 +45,14 @@ def impute_function(
         categorical_strategy=categorical_strategy,
     )
     context.data_container.update_df()
-    return "Imputation complete."
+    return "The dataset has been transformed: missing values have been imputed."
 
 
 def build_impute_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(impute_function, context=context),
         name="impute_tool",
-        description="""This tool allows you to impute missing values in the dataset using the specified strategies.""",
+        description="Imputes missing values in the dataset with the specified strategies.",
         fn_schema=_ImputeInput,
     )
 
@@ -97,7 +97,8 @@ def drop_highly_missing_vars_function(
     context.data_container.update_df()
 
     return (
-        "Columns with high missing values have been dropped: "
+        "The dataset has been transformed: "
+        + "columns with high missing values have been dropped: "
         + ", ".join(dropped_cols)
         + "."
     )
@@ -107,7 +108,7 @@ def build_drop_highly_missing_vars_tool(context: ToolingContext) -> FunctionTool
     return FunctionTool.from_defaults(
         fn=partial(drop_highly_missing_vars_function, context=context),
         name="drop_highly_missing_vars_tool",
-        description="""This tool allows you to drop columns with a proportion of missing values above a specified threshold.""",
+        description="Drops columns with a proportion of missing values above a specified threshold.",
         fn_schema=_DropHighlyMissingVarsInput,
     )
 
@@ -124,14 +125,15 @@ def save_state_function(state_name: str, context: ToolingContext) -> str:
     context.add_code(f"analyzer.save_data_checkpoint({state_name})")
     context.data_container.analyzer.save_data_checkpoint(state_name)
     context.data_container.update_df()
-    return f"State {state_name} saved."
+    return f"Dataset state {state_name} saved."
 
 
 def build_save_state_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(save_state_function, context=context),
         name="save_state_tool",
-        description="""This tool allows you to save the current state of the dataset.""",
+        description="This tool allows you to save the current state of the dataset. "
+        "The state can be loaded later.",
         fn_schema=_SaveStateInput,
     )
 
@@ -148,14 +150,41 @@ def load_state_function(state_name: str, context: ToolingContext) -> str:
     context.add_code(f"analyzer.load_data_checkpoint({state_name})")
     context.data_container.analyzer.load_data_checkpoint(state_name)
     context.data_container.update_df()
-    return f"State {state_name} loaded."
+    output_dict = {}
+    output_dict["train_shape"] = {
+        "n_rows": context._data_container.analyzer.datahandler().df_train().shape[0],
+        "n_vars": context._data_container.analyzer.datahandler().df_train().shape[1],
+        "n_categorical_vars": len(
+            context._data_container.analyzer.datahandler().categorical_vars()
+        ),
+        "n_numeric_vars": len(
+            context._data_container.analyzer.datahandler().numeric_vars()
+        ),
+    }
+    output_dict["test_shape"] = {
+        "n_rows": context._data_container.analyzer.datahandler().df_test().shape[0],
+        "n_vars": context._data_container.analyzer.datahandler().df_test().shape[1],
+        "n_categorical_vars": len(
+            context._data_container.analyzer.datahandler().categorical_vars()
+        ),
+        "n_numeric_vars": len(
+            context._data_container.analyzer.datahandler().numeric_vars()
+        ),
+    }
+    output_dict["numeric_vars"] = (
+        context._data_container.analyzer.datahandler().numeric_vars()
+    )
+    output_dict["categorical_vars"] = (
+        context._data_container.analyzer.datahandler().categorical_vars()
+    )
+    return f"Dataset state {state_name} loaded. Dataset summary: " + str(output_dict)
 
 
 def build_load_state_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(load_state_function, context=context),
         name="load_state_tool",
-        description="""This tool allows you to load a previously saved state of the dataset.""",
+        description="This tool allows you to load a previously saved dataset state.",
         fn_schema=_LoadStateInput,
     )
 
@@ -170,14 +199,41 @@ def revert_to_original_function(context: ToolingContext) -> str:
     context.add_code("analyzer.load_data_checkpoint()")
     context.data_container.analyzer.load_data_checkpoint()
     context.data_container.update_df()
-    return "Dataset reverted to original state."
+    output_dict = {}
+    output_dict["train_shape"] = {
+        "n_rows": context._data_container.analyzer.datahandler().df_train().shape[0],
+        "n_vars": context._data_container.analyzer.datahandler().df_train().shape[1],
+        "n_categorical_vars": len(
+            context._data_container.analyzer.datahandler().categorical_vars()
+        ),
+        "n_numeric_vars": len(
+            context._data_container.analyzer.datahandler().numeric_vars()
+        ),
+    }
+    output_dict["test_shape"] = {
+        "n_rows": context._data_container.analyzer.datahandler().df_test().shape[0],
+        "n_vars": context._data_container.analyzer.datahandler().df_test().shape[1],
+        "n_categorical_vars": len(
+            context._data_container.analyzer.datahandler().categorical_vars()
+        ),
+        "n_numeric_vars": len(
+            context._data_container.analyzer.datahandler().numeric_vars()
+        ),
+    }
+    output_dict["numeric_vars"] = (
+        context._data_container.analyzer.datahandler().numeric_vars()
+    )
+    output_dict["categorical_vars"] = (
+        context._data_container.analyzer.datahandler().categorical_vars()
+    )
+    return "Dataset reverted to original state. Dataset summary: " + str(output_dict)
 
 
 def build_revert_to_original_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(revert_to_original_function, context=context),
         name="revert_to_original_tool",
-        description="""This tool allows you to revert the dataset to its original state.""",
+        description="This tool allows you to revert the dataset to its original state.",
         fn_schema=_BlankInput,
     )
 
@@ -220,15 +276,15 @@ def _engineer_numeric_feature_function(
         name=feature_name, formula=formula
     )
     context.data_container.update_df()
-    return f"Feature {feature_name} engineered."
+    return "The dataset has been transformed: " + f"Feature {feature_name} engineered."
 
 
 def build_engineer_numeric_feature_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(_engineer_numeric_feature_function, context=context),
         name="engineer_numeric_feature_tool",
-        description="This tool allows you to engineer a new numeric variable "
-        "using a formula of other numeric variables.",
+        description="This tool allows you to define/engineer/make a new numeric variable "
+        "based on a formula of other numeric variables.",
         fn_schema=_EngineerNumericFeatureInput,
     )
 
@@ -292,7 +348,8 @@ def _engineer_categorical_feature_function(
                 thresholds_str += f"{level} < {threshold}, "
 
     context.add_thought(
-        f"I am going to engineer a new categorical feature named {feature_name} using the numeric variable {numeric_var} as follows: "
+        f"I am going to engineer a new categorical variable named {feature_name} "
+        f"using the numeric variable {numeric_var} as follows: "
         f"{thresholds_str}"
     )
     context.add_code(
@@ -307,7 +364,7 @@ def _engineer_categorical_feature_function(
         leq=leq,
     )
     context.data_container.update_df()
-    return f"Feature {feature_name} engineered."
+    return "The dataset has been transformed: " + f"Feature {feature_name} engineered."
 
 
 def build_engineer_categorical_feature_tool(context: ToolingContext) -> FunctionTool:
@@ -337,19 +394,28 @@ def onehot_encode_function(vars: str, dropfirst: bool, context: ToolingContext) 
     context.add_thought(
         "I am going to one-hot encode the following variables: " + vars + "."
     )
-    context.add_code(f"analyzer.onehot_encode(include_vars={vars})")
+    context.add_code(
+        f"analyzer.onehot(include_vars={vars}, dropfirst={dropfirst})"
+    )
 
     vars_list = parse_str_list_from_str(vars)
-    context.data_container.analyzer.onehot(include_vars=vars_list, dropfirst=dropfirst)
+    context.data_container.analyzer.onehot(
+        include_vars=vars_list, 
+        dropfirst=dropfirst
+    )
     context.data_container.update_df()
-    return "One-hot encoding complete."
+    return "The dataset has been transformed: " + \
+        f"Variables {vars_list} one-hot encoded. " + \
+        f"The original variables are retained. " + \
+        f"Drop first level/category: {dropfirst}."
 
 
 def build_onehot_encode_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(onehot_encode_function, context=context),
         name="onehot_encode_tool",
-        description="This tool allows you to one-hot encode variables in the dataset.",
+        description="One-hot encodes variables in the dataset. "
+        "Does not overwrite original variables.",
         fn_schema=_OnehotEncodeInput,
     )
 
@@ -373,7 +439,7 @@ def drop_na_function(vars: str, context: ToolingContext) -> str:
     vars_list = parse_str_list_from_str(vars)
     context.data_container.analyzer.dropna(include_vars=vars_list)
     context.data_container.update_df()
-    return "Rows with missing values dropped."
+    return "The dataset has been transformed: " + "Rows with missing values dropped."
 
 
 def build_drop_na_tool(context: ToolingContext) -> FunctionTool:
@@ -402,13 +468,15 @@ def scale_function(vars: str, method: str, context: ToolingContext) -> str:
     vars_list = parse_str_list_from_str(vars)
     context.data_container.analyzer.scale(include_vars=vars_list, strategy=method)
     context.data_container.update_df()
-    return "Scaling complete."
+    return "The dataset has been transformed: " + \
+        f"Variables {vars_list} scaled using the {method} method."
 
 
 def build_scale_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(scale_function, context=context),
         name="scale_tool",
-        description="""This tool allows you to scale numeric variables in the dataset.""",
+        description="Scales numeric variable values in the dataset based on a specified strategy. " +\
+            "Standardization (scale to mean = 0, std = 1) and min-max scaling are supported.",
         fn_schema=_ScaleInput,
     )

@@ -1,37 +1,35 @@
-2024-12-23 02:17:22 - Mage Log - A new _MageOptions object has been created with LLM build function: <function build_groq at 0x15fe32ca0> and multimodal LLM build function: None
-2024-12-23 02:17:22 - Mage Log - GROQ LLM build function has been set to: functools.partial(<function build_groq at 0x15fe32ca0>, temperature=0.0, model='llama-3.3-70b-versatile')
-2024-12-23 02:17:30 - Analyzer Log - Analyzer initialized for dataset 'Unnamed Dataset'.
-2024-12-23 02:17:30 - Mage Log - Data container initialized with the Analyzer built from the provided DataFrame.
-2024-12-23 02:17:30 - Mage Log - IO initialized.
-2024-12-23 02:17:30 - Mage Log - Initializing the Orchestrator.
-2024-12-23 02:17:30 - Mage Log - Initializing SingleAgent
-2024-12-23 02:17:31 - Mage Log - Adding dictionary to storage.
-2024-12-23 02:17:31 - Mage Log - Added dictionary without description. First 20 characters: {"train_shape": {"n_.
-2024-12-23 02:17:34 - Mage Log - SingleAgent initialized
-2024-12-23 02:18:04 - Mage Log - _feature_selection_function called
-2024-12-23 02:18:04 - Mage Log - _feature_selection_function Feature selector: Boruta
-2024-12-23 02:18:04 - Mage Log - _feature_selection_function Target: Survived
-2024-12-23 02:18:04 - Mage Log - _feature_selection_function Predictors: ['Age', 'Fare', 'Parch', 'Pclass', 'SibSp', 'Cabin', 'Embarked', 'Name', 'Sex', 'Ticket']
-2024-12-23 02:18:04 - Analyzer Log - Fitting 'BorutaFSR'.
-2024-12-23 02:18:04 - Analyzer Log - Train dataset: dropped 569 examples with missing values out of 712 total examples.
-2024-12-23 02:18:08 - Mage Log - Adding dictionary to storage.
-2024-12-23 02:18:08 - Mage Log - Added dictionary without description. First 20 characters: {"target": "Survived.
-2024-12-23 02:18:09 - Mage Log - _logit_function call: predictors: Sex, Age, target: Survived
-2024-12-23 02:18:09 - Analyzer Log - Train dataset: dropped 140 examples with missing values out of 712 total examples.
-2024-12-23 02:18:09 - Analyzer Log - Test dataset: dropped 37 examples with missing values out of 179 total examples.
-2024-12-23 02:18:09 - Mage Log - _logit_function call finished
-2024-12-23 02:18:09 - Mage Log - Adding table to storage.
-2024-12-23 02:18:09 - Mage Log - Added table to /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl: Path to table: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl
+2024-12-23 13:15:47 - Mage Log - A new _MageOptions object has been created with LLM build function: <function build_groq at 0x16c12eca0> and multimodal LLM build function: None
+2024-12-23 13:15:48 - Mage Log - GROQ LLM build function has been set to: functools.partial(<function build_groq at 0x16c12eca0>, temperature=0.0, model='llama-3.3-70b-versatile')
+2024-12-23 13:16:01 - Analyzer Log - Analyzer initialized for dataset 'Unnamed Dataset'.
+2024-12-23 13:16:01 - Mage Log - Data container initialized with the Analyzer built from the provided DataFrame.
+2024-12-23 13:16:01 - Mage Log - IO initialized.
+2024-12-23 13:16:01 - Mage Log - Initializing the Orchestrator.
+2024-12-23 13:16:01 - Mage Log - Initializing SingleAgent
+2024-12-23 13:16:01 - Mage Log - Adding dictionary to storage.
+2024-12-23 13:16:01 - Mage Log - Added dictionary without description. First 20 characters: {"train_shape": {"n_.
+2024-12-23 13:16:05 - Mage Log - SingleAgent initialized
+2024-12-23 13:16:09 - Mage Log - _ml_regression_function called
+2024-12-23 13:16:09 - Mage Log - _ml_regression_function Models to test: OLS, Ridge, Lasso, RF, XGBoost
+2024-12-23 13:16:09 - Mage Log - _ml_regression_function Target: SalePrice
+2024-12-23 13:16:09 - Mage Log - _ml_regression_function Predictors: ['1stFlrSF', '2ndFlrSF', 'BedroomAbvGr', 'BsmtFinSF1', 'BsmtFinSF2', 'FullBath', 'GarageArea', 'GarageCars', 'GrLivArea', 'LotArea', 'OverallQual', 'TotalBsmtSF', 'YearBuilt', 'YearRemodAdd']
+2024-12-23 13:16:09 - Analyzer Log - Fitting model 'OLS'.
+2024-12-23 13:16:09 - Analyzer Log - Fitting 'OLS'. Search method: GridSearchCV (1 fits per fold, 5 total fits). 
+2024-12-23 13:16:09 - Analyzer Log - Successfully evaluated model 'OLS'.
+2024-12-23 13:16:09 - Analyzer Log - Fitting model 'Ridge'.
+2024-12-23 13:16:09 - Analyzer Log - Fitting 'Ridge'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2024-12-23 13:16:10 - Analyzer Log - Successfully evaluated model 'Ridge'.
+2024-12-23 13:16:10 - Analyzer Log - Fitting model 'Lasso'.
+2024-12-23 13:16:10 - Analyzer Log - Fitting 'Lasso'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2024-12-23 13:16:12 - Analyzer Log - Successfully evaluated model 'Lasso'.
+2024-12-23 13:16:12 - Analyzer Log - Fitting model 'RF'.
+2024-12-23 13:16:12 - Analyzer Log - Fitting 'RF'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2024-12-23 13:17:03 - Analyzer Log - Successfully evaluated model 'RF'.
+2024-12-23 13:17:03 - Analyzer Log - Fitting model 'XGBoost'.
+2024-12-23 13:17:03 - Analyzer Log - Fitting 'XGBoost'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2024-12-23 13:18:30 - Analyzer Log - Successfully evaluated model 'XGBoost'.
+2024-12-23 13:18:30 - Mage Log - Adding table to storage.
+2024-12-23 13:18:30 - Mage Log - Added table to /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl: Path to table: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl
 
-{"('train', 'accuracy')": {"Logit Linear Model": 0.7814685314685315}, "('train', 'f1')": {"Logit Linear Model": 0.715261958997722}, "('train', 'precision')": {"Logit Linear Model": 0.7584541062801933}, "('train', 'recall')": {"Logit Linear Model": 0.6767241379310345}, "('train', 'roc_auc')": {"Logit Linear Model": 0.7715327079107507}, "('train', 'n_obs')": {"Logit Linear Model": 572.0}, "('test', 'accuracy')": {"Logit Linear Model": 0.7746478873239436}, "('test', 'f1')": {"Logit Linear Model": 0.7142857142857143}, "('test', 'precision')": {"Logit Linear Model": 0.7407407407407407}, "('test', 'recall')": {"Logit Linear Model": 0.6896551724137931}, "('test', 'roc_auc')": {"Logit Linear Model": 0.7722701149425287}, "('test', 'n_obs')": {"Logit Linear Model": 142.0}}
-2024-12-23 02:18:09 - Mage Log - Adding table to storage.
-2024-12-23 02:18:09 - Mage Log - Added table to /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/1.pkl: Path to table: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/1.pkl
-
-{"const": {"Estimate (Std. Error)": "1.201 (0.287)", "p-value": 0.0}, "Sex::male": {"Estimate (Std. Error)": "-2.491 (0.208)", "p-value": 0.0}, "Age": {"Estimate (Std. Error)": "-0.002 (0.008)", "p-value": 0.79}}
-2024-12-23 02:18:09 - Mage Log - Adding dictionary to storage.
-2024-12-23 02:18:09 - Mage Log - Added dictionary without description. First 20 characters: {"coefficients": {"c.
-2024-12-23 02:18:10 - Mage Log - _logit_function output: {"coefficients": {"const": {"Estimate (Std. Error)": "1.201 (0.287)", "p-value": 0.0}, "Sex::male": {"Estimate (Std. Error)": "-2.491 (0.208)", "p-value": 0.0}, "Age": {"Estimate (Std. Error)": "-0.002 (0.008)", "p-value": 0.79}}, "train_metrics": {"accuracy": {"Logit Linear Model": 0.7814685314685315}, "f1": {"Logit Linear Model": 0.715261958997722}, "precision": {"Logit Linear Model": 0.7584541062801933}, "recall": {"Logit Linear Model": 0.6767241379310345}, "roc_auc": {"Logit Linear Model": 0.7715327079107507}, "n_obs": {"Logit Linear Model": 572.0}}, "test_metrics": {"accuracy": {"Logit Linear Model": 0.7746478873239436}, "f1": {"Logit Linear Model": 0.7142857142857143}, "precision": {"Logit Linear Model": 0.7407407407407407}, "recall": {"Logit Linear Model": 0.6896551724137931}, "roc_auc": {"Logit Linear Model": 0.7722701149425287}, "n_obs": {"Logit Linear Model": 142.0}}}
-Path to image: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_img_store/0.png
-
-Description: Diagnostic plots.
-A detailed description is unavailable.
+{"('train', 'rmse')": {"OLS": 36159.942, "Ridge": 36161.815, "Lasso": 36159.972, "RF": 11736.546, "XGBoost": 5176.702}, "('train', 'mae')": {"OLS": 22039.54, "Ridge": 21978.593, "Lasso": 22036.227, "RF": 7531.732, "XGBoost": 3895.29}, "('train', 'mape')": {"OLS": 0.132, "Ridge": 0.131, "Lasso": 0.132, "RF": 0.045, "XGBoost": 0.025}, "('train', 'pearsonr')": {"OLS": 0.884, "Ridge": 0.884, "Lasso": 0.884, "RF": 0.99, "XGBoost": 0.998}, "('train', 'spearmanr')": {"OLS": 0.93, "Ridge": 0.93, "Lasso": 0.93, "RF": 0.988, "XGBoost": 0.996}, "('train', 'r2')": {"OLS": 0.781, "Ridge": 0.781, "Lasso": 0.781, "RF": 0.977, "XGBoost": 0.996}, "('train', 'adjr2')": {"OLS": 0.778, "Ridge": 0.778, "Lasso": 0.778, "RF": 0.977, "XGBoost": 0.995}, "('train', 'n_obs')": {"OLS": 1168.0, "Ridge": 1168.0, "Lasso": 1168.0, "RF": 1168.0, "XGBoost": 1168.0}, "('test', 'rmse')": {"OLS": 38185.704, "Ridge": 38163.35, "Lasso": 38185.657, "RF": 28598.901, "XGBoost": 27982.068}, "('test', 'mae')": {"OLS": 23781.393, "Ridge": 23723.666, "Lasso": 23777.397, "RF": 17790.436, "XGBoost": 17527.954}, "('test', 'mape')": {"OLS": 0.143, "Ridge": 0.142, "Lasso": 0.143, "RF": 0.112, "XGBoost": 0.107}, "('test', 'pearsonr')": {"OLS": 0.905, "Ridge": 0.906, "Lasso": 0.905, "RF": 0.952, "XGBoost": 0.949}, "('test', 'spearmanr')": {"OLS": 0.935, "Ridge": 0.936, "Lasso": 0.935, "RF": 0.94, "XGBoost": 0.945}, "('test', 'r2')": {"OLS": 0.81, "Ridge": 0.81, "Lasso": 0.81, "RF": 0.893, "XGBoost": 0.898}, "('test', 'adjr2')": {"OLS": 0.8, "Ridge": 0.801, "Lasso": 0.8, "RF": 0.888, "XGBoost": 0.893}, "('test', 'n_obs')": {"OLS": 292.0, "Ridge": 292.0, "Lasso": 292.0, "RF": 292.0, "XGBoost": 292.0}}
+2024-12-23 13:18:30 - Mage Log - Adding dictionary to storage.
+2024-12-23 13:18:30 - Mage Log - Added dictionary without description. First 20 characters: {"train_metrics": {".

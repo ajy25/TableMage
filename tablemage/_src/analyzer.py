@@ -1023,6 +1023,7 @@ class Analyzer:
         include_vars: list[str] | None = None,
         exclude_vars: list[str] | None = None,
         dropfirst: bool = True,
+        keep_original: bool = False,
     ) -> "Analyzer":
         """One-hot encodes the specified variables (columns).
 
@@ -1039,13 +1040,19 @@ class Analyzer:
         dropfirst : bool
             Default: True. If True, drops the first one-hot encoded column.
 
+        keep_original : bool
+            Default: False. If True, keeps the original variables in the DataFrame.
+
         Returns
         -------
         Analyzer
             Returns self for method chaining.
         """
         self._datahandler.onehot(
-            include_vars=include_vars, exclude_vars=exclude_vars, dropfirst=dropfirst
+            include_vars=include_vars, 
+            exclude_vars=exclude_vars, 
+            dropfirst=dropfirst,
+            keep_original=keep_original
         )
         return self
 
