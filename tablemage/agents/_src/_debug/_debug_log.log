@@ -1,40 +1,114 @@
-2024-12-25 11:01:47 - Mage Log - A new _MageOptions object has been created with LLM build function: <function build_groq at 0x178d331a0> and multimodal LLM build function: None
-2024-12-25 11:01:47 - Mage Log - GROQ LLM build function has been set to: functools.partial(<function build_groq at 0x178d331a0>, temperature=0.0, model='llama-3.1-8b-instant')
-2024-12-25 11:02:03 - Analyzer Log - Analyzer initialized for dataset 'Unnamed Dataset'.
-2024-12-25 11:02:03 - Mage Log - Data container initialized with the Analyzer built from the provided DataFrame.
-2024-12-25 11:02:03 - Mage Log - IO initialized.
-2024-12-25 11:02:03 - Mage Log - Initializing the Orchestrator.
-2024-12-25 11:02:03 - Mage Log - Initializing SingleAgent
-2024-12-25 11:02:03 - Mage Log - Adding dictionary to storage.
-2024-12-25 11:02:03 - Mage Log - Added dictionary without description. First 20 characters: {"train_shape": {"n_.
-2024-12-25 11:02:07 - Mage Log - SingleAgent initialized
-2024-12-25 11:02:19 - Mage Log - Adding dictionary to storage.
-2024-12-25 11:02:19 - Mage Log - Added dictionary without description. First 20 characters: {"train_shape": {"n_.
-2024-12-25 11:03:32 - Mage Log - _ml_regression_function called
-2024-12-25 11:03:32 - Mage Log - _ml_regression_function Models to test: OLS, Ridge, Lasso, ElasticNet, RF, XGBoost
-2024-12-25 11:03:32 - Mage Log - _ml_regression_function Target: SalePrice
-2024-12-25 11:03:32 - Mage Log - _ml_regression_function Predictors: ['1stFlrSF', '2ndFlrSF', 'YearBuilt', 'HouseStyle']
-2024-12-25 11:03:32 - Analyzer Log - Fitting model 'OLS'.
-2024-12-25 11:03:32 - Analyzer Log - Fitting 'OLS'. Search method: GridSearchCV (1 fits per fold, 5 total fits). 
-2024-12-25 11:03:32 - Analyzer Log - Successfully evaluated model 'OLS'.
-2024-12-25 11:03:32 - Analyzer Log - Fitting model 'Ridge'.
-2024-12-25 11:03:32 - Analyzer Log - Fitting 'Ridge'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2024-12-25 11:03:33 - Analyzer Log - Successfully evaluated model 'Ridge'.
-2024-12-25 11:03:33 - Analyzer Log - Fitting model 'Lasso'.
-2024-12-25 11:03:33 - Analyzer Log - Fitting 'Lasso'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2024-12-25 11:03:34 - Analyzer Log - Successfully evaluated model 'Lasso'.
-2024-12-25 11:03:34 - Analyzer Log - Fitting model 'ElasticNet'.
-2024-12-25 11:03:34 - Analyzer Log - Fitting 'ElasticNet'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2024-12-25 11:03:36 - Analyzer Log - Successfully evaluated model 'ElasticNet'.
-2024-12-25 11:03:36 - Analyzer Log - Fitting model 'RF'.
-2024-12-25 11:03:36 - Analyzer Log - Fitting 'RF'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2024-12-25 11:04:23 - Analyzer Log - Successfully evaluated model 'RF'.
-2024-12-25 11:04:23 - Analyzer Log - Fitting model 'XGBoost'.
-2024-12-25 11:04:23 - Analyzer Log - Fitting 'XGBoost'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2024-12-25 11:04:57 - Analyzer Log - Successfully evaluated model 'XGBoost'.
-2024-12-25 11:04:57 - Mage Log - Adding table to storage.
-2024-12-25 11:04:57 - Mage Log - Added table to /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl: Path to table: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl
+2024-12-30 04:22:07 - Mage Log - A new _MageOptions object has been created with LLM build function: <function build_groq at 0x16d333380> and multimodal LLM build function: None
+2024-12-30 04:22:07 - Mage Log - GROQ LLM build function has been set to: functools.partial(<function build_groq at 0x16d333380>, temperature=0.0, model='llama-3.3-70b-versatile')
+2024-12-30 04:22:20 - Analyzer Log - Renamed variables 'Unnamed: 0' to 'Unnamed:_0'.
+2024-12-30 04:22:20 - Analyzer Log - Analyzer initialized for dataset 'Unnamed Dataset'.
+2024-12-30 04:22:20 - Mage Log - Data container initialized with the Analyzer built from the provided DataFrame.
+2024-12-30 04:22:20 - Mage Log - IO initialized.
+2024-12-30 04:22:20 - Mage Log - Initializing the Orchestrator.
+2024-12-30 04:22:20 - Mage Log - Initializing SingleAgent
+2024-12-30 04:22:20 - Mage Log - Adding dictionary to storage.
+2024-12-30 04:22:20 - Mage Log - Added dictionary without description. First 20 characters: {"train_shape": {"n_.
+2024-12-30 04:22:24 - Mage Log - SingleAgent initialized
+2024-12-30 04:23:01 - Mage Log - Executing Python code in a separate subprocess with preloaded DataFrames. Input code: 
+result = df_all['alcohol'].describe()
+2024-12-30 04:23:13 - Mage Log - Executing Python code in a separate subprocess with preloaded DataFrames. Input code: 
+result = df_all['malic_acid'].describe()
+2024-12-30 04:23:23 - Mage Log - Adding table to storage.
+2024-12-30 04:23:23 - Mage Log - Added table to /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl: Path to table: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl
 
-{"('train', 'rmse')": {"OLS": 44040.709, "Ridge": 44079.038, "Lasso": 44041.391, "ElasticNet": 44088.298, "RF": 18561.095, "XGBoost": 20974.047}, "('train', 'mae')": {"OLS": 27919.735, "Ridge": 27892.828, "Lasso": 27912.109, "ElasticNet": 27894.997, "RF": 13062.235, "XGBoost": 15076.339}, "('train', 'mape')": {"OLS": 0.161, "Ridge": 0.161, "Lasso": 0.161, "ElasticNet": 0.161, "RF": 0.082, "XGBoost": 0.094}, "('train', 'pearsonr')": {"OLS": 0.821, "Ridge": 0.821, "Lasso": 0.821, "ElasticNet": 0.821, "RF": 0.973, "XGBoost": 0.963}, "('train', 'spearmanr')": {"OLS": 0.879, "Ridge": 0.879, "Lasso": 0.879, "ElasticNet": 0.879, "RF": 0.962, "XGBoost": 0.945}, "('train', 'r2')": {"OLS": 0.675, "Ridge": 0.674, "Lasso": 0.675, "ElasticNet": 0.674, "RF": 0.942, "XGBoost": 0.926}, "('train', 'adjr2')": {"OLS": 0.672, "Ridge": 0.671, "Lasso": 0.672, "ElasticNet": 0.671, "RF": 0.942, "XGBoost": 0.926}, "('train', 'n_obs')": {"OLS": 1168.0, "Ridge": 1168.0, "Lasso": 1168.0, "ElasticNet": 1168.0, "RF": 1168.0, "XGBoost": 1168.0}, "('test', 'rmse')": {"OLS": 46288.628, "Ridge": 46286.599, "Lasso": 46279.393, "ElasticNet": 46290.035, "RF": 35382.564, "XGBoost": 35388.105}, "('test', 'mae')": {"OLS": 29647.775, "Ridge": 29605.424, "Lasso": 29641.561, "ElasticNet": 29600.943, "RF": 23635.162, "XGBoost": 23429.745}, "('test', 'mape')": {"OLS": 0.174, "Ridge": 0.173, "Lasso": 0.174, "ElasticNet": 0.173, "RF": 0.149, "XGBoost": 0.146}, "('test', 'pearsonr')": {"OLS": 0.856, "Ridge": 0.856, "Lasso": 0.856, "ElasticNet": 0.856, "RF": 0.919, "XGBoost": 0.915}, "('test', 'spearmanr')": {"OLS": 0.884, "Ridge": 0.885, "Lasso": 0.884, "ElasticNet": 0.885, "RF": 0.894, "XGBoost": 0.896}, "('test', 'r2')": {"OLS": 0.721, "Ridge": 0.721, "Lasso": 0.721, "ElasticNet": 0.721, "RF": 0.837, "XGBoost": 0.837}, "('test', 'adjr2')": {"OLS": 0.711, "Ridge": 0.711, "Lasso": 0.711, "ElasticNet": 0.711, "RF": 0.831, "XGBoost": 0.831}, "('test', 'n_obs')": {"OLS": 292.0, "Ridge": 292.0, "Lasso": 292.0, "ElasticNet": 292.0, "RF": 292.0, "XGBoost": 292.0}}
-2024-12-25 11:04:57 - Mage Log - Adding dictionary to storage.
-2024-12-25 11:04:57 - Mage Log - Added dictionary without description. First 20 characters: {"train_metrics": {".
+{"malic_acid": {"Corr. w alcohol": "0.094", "p-value": "0.210"}}
+2024-12-30 04:23:37 - Mage Log - _logit_function call: predictors: alcohol, malic_acid, flavanoids, target: wine_class
+2024-12-30 04:23:38 - Mage Log - _ml_classification_function called
+2024-12-30 04:23:38 - Mage Log - _ml_classification_function Models to test: Logistic
+2024-12-30 04:23:38 - Mage Log - _ml_classification_function Target: wine_class
+2024-12-30 04:23:38 - Mage Log - _ml_classification_function Predictors: ['alcohol', 'malic_acid', 'flavanoids']
+2024-12-30 04:23:38 - Analyzer Log - Fitting model 'Logistic'.
+2024-12-30 04:23:38 - Analyzer Log - Fitting 'Logistic'. Search method: GridSearchCV (1 fits per fold, 5 total fits). 
+2024-12-30 04:23:38 - Analyzer Log - Optimal thresholds set for 'Logistic' via roc.
+2024-12-30 04:23:38 - Analyzer Log - Successfully fitted model 'Logistic'.
+2024-12-30 04:23:38 - Mage Log - Adding table to storage.
+2024-12-30 04:23:38 - Mage Log - Added table to /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/1.pkl: Path to table: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/1.pkl
+
+{"('train', 'accuracy')": {"Logistic": 0.93}, "('train', 'f1')": {"Logistic": 0.932}, "('train', 'precision')": {"Logistic": 0.93}, "('train', 'recall')": {"Logistic": 0.94}, "('train', 'roc_auc(ovo)')": {"Logistic": 0.989}, "('train', 'n_obs')": {"Logistic": 142.0}, "('test', 'accuracy')": {"Logistic": 0.944}, "('test', 'f1')": {"Logistic": 0.943}, "('test', 'precision')": {"Logistic": 0.941}, "('test', 'recall')": {"Logistic": 0.952}, "('test', 'roc_auc(ovo)')": {"Logistic": 1.0}, "('test', 'n_obs')": {"Logistic": 36.0}}
+2024-12-30 04:23:40 - Mage Log - Executing Python code in a separate subprocess with preloaded DataFrames. Input code: 
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, f1_score
+
+X = df_all[['alcohol', 'malic_acid', 'flavanoids']]
+y = df_all['wine_class']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+
+result = {'test_f1_score': f1_score(y_test, y_pred, average='weighted'), 'test_accuracy': accuracy_score(y_test, y_pred)}
+2024-12-30 04:23:41 - Mage Log - Adding dictionary to storage.
+2024-12-30 04:23:41 - Mage Log - Added dictionary with description: The result of the Python code execution. The Python code was: 
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, f1_score
+
+X = df_all[['alcohol', 'malic_acid', 'flavanoids']]
+y = df_all['wine_class']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+
+result = {'test_f1_score': f1_score(y_test, y_pred, average='weighted'), 'test_accuracy': accuracy_score(y_test, y_pred)}
+2024-12-30 04:24:24 - Analyzer Log - Engineered numeric variable 'meaningless' = 'proline' - 'alcohol' * 'malic_acid'.
+2024-12-30 04:24:25 - Mage Log - Executing Python code in a separate subprocess with preloaded DataFrames. Input code: 
+result = df_all['meaningless'].median()
+2024-12-30 04:24:36 - Analyzer Log - Scaled variables 'color_intensity' using strategy 'minmax'.
+2024-12-30 04:24:37 - Mage Log - Executing Python code in a separate subprocess with preloaded DataFrames. Input code: 
+result = df_all['color_intensity'].median()
+2024-12-30 04:24:47 - Analyzer Log - Scaled variables 'total_phenols' using strategy 'standardize'.
+2024-12-30 04:24:48 - Mage Log - Executing Python code in a separate subprocess with preloaded DataFrames. Input code: 
+result = df_all['total_phenols'].median()
+2024-12-30 04:25:00 - Mage Log - _ols_function call: predictors: color_intensity, total_phenols, target: hue
+2024-12-30 04:25:00 - Mage Log - summary: ========================================================================================
+[1mOrdinary Least Squares Regression Report[0m
+----------------------------------------------------------------------------------------
+[1mTarget variable:[0m
+  [95m'hue'[0m 
+                                                                                        
+[1mPredictor variables (2):[0m
+  [95m'color_intensity', [0m[95m'total_phenols'[0m 
+----------------------------------------------------------------------------------------
+[1mMetrics:[0m
+  [1mTrain (142)[0m                                [1mTest (36)[0m 
+    R2:       [93m0.456[0m                            R2:       [93m0.308[0m 
+    Adj. R2:  [93m0.448[0m                            Adj. R2:  [93m0.266[0m 
+    RMSE:     [93m0.172[0m                            RMSE:     [93m0.171[0m 
+----------------------------------------------------------------------------------------
+[1mCoefficients:[0m
+[1m                                  Estimate         Std. Error            p-value [0m
+[1m  Predictor                                                                      [0m
+  const                              1.139              0.030                0.0 
+  color_intensity                   -0.619              0.071                0.0 
+  total_phenols                      0.084              0.013                0.0 
+========================================================================================
+2024-12-30 04:25:00 - Mage Log - Adding table to storage.
+2024-12-30 04:25:00 - Mage Log - Added table to /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/2.pkl: Path to table: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/2.pkl
+
+{"('train', 'rmse')": {"OLS Linear Model": 0.172}, "('train', 'mae')": {"OLS Linear Model": 0.133}, "('train', 'mape')": {"OLS Linear Model": 0.145}, "('train', 'pearsonr')": {"OLS Linear Model": 0.675}, "('train', 'spearmanr')": {"OLS Linear Model": 0.563}, "('train', 'r2')": {"OLS Linear Model": 0.456}, "('train', 'adjr2')": {"OLS Linear Model": 0.448}, "('train', 'n_obs')": {"OLS Linear Model": 142.0}, "('test', 'rmse')": {"OLS Linear Model": 0.171}, "('test', 'mae')": {"OLS Linear Model": 0.142}, "('test', 'mape')": {"OLS Linear Model": 0.15}, "('test', 'pearsonr')": {"OLS Linear Model": 0.572}, "('test', 'spearmanr')": {"OLS Linear Model": 0.341}, "('test', 'r2')": {"OLS Linear Model": 0.308}, "('test', 'adjr2')": {"OLS Linear Model": 0.266}, "('test', 'n_obs')": {"OLS Linear Model": 36.0}}
+2024-12-30 04:25:00 - Mage Log - Adding table to storage.
+2024-12-30 04:25:00 - Mage Log - Added table to /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/3.pkl: Path to table: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/3.pkl
+
+{"const": {"Estimate (Std. Error)": "1.139 (0.03)", "p-value": 0.0}, "color_intensity": {"Estimate (Std. Error)": "-0.619 (0.071)", "p-value": 0.0}, "total_phenols": {"Estimate (Std. Error)": "0.084 (0.013)", "p-value": 0.0}}
+2024-12-30 04:25:00 - Mage Log - Adding dictionary to storage.
+2024-12-30 04:25:00 - Mage Log - Added dictionary without description. First 20 characters: {"coefficients": {"c.
+2024-12-30 04:25:01 - Mage Log - _ols_function output: {"coefficients": {"const": {"Estimate (Std. Error)": "1.139 (0.03)", "p-value": 0.0}, "color_intensity": {"Estimate (Std. Error)": "-0.619 (0.071)", "p-value": 0.0}, "total_phenols": {"Estimate (Std. Error)": "0.084 (0.013)", "p-value": 0.0}}, "train_metrics": {"rmse": {"OLS Linear Model": 0.172}, "mae": {"OLS Linear Model": 0.133}, "mape": {"OLS Linear Model": 0.145}, "pearsonr": {"OLS Linear Model": 0.675}, "spearmanr": {"OLS Linear Model": 0.563}, "r2": {"OLS Linear Model": 0.456}, "adjr2": {"OLS Linear Model": 0.448}, "n_obs": {"OLS Linear Model": 142.0}}, "test_metrics": {"rmse": {"OLS Linear Model": 0.171}, "mae": {"OLS Linear Model": 0.142}, "mape": {"OLS Linear Model": 0.15}, "pearsonr": {"OLS Linear Model": 0.572}, "spearmanr": {"OLS Linear Model": 0.341}, "r2": {"OLS Linear Model": 0.308}, "adjr2": {"OLS Linear Model": 0.266}, "n_obs": {"OLS Linear Model": 36.0}}}
+Path to image: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_img_store/0.png
+
+Description: Diagnostic plots.
+A detailed description is unavailable.
+2024-12-30 04:25:26 - Mage Log - Executing Python code in a separate subprocess with preloaded DataFrames. Input code: 
+result = df_all['alcohol'].sort_values(ascending=False).iloc[2]
+2024-12-30 04:25:41 - Mage Log - Executing Python code in a separate subprocess with preloaded DataFrames. Input code: 
+result = df_all['wine_class'].value_counts()

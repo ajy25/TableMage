@@ -17,9 +17,8 @@ class _PythonToolInput(BaseModel):
     code: str = Field(
         description="The Python code to execute. "
         + "The pandas library is already imported. "
-        + "The train and test DataFrames are preloaded as 'df_train' and 'df_test'. "
-        + "Feel free to import other standard data science libraries. "
-        + "Return the result in the 'result' variable.",
+        + "The DataFrame is preloaded as `df_all`. "
+        + "Save the outcome to the `result` variable so the user can view it.",
     )
 
 
@@ -186,21 +185,22 @@ def python_env_code_run(
 
 python_env_code_run_descr = """\
 NOTE:
-Use this tool only if your other tools cannot solve your problem.
+Use this tool only when no other tools can address the task effectively. \
+This tool is particularly suited for exploring datasets and \
+performing operations using pandas functions.
 
 DESCRIPTION:
-Executes a Python code snippet in a separate subprocess \
-with train DataFrame named 'df_train' preloaded, and \
-test DataFrame named 'df_test' preloaded. \
-'df_all', the concatenation of 'df_train' and 'df_test', is also preloaded. \
-Work with 'df_all' unless you need to work with 'df_train' or 'df_test'. \
-The result must be saved in the 'result' variable. \
-The result must be a number, string, list, dictionary, or DataFrame. \
-A string containing the stdout, stderr, and str(result) is returned to you. \
-Never make plots with this tool.
+- Executes a Python code snippet in a separate subprocess.  
+- A preloaded DataFrame, `df_all`, serves as the primary dataset for analysis.  
+- Optionally, you can work with `df_train` or `df_test` if explicitly required. 
+- You should save the outcome to the variable `result`.  
+- Acceptable types for `result`: number, string, list, dictionary, or DataFrame.
+
+IMPORTANT:  
+- Do not create plots using this tool.  
+- Always save to `result` so the user can view the output. Never use print.
 
 EXAMPLE INPUT:
-df_all = pd.concat([df_train, df_test], axis=0)
 result = df_all.describe()
 """
 

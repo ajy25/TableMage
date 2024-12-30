@@ -662,13 +662,13 @@ class DataHandler:
             self._working_df_train[numeric_var],
             bins=thresholds_with_infs,
             labels=level_names,
-            right=not leq,
+            right=leq,
         )
         self._working_df_test[feature_name] = pd.cut(
             self._working_df_test[numeric_var],
             bins=thresholds_with_infs,
             labels=level_names,
-            right=not leq,
+            right=leq,
         )
 
         if self._verbose:

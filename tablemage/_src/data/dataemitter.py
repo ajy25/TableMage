@@ -245,6 +245,18 @@ class DataEmitter:
                 f"with missing values out of {prev_test_len} total examples.",
                 type="NOTE",
             )
+        if new_train_len == 0:
+            raise RuntimeError(
+                "All examples/rows in the training dataset have missing values. "
+                "Please consider imputing missing values "
+                "or dropping variables/predictors/columns with high missingness."
+            )
+        if new_test_len == 0:
+            raise RuntimeError(
+                "All examples/rows in the test dataset have missing values. "
+                "Please consider imputing missing values "
+                "or dropping variables/predictors/columns with high missingness."
+            )
         if self._pre_onehot_X_vars_subset is not None:
             xvars = self._pre_onehot_X_vars_subset
         else:
@@ -303,6 +315,12 @@ class DataEmitter:
                 f"with missing values out of {prev_train_len} total examples.",
                 type="NOTE",
             )
+        if new_train_len == 0:
+            raise RuntimeError(
+                "All examples/rows in the training dataset have missing values. "
+                "Please consider imputing missing values "
+                "or dropping variables/predictors/columns with high missingness."
+            )
         if self._pre_onehot_X_vars_subset is not None:
             xvars = self._pre_onehot_X_vars_subset
         else:
@@ -352,6 +370,12 @@ class DataEmitter:
                 f"with missing values out of {prev_test_len} total examples.",
                 type="NOTE",
             )
+        if new_test_len == 0:
+            raise RuntimeError(
+                "All examples/rows in the test dataset have missing values. "
+                "Please consider imputing missing values "
+                "or dropping variables/predictors/columns with high missingness."
+            )
         if self._pre_onehot_X_vars_subset is not None:
             xvars = self._pre_onehot_X_vars_subset
         else:
@@ -378,6 +402,12 @@ class DataEmitter:
                 f"with missing values out of {prev_train_len} total examples.",
                 type="NOTE",
             )
+        if new_train_len == 0:
+            raise RuntimeError(
+                "All examples/rows in the training dataset have missing values. "
+                "Please consider imputing missing values "
+                "or dropping variables/predictors/columns with high missingness."
+            )
         if self._pre_onehot_X_vars_subset is not None:
             xvars = self._pre_onehot_X_vars_subset
         else:
@@ -403,6 +433,12 @@ class DataEmitter:
                 f"Test dataset: dropped {prev_test_len - new_test_len} examples "
                 f"with missing values out of {prev_test_len} total examples.",
                 type="NOTE",
+            )
+        if new_test_len == 0:
+            raise RuntimeError(
+                "All examples/rows in the test dataset have missing values. "
+                "Please consider imputing missing values "
+                "or dropping variables/predictors/columns with high missingness."
             )
         if self._pre_onehot_X_vars_subset is not None:
             xvars = self._pre_onehot_X_vars_subset
@@ -542,7 +578,7 @@ class DataEmitter:
                 X[numeric_var],
                 bins=thresholds_with_infs,
                 labels=level_names,
-                right=not leq,
+                right=leq,
             )
             return X
 
@@ -550,13 +586,13 @@ class DataEmitter:
             self._working_df_train[numeric_var],
             bins=thresholds_with_infs,
             labels=level_names,
-            right=not leq,
+            right=leq,
         )
         self._working_df_test[feature_name] = pd.cut(
             self._working_df_test[numeric_var],
             bins=thresholds_with_infs,
             labels=level_names,
-            right=not leq,
+            right=leq,
         )
 
         (

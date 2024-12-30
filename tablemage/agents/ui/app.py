@@ -71,7 +71,7 @@ def upload_dataset():
 
     try:
         # Read the uploaded CSV file
-        uploaded_data = pd.read_csv(file, index_col=0)
+        uploaded_data = pd.read_csv(file)
         mage = ConversationalAgent(uploaded_data, test_size=test_size)
 
         return jsonify({"message": "Dataset uploaded successfully"}), 200

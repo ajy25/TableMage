@@ -1,10 +1,13 @@
-from llama_index.core.agent import FunctionCallingAgent, ReActAgent
+from llama_index.core.agent import (
+    FunctionCallingAgent,
+    ReActAgent,
+    StructuredPlannerAgent,
+)
 from llama_index.core.llms.function_calling import FunctionCallingLLM
 from llama_index.core import VectorStoreIndex
 from llama_index.core.base.llms.types import ChatMessage, MessageRole
 from llama_index.core.objects import ObjectIndex
 from llama_index.core.schema import QueryBundle
-from llama_index.core.agent import FunctionCallingAgent
 from llama_index.core.memory import (
     ChatMemoryBuffer,
     VectorMemory,
@@ -190,7 +193,7 @@ def build_agent(
                 verbose=True,
                 system_prompt=system_prompt,
                 memory=memory_obj,
-                max_iterations=10,
+                max_iterations=20,
             )
         else:
             agent = FunctionCallingAgent.from_tools(
