@@ -45,7 +45,7 @@ class CustomC(BaseC):
             Only considered if model yields probabilities.
         """
         super().__init__(threshold_strategy=threshold_strategy)
-        self._estimator: BaseSearchCV | BaseEstimator | Pipeline = estimator
+        self._best_estimator: BaseSearchCV | BaseEstimator | Pipeline = estimator
         if name is None:
             self._name = str(estimator)
         else:
@@ -61,9 +61,13 @@ class CustomC(BaseC):
             Default: False. If True, prints progress.
         """
         self._is_binary = True
+        dropfirst = False
 
         if self._dataemitters is None and self._dataemitter is not None:
-            X_train_df, y_train_series = self._dataemitter.emit_train_Xy()
+            X_train_df, y_train_series = self._dataemitter.emit_train_Xy(
+                dropfirst=dropfirst, verbose=verbose
+            )
+            self._predictors = X_train_df.columns.to_list()
             X_train = X_train_df
             y_train = y_train_series.to_numpy()
 
@@ -74,14 +78,14 @@ class CustomC(BaseC):
 
             if verbose:
                 print_wrapped(f"Fitting {self._name}.", type="PROGRESS")
-            self._estimator.fit(X_train, y_train_encoded)
+            self._best_estimator.fit(X_train, y_train_encoded)
 
-            y_pred_encoded = self._estimator.predict(X_train)
+            y_pred_encoded = self._best_estimator.predict(X_train)
 
-            if hasattr(self._estimator, "predict_proba"):
-                y_pred_score = self._estimator.predict_proba(X_train)
-            elif hasattr(self._estimator, "decision_function"):
-                y_pred_score = self._estimator.decision_function(X_train)
+            if hasattr(self._best_estimator, "predict_proba"):
+                y_pred_score = self._best_estimator.predict_proba(X_train)
+            elif hasattr(self._best_estimator, "decision_function"):
+                y_pred_score = self._best_estimator.decision_function(X_train)
 
             if self._is_binary:
                 self._train_scorer = ClassificationBinaryScorer(
@@ -98,7 +102,7 @@ class CustomC(BaseC):
                     y_true=y_train,
                     y_pred_score=y_pred_score,
                     y_pred_class_order=self._label_encoder.inverse_transform(
-                        self._estimator.classes_
+                        self._best_estimator.classes_
                     ),
                     name=str(self),
                 )
@@ -114,7 +118,7 @@ class CustomC(BaseC):
                     y_train_series,
                     X_test_df,
                     y_test_series,
-                ) = emitter.emit_train_test_Xy()
+                ) = emitter.emit_train_test_Xy(dropfirst=dropfirst, verbose=verbose)
                 X_train = X_train_df
                 y_train = y_train_series.to_numpy()
 
@@ -126,16 +130,16 @@ class CustomC(BaseC):
                 X_test = X_test_df
                 y_test = y_test_series.to_numpy()
 
-                self._estimator.fit(X_train, y_train_encoded)
-                y_pred_encoded = self._estimator.predict(X_test)
+                self._best_estimator.fit(X_train, y_train_encoded)
+                y_pred_encoded = self._best_estimator.predict(X_test)
 
                 y_preds_encoded.append(y_pred_encoded)
                 y_trues.append(y_test)
 
-                if hasattr(self._estimator, "predict_proba"):
-                    y_pred_scores.append(self._estimator.predict_proba(X_test))
-                elif hasattr(self._estimator, "decision_function"):
-                    y_pred_scores.append(self._estimator.decision_function(X_test))
+                if hasattr(self._best_estimator, "predict_proba"):
+                    y_pred_scores.append(self._best_estimator.predict_proba(X_test))
+                elif hasattr(self._best_estimator, "decision_function"):
+                    y_pred_scores.append(self._best_estimator.decision_function(X_test))
 
             if len(y_pred_scores) == 0:
                 y_pred_scores = None
@@ -157,24 +161,27 @@ class CustomC(BaseC):
                     y_true=y_trues,
                     y_pred_score=y_pred_scores,
                     y_pred_class_order=self._label_encoder.inverse_transform(
-                        self._estimator.classes_
+                        self._best_estimator.classes_
                     ),
                     name=str(self),
                 )
             # refit on all data
-            X_train_df, y_train_series = self._dataemitter.emit_train_Xy()
+            X_train_df, y_train_series = self._dataemitter.emit_train_Xy(
+                dropfirst=dropfirst, verbose=verbose
+            )
+            self._predictors = X_train_df.columns.to_list()
             X_train = X_train_df
             y_train = y_train_series.to_numpy()
 
             y_train_encoded = self._label_encoder.fit_transform(y_train)
 
-            self._estimator.fit(X_train, y_train_encoded)
+            self._best_estimator.fit(X_train, y_train_encoded)
 
-            y_pred_encoded = self._estimator.predict(X_train)
-            if hasattr(self._estimator, "predict_proba"):
-                y_pred_score = self._estimator.predict_proba(X_train)
-            elif hasattr(self._estimator, "decision_function"):
-                y_pred_score = self._estimator.decision_function(X_train)
+            y_pred_encoded = self._best_estimator.predict(X_train)
+            if hasattr(self._best_estimator, "predict_proba"):
+                y_pred_score = self._best_estimator.predict_proba(X_train)
+            elif hasattr(self._best_estimator, "decision_function"):
+                y_pred_score = self._best_estimator.decision_function(X_train)
 
             if self._is_binary:
                 self._train_scorer = ClassificationBinaryScorer(
@@ -190,7 +197,7 @@ class CustomC(BaseC):
                     y_true=y_train,
                     y_pred_score=y_pred_score,
                     y_pred_class_order=self._label_encoder.inverse_transform(
-                        self._estimator.classes_
+                        self._best_estimator.classes_
                     ),
                     name=str(self),
                 )
@@ -198,17 +205,19 @@ class CustomC(BaseC):
         else:
             raise ValueError("The datahandler must not be None")
 
-        X_test_df, y_test_series = self._dataemitter.emit_test_Xy()
+        X_test_df, y_test_series = self._dataemitter.emit_test_Xy(
+            dropfirst=dropfirst, verbose=verbose
+        )
         X_test = X_test_df
         y_test = y_test_series.to_numpy()
 
-        y_pred_encoded = self._estimator.predict(X_test)
+        y_pred_encoded = self._best_estimator.predict(X_test)
 
         y_pred_score = None
-        if hasattr(self._estimator, "predict_proba"):
-            y_pred_score = self._estimator.predict_proba(X_test)
-        elif hasattr(self._estimator, "decision_function"):
-            y_pred_score = self._estimator.decision_function(X_test)
+        if hasattr(self._best_estimator, "predict_proba"):
+            y_pred_score = self._best_estimator.predict_proba(X_test)
+        elif hasattr(self._best_estimator, "decision_function"):
+            y_pred_score = self._best_estimator.decision_function(X_test)
 
         if self._is_binary:
             self._test_scorer = ClassificationBinaryScorer(
@@ -224,7 +233,7 @@ class CustomC(BaseC):
                 y_true=y_test,
                 y_pred_score=y_pred_score,
                 y_pred_class_order=self._label_encoder.inverse_transform(
-                    self._estimator.classes_
+                    self._best_estimator.classes_
                 ),
                 name=str(self),
             )
@@ -243,12 +252,12 @@ class CustomC(BaseC):
         -------
         Pipeline
         """
-        if isinstance(self._estimator, Pipeline):
+        if isinstance(self._best_estimator, Pipeline):
             new_step = (
                 "custom_prep_data",
                 self._dataemitter.sklearn_preprocessing_transformer(),
             )
-            new_pipeline = Pipeline(steps=[new_step, ("model", self._estimator)])
+            new_pipeline = Pipeline(steps=[new_step, ("model", self._best_estimator)])
             return new_pipeline
         else:
             pipeline = Pipeline(
@@ -257,7 +266,7 @@ class CustomC(BaseC):
                         "custom_prep_data",
                         self._dataemitter.sklearn_preprocessing_transformer(),
                     ),
-                    ("model", self._estimator),
+                    ("model", self._best_estimator),
                 ]
             )
             return pipeline

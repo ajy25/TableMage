@@ -49,9 +49,14 @@ class CustomR(BaseR):
             Default: False. If True, prints progress.
         """
         y_scaler = self._dataemitter.y_scaler()
+        dropfirst = False
 
         if self._dataemitters is None and self._dataemitter is not None:
-            X_train_df, y_train_series = self._dataemitter.emit_train_Xy()
+            X_train_df, y_train_series = self._dataemitter.emit_train_Xy(
+                dropfirst=dropfirst,
+                verbose=verbose,
+            )
+            self._predictors = X_train_df.columns.to_list()
             X_train = X_train_df
             y_train = y_train_series.to_numpy()
             if verbose:
@@ -79,7 +84,10 @@ class CustomR(BaseR):
                     y_train_series,
                     X_test_df,
                     y_test_series,
-                ) = emitter.emit_train_test_Xy()
+                ) = emitter.emit_train_test_Xy(
+                    dropfirst=dropfirst,
+                    verbose=verbose,
+                )
                 X_train = X_train_df
                 y_train = y_train_series.to_numpy()
                 X_test = X_test_df
@@ -105,7 +113,11 @@ class CustomR(BaseR):
             )
 
             # refit on all data
-            X_train_df, y_train_series = self._dataemitter.emit_train_Xy()
+            X_train_df, y_train_series = self._dataemitter.emit_train_Xy(
+                dropfirst=dropfirst,
+                verbose=verbose,
+            )
+            self._predictors = X_train_df.columns.to_list()
             X_train = X_train_df
             y_train = y_train_series.to_numpy()
             if verbose:
@@ -128,7 +140,10 @@ class CustomR(BaseR):
         else:
             raise ValueError("The datahandler must not be None")
 
-        X_test_df, y_test_series = self._dataemitter.emit_test_Xy()
+        X_test_df, y_test_series = self._dataemitter.emit_test_Xy(
+            dropfirst=dropfirst,
+            verbose=verbose,
+        )
         X_test = X_test_df
         y_test = y_test_series.to_numpy()
 

@@ -162,6 +162,8 @@ def test_pipeline_generation_regression(setup_data):
             "OverallQual",
         ],
     )
+    report._to_dict()
+
     pipeline = report.model("LinearR(l2)").sklearn_pipeline()
 
     output = pipeline.predict(
@@ -443,6 +445,7 @@ def test_pipeline_generation_classification(setup_data):
             "1stFlrSF_quartiles",
         ],
     )
+    report._to_dict()
 
     pipeline = report.model("LinearC(l2)").sklearn_pipeline()
 

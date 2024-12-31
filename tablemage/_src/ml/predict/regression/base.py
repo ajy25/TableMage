@@ -1,4 +1,6 @@
 import pandas as pd
+import numpy as np
+from ....display.print_options import print_options
 from sklearn.base import BaseEstimator
 from sklearn.pipeline import Pipeline
 from ....feature_selection import BaseFSR
@@ -467,5 +469,14 @@ class BaseR(BasePredictModel):
 
         if self._hyperparam_searcher is not None:
             output["fitting_details"] = self._hyperparam_searcher._to_dict()
+
+        def round_floats(d):
+            for key, value in d.items():
+                if isinstance(value, dict):
+                    round_floats(value)
+                elif isinstance(value, float):
+                    d[key] = np.round(value, print_options._n_decimals)
+
+        round_floats(output)
 
         return output

@@ -69,4 +69,6 @@ def test_regression_run_simple(setup_data):
         ],
     )
 
+    report._to_dict()
+
     assert isinstance(report.fs_report().top_features(), list)

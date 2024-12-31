@@ -17,6 +17,7 @@ from ....display.print_utils import (
     color_text,
     quote_and_color,
 )
+from ....display.print_options import print_options
 from ..predict_utils import ColumnSelector
 from .thresholding_utils import (
     select_optimal_threshold_binary,
@@ -613,7 +614,7 @@ class BaseC(BasePredictModel):
             type = "Importances"
             self._feature_importance_type_str = "feature importances"
         elif hasattr(self._best_estimator, "coef_"):
-            importances = self._best_estimator.coef_.flatten()
+            importances = self._best_estimator.coef_
             type = "Coefficients"
             self._feature_importance_type_str = "coefficients"
         else:
@@ -622,6 +623,14 @@ class BaseC(BasePredictModel):
                 f"{color_text(self._name, 'yellow')}.",
             )
             return None
+
+        importances_shape = importances.shape
+        # handle case of multiple classes
+        if len(importances_shape) == 2:
+            if importances_shape[0] == 1:
+                importances = importances[0]
+            else:
+                importances = importances.mean(axis=0)
 
         return pd.DataFrame(
             data=importances,
@@ -650,6 +659,15 @@ class BaseC(BasePredictModel):
         if self._hyperparam_searcher is not None:
             output["fitting_details"] = self._hyperparam_searcher._to_dict()
 
+        # for all floats in dict, round to print_options._n_decimals
+        def round_floats(d):
+            for key, value in d.items():
+                if isinstance(value, dict):
+                    round_floats(value)
+                elif isinstance(value, float):
+                    d[key] = np.round(value, print_options._n_decimals)
+
+        round_floats(output)
         return output
 
     def _validate_inputs(self):

@@ -62,12 +62,13 @@ def test_regression_run_simple(setup_data):
         ],
     )
     assert len(report.model("LinearR(l2)")._test_scorer._y_pred) == SAMPLE_SIZE * 0.4
+    report._to_dict()
 
 
 def test_regression_run_cv(setup_data):
     """Tests regression mechanism for prediction with ml models"""
     analyzer = tm.Analyzer(setup_data["df_house_mini"], test_size=0.4, verbose=False)
-    analyzer.regress(
+    report = analyzer.regress(
         models=[
             tm.ml.LinearR(
                 type="l2",
@@ -84,12 +85,13 @@ def test_regression_run_cv(setup_data):
         ],
         outer_cv=2,
     )
+    report._to_dict()
 
 
 def test_regression_run_fs(setup_data):
     """Tests regression mechanism for prediction with ml models"""
     analyzer = tm.Analyzer(setup_data["df_house_mini"], test_size=0.4, verbose=False)
-    analyzer.regress(
+    report = analyzer.regress(
         models=[
             tm.ml.LinearR(
                 type="l2",
@@ -106,6 +108,7 @@ def test_regression_run_fs(setup_data):
         ],
         feature_selectors=[tm.fs.KBestFSR("r_regression", 2)],
     )
+    report._to_dict()
 
 
 def test_regression_run_cv_fs(setup_data):
@@ -133,6 +136,8 @@ def test_regression_run_cv_fs(setup_data):
     report.cv_metrics(True)
     report.feature_importance("LinearR(l2)")
     report.plot_obs_vs_pred("LinearR(l2)", "train")
+
+    report._to_dict()
 
 
 def test_classification_run_simple(setup_data):
@@ -162,3 +167,5 @@ def test_classification_run_simple(setup_data):
     report.plot_roc_curve("LinearC(l2)", "test")
     report.plot_roc_curves("train")
     report.plot_roc_curves("test")
+
+    report._to_dict()

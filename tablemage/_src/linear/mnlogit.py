@@ -92,11 +92,10 @@ class MNLogitLinearModel:
 
         # we allow y_train to be categorical, i.e. we encode it with a label encoder
         self._y_label_order = None
-        if not is_numerical(y_train):
-            self._label_encoder = LabelEncoder()
-            y_train = self._label_encoder.fit_transform(y_train)
-            self._y_label_order = self._label_encoder.classes_
-            y_test = self._label_encoder.transform(y_test)
+        self._label_encoder = LabelEncoder()
+        y_train = self._label_encoder.fit_transform(y_train)
+        self._y_label_order = self._label_encoder.classes_
+        y_test = self._label_encoder.transform(y_test)
 
         with suppress_print_output():
             if self.alpha == 0:
