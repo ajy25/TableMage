@@ -17,8 +17,7 @@ class _PythonToolInput(BaseModel):
     code: str = Field(
         description="The Python code to execute. "
         + "The pandas library is already imported. "
-        + "The DataFrame is preloaded as `df_all`. "
-        + "Save the outcome to the `result` variable so the user can view it.",
+        + "The DataFrame is preloaded as `df_all`.",
     )
 
 
@@ -43,9 +42,9 @@ def python_env_code_run_backend(
         The Python code to execute.
 
     Returns:
-        dict: Contains 'result' (deserialized output), 'stdout', 'stderr', and 'returncode'.
+        dict: Contains `result` (deserialized output), `stdout`, `stderr`, and `returncode`.
     """
-    preamble = """
+    preamble = """\
 import pandas as pd
 import pickle
 import sys
@@ -66,8 +65,11 @@ result = None
         + "\n"
         + """
 # Serialize the result to a file
-with open(sys.argv[3], 'wb') as result_file:
-    pickle.dump(result, result_file)
+try:
+    with open(sys.argv[3], 'wb') as result_file:
+        pickle.dump(result, result_file)
+except Exception as e:
+    print(f'Error occurred while saving the result: {str(e)}')
 """
     )
 
@@ -106,8 +108,13 @@ with open(sys.argv[3], 'wb') as result_file:
         # Deserialize the result
         output_data = None
         if os.path.exists(temp_result_path):
-            with open(temp_result_path, "rb") as f:
-                output_data = pickle.load(f)
+            try:
+                with open(temp_result_path, "rb") as f:
+                    output_data = pickle.load(f)
+            except Exception as e:
+                print_debug(
+                    f"An error occurred while deserializing the result: {str(e)}"
+                )
 
         return {
             "result": output_data,
@@ -154,11 +161,18 @@ def python_env_code_run(
         # make empty DataFrame suitable for concatenation
         df_test = pd.DataFrame(columns=df_test.columns)
 
-    result = python_env_code_run_backend(
-        df_train=df_train,
-        df_test=df_test,
-        code=code,
-    )
+    try:
+        result = python_env_code_run_backend(
+            df_train=df_train,
+            df_test=df_test,
+            code=code,
+        )
+    except Exception as e:
+        print_debug(
+            f"An error occurred while executing the Python code. "
+            f"The error message is: {str(e)}"
+        )
+
     result_actual = result["result"]
     if isinstance(result_actual, pd.DataFrame):
         context.add_table(table=result_actual)
@@ -184,21 +198,20 @@ def python_env_code_run(
 
 
 python_env_code_run_descr = """\
-NOTE:
-Use this tool only when no other tools can address the task effectively. \
+Use this tool ONLY when no other tools can address the task effectively. \
 This tool is particularly suited for exploring datasets and \
 performing operations using pandas functions.
 
 DESCRIPTION:
-- Executes a Python code snippet in a separate subprocess.  
-- A preloaded DataFrame, `df_all`, serves as the primary dataset for analysis.  
-- Optionally, you can work with `df_train` or `df_test` if explicitly required. 
-- You should save the outcome to the variable `result`.  
-- Acceptable types for `result`: number, string, list, dictionary, or DataFrame.
+- Executes Python code.
+- A preloaded DataFrame, `df_all`, serves as the primary dataset for analysis. 
+- Optionally, you can work with `df_train` or `df_test` if explicitly required.
+- Save the output data structure to the variable `result`. \
+    Acceptable types for `result`: dictionary or DataFrame.
 
-IMPORTANT:  
-- Do not create plots using this tool.  
-- Always save to `result` so the user can view the output. Never use print.
+IMPORTANT:
+- ONLY use this tool as a LAST RESORT. Most tasks can be accomplished using other tools.
+- Do not create plots using this tool.
 
 EXAMPLE INPUT:
 result = df_all.describe()

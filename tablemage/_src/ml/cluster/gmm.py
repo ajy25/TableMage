@@ -63,8 +63,8 @@ class GMMClust(BaseClust):
     def fit(self, verbose: bool = False) -> None:
         """Fits the model to the data."""
 
-        X_train = self._dataemitter.emit_train_X(verbose=verbose)
-        X_test = self._dataemitter.emit_test_X(verbose=verbose)
+        X_train = self._dataemitter.emit_train_X(dropfirst=False, verbose=verbose)
+        X_test = self._dataemitter.emit_test_X(dropfirst=False, verbose=verbose)
 
         if isinstance(self._n_components, int):
             self._estimator = GaussianMixture(

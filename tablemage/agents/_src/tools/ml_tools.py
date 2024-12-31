@@ -128,7 +128,7 @@ The available models are (in 'Model Name': Description format)...
 7. 'SVM': Support vector machine regressor with radial basis function kernel
 8. 'MLP': Multilayer perceptron regressor
 An example input (without the quotes) is: 'OLS, Lasso, RF'.
-        """
+"""
     )
     target: str = Field(description="The target variable.")
     predictors: str = Field(
@@ -200,8 +200,8 @@ The available models are (in 'Model Name': Description format)...
 6. 'XGBoost': XGBoost classifier
 7. 'SVM': Support vector machine classifier with radial basis function kernel
 8. 'MLP': Multilayer perceptron classifier
-An example input (without the quotes) is: 'Logistic, RF, MLP'.
-        """
+An example input (without the quotes) is: 'Logistic, RF, XGBoost'.
+"""
     )
     target: str = Field(description="The target variable.")
     predictors: str = Field(
@@ -269,23 +269,31 @@ class _FeatureSelectionInput(BaseModel):
 The feature selection method to use. The available methods are:
 
 1. 'Boruta': Boruta method (automatically selects the number of features)
-2. 'Select{N}Best': Select N best features based on the F-score, where you replace {N} with the number of features you want to select.
+2. 'Select<N>Best': Select N best features based on the F-score, where you replace <N> with the number of features you want to select.
 
 Two example inputs (without the quotes) are: 'Boruta' and 'Select5Best'.
-        """
+"""
     )
     target: str = Field(description="The target variable.")
     predictors: str = Field(
         description="""\
 A comma delimited string of variables used by the models to predict the target.
 An example input (without the quotes) is: 'var1, var2, var3'.
-        """
+"""
+    )
+    task: Literal["classification", "regression"] = Field(
+        description="The type of task to perform. "
+        "Either 'classification' or 'regression'."
     )
 
 
 @tool_try_except_thought_decorator
 def _feature_selection_function(
-    feature_selector: str, target: str, predictors: str, context: ToolingContext
+    feature_selector: str,
+    target: str,
+    predictors: str,
+    task: Literal["classification", "regression"],
+    context: ToolingContext,
 ) -> str:
     print_debug("_feature_selection_function called")
     print_debug("_feature_selection_function Feature selector: " + feature_selector)
@@ -295,8 +303,17 @@ def _feature_selection_function(
 
     # figure out if target is categorical or continuous
     if target in context._data_container.analyzer.numeric_vars():
-        target_type = "regression"
+        if task == "classification":
+            target_type = "classification"
+        elif task == "regression":
+            target_type = "regression"
+        else:
+            raise ValueError(f"Invalid task type: {task}.")
     elif target in context._data_container.analyzer.categorical_vars():
+        if task == "regression":
+            raise ValueError(
+                f"Target variable {target} is categorical, but task is regression."
+            )
         target_type = "classification"
     else:
         raise ValueError(f"Target variable {target} is not found in the dataset.")
@@ -310,7 +327,8 @@ def _feature_selection_function(
             "Best"
         ):
             raise ValueError(
-                "Invalid feature selector. Should be of the form 'Select{N}Best' where {N} is the number of features to select."
+                "Invalid feature selector. "
+                "Should be either 'Boruta' or 'Select<N>Best'."
             )
         k = int(feature_selector[6:-4])
         fs = (
@@ -353,13 +371,13 @@ def build_feature_selection_tool(context: ToolingContext) -> FunctionTool:
         fn=partial(_feature_selection_function, context=context),
         name="feature_selection_tool",
         description="""\
-Performs feature selection with a specified method. 
-Automatically detecs if the target variable is categorical or continuous.
-Selects the best features/predictors/variables from a list of predictor variables to predict the target variable. 
-Returns a string describing the selected features.
-Categorical variables are one-hot encoded before feature selection.
+Performs feature selection with a specified method. \
+Automatically detecs if the target variable is categorical or continuous. \
+Selects the best features/predictors/variables from a list of predictor variables to predict the target variable. \
+Returns a string describing the selected features. \
+Categorical variables are one-hot encoded before feature selection. \
 If a category is selected, the output would be '<variable_name>::<category>'.
-        """,
+""",
         fn_schema=_FeatureSelectionInput,
     )
 
@@ -369,17 +387,17 @@ class _ClusteringInput(BaseModel):
         description="""\
 A comma delimited string of variables/features to use for clustering.
 An example input (without the quotes) is: 'var1, var2, var3'.
-        """
+"""
     )
     model: str = Field(
         description="""\
-The available models are (in 'Model Name': Description format)...
+The available models are (in 'Model Name': Description format):
 
 1. 'KMeans': KMeans clustering
 2. 'GMM': Gaussian mixture model clustering
 
 An example input (without the quotes) is: 'KMeans'.
-        """
+"""
     )
     n_clusters: int = Field(
         description="The number of clusters to create. An example input (without the quotes) is: '5'. "
@@ -391,13 +409,13 @@ An example input (without the quotes) is: 'KMeans'.
     )
     vis_type: str = Field(
         description="""\
-The type of visualization to use. The available types are...
+The type of visualization to use. The available types are:
 
 1. 'PCA': Principal component analysis
 2. 'TSNE': t-distributed stochastic neighbor embedding
 
 An example input (without the quotes) is: 'PCA'.
-        """
+"""
     )
 
 
@@ -468,9 +486,9 @@ def build_clustering_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(_clustering_function, context=context),
         name="clustering_tool",
-        description="""Performs clustering with a specified method. 
-Clusters the data using a list of variables. 
+        description="""Performs clustering with a specified method. \
+Clusters the data using a list of variables. \
 Returns a figure showing the clusters.
-        """,
+""",
         fn_schema=_ClusteringInput,
     )

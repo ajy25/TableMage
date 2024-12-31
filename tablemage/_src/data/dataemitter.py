@@ -190,6 +190,7 @@ class DataEmitter:
 
     def emit_train_test_Xy(
         self,
+        dropfirst: bool = True,
         verbose: bool = True,
     ) -> tuple[pd.DataFrame, pd.Series, pd.DataFrame, pd.Series]:
         """Returns a tuple as follows:
@@ -262,10 +263,16 @@ class DataEmitter:
         else:
             xvars = self._Xvars
         X_train_df = self._onehot_helper(
-            working_df_train[xvars], fit=True, use_second_encoder=True
+            working_df_train[xvars],
+            dropfirst=dropfirst,
+            fit=True,
+            use_second_encoder=True,
         )
         X_test_df = self._onehot_helper(
-            working_df_test[xvars], fit=False, use_second_encoder=True
+            working_df_test[xvars],
+            dropfirst=dropfirst,
+            fit=False,
+            use_second_encoder=True,
         )
         if self._final_X_vars_subset is not None:
             X_train_df = X_train_df[self._final_X_vars_subset]
@@ -277,7 +284,9 @@ class DataEmitter:
             working_df_test[self._yvar],
         )
 
-    def emit_train_Xy(self, verbose: bool = True) -> tuple[pd.DataFrame, pd.Series]:
+    def emit_train_Xy(
+        self, dropfirst: bool = True, verbose: bool = True
+    ) -> tuple[pd.DataFrame, pd.Series]:
         """Returns a tuple as follows: (X_train_df, y_train_series).
 
         ** WARNING **
@@ -326,13 +335,18 @@ class DataEmitter:
         else:
             xvars = self._Xvars
         X_train_df = self._onehot_helper(
-            working_df_train[xvars], fit=True, use_second_encoder=True
+            working_df_train[xvars],
+            dropfirst=dropfirst,
+            fit=True,
+            use_second_encoder=True,
         )
         if self._final_X_vars_subset is not None:
             X_train_df = X_train_df[self._final_X_vars_subset]
         return X_train_df, working_df_train[self._yvar]
 
-    def emit_test_Xy(self, verbose: bool = True) -> tuple[pd.DataFrame, pd.Series]:
+    def emit_test_Xy(
+        self, dropfirst: bool = True, verbose: bool = True
+    ) -> tuple[pd.DataFrame, pd.Series]:
         """Returns a tuple as follows: (X_test_df, y_test_series).
 
         ** WARNING **
@@ -381,13 +395,18 @@ class DataEmitter:
         else:
             xvars = self._Xvars
         X_test_df = self._onehot_helper(
-            working_df_test[xvars], fit=False, use_second_encoder=True
+            working_df_test[xvars],
+            dropfirst=dropfirst,
+            fit=False,
+            use_second_encoder=True,
         )
         if self._final_X_vars_subset is not None:
             X_test_df = X_test_df[self._final_X_vars_subset]
         return X_test_df, working_df_test[self._yvar]
 
-    def emit_train_X(self, verbose: bool = True) -> pd.DataFrame:
+    def emit_train_X(
+        self, dropfirst: bool = True, verbose: bool = True
+    ) -> pd.DataFrame:
         """Returns X_train_df."""
         if self._yvar is None:
             all_vars = self._Xvars
@@ -413,13 +432,16 @@ class DataEmitter:
         else:
             xvars = self._Xvars
         X_train_df = self._onehot_helper(
-            working_df_train[xvars], fit=True, use_second_encoder=True
+            working_df_train[xvars],
+            dropfirst=dropfirst,
+            fit=True,
+            use_second_encoder=True,
         )
         if self._final_X_vars_subset is not None:
             X_train_df = X_train_df[self._final_X_vars_subset]
         return X_train_df
 
-    def emit_test_X(self, verbose: bool = True) -> pd.DataFrame:
+    def emit_test_X(self, dropfirst: bool = True, verbose: bool = True) -> pd.DataFrame:
         """Returns X_test_df."""
         if self._yvar is None:
             all_vars = self._Xvars
@@ -445,7 +467,10 @@ class DataEmitter:
         else:
             xvars = self._Xvars
         X_test_df = self._onehot_helper(
-            working_df_test[xvars], fit=False, use_second_encoder=True
+            working_df_test[xvars],
+            dropfirst=dropfirst,
+            fit=False,
+            use_second_encoder=True,
         )
         if self._final_X_vars_subset is not None:
             X_test_df = X_test_df[self._final_X_vars_subset]

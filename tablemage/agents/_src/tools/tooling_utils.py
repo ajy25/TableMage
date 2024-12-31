@@ -9,8 +9,12 @@ def tool_try_except_thought_decorator(func):
         try:
             return func(*args, **kwargs)
         except Exception as e:
-            context.add_thought(f"An error occurred: {e}.")
-            raise  # Re-raise the error
+            thought = f"An error occurred: '{e}'"
+            if thought[-1] != ".":
+                thought += "."
+            thought += " I'll try again."
+            context.add_thought(thought)
+            raise e
 
     return wrapper
 

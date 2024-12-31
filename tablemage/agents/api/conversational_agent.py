@@ -53,7 +53,10 @@ class ConversationalAgent:
         print_debug("IO initialized.")
         print_debug("Initializing the Orchestrator.")
         self._single_agent = SingleAgent(
-            llm=options.llm_build_function(), context=self._context, react=False
+            llm=options.llm_build_function(),
+            context=self._context,
+            react=False,
+            tool_rag_top_k=10,
         )
 
     def chat(self, message: str) -> str:

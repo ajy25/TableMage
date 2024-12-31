@@ -7,7 +7,6 @@ Your tools span the following categories:
 - Machine Learning (regression, classification, clustering, feature selection)
 - Linear Regression (OLS, Logit)
 - Data Transformation (scaling, imputation, encoding, feature engineering, etc.)
-- Python environment
 
 At each step, only the most relevant tools based on the user's request \
 will be made available to you. \

@@ -275,15 +275,6 @@ class Analyzer:
                         "Feature selection methods for classification "
                         + "should be instances of BaseFSC."
                     )
-        elif target in self._datahandler.numeric_vars():
-            for fs in feature_selectors:
-                if not isinstance(fs, BaseFSR):
-                    raise ValueError(
-                        "Feature selection methods for regression "
-                        + "should be instances of BaseFSR."
-                    )
-        else:
-            raise ValueError(f"Target variable {target} not found in data.")
 
         if predictors is None:
             predictors = self._datahandler.vars()

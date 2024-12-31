@@ -117,7 +117,7 @@ class BaseC(BasePredictModel):
 
         if self._dataemitters is None and self._dataemitter is not None:
             X_train_df, y_train_series = self._dataemitter.emit_train_Xy(
-                verbose=verbose
+                dropfirst=self._dropfirst, verbose=verbose
             )
             y_train = y_train_series.to_numpy()
 
@@ -129,7 +129,9 @@ class BaseC(BasePredictModel):
                     verbose=verbose,
                 )
                 self._predictors = self._feature_selection_report.top_features()
-                X_train = self._feature_selection_report._emit_train_X(verbose=verbose)
+                X_train = self._feature_selection_report._emit_train_X(
+                    dropfirst=self._dropfirst, verbose=verbose
+                )
             else:
                 self._predictors = X_train_df.columns.to_list()
                 X_train = X_train_df
@@ -210,7 +212,9 @@ class BaseC(BasePredictModel):
                     y_train_series,
                     X_test_df,
                     y_test_series,
-                ) = emitter.emit_train_test_Xy(verbose=verbose)
+                ) = emitter.emit_train_test_Xy(
+                    dropfirst=self._dropfirst, verbose=verbose
+                )
                 y_train = y_train_series.to_numpy()
                 y_train_encoded: np.ndarray = self._label_encoder.fit_transform(y_train)
 
@@ -221,8 +225,12 @@ class BaseC(BasePredictModel):
                         max_n_features=self._max_n_features,
                         verbose=verbose,
                     )
-                    X_train = fold_selector._emit_train_X(verbose=verbose)
-                    X_test = fold_selector._emit_test_X(verbose=verbose)
+                    X_train = fold_selector._emit_train_X(
+                        dropfirst=self._dropfirst, verbose=verbose
+                    )
+                    X_test = fold_selector._emit_test_X(
+                        dropfirst=self._dropfirst, verbose=verbose
+                    )
                 else:
                     X_train = X_train_df
                     X_test = X_test_df
@@ -293,7 +301,9 @@ class BaseC(BasePredictModel):
                 )
 
             # refit on all data
-            X_train_df, y_train_series = self._dataemitter.emit_train_Xy()
+            X_train_df, y_train_series = self._dataemitter.emit_train_Xy(
+                dropfirst=self._dropfirst, verbose=verbose
+            )
             y_train = y_train_series.to_numpy()
 
             if self._feature_selectors is not None:
@@ -303,7 +313,9 @@ class BaseC(BasePredictModel):
                     max_n_features=self._max_n_features,
                     verbose=verbose,
                 )
-                X_train = self._feature_selection_report._emit_train_X()
+                X_train = self._feature_selection_report._emit_train_X(
+                    dropfirst=self._dropfirst, verbose=verbose
+                )
                 self._predictors = self._feature_selection_report.top_features()
             else:
                 self._predictors = X_train_df.columns.to_list()
@@ -373,14 +385,18 @@ class BaseC(BasePredictModel):
         else:
             raise ValueError("The datahandler must not be None")
 
-        X_test_df, y_test_series = self._dataemitter.emit_test_Xy(verbose=verbose)
+        X_test_df, y_test_series = self._dataemitter.emit_test_Xy(
+            dropfirst=self._dropfirst, verbose=verbose
+        )
 
         y_test = y_test_series.to_numpy()
 
         if self._feature_selectors is None:
             X_test = X_test_df
         else:
-            X_test = self._feature_selection_report._emit_test_X(verbose=verbose)
+            X_test = self._feature_selection_report._emit_test_X(
+                dropfirst=self._dropfirst, verbose=verbose
+            )
 
         y_pred_score = None
         if hasattr(self._best_estimator, "predict_proba"):

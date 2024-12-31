@@ -68,12 +68,18 @@ class MNLogitLinearModel:
         """
         self._dataemitter = dataemitter
 
-    def fit(self, max_iter: int | None = None):
+    def fit(self, max_iter: int | None = None, verbose: bool = True):
         """Fits the model based on the data specified."""
 
         # Emit all data
-        X_train, y_train = self._dataemitter.emit_train_Xy()
-        X_test, y_test = self._dataemitter.emit_test_Xy()
+        X_train, y_train = self._dataemitter.emit_train_Xy(
+            dropfirst=True,
+            verbose=verbose,
+        )
+        X_test, y_test = self._dataemitter.emit_test_Xy(
+            dropfirst=True,
+            verbose=verbose,
+        )
 
         # we force the constant to be included
         X_train = sm.add_constant(X_train, has_constant="add")
