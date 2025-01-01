@@ -27,7 +27,8 @@ dependencies = [
     "tableone>=0.9.1",
     "umap-learn>=0.5.7",
     "optuna>=3.6.1",
-    "optuna-integration>=3.6.0"
+    "optuna-integration>=3.6.0",
+    "tableone>=0.9.1"
 ]
 license = {file = "LICENSE"}
 keywords = ["data science", "low-code", "no-code", "statistics", "machine learning"]
@@ -37,7 +38,7 @@ classifiers = [
 
 
 [project.optional-dependencies]
-mage = [
+agents = [
     "llama-index>=0.11.23",
     "llama-index-experimental>=0.4.0",
     "llama-index-llms-groq>=0.2.0",

@@ -8,7 +8,7 @@ from .llms.ollama.ollama import build_ollama
 from .llms.api_key_utils import key_exists
 
 
-class _MageOptions:
+class _AgentsOptions:
 
     def __init__(self):
 
@@ -116,4 +116,4 @@ class _MageOptions:
         return self._multimodal
 
 
-options = _MageOptions()
+options = _AgentsOptions()

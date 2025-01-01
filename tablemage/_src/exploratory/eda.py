@@ -6,11 +6,10 @@ import scipy.stats as stats
 from typing import Literal
 from sklearn.preprocessing import minmax_scale, scale
 from sklearn.decomposition import PCA
-from textwrap import fill
-
-# from tableone import TableOne
+from pandas.api.types import is_numeric_dtype
+from tableone import TableOne
 from ..stattests import StatisticalTestReport
-from ..display.print_utils import print_wrapped, format_value
+from ..display.print_utils import print_wrapped, format_value, suppress_std_output
 from ..display.print_options import print_options
 from ..display.plot_options import plot_options
 from ..utils import ensure_arg_list_uniqueness
@@ -18,13 +17,12 @@ from ..utils import ensure_arg_list_uniqueness
 
 def safe_pearsonr(x: np.ndarray, y: np.ndarray) -> tuple[float, float]:
     """Safely compute Pearson correlation with missing value handling."""
-    # Get mask for pairwise complete observations
     mask = ~(np.isnan(x) | np.isnan(y))
-    if np.sum(mask) < 2:  # Need at least 2 complete pairs
+    if np.sum(mask) < 2:
         return np.nan, np.nan
     try:
         return stats.pearsonr(x[mask], y[mask])
-    except Exception:  # Catch any numerical computation errors
+    except Exception:
         return np.nan, np.nan
 
 
@@ -376,7 +374,6 @@ class EDAReport:
             Columns include the Pearson correlation coefficient, p-value, and
             number of units considered (if dropna was True).
         """
-        # Input validation
         invalid_vars = set(numeric_vars) - set(self._numeric_vars)
         if invalid_vars:
             raise ValueError(
@@ -466,7 +463,6 @@ class EDAReport:
             pval_str = format_value(pval, n_decimals)
             return f"{corr_str} ({pval_str})"
 
-        # Validate input variables
         invalid_vars = set(numeric_vars) - set(self._numeric_vars)
         if invalid_vars:
             raise ValueError(
@@ -474,16 +470,13 @@ class EDAReport:
                 "Must be known numeric variables."
             )
 
-        # Extract data as numpy array for faster computation
         data = self._df[numeric_vars].values
         n_vars = len(numeric_vars)
         n_decimals = getattr(print_options, "_n_decimals", 4)
 
-        # Initialize matrices for correlations and p-values
         corr_matrix = np.ones((n_vars, n_vars))
         p_matrix = np.ones((n_vars, n_vars)) if p_values else None
 
-        # Compute correlations and p-values for upper triangle
         for i in range(n_vars):
             for j in range(i + 1, n_vars):
                 corr, p = safe_pearsonr(data[:, i], data[:, j])
@@ -491,9 +484,8 @@ class EDAReport:
                 if p_values:
                     p_matrix[i, j] = p_matrix[j, i] = p
 
-        # Convert to DataFrame and format values
         if not p_values:
-            # Format correlation values only
+
             def format_value_with_na(x):
                 return "NA" if pd.isna(x) else format_value(x, n_decimals)
 
@@ -502,7 +494,6 @@ class EDAReport:
                 formatted_matrix, index=numeric_vars, columns=numeric_vars
             )
         else:
-            # Format correlations with p-values
             formatted_matrix = np.empty((n_vars, n_vars), dtype=object)
             for i in range(n_vars):
                 for j in range(n_vars):
@@ -522,72 +513,82 @@ class EDAReport:
 
         return result
 
-    # def tabulate_tableone(
-    #     self,
-    #     vars: list[str],
-    #     stratify_by: str | None,
-    #     show_missingness: bool = True,
-    #     show_htest_name: bool = True,
-    #     bonferroni_correction: bool = False,
-    # ) -> TableOne:
-    #     """
-    #     Generates a tableone for the given variables stratified by the given variable.
+    def tabulate_tableone(
+        self,
+        vars: list[str],
+        stratify_by: str | None,
+        show_missingness: bool = True,
+        show_htest_name: bool = True,
+        bonferroni_correction: bool = False,
+    ) -> TableOne:
+        """
+        Generates a tableone for the given variables stratified by the given variable.
 
-    #     Parameters
-    #     ----------
-    #     vars : list[str]
-    #         List of variables to include in the tableone.
+        Parameters
+        ----------
+        vars : list[str]
+            List of variables to include in the tableone.
 
-    #     stratify_by : str
-    #         Categorical variable to stratify by.
+        stratify_by : str
+            Categorical variable to stratify by.
 
-    #     show_missingness : bool
-    #         Default: True. If True, includes missingness information in the table.
+        show_missingness : bool
+            Default: True. If True, includes missingness information in the table.
 
-    #     show_htest_name : bool
-    #         Default: True. If True, includes the name of the hypothesis test in the table.
+        show_htest_name : bool
+            Default: True. If True, includes the name of the hypothesis test in the table.
 
-    #     bonferroni_correction : bool
-    #         Default: False. If True, applies Bonferroni correction to the p-values.
+        bonferroni_correction : bool
+            Default: False. If True, applies Bonferroni correction to the p-values.
 
-    #     Returns
-    #     -------
-    #     TableOne
-    #     """
-    #     pval = stratify_by is not None
-    #     pval_adjust = "bonferroni" if bonferroni_correction else None
-    #     return TableOne(
-    #         data=self._df,
-    #         columns=vars,
-    #         groupby=stratify_by,
-    #         pval=pval,
-    #         pval_adjust=pval_adjust,
-    #         htest_name=show_htest_name,
-    #         missing=show_missingness,
-    #     )
+        Returns
+        -------
+        TableOne
+        """
+        pval = stratify_by is not None
+        pval_adjust = "bonferroni" if bonferroni_correction else None
+        return TableOne(
+            data=self._df,
+            columns=vars,
+            groupby=stratify_by,
+            pval=pval,
+            pval_adjust=pval_adjust,
+            htest_name=show_htest_name,
+            missing=show_missingness,
+        )
 
     # --------------------------------------------------------------------------
     # PLOTTING
     # --------------------------------------------------------------------------
     @ensure_arg_list_uniqueness()
-    def plot_numeric_pairs(
+    def plot_pairs(
         self,
-        numeric_vars: list[str] | None = None,
-        stratify_by: str | None = None,
+        vars: list[str] | None = None,
+        htest: bool = True,
         figsize: tuple[float, float] = (7, 7),
     ) -> plt.Figure:
         """
-        Plots pairwise relationships between numeric variables.
+        Plots pairwise relationships among the specified variables
+        (numeric or categorical).
+
+        Diagonal plots show distributions of single variables,
+        lower panels show one type of plot, upper panels another.
 
         Parameters
         ----------
-        numeric_vars : list[str]
-            Default: None. A list of numeric variables.
-            If None, all numeric variables are considered.
+        df : pd.DataFrame
+            Your DataFrame containing the data.
 
-        stratify_by : str
-            Default: None. Categorical var name.
-            If not None, the plot is stratified by this variable.
+        vars : list[str] | None
+            Default: None. A list of variable names (numeric or categorical).
+            If None, all columns are considered.
+
+        htest : bool
+            Default: True. If True, includes correlation coefficients and p-values
+            for numeric-numeric pairs, chi-squared test results for
+            categorical-categorical pairs, and
+            either t-test or ANOVA results for numeric-categorical pairs
+            in the upper triangle.
 
         figsize : tuple[float, float]
             Default: (7, 7). The size of the figure.
@@ -597,105 +598,295 @@ class EDAReport:
         plt.Figure
         """
         font_adjustment = 1
+        df = self._df
 
-        if numeric_vars is None:
-            numeric_vars = self._numeric_vars
-        if len(numeric_vars) > 6:
-            raise ValueError(
-                "No more than 6 numeric variables may be " + "plotted at the same time."
-            )
+        if vars is None:
+            vars = list(df.columns)
 
-        if stratify_by is None:
-            grid = sns.PairGrid(self._df[numeric_vars].dropna())
-            right_adjust = None
-        else:
-            grid = sns.PairGrid(
-                self._df[numeric_vars + [stratify_by]].dropna(),
-                hue=stratify_by,
-                palette=plot_options._color_palette[
-                    : len(self._df[stratify_by].unique())
-                ],
-            )
-            right_adjust = 0.85
-
-        grid.map_diag(
-            sns.histplot,
-            color=plot_options._bar_color,
-            edgecolor=plot_options._bar_edgecolor,
-            kde=True,
-            alpha=plot_options._bar_alpha,
+        if len(vars) > 10:
+            raise ValueError("Plotting too many variables is unwieldy. Try <= 10.")
+        df_plot = df[vars].dropna()
+        n_vars = len(vars)
+        fig, axes = plt.subplots(
+            n_vars, n_vars, figsize=figsize, sharex=False, sharey=False
         )
+        if n_vars == 1:
+            axes = np.array([[axes]])
+        right_adjust = 1.0
 
-        if stratify_by is None:
-            grid.map_upper(
-                lambda x, y, **kwargs: plt.text(
+        def diag_plot(ax: plt.Axes, series, axis: Literal["x", "y"] = "x"):
+            """Plot on the diagonal: distribution of a single variable."""
+            if axis == "x":
+                if is_numeric_dtype(series):
+                    sns.histplot(
+                        x=series,
+                        kde=True,
+                        color=plot_options._bar_color,
+                        edgecolor=plot_options._bar_edgecolor,
+                        alpha=plot_options._bar_alpha,
+                        ax=ax,
+                    )
+                else:
+                    sns.countplot(
+                        x=series,
+                        color=plot_options._bar_color,
+                        alpha=plot_options._bar_alpha,
+                        ax=ax,
+                        order=sorted(series.unique()),
+                    )
+                    # Rotate category labels
+                    ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
+            elif axis == "y":
+                if is_numeric_dtype(series):
+                    sns.histplot(
+                        y=series,
+                        kde=True,
+                        color=plot_options._bar_color,
+                        edgecolor=plot_options._bar_edgecolor,
+                        alpha=plot_options._bar_alpha,
+                        ax=ax,
+                    )
+                else:
+                    sns.countplot(
+                        y=series,
+                        color=plot_options._bar_color,
+                        alpha=plot_options._bar_alpha,
+                        ax=ax,
+                        order=sorted(series.unique()),
+                    )
+                    # Rotate category labels
+                    ax.set_yticklabels(ax.get_yticklabels(), rotation=45, ha="right")
+
+        @suppress_std_output()
+        def upper_plot(ax: plt.Axes, x, y, xname, yname):
+            """Plot on the upper triangle (i < j)"""
+            if is_numeric_dtype(x) and is_numeric_dtype(y):
+                # pearson corr
+                r, p = stats.pearsonr(x, y)
+                ax.text(
                     0.5,
                     0.5,
-                    f"ρ = {round(stats.pearsonr(x, y)[0], print_options._n_decimals)}\n"
-                    + f"p = {round(stats.pearsonr(x, y)[1], print_options._n_decimals)}",
+                    f"r = {r:.{print_options._n_decimals}f}\n"
+                    + f"p = {p:.{print_options._n_decimals}g}",
                     ha="center",
                     va="center",
-                    transform=plt.gca().transAxes,
-                    fontsize=plot_options._axis_title_font_size - font_adjustment,
+                    transform=ax.transAxes,
+                    fontsize=10 - font_adjustment,
                 )
-            )
-        else:
-            grid.map_upper(
-                sns.scatterplot, s=plot_options._dot_size, color=plot_options._dot_color
-            )
+            elif is_numeric_dtype(x) and not is_numeric_dtype(y):
+                # test equal means
+                report = self.test_equal_means(numeric_var=xname, stratify_by=yname)
+                test_type = report._description
+                p = report._pval
+                ax.text(
+                    0.5,
+                    0.5,
+                    f"{test_type}\n" + f"p = {p:.{print_options._n_decimals}g}",
+                    ha="center",
+                    va="center",
+                    transform=ax.transAxes,
+                    fontsize=10 - font_adjustment,
+                )
 
-        grid.map_lower(
-            sns.scatterplot, s=plot_options._dot_size, color=plot_options._dot_color
+            elif not is_numeric_dtype(x) and is_numeric_dtype(y):
+                # test equal means
+                report = self.test_equal_means(numeric_var=yname, stratify_by=xname)
+                test_type = report._description
+                p = report._pval
+                ax.text(
+                    0.5,
+                    0.5,
+                    f"{test_type}\n" + f"p = {p:.{print_options._n_decimals}g}",
+                    ha="center",
+                    va="center",
+                    transform=ax.transAxes,
+                    fontsize=10 - font_adjustment,
+                )
+
+            else:
+                # chi2
+                report = self.chi2(categorical_var_1=xname, categorical_var_2=yname)
+                test_type = report._description
+                p = report._pval
+                ax.text(
+                    0.5,
+                    0.5,
+                    f"{test_type}\n" + f"p = {p:.{print_options._n_decimals}g}",
+                    ha="center",
+                    va="center",
+                    transform=ax.transAxes,
+                    fontsize=10 - font_adjustment,
+                )
+
+        def lower_plot(ax: plt.Axes, x, y, xname, yname):
+            """Plot on the lower triangle (i > j)."""
+            if is_numeric_dtype(x) and is_numeric_dtype(y):
+                ax.scatter(
+                    x, y, s=plot_options._dot_size, color=plot_options._dot_color
+                )
+            elif is_numeric_dtype(x) and not is_numeric_dtype(y):
+                # numeric vs categorical -> boxplot with categories on y-axis
+                sns.boxplot(
+                    x=x,
+                    y=y,
+                    color=plot_options._bar_color,
+                    flierprops={"alpha": 0.3},
+                    ax=ax,
+                    order=sorted(df_plot[yname].unique()),
+                    boxprops=dict(
+                        color=plot_options._bar_color,
+                        alpha=plot_options._bar_alpha,
+                        linewidth=plot_options._line_width,
+                    ),
+                )
+                ax.set_yticklabels(ax.get_yticklabels(), rotation=45, ha="right")
+
+            elif not is_numeric_dtype(x) and is_numeric_dtype(y):
+                # categorical vs numeric -> boxplot with categories on x-axis
+                sns.boxplot(
+                    x=x,
+                    y=y,
+                    color=plot_options._bar_color,
+                    flierprops={"alpha": 0.3},
+                    ax=ax,
+                    order=sorted(df_plot[xname].unique()),
+                    boxprops=dict(
+                        color=plot_options._bar_color,
+                        alpha=plot_options._bar_alpha,
+                        linewidth=plot_options._line_width,
+                    ),
+                )
+                ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
+
+            else:
+                freq = pd.crosstab(y, x)
+                sns.heatmap(
+                    freq,
+                    annot=True,
+                    annot_kws={
+                        "fontsize": 8 - font_adjustment,
+                    },
+                    fmt="d",
+                    cbar=False,
+                    cmap=plot_options._cmap,
+                    ax=ax,
+                )
+                ax.set_yticklabels(ax.get_yticklabels(), rotation=45, ha="right")
+                ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
+
+        for i in range(n_vars):
+            for j in range(n_vars):
+                ax = axes[i, j]
+                this_x = df_plot[vars[j]]
+                this_y = df_plot[vars[i]]
+                if i == j:
+                    # we will use y if i is half of all vars
+                    axis = "x" if i >= n_vars // 2 else "y"
+                    diag_plot(ax, df_plot[vars[i]], axis=axis)
+                elif i < j:
+                    if htest:
+                        try:
+                            upper_plot(ax, this_x, this_y, vars[j], vars[i])
+                        except:
+                            lower_plot(ax, this_x, this_y, vars[j], vars[i])
+                    else:
+                        lower_plot(ax, this_x, this_y, vars[j], vars[i])
+                else:
+                    lower_plot(ax, this_x, this_y, vars[j], vars[i])
+        for i in range(n_vars):
+            for j in range(n_vars):
+                ax = axes[i, j]
+                if i == n_vars - 1:
+                    # bottom row -> show x-axis label
+                    ax.set_xlabel(vars[j], fontsize=12 - font_adjustment)
+                else:
+                    ax.set_xlabel("")
+                    ax.set_xticks([])
+
+                if j == 0:
+                    # first column -> show y-axis label
+                    ax.set_ylabel(vars[i], fontsize=12 - font_adjustment)
+                else:
+                    ax.set_ylabel("")
+                    ax.set_yticks([])
+                try:
+                    ax.ticklabel_format(style="sci", axis="x", scilimits=(-3, 3))
+                except:
+                    pass
+                try:
+                    ax.ticklabel_format(style="sci", axis="y", scilimits=(-3, 3))
+                except:
+                    pass
+
+                ax.tick_params(
+                    axis="both", which="major", labelsize=9 - font_adjustment
+                )
+                ax.tick_params(
+                    axis="both", which="minor", labelsize=8 - font_adjustment
+                )
+
+        fig.subplots_adjust(
+            left=0.1, bottom=0.1, wspace=0.2, hspace=0.2, right=right_adjust
         )
-
-        grid.add_legend()
-
-        for ax in grid.axes.flat:
-            ax.ticklabel_format(
-                style="sci", axis="both", scilimits=plot_options._scilimits
-            )
-
-            ax.xaxis.offsetText.set_fontsize(
-                plot_options._axis_major_ticklabel_font_size - font_adjustment
-            )
-            ax.yaxis.offsetText.set_fontsize(
-                plot_options._axis_major_ticklabel_font_size - font_adjustment
-            )
-
-            ax.xaxis.label.set_fontsize(
-                plot_options._axis_title_font_size - font_adjustment
-            )
-            ax.yaxis.label.set_fontsize(
-                plot_options._axis_title_font_size - font_adjustment
-            )
-            ax.tick_params(
-                axis="both",
-                which="major",
-                labelsize=plot_options._axis_major_ticklabel_font_size
-                - font_adjustment,
-            )
-            ax.tick_params(
-                axis="both",
-                which="minor",
-                labelsize=plot_options._axis_minor_ticklabel_font_size
-                - font_adjustment,
-            )
-
-        fig = grid.figure
-        fig.set_size_inches(*figsize)
-        fig.subplots_adjust(wspace=0.2, hspace=0.2, right=right_adjust)
-
-        if stratify_by is not None:
-            legend = fig.legends[0]
-            legend.set_title(
-                legend.get_title().get_text(),
-                prop={"size": plot_options._axis_title_font_size},
-            )
-            for text in legend.get_texts():
-                text.set_text(fill(text.get_text(), 10))
-                text.set_fontsize(plot_options._axis_title_font_size - font_adjustment)
-        fig.subplots_adjust(left=0.1, bottom=0.1)
+        fig.tight_layout()
         plt.close(fig)
+        return fig
+
+    def plot(
+        self,
+        x: str | None,
+        y: str | None,
+        figsize: tuple[float, float] = (5, 5),
+        ax: plt.Axes | None = None,
+    ) -> plt.Figure:
+        """General purpose plot method for single variable distributions and
+        relationships between two variables. Variables may be numeric or categorical.
+
+        If both numeric, scatter plot is produced.
+        If one numeric and one categorical, boxplot is produced.
+        If both categorical, cross tab heatmap is produced.
+
+        Parameters
+        ----------
+        x : str | None
+            Default: None. The name of the variable to plot on the x-axis.
+
+        y : str | None
+            Default: None. The name of the variable to plot on the y-axis.
+
+        figsize : tuple[float, float]
+            Default: (5, 5). The size of the figure. Only used if ax is None.
+
+        ax : plt.Axes | None
+            Default: None. The axes to plot on. If None, a new figure is created.
+        """
+        x_series = self._df[x] if x else None
+        y_series = self._df[y] if y else None
+
+        if ax is None:
+            fig, ax = plt.subplots(figsize=figsize)
+        else:
+            fig = ax.figure
+
+        if x and not y:
+            if pd.api.types.is_numeric_dtype(x_series):
+                ax.hist(x_series.dropna())
+            else:
+                counts = x_series.value_counts()
+                ax.bar(counts.index.astype(str), counts.values)
+        elif x and y:
+            x_num = pd.api.types.is_numeric_dtype(x_series)
+            y_num = pd.api.types.is_numeric_dtype(y_series)
+            if x_num and y_num:
+                ax.scatter(x_series, y_series, alpha=0.5)
+            elif x_num and not y_num:
+                sns.boxplot(x=x_series, y=y_series, ax=ax)
+            elif not x_num and y_num:
+                sns.boxplot(x=x_series, y=y_series, ax=ax)
+            else:
+                cross = pd.crosstab(x_series, y_series)
+                cross.plot(kind="bar", ax=ax)
+
         return fig
 
     @ensure_arg_list_uniqueness()

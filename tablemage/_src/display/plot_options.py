@@ -30,8 +30,8 @@ class _PlotOptions:
 
         self._reference_line_color = "gray"
 
-        self._bar_alpha = 0.5
-        """Transparency of bars/bins. (Seaborn)"""
+        self._bar_alpha = 0.3
+        """Transparency of bars/bins. (Matplotlib)"""
 
         self._bar_color = "black"
         """Color of the bars/bins. (Matplotlib)"""
@@ -56,6 +56,8 @@ class _PlotOptions:
 
         self._scilimits = (-3, 3)
         """Scientific limits for the axis labels. (Matplotlib)"""
+
+        self._cmap = "Grays"
 
         self._on_sns_update()
 
@@ -135,6 +137,38 @@ class _PlotOptions:
             A valid seaborn color palette, e.g. sns.color_palette("muted")
         """
         self._color_palette = color_palette
+
+    def set_color_map(self, cmap: str):
+        """Updates the color map to use for plots.
+
+        Parameters
+        ----------
+        cmap : str
+            A valid matplotlib color map.
+            Examples:
+            - "viridis"
+            - "plasma"
+            - "inferno"
+            - "magma"
+            - "cividis"
+            - "Greys"
+            - "Purples"
+            - "Blues"
+            - "Greens"
+            - "Oranges"
+            - "Reds"
+            - "YlOrBr"
+            - "YlOrRd"
+            - "OrRd"
+            - "PuRd"
+            - "RdPu"
+            - "BuPu"
+            - "GnBu"
+            - "PuBu"
+            - "YlGnBu"
+            - "PuBuGn"
+        """
+        self._cmap = cmap
 
     def set_font_sizes(
         self,

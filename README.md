@@ -22,20 +22,18 @@ To install TableMage:
 ```
 git clone https://github.com/ajy25/TableMage.git
 cd TableMage
-pip install .           # low-code API only (few dependencies)
-pip install .\[mage\]   # no-code application (lots of dependencies)
+pip install .
 ```
 
-TableMage is built with the standard Python data science stack (scikit-learn, scipy, statsmodels).
-For additional notes regarding dependencies, check out `./dev_notes/dependencies.md`. 
-TableMage requires Python version 3.10 through 3.12.
+For notes regarding dependencies, please refer to `./dev_notes/dependencies.md`. 
+TableMage supports Python versions 3.10 through 3.12.
 
 **Note for MacOS users:** You might run into an error involving XGBoost, one of TableMage's dependencies, when using TableMage for the first time.
 To resolve this error, you'll need to install libomp: `brew install libomp`. This requries [Homebrew](https://brew.sh/).
 
 ## Quick start (low-code)
 
-You'll probably want to use TableMage for machine learning model benchmarking. Here's how to do it.
+You'll likely use TableMage for machine learning model benchmarking. Here's how to do it.
 
 ```python
 import tablemage as tm
@@ -81,36 +79,41 @@ y_pred = reg_report.model('LinearR(l2)').predict(new_df)
 joblib.dump(reg_report.model('LinearR(l2)'), 'l2_pipeline.joblib')
 ```
 
-Check out the `./demo` directory for detailed examples and discussion of other functionality.
-
-
+Check out the `./demo` directory for detailed examples and walkthroughs of other functionality, 
+including exploratory data analysis, regression analysis, and causal inference.
 
 
 ## Quick start (no-code)
 
-First, you'll need to add a `.env` file to the cloned directory. 
-Copy and paste the existing `./.env_template`, and fill in the relevant API key(s).
-If you're using Ollama for LLM inference, simply have the Ollama app running in the background.
+First, install the required additional dependencies:
+```
+pip install '.[agents]'
+```
+
+Next, add your API key.
+```python
+import tablemage as tm
+tm.agents.set_key("openai", "add-your-api-key-here")
+```
+
 
 You can open up a chat user interface by running the following code and clicking on the URL that appears in the terminal.
 Your conversation with the AI agent appears on the left, while the AI agent's analyses (figures made, tables produced, TableMage commands used) appear on the right.
 
 ```python
-from tablemage.mage import App
-App().run()
+tm.agents.App().run()
 ```
 
 Or, you can chat with the AI agent directly in Python:
 
 ```python
-from tablemage.mage import Mage
 import pandas as pd
 
 # load table
 df = ...
 
 # initialize a Mage object
-mage = Mage(df, test_size=0.2)
+mage = tm.agents.ConversationalAgent(df, test_size=0.2)
 
 # chat with the Mage
 print(mage.chat("Compute the summary statistics for the numeric variables."))
@@ -122,11 +125,11 @@ TableMage is under active development.
 
 ### Motivation: low-code/no-code data science for clinical research
 
-TableMage provides a low-code Python API that exponentially accelerates data science and machine learning by seamlessly connecting the data exploration and processing steps to the modeling steps. TableMage offers the following:
+TableMage provides a low-code Python API that exponentially accelerates data science by seamlessly connecting exploratory analysis and data preprocessing to statistical and machine learning modeling. TableMage offers the following features:
 1. **Preprocess-as-you-explore functionality.** TableMage remembers data transformations and automatically preprocesses your train, validation, and test datasets when you later fit and evaluate models. 
 2. **Automatic hyperparameter optimization and feature selection.** TableMage can automatically select features and identify optimal hyperparameters for you. All TableMage ML models come with preset hyperparameter search methods. 
 3. **Flexibility.** Though TableMage provides many out-of-the-box models with default hyperparameter search spaces, it also supports custom estimators and pipelines. Any scikit-learn `BaseEstimator`/`Pipeline`-like object with fit and predict methods can be used. 
-4. **Linear regression.** TableMage contains numerous methods to support statsmodels' classical linear statistical models, including diagnostic plots, stepwise feature selection, and statistical tests, enabling you to seamlessly switch between linear statistical modeling and ML modeling.
+4. **Linear regression.** TableMage contains numerous methods to support statsmodels' classical linear statistical models, including diagnostic plots, stepwise feature selection, and statistical tests, enabling you to seamlessly switch between linear statistical modeling and machine learning.
 5. **Exploratory data analysis, causal inference, clustering, and more.** TableMage provides low-code tools for other areas of data science, not just regression and classification.
 5. **GenAI integration.**  TableMage comes with AI agents equipped with its low-code tools, allowing you to chat with your data.
 

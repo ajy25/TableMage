@@ -1,7 +1,13 @@
 from dotenv import load_dotenv
-import pathlib
+from pathlib import Path
 import os
 from typing import Literal
+
+
+dotenv_path = Path(__file__).parent.parent.parent.parent.parent.resolve() / ".env"
+if not dotenv_path.exists():
+    with open(dotenv_path, "w") as f:
+        f.write("OPENAI_API_KEY=...\nGROQ_API_KEY=...\n")
 
 
 def key_exists(
@@ -17,9 +23,7 @@ def key_exists(
     llm_type : Literal["openai"]
         The type of LLM for which to find the API key.
     """
-    load_dotenv(
-        dotenv_path=pathlib.Path(__file__).parent.parent.parent.parent.parent / ".env"
-    )
+    load_dotenv(dotenv_path=dotenv_path)
 
     if llm_type == "openai":
         api_key = (
@@ -45,9 +49,7 @@ def find_key(llm_type: Literal["openai", "groq"]) -> str:
     llm_type : Literal["openai", "groq"]
         The type of LLM for which to find the API key.
     """
-    load_dotenv(
-        dotenv_path=pathlib.Path(__file__).parent.parent.parent.parent.parent / ".env"
-    )
+    load_dotenv(dotenv_path=dotenv_path)
 
     if llm_type == "openai":
         api_key = (
@@ -63,3 +65,30 @@ def find_key(llm_type: Literal["openai", "groq"]) -> str:
         raise ValueError("Invalid LLM type specified.")
 
     return api_key
+
+
+def set_key(llm_type: Literal["openai", "groq"], api_key: str) -> None:
+    """Writes the specified API key to the .env file.
+
+    Parameters
+    ----------
+    llm_type : Literal["openai", "groq"]
+        The type of LLM for which to set the API key.
+
+    api_key : str
+        The API key to set.
+    """
+    if llm_type == "openai":
+        key_name = "OPENAI_API_KEY"
+    elif llm_type == "groq":
+        key_name = "GROQ_API_KEY"
+
+    with open(dotenv_path, "r") as f:
+        lines = f.readlines()
+
+    with open(dotenv_path, "w") as f:
+        for line in lines:
+            if line.startswith(key_name):
+                f.write(f"{key_name}={api_key}\n")
+            else:
+                f.write(line)
