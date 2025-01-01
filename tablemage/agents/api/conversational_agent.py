@@ -56,7 +56,7 @@ class ConversationalAgent:
             llm=options.llm_build_function(),
             context=self._context,
             react=False,
-            tool_rag_top_k=10,
+            tool_rag_top_k=5,
         )
 
     def chat(self, message: str) -> str:

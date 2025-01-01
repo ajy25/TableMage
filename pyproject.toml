@@ -39,14 +39,13 @@ classifiers = [
 
 [project.optional-dependencies]
 agents = [
-    "llama-index>=0.11.23",
+    "llama-index>=0.12.9",
     "llama-index-experimental>=0.4.0",
     "llama-index-llms-groq>=0.2.0",
     "llama-index-llms-ollama>=0.3.6",
     "flask",
     "python-dotenv",
-    "llama-index-embeddings-fastembed",
-    "llama-index-llms-ollama",
+    "llama-index-embeddings-fastembed>=0.3.0",
     "fastembed",
 ]
 

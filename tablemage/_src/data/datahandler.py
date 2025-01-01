@@ -1,4 +1,5 @@
 import pandas as pd
+from pandas.api.types import is_numeric_dtype
 import numpy as np
 from typing import Literal
 from copy import deepcopy
@@ -1535,6 +1536,10 @@ class DataHandler:
         categorical_vars = df.select_dtypes(
             include=["category", "object"]
         ).columns.to_list()
+        # force categorical vars to be strings
+        for var in categorical_vars:
+            df[var] = df[var].astype(str)
+
         numeric_vars = df.select_dtypes(include=["number"]).columns.to_list()
 
         all_vars = df.columns.to_list()

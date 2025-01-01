@@ -385,7 +385,7 @@ class EDAReport:
                 f"Invalid input: {target}. Must be a known numeric variable."
             )
         if bonferroni_correction:
-            p_val_name = f"p-value (Bonferroni corrected, n_tests={len(numeric_vars)})"
+            p_val_name = f"p-value (Bonferroni corrected)"
         else:
             p_val_name = "p-value"
 
@@ -407,10 +407,10 @@ class EDAReport:
         n_decimals = getattr(print_options, "_n_decimals", 4)
 
         corr_table[corr_column_name] = corr_table[corr_column_name].apply(
-            lambda x: format_value(x, n_decimals)
+            lambda x: format_value(x, n_decimals, mode="f")
         )
         corr_table[p_val_name] = corr_table[p_val_name].apply(
-            lambda x: format_value(x, n_decimals)
+            lambda x: format_value(x, n_decimals, mode="e")
         )
 
         if not has_missing:
@@ -424,7 +424,7 @@ class EDAReport:
     def tabulate_correlation_matrix(
         self,
         numeric_vars: list[str],
-        p_values: bool = False,
+        htest: bool = False,
     ) -> pd.DataFrame:
         """Generates a table of the Pearson correlation coefficients
         between numeric variables.
@@ -439,7 +439,7 @@ class EDAReport:
         numeric_vars : list[str]
             List of numeric variables to compute correlations for.
 
-        p_values : bool, default=False
+        htest : bool, default=False
             If True, includes p-values in the output in format: "corr (p-val)"
 
         Returns
@@ -475,16 +475,16 @@ class EDAReport:
         n_decimals = getattr(print_options, "_n_decimals", 4)
 
         corr_matrix = np.ones((n_vars, n_vars))
-        p_matrix = np.ones((n_vars, n_vars)) if p_values else None
+        p_matrix = np.ones((n_vars, n_vars)) if htest else None
 
         for i in range(n_vars):
             for j in range(i + 1, n_vars):
                 corr, p = safe_pearsonr(data[:, i], data[:, j])
                 corr_matrix[i, j] = corr_matrix[j, i] = corr
-                if p_values:
+                if htest:
                     p_matrix[i, j] = p_matrix[j, i] = p
 
-        if not p_values:
+        if not htest:
 
             def format_value_with_na(x):
                 return "NA" if pd.isna(x) else format_value(x, n_decimals)
@@ -597,7 +597,7 @@ class EDAReport:
         -------
         plt.Figure
         """
-        font_adjustment = 1
+        font_adjustment = 0
         df = self._df
 
         if vars is None:
@@ -671,7 +671,7 @@ class EDAReport:
                     ha="center",
                     va="center",
                     transform=ax.transAxes,
-                    fontsize=10 - font_adjustment,
+                    fontsize=plot_options._axis_title_font_size - font_adjustment,
                 )
             elif is_numeric_dtype(x) and not is_numeric_dtype(y):
                 # test equal means
@@ -685,7 +685,7 @@ class EDAReport:
                     ha="center",
                     va="center",
                     transform=ax.transAxes,
-                    fontsize=10 - font_adjustment,
+                    fontsize=plot_options._axis_title_font_size - font_adjustment,
                 )
 
             elif not is_numeric_dtype(x) and is_numeric_dtype(y):
@@ -700,7 +700,7 @@ class EDAReport:
                     ha="center",
                     va="center",
                     transform=ax.transAxes,
-                    fontsize=10 - font_adjustment,
+                    fontsize=plot_options._axis_title_font_size - font_adjustment,
                 )
 
             else:
@@ -715,14 +715,21 @@ class EDAReport:
                     ha="center",
                     va="center",
                     transform=ax.transAxes,
-                    fontsize=10 - font_adjustment,
+                    fontsize=plot_options._axis_title_font_size - font_adjustment,
                 )
 
         def lower_plot(ax: plt.Axes, x, y, xname, yname):
             """Plot on the lower triangle (i > j)."""
             if is_numeric_dtype(x) and is_numeric_dtype(y):
-                ax.scatter(
-                    x, y, s=plot_options._dot_size, color=plot_options._dot_color
+                # scatter plot
+                sns.scatterplot(
+                    x=x,
+                    y=y,
+                    facecolor=plot_options._dot_facecolor,
+                    edgecolor=plot_options._dot_edgecolor,
+                    size=plot_options._dot_size,
+                    ax=ax,
+                    legend=False,
                 )
             elif is_numeric_dtype(x) and not is_numeric_dtype(y):
                 # numeric vs categorical -> boxplot with categories on y-axis
@@ -730,7 +737,10 @@ class EDAReport:
                     x=x,
                     y=y,
                     color=plot_options._bar_color,
-                    flierprops={"alpha": 0.3},
+                    flierprops={
+                        "alpha": 0.3,
+                        "markersize": plot_options._dot_size + 1,
+                    },
                     ax=ax,
                     order=sorted(df_plot[yname].unique()),
                     boxprops=dict(
@@ -747,7 +757,10 @@ class EDAReport:
                     x=x,
                     y=y,
                     color=plot_options._bar_color,
-                    flierprops={"alpha": 0.3},
+                    flierprops={
+                        "alpha": 0.3,
+                        "markersize": plot_options._dot_size + 1,
+                    },
                     ax=ax,
                     order=sorted(df_plot[xname].unique()),
                     boxprops=dict(
@@ -764,7 +777,8 @@ class EDAReport:
                     freq,
                     annot=True,
                     annot_kws={
-                        "fontsize": 8 - font_adjustment,
+                        "fontsize": plot_options._axis_major_ticklabel_font_size
+                        - font_adjustment,
                     },
                     fmt="d",
                     cbar=False,
@@ -796,33 +810,55 @@ class EDAReport:
         for i in range(n_vars):
             for j in range(n_vars):
                 ax = axes[i, j]
+                if i == j:
+                    # diag -> no axis labels
+                    ax.grid(False)
+
                 if i == n_vars - 1:
                     # bottom row -> show x-axis label
-                    ax.set_xlabel(vars[j], fontsize=12 - font_adjustment)
+                    ax.set_xlabel(
+                        vars[j],
+                        fontsize=plot_options._axis_title_font_size - font_adjustment,
+                    )
                 else:
                     ax.set_xlabel("")
                     ax.set_xticks([])
 
                 if j == 0:
                     # first column -> show y-axis label
-                    ax.set_ylabel(vars[i], fontsize=12 - font_adjustment)
+                    ax.set_ylabel(
+                        vars[i],
+                        fontsize=plot_options._axis_title_font_size - font_adjustment,
+                    )
                 else:
                     ax.set_ylabel("")
                     ax.set_yticks([])
                 try:
                     ax.ticklabel_format(style="sci", axis="x", scilimits=(-3, 3))
+                    ax.xaxis.get_offset_text().set_fontsize(
+                        plot_options._axis_minor_ticklabel_font_size - font_adjustment
+                    )
                 except:
                     pass
                 try:
                     ax.ticklabel_format(style="sci", axis="y", scilimits=(-3, 3))
+                    ax.yaxis.get_offset_text().set_fontsize(
+                        plot_options._axis_minor_ticklabel_font_size - font_adjustment
+                    )
                 except:
                     pass
 
                 ax.tick_params(
-                    axis="both", which="major", labelsize=9 - font_adjustment
+                    axis="both",
+                    which="major",
+                    labelsize=plot_options._axis_major_ticklabel_font_size
+                    - font_adjustment,
                 )
                 ax.tick_params(
-                    axis="both", which="minor", labelsize=8 - font_adjustment
+                    axis="both",
+                    which="minor",
+                    labelsize=plot_options._axis_minor_ticklabel_font_size
+                    - font_adjustment,
                 )
 
         fig.subplots_adjust(
@@ -834,8 +870,8 @@ class EDAReport:
 
     def plot(
         self,
-        x: str | None,
-        y: str | None,
+        x: str,
+        y: str | None = None,
         figsize: tuple[float, float] = (5, 5),
         ax: plt.Axes | None = None,
     ) -> plt.Figure:
@@ -848,8 +884,8 @@ class EDAReport:
 
         Parameters
         ----------
-        x : str | None
-            Default: None. The name of the variable to plot on the x-axis.
+        x : str
+            The name of the variable to plot on the x-axis.
 
         y : str | None
             Default: None. The name of the variable to plot on the y-axis.
@@ -860,288 +896,127 @@ class EDAReport:
         ax : plt.Axes | None
             Default: None. The axes to plot on. If None, a new figure is created.
         """
-        x_series = self._df[x] if x else None
-        y_series = self._df[y] if y else None
+        if y is not None:
+            # drop rows with missing values in either x or y
+            df = self._df.dropna(subset=[x, y])
+        else:
+            df = self._df.dropna(subset=[x])
+
+        x_series = df[x]
+        y_series = df[y] if y else None
 
         if ax is None:
             fig, ax = plt.subplots(figsize=figsize)
         else:
             fig = ax.figure
 
-        if x and not y:
+        if y is None:
             if pd.api.types.is_numeric_dtype(x_series):
-                ax.hist(x_series.dropna())
+                # plot a histogram through sns.histplot
+                sns.histplot(
+                    x_series,
+                    bins="auto",
+                    kde=True,
+                    color=plot_options._bar_color,
+                    edgecolor=plot_options._bar_edgecolor,
+                    alpha=plot_options._bar_alpha,
+                    ax=ax,
+                )
             else:
-                counts = x_series.value_counts()
-                ax.bar(counts.index.astype(str), counts.values)
-        elif x and y:
-            x_num = pd.api.types.is_numeric_dtype(x_series)
-            y_num = pd.api.types.is_numeric_dtype(y_series)
-            if x_num and y_num:
-                ax.scatter(x_series, y_series, alpha=0.5)
-            elif x_num and not y_num:
-                sns.boxplot(x=x_series, y=y_series, ax=ax)
-            elif not x_num and y_num:
-                sns.boxplot(x=x_series, y=y_series, ax=ax)
+                # plot a bar plot through sns.countplot
+                sns.countplot(
+                    x=x_series,
+                    color=plot_options._bar_color,
+                    alpha=plot_options._bar_alpha,
+                    ax=ax,
+                    order=sorted(x_series.unique()),
+                )
+                # Rotate category labels
+                ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
+
+        else:
+            # numeric-numeric
+            if pd.api.types.is_numeric_dtype(
+                x_series
+            ) and pd.api.types.is_numeric_dtype(y_series):
+                # scatter plot
+                sns.scatterplot(
+                    x=x_series,
+                    y=y_series,
+                    facecolor=plot_options._dot_facecolor,
+                    edgecolor=plot_options._dot_edgecolor,
+                    size=plot_options._dot_size,
+                    ax=ax,
+                    legend=False,
+                )
+            # numeric-categorical
+            elif pd.api.types.is_numeric_dtype(
+                x_series
+            ) and not pd.api.types.is_numeric_dtype(y_series):
+                sns.boxplot(
+                    x=x_series,
+                    y=y_series,
+                    color=plot_options._bar_color,
+                    flierprops={"alpha": 0.3},
+                    ax=ax,
+                    order=sorted(y_series.unique()),
+                    boxprops=dict(
+                        color=plot_options._bar_color,
+                        alpha=plot_options._bar_alpha,
+                        linewidth=plot_options._line_width,
+                    ),
+                )
+                ax.set_yticklabels(ax.get_yticklabels(), rotation=45, ha="right")
+            # categorical-numeric
+            elif not pd.api.types.is_numeric_dtype(
+                x_series
+            ) and pd.api.types.is_numeric_dtype(y_series):
+                sns.boxplot(
+                    x=x_series,
+                    y=y_series,
+                    color=plot_options._bar_color,
+                    flierprops={"alpha": 0.3},
+                    ax=ax,
+                    order=sorted(x_series.unique()),
+                    boxprops=dict(
+                        color=plot_options._bar_color,
+                        alpha=plot_options._bar_alpha,
+                        linewidth=plot_options._line_width,
+                    ),
+                )
+                ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
+            # categorical-categorical
             else:
-                cross = pd.crosstab(x_series, y_series)
-                cross.plot(kind="bar", ax=ax)
+                freq = pd.crosstab(y_series, x_series)
+                sns.heatmap(
+                    freq,
+                    annot=True,
+                    annot_kws={
+                        "fontsize": 8,
+                    },
+                    fmt="d",
+                    cbar=False,
+                    cmap=plot_options._cmap,
+                    ax=ax,
+                )
+                ax.set_yticklabels(ax.get_yticklabels(), rotation=45, ha="right")
+                ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
 
-        return fig
-
-    @ensure_arg_list_uniqueness()
-    def plot_distribution_stratified(
-        self,
-        numeric_var: str,
-        stratify_by: str,
-        strategy: Literal[
-            "stacked_kde_density",
-            "stacked_hist_kde_density",
-            "stacked_hist_kde_frequency",
-            "violin",
-            "violin_swarm",
-            "violin_strip",
-            "box",
-            "box_swarm",
-            "box_strip",
-        ] = "box",
-        figsize: tuple[float, float] = (5, 5),
-        ax: plt.Axes | None = None,
-    ) -> plt.Figure:
-        """Plots the distributions (density) of a given numeric variable
-        stratified by a categorical variable. Note that NaNs will be dropped,
-        which may yield different ranges for different
-        stratify_by inputs, depending on their levels of missingness.
-
-        Parameters
-        ----------
-        numeric_var : str
-            Numeric variable of interest.
-
-        stratify_by : str
-            Categorical variable to stratify by.
-
-        strategy : Literal['stacked_kde_density', 'stacked_hist_kde_density',
-            'stacked_hist_kde_frequency', 'violin', 'violin_swarm', 'violin_strip',
-            'box', 'box_swarm', 'box_strip']
-            Default: 'box'. The strategy for plotting the distribution.
-
-        figsize : tuple[float, float]
-            Default: (5, 5). The size of the figure.
-
-        ax : plt.Axes | None
-            Default: None. If not None, the plot is drawn on the input Axes.
-
-        Returns
-        -------
-        plt.Figure
-        """
-        fig = None
-        if ax is None:
-            fig, ax = plt.subplots(1, 1, figsize=figsize)
-
-        local_df = self._df[[numeric_var, stratify_by]].dropna()
-
-        if strategy in [
-            "stacked_hist_kde_frequency",
-            "stacked_hist_kde_density",
-            "stacked_kde_density",
-        ]:
-            for i, category in enumerate(local_df[stratify_by].unique()):
-                subset = local_df[local_df[stratify_by] == category]
-                if strategy == "stacked_hist_kde_density":
-                    sns.histplot(
-                        subset[numeric_var],
-                        bins="auto",
-                        kde=True,
-                        label=str(category),
-                        alpha=plot_options._bar_alpha,
-                        stat="density",
-                        ax=ax,
-                        color=plot_options._color_palette[i],
-                        edgecolor=plot_options._bar_edgecolor,
-                    )
-                elif strategy == "stacked_hist_kde_frequency":
-                    sns.histplot(
-                        subset[numeric_var],
-                        bins="auto",
-                        kde=True,
-                        label=str(category),
-                        alpha=plot_options._bar_alpha,
-                        stat="frequency",
-                        ax=ax,
-                        color=plot_options._color_palette[i],
-                        edgecolor=plot_options._bar_edgecolor,
-                    )
-                elif strategy == "stacked_kde_density":
-                    sns.kdeplot(subset[numeric_var], label=str(category), ax=ax)
-
-            legend = ax.legend()
-            legend.set_title(stratify_by)
-
+        try:
             ax.ticklabel_format(
                 style="sci", axis="x", scilimits=plot_options._scilimits
             )
-
-        elif strategy == "violin_swarm":
-            sns.violinplot(
-                data=local_df,
-                x=stratify_by,
-                y=numeric_var,
-                ax=ax,
-                inner=None,
-                color=plot_options._bar_color,
-                edgecolor=plot_options._bar_edgecolor,
-                alpha=plot_options._bar_alpha,
+        except:
+            pass
+        try:
+            ax.ticklabel_format(
+                style="sci", axis="y", scilimits=plot_options._scilimits
             )
-            sns.swarmplot(
-                data=local_df,
-                x=stratify_by,
-                y=numeric_var,
-                color=plot_options._dot_color,
-                size=plot_options._dot_size,
-                ax=ax,
-            )
+        except:
+            pass
 
-        elif strategy == "violin":
-            sns.violinplot(
-                data=local_df,
-                x=stratify_by,
-                y=numeric_var,
-                ax=ax,
-                color=plot_options._bar_color,
-                edgecolor=plot_options._bar_color,
-                inner="box",
-                alpha=plot_options._bar_alpha,
-            )
-
-        elif strategy == "violin_strip":
-            sns.violinplot(
-                data=local_df,
-                x=stratify_by,
-                y=numeric_var,
-                ax=ax,
-                inner=None,
-                color=plot_options._bar_color,
-                edgecolor=plot_options._bar_edgecolor,
-                alpha=plot_options._bar_alpha,
-            )
-            sns.stripplot(
-                data=local_df,
-                x=stratify_by,
-                y=numeric_var,
-                color=plot_options._dot_color,
-                size=plot_options._dot_size,
-                ax=ax,
-            )
-
-        elif strategy == "box_swarm":
-            sns.boxplot(
-                data=local_df,
-                x=stratify_by,
-                y=numeric_var,
-                ax=ax,
-                color=plot_options._bar_color,
-                edgecolor=plot_options._bar_edgecolor,
-                fill=False,
-                linewidth=0.5,
-            )
-            sns.swarmplot(
-                data=local_df,
-                x=stratify_by,
-                y=numeric_var,
-                color=plot_options._dot_color,
-                size=plot_options._dot_size,
-                ax=ax,
-            )
-
-        elif strategy == "box_strip":
-            sns.boxplot(
-                data=local_df,
-                x=stratify_by,
-                y=numeric_var,
-                ax=ax,
-                color=plot_options._bar_color,
-                fill=False,
-                linewidth=0.5,
-            )
-            sns.stripplot(
-                data=local_df,
-                x=stratify_by,
-                y=numeric_var,
-                color=plot_options._dot_color,
-                size=plot_options._dot_size,
-                ax=ax,
-            )
-
-        elif strategy == "box":
-            sns.boxplot(
-                data=local_df,
-                x=stratify_by,
-                y=numeric_var,
-                ax=ax,
-                color=plot_options._bar_color,
-                fill=False,
-                linewidth=0.5,
-            )
-
-        else:
-            raise ValueError(f"Invalid input: {strategy}.")
-
-        ax.ticklabel_format(style="sci", axis="y", scilimits=plot_options._scilimits)
-        ax.set_title(
-            f"Distribution of {numeric_var}",
-        )
-
-        ax.title.set_fontsize(plot_options._title_font_size)
-        ax.xaxis.label.set_fontsize(plot_options._axis_title_font_size)
-        ax.yaxis.label.set_fontsize(plot_options._axis_title_font_size)
-        ax.tick_params(
-            axis="both",
-            which="major",
-            labelsize=plot_options._axis_major_ticklabel_font_size,
-        )
-        ax.tick_params(
-            axis="both",
-            which="minor",
-            labelsize=plot_options._axis_minor_ticklabel_font_size,
-        )
-
-        if fig is not None:
-            fig.tight_layout()
-            plt.close()
+        plt.close(fig)
         return fig
-
-    @ensure_arg_list_uniqueness()
-    def plot_distribution(
-        self,
-        var: str,
-        density: bool = False,
-        figsize: tuple[float, float] = (5, 5),
-        ax: plt.Axes | None = None,
-    ) -> plt.Figure:
-        """Plots the distribution of the variable.
-
-        Parameters
-        ----------
-        var : str
-            Variable name.
-
-        density : bool
-            Default: False. If True, plots the density rather than the
-            frequency.
-
-        figsize : tuple[float, float]
-            Default: (5, 5). The size of the figure. Only used if ax is None.
-
-        ax : plt.Axes | None
-            Default: None. If not None, the plot is drawn on the input Axes.
-
-        Returns
-        -------
-        plt.Figure
-        """
-        return self[var].plot_distribution(density=density, figsize=figsize, ax=ax)
 
     @ensure_arg_list_uniqueness()
     def plot_pca(
@@ -1320,7 +1195,7 @@ class EDAReport:
 
         title_str = ", ".join(numeric_vars)
         ax.set_title(f"PCA({title_str})", wrap=True)
-        ax.ticklabel_format(style="sci", axis="both", scilimits=(-3, 3))
+        ax.ticklabel_format(style="sci", axis="both", scilimits=plot_options._scilimits)
 
         ax.title.set_fontsize(plot_options._title_font_size)
         ax.xaxis.label.set_fontsize(plot_options._axis_title_font_size)
@@ -1356,9 +1231,9 @@ class EDAReport:
     def plot_correlation_heatmap(
         self,
         numeric_vars: list[str] | None = None,
-        p_values: bool = False,
-        cmap: str | plt.Colormap = "coolwarm",
-        figsize: tuple[float, float] = (5, 5),
+        htest: bool = False,
+        cmap: str | plt.Colormap = plot_options._cmap,
+        figsize: tuple[float, float] = (7, 7),
         ax: plt.Axes | None = None,
     ) -> plt.Figure:
         """Plots a heatmap of the correlation matrix of the numeric variables.
@@ -1369,7 +1244,7 @@ class EDAReport:
             List of numeric variables to include in the heatmap.
             If None, all numeric variables are considered.
 
-        p_values : bool
+        htest : bool
             If True, displays correlation coefficients with their
             corresponding p-values in parentheses.
 
@@ -1393,8 +1268,8 @@ class EDAReport:
             """Format correlation and p-value pair."""
             if pd.isna(corr) or pd.isna(pval):
                 return "NA"
-            corr_str = format_value(corr, n_decimals)
-            pval_str = format_value(pval, n_decimals)
+            corr_str = format_value(corr, n_decimals, mode="e")
+            pval_str = format_value(pval, n_decimals, mode="e")
             return f"{corr_str}\n(p={pval_str})"
 
         if numeric_vars is None:
@@ -1413,7 +1288,7 @@ class EDAReport:
 
         n_decimals = getattr(print_options, "_n_decimals", 4)
 
-        if not p_values:
+        if not htest:
             # Use pandas corr() which handles missing values with pairwise deletion
             corr = self._df[numeric_vars].corr()
 
@@ -1421,7 +1296,7 @@ class EDAReport:
             def format_value_with_na(x):
                 return "NA" if pd.isna(x) else format_value(x, n_decimals)
 
-            corr_formatted = corr.applymap(format_value_with_na)
+            corr_formatted = corr.apply(lambda x: x.apply(format_value_with_na))
 
             # Create a mask for missing values to show them differently
             mask = corr.isna()
@@ -1458,7 +1333,7 @@ class EDAReport:
                         corr_matrix[i, j] = 1.0
                         p_matrix[i, j] = 1.0
                         annot_matrix[i, j] = (
-                            format_value(1.0, n_decimals) + "\n(p=1.0000)"
+                            format_value(1.0, n_decimals, mode="f") + "\n(p=1.0)"
                         )
                     else:
                         corr, p = safe_pearsonr(
@@ -1488,11 +1363,6 @@ class EDAReport:
                 center=0,
                 mask=mask,  # Mask NA values
             )
-
-        # customize appearance
-        title = "Correlation Heatmap"
-        ax.set_title(title, fontsize=plot_options._title_font_size)
-
         ax.set_xticklabels(
             numeric_vars,
             rotation=45,
@@ -1501,7 +1371,8 @@ class EDAReport:
         )
         ax.set_yticklabels(
             numeric_vars,
-            rotation=0,
+            rotation=45,
+            ha="right",
             fontsize=plot_options._axis_major_ticklabel_font_size,
         )
 
@@ -2051,7 +1922,7 @@ class EDAReport:
                 group_1, group_2, equal_var=False, trim=0.1, alternative="two-sided"
             )
             return StatisticalTestReport(
-                description="Yuen's (20% trimmed mean) t-test",
+                description="Yuen's (20% trimmed) t-test",
                 statistic=ttest_result.statistic,
                 pval=ttest_result.pvalue,
                 descriptive_statistic=float(group_1.mean() - group_2.mean()),

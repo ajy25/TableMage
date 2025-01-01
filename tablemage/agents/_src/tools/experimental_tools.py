@@ -69,7 +69,10 @@ try:
     with open(sys.argv[3], 'wb') as result_file:
         pickle.dump(result, result_file)
 except Exception as e:
-    print(f'Error occurred while saving the result: {str(e)}')
+    try:
+        print(str(e))
+    except Exception:
+        raise e
 """
     )
 

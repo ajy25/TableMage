@@ -1,1 +1,11 @@
-2024-12-31 14:52:05 - Agents Log - A new _MageOptions object has been created with LLM build function: <function build_groq at 0x308d37a60> and multimodal LLM build function: None
+2025-01-01 02:31:28 - Agents Log - A new _MageOptions object has been created with LLM build function: <function build_groq at 0x17a097100> and multimodal LLM build function: None
+2025-01-01 02:31:29 - Agents Log - GROQ LLM build function has been set to: functools.partial(<function build_groq at 0x17a097100>, temperature=0.1, model='llama-3.1-8b-instant')
+2025-01-01 02:31:35 - Analyzer Log - Renamed variables 'Unnamed: 0' to 'Unnamed:_0'.
+2025-01-01 02:31:35 - Analyzer Log - Analyzer initialized for dataset 'Unnamed Dataset'.
+2025-01-01 02:31:35 - Agents Log - Data container initialized with the Analyzer built from the provided DataFrame.
+2025-01-01 02:31:35 - Agents Log - IO initialized.
+2025-01-01 02:31:35 - Agents Log - Initializing the Orchestrator.
+2025-01-01 02:31:35 - Agents Log - Initializing SingleAgent
+2025-01-01 02:31:36 - Agents Log - Adding dictionary to storage.
+2025-01-01 02:31:36 - Agents Log - Added dictionary without description. First 20 characters: {"train_shape": {"n_.
+2025-01-01 02:31:39 - Agents Log - SingleAgent initialized

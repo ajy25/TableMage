@@ -21,3 +21,8 @@ local_tests_llm
 
 
 storage/
+
+
+benchmarking/infiagent/data/*
+benchmarking/infiagent/url.txt/*
+benchmarking/infiagent/api_key.txt

@@ -50,28 +50,98 @@ def build_test_equal_means_tool(context: ToolingContext) -> FunctionTool:
 
 
 # Plot distribution tool
-class _PlotDistributionInput(BaseModel):
-    var: str = Field(description="The variable to plot the distribution of.")
+class _PlotInput(BaseModel):
+    x: str = Field(description="Variable to place on the x-axis of plot.")
+    y: str = Field(
+        description="Variable to place on the y-axis of plot. "
+        "If an empty string is provided, the distribution of x will be plotted. "
+        "Otherwise, a scatter plot, box plot, or crosstab heatmap will be generated, "
+        "depending on the data types of x and y.",
+    )
 
 
 @tool_try_except_thought_decorator
-def _plot_distribution_function(var: str, context: ToolingContext) -> str:
-    context.add_thought(
-        "I am going to plot the distribution of the variable: {var}.".format(var=var)
-    )
-    context.add_code("analyzer.eda().plot_distribution('{}')".format(var))
-    fig = context._data_container.analyzer.eda("all").plot_distribution(var)
-    return context.add_figure(
-        fig, text_description=f"Distribution plot of variable: {var}."
-    )
+def _plot_function(x: str, y: str, context: ToolingContext) -> str:
+    if y == "":
+        context.add_thought(
+            "I am going to plot the distribution of the variable: {x}.".format(x=x)
+        )
+        context.add_code("analyzer.eda().plot('{x}')".format(x=x))
+        fig = context._data_container.analyzer.eda("all").plot(x)
+        return context.add_figure(
+            fig, text_description=f"Distribution plot of variable: {x}."
+        )
+    else:
+        context.add_thought(
+            "I am going to plot the relationship between {x} and {y}.".format(x=x, y=y)
+        )
+        context.add_code("analyzer.eda().plot('{x}', '{y}')".format(x=x, y=y))
+        fig = context._data_container.analyzer.eda("all").plot(x, y)
+        # determine plot type
+        if x in context._data_container.analyzer.eda("all").categorical_vars:
+            if y in context._data_container.analyzer.eda("all").categorical_vars:
+                text_description = f"Crosstab heatmap of variables: {x} and {y}."
+            else:
+                text_description = f"Box plot of variables: {x} and {y}."
+        else:
+            if y in context._data_container.analyzer.eda("all").categorical_vars:
+                text_description = f"Box plot of variables: {y} and {x}."
+            else:
+                text_description = f"Scatter plot of variables: {x} and {y}."
+
+        return context.add_figure(fig, text_description=text_description)
 
 
-def build_plot_distribution_tool(context: ToolingContext) -> FunctionTool:
+def build_plot_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
-        fn=partial(_plot_distribution_function, context=context),
-        name="plot_distribution_tool",
-        description="""Plots the distribution of a variable.""",
-        fn_schema=_PlotDistributionInput,
+        fn=partial(_plot_function, context=context),
+        name="plot_tool",
+        description="""\
+Versatile plotting tool. Provide one or two variables, categorical or numeric. \
+If one variable is provided, a distribution plot will be generated \
+(histogram for numeric, bar plot for categorical). \
+If two variables are provided, a scatter plot, box plot, \
+or crosstab heatmap will be generated, \
+depending on the data types of the variables. \
+Returns a JSON string describing the figure.\
+""",
+        fn_schema=_PlotInput,
+    )
+
+
+# Pairplot tool
+
+
+class _PlotPairsInput(BaseModel):
+    vars: str = Field(
+        description="Comma delimited list of variables to include in the pairplot."
+    )
+
+
+@tool_try_except_thought_decorator
+def _plot_pairs_function(vars: str, context: ToolingContext) -> str:
+    vars_list = [var.strip() for var in vars.split(",")]
+    context.add_thought(
+        "I am going to generate a pairplot for the following variables: {vars_list}.".format(
+            vars_list=vars_list
+        )
+    )
+    context.add_code("analyzer.eda().plot_pairs(['{}'])".format("', '".join(vars_list)))
+    fig = context._data_container.analyzer.eda("all").plot_pairs(vars_list)
+    return context.add_figure(
+        fig, text_description=f"Pairplot of variables: {', '.join(vars_list)}."
+    )
+
+
+def build_plot_pairs_tool(context: ToolingContext) -> FunctionTool:
+    return FunctionTool.from_defaults(
+        fn=partial(_plot_pairs_function, context=context),
+        name="plot_pairs_tool",
+        description="""\
+Generates a pairplot for the specified variables. \
+Returns a JSON string describing the pairplot figure.\
+""",
+        fn_schema=_PlotPairsInput,
     )
 
 
@@ -174,8 +244,11 @@ def build_numeric_summary_statistics_tool(context: ToolingContext) -> FunctionTo
     return FunctionTool.from_defaults(
         fn=temp_fn,
         name="numeric_summary_statistics_tool",
-        description="""Generates summary statistics for the numeric variables in the dataset.
-        Returns a JSON string containing the summary statistics.""",
+        description="""
+Generates summary statistics for the numeric variables in the dataset. \
+Returns a JSON string containing the summary statistics, including \
+mean, median, standard deviation, variance, minimum, maximum, and missingness.\
+""",
         fn_schema=_BlankInput(),
     )
 
@@ -199,7 +272,10 @@ def build_categorical_summary_statistics_tool(context: ToolingContext) -> Functi
     return FunctionTool.from_defaults(
         fn=temp_fn,
         name="categorical_summary_statistics_tool",
-        description="""Generates summary statistics for the categorical variables in the dataset.
-        Returns a JSON string containing the summary statistics.""",
+        description="""\
+Generates summary statistics for the categorical variables in the dataset. \
+Returns a JSON string containing the summary statistics, \
+including most frequent category, least frequent category, and missingness.\
+""",
         fn_schema=_BlankInput(),
     )

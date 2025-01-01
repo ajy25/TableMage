@@ -27,7 +27,8 @@ from ..tools.ml_tools import (
 )
 from ..tools.eda_tools import (
     build_test_equal_means_tool,
-    build_plot_distribution_tool,
+    build_plot_tool,
+    build_plot_pairs_tool,
     build_numeric_summary_statistics_tool,
     build_categorical_summary_statistics_tool,
     build_correlation_comparison_tool,
@@ -144,7 +145,8 @@ def build_agent(
         build_ml_classification_tool(context),
         build_clustering_tool(context),
         build_test_equal_means_tool(context),
-        build_plot_distribution_tool(context),
+        build_plot_tool(context),
+        build_plot_pairs_tool(context),
         build_numeric_summary_statistics_tool(context),
         build_categorical_summary_statistics_tool(context),
         build_correlation_comparison_tool(context),

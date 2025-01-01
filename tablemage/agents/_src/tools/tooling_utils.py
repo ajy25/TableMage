@@ -9,7 +9,7 @@ def tool_try_except_thought_decorator(func):
         try:
             return func(*args, **kwargs)
         except Exception as e:
-            thought = f"An error occurred: '{e}'"
+            thought = f"An error occurred: {e}"
             if thought[-1] != ".":
                 thought += "."
             thought += " I'll try again."

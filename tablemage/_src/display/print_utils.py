@@ -371,7 +371,11 @@ def format_two_column(
     return left_text + " " * left_buffer + right_text
 
 
-def format_value(value: float, n_decimals: int = 4) -> str:
+def format_value(
+    value: float,
+    n_decimals: int = print_options._n_decimals,
+    mode: Literal["f", "g", "e"] = "f",
+) -> str:
     """Format float values with consistent decimal places."""
     if pd.isna(value):
         return "NA"
@@ -379,4 +383,12 @@ def format_value(value: float, n_decimals: int = 4) -> str:
         return "0." + "0" * n_decimals
     if value == 1:
         return "1." + "0" * n_decimals
-    return f"{value:.{n_decimals}f}"
+
+    if mode == "g":
+        return f"{value:.{n_decimals}g}"
+    elif mode == "f":
+        return f"{value:.{n_decimals}f}"
+    elif mode == "e":
+        return f"{value:.{n_decimals}e}"
+    else:
+        raise ValueError("Invalid mode. Must be 'f' or 'g' or 'e'.")

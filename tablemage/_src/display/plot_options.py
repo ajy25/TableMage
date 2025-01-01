@@ -17,10 +17,21 @@ class _PlotOptions:
         """Context to use for plots. (Seaborn)"""
 
         self._dot_size = 2
-        """Size of the dots in scatter plots. (Matplotlib)"""
+        """Size of the dots in scatter plots. ("size" param in Seaborn, \
+        "s" param in Matplotlib)
+        """
+
+        self._dot_s = 3
+        """Size of the dots in scatter plots. ("s" param in Seaborn)"""
 
         self._dot_color = "black"
         """Color of the dots in scatter plots. (Matplotlib)"""
+
+        self._dot_facecolor = "none"
+        """Face color of the dots in scatter plots. (Seaborn)"""
+
+        self._dot_edgecolor = "black"
+        """Edge color of the dots in scatter plots. (Seaborn)"""
 
         self._line_width = 1.0
         """Width of the lines in line plots. (Matplotlib)"""
