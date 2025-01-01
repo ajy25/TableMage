@@ -1538,7 +1538,7 @@ class DataHandler:
         ).columns.to_list()
         # force categorical vars to be strings
         for var in categorical_vars:
-            df[var] = df[var].astype(str)
+            df[var] = df[var].apply(lambda x: str(x) if pd.notna(x) else np.nan)
 
         numeric_vars = df.select_dtypes(include=["number"]).columns.to_list()
 

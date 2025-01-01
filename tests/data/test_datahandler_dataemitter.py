@@ -665,7 +665,7 @@ def test_datahandler_dropna_drop_highly_missing(setup_data):
     """Test DataEmitter with basic pipeline generation capabilities"""
     train_data = setup_data["df_house_train"]
     test_data = setup_data["df_house_test"]
-    dh = DataHandler(train_data, test_data, verbose=False)
+    dh = DataHandler(train_data, test_data, verbose=True)
 
     dh.drop_highly_missing_vars(threshold=0.5)
     dh.dropna()
