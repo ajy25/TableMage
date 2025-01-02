@@ -85,22 +85,24 @@ including exploratory data analysis, regression analysis, and causal inference.
 
 ## Quick start (no-code)
 
-First, install the required additional dependencies:
+First, install the required additional dependencies.
 ```
 pip install '.[agents]'
 ```
 
-Next, add your API key.
+Next, add your API key. You only need to do this once; your API key will be written to a local `.env` file.
 ```python
 import tablemage as tm
-tm.agents.set_key("openai", "add-your-api-key-here")
+tm.use_agents()                                             # import the agents module
+tm.agents.set_key("openai", "add-your-api-key-here")        # set API key
 ```
-
 
 You can open up a chat user interface by running the following code and clicking on the URL that appears in the terminal.
 Your conversation with the AI agent appears on the left, while the AI agent's analyses (figures made, tables produced, TableMage commands used) appear on the right.
 
 ```python
+import tablemage as tm
+tm.use_agents()
 tm.agents.App().run()
 ```
 
@@ -108,28 +110,19 @@ Or, you can chat with the AI agent directly in Python:
 
 ```python
 import pandas as pd
+import tablemage as tm
+tm.use_agents()
 
 # load table
 df = ...
 
-# initialize a Mage object
-mage = tm.agents.ConversationalAgent(df, test_size=0.2)
+# initialize a ConversationalAgent object
+agent = tm.agents.ConversationalAgent(df, test_size=0.2)
 
-# chat with the Mage
-print(mage.chat("Compute the summary statistics for the numeric variables."))
+# chat with the agent
+print(agent.chat("Compute the summary statistics for the numeric variables."))
 ```
 
 ## Notes
 
 TableMage is under active development.
-
-### Motivation: low-code/no-code data science for clinical research
-
-TableMage provides a low-code Python API that exponentially accelerates data science by seamlessly connecting exploratory analysis and data preprocessing to statistical and machine learning modeling. TableMage offers the following features:
-1. **Preprocess-as-you-explore functionality.** TableMage remembers data transformations and automatically preprocesses your train, validation, and test datasets when you later fit and evaluate models. 
-2. **Automatic hyperparameter optimization and feature selection.** TableMage can automatically select features and identify optimal hyperparameters for you. All TableMage ML models come with preset hyperparameter search methods. 
-3. **Flexibility.** Though TableMage provides many out-of-the-box models with default hyperparameter search spaces, it also supports custom estimators and pipelines. Any scikit-learn `BaseEstimator`/`Pipeline`-like object with fit and predict methods can be used. 
-4. **Linear regression.** TableMage contains numerous methods to support statsmodels' classical linear statistical models, including diagnostic plots, stepwise feature selection, and statistical tests, enabling you to seamlessly switch between linear statistical modeling and machine learning.
-5. **Exploratory data analysis, causal inference, clustering, and more.** TableMage provides low-code tools for other areas of data science, not just regression and classification.
-5. **GenAI integration.**  TableMage comes with AI agents equipped with its low-code tools, allowing you to chat with your data.
-

@@ -18,9 +18,9 @@ handler.setFormatter(formatter)
 AGENTS_LOGGER.addHandler(handler)
 
 # let's add sys.stderr to the logger
-stream_handler = logging.StreamHandler(sys.stderr)
-stream_handler.setLevel(logging.DEBUG)
-AGENTS_LOGGER.addHandler(stream_handler)
+# stream_handler = logging.StreamHandler(sys.stderr)
+# stream_handler.setLevel(logging.DEBUG)
+# AGENTS_LOGGER.addHandler(stream_handler)
 
 
 def print_debug(message: str):

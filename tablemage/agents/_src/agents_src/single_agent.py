@@ -13,7 +13,9 @@ from llama_index.core.memory import (
     VectorMemory,
     SimpleComposableMemory,
 )
-from llama_index.embeddings.fastembed import FastEmbedEmbedding
+
+from llama_index.core import Settings
+
 from typing import Literal
 from pathlib import Path
 
@@ -26,7 +28,10 @@ from ..tools.ml_tools import (
     build_clustering_tool,
 )
 from ..tools.eda_tools import (
-    build_test_equal_means_tool,
+    build_test_ttest_tool,
+    build_test_anova_tool,
+    build_test_chi2_tool,
+    build_test_normality_tool,
     build_plot_tool,
     build_plot_pairs_tool,
     build_numeric_summary_statistics_tool,
@@ -65,8 +70,9 @@ def build_agent(
     system_prompt: str = SINGLE_SYSTEM_PROMPT,
     memory: Literal["buffer", "vector"] = "vector",
     tool_rag: bool = True,
-    tool_rag_top_k: int = 3,
+    tool_rag_top_k: int = 5,
     react: bool = False,
+    python_only: bool = False,
 ) -> FunctionCallingAgent | ReActAgent:
     """Builds an agent.
 
@@ -102,6 +108,9 @@ def build_agent(
         If True, a ReActAgent is returned. Otherwise, a FunctionCallingAgent is returned.
         If True, the system prompt is not considered.
 
+    python_only : bool
+        If True, only the Python environment is provided. Default is False.
+
     Returns
     -------
     FunctionCallingAgent | ReActAgent
@@ -117,7 +126,7 @@ def build_agent(
         buffer_memory = ChatMemoryBuffer.from_defaults(token_limit=3000)
         vector_memory = VectorMemory.from_defaults(
             vector_store=vector_store,
-            embed_model=FastEmbedEmbedding(model_name="BAAI/bge-base-en-v1.5"),
+            embed_model=Settings.embed_model,
             retriever_kwargs={"similarity_top_k": 1},
         )
         memory_obj = SimpleComposableMemory(
@@ -138,41 +147,54 @@ def build_agent(
         )
     )
 
-    tools = [
-        build_estimate_causal_effect_tool(context),
-        build_feature_selection_tool(context),
-        build_ml_regression_tool(context),
-        build_ml_classification_tool(context),
-        build_clustering_tool(context),
-        build_test_equal_means_tool(context),
-        build_plot_tool(context),
-        build_plot_pairs_tool(context),
-        build_numeric_summary_statistics_tool(context),
-        build_categorical_summary_statistics_tool(context),
-        build_correlation_comparison_tool(context),
-        build_correlation_matrix_tool(context),
-        build_ols_tool(context),
-        build_logit_tool(context),
-        build_drop_highly_missing_vars_tool(context),
-        build_drop_na_tool(context),
-        build_engineer_numeric_feature_tool(context),
-        build_engineer_categorical_feature_tool(context),
-        build_impute_tool(context),
-        build_scale_tool(context),
-        build_onehot_encode_tool(context),
-        build_force_binary_tool(context),
-        dataset_summary_tool,
-    ]
+    if python_only:
+        tools = []
 
-    tools_to_persist = [
-        build_python_env_code_run_tool(context),
-        build_revert_to_original_tool(context),
-    ]
+    else:
+        tools = [
+            build_estimate_causal_effect_tool(context),
+            build_feature_selection_tool(context),
+            build_ml_regression_tool(context),
+            build_ml_classification_tool(context),
+            build_clustering_tool(context),
+            build_test_ttest_tool(context),
+            build_test_anova_tool(context),
+            build_test_chi2_tool(context),
+            build_test_normality_tool(context),
+            build_plot_tool(context),
+            build_plot_pairs_tool(context),
+            build_numeric_summary_statistics_tool(context),
+            build_categorical_summary_statistics_tool(context),
+            build_correlation_comparison_tool(context),
+            build_correlation_matrix_tool(context),
+            build_ols_tool(context),
+            build_logit_tool(context),
+            build_drop_highly_missing_vars_tool(context),
+            build_drop_na_tool(context),
+            build_engineer_numeric_feature_tool(context),
+            build_engineer_categorical_feature_tool(context),
+            build_impute_tool(context),
+            build_scale_tool(context),
+            build_onehot_encode_tool(context),
+            build_force_binary_tool(context),
+            dataset_summary_tool,
+        ]
+
+    if python_only:
+        tools_to_persist = [
+            build_python_env_code_run_tool(context),
+        ]
+    else:
+        tools_to_persist = [
+            build_python_env_code_run_tool(context),
+            build_revert_to_original_tool(context),
+        ]
 
     if tool_rag:
         obj_index = ObjectIndex.from_objects(
             tools,
             index_cls=VectorStoreIndex,
+            embed_model=Settings.embed_model,
         )
         tool_retriever = obj_index.as_retriever(similarity_top_k=tool_rag_top_k)
 
@@ -236,6 +258,8 @@ class SingleAgent:
         memory: Literal["buffer", "vector"] = "vector",
         tool_rag: bool = True,
         tool_rag_top_k: int = 5,
+        system_prompt: str = SINGLE_SYSTEM_PROMPT,
+        python_only: bool = False,
     ):
         """Initializes the SingleAgent object."""
         if not isinstance(llm, FunctionCallingLLM):
@@ -250,6 +274,8 @@ class SingleAgent:
             tool_rag=tool_rag,
             tool_rag_top_k=tool_rag_top_k,
             react=react,
+            system_prompt=system_prompt,
+            python_only=python_only,
         )
 
         print_debug("SingleAgent initialized")

@@ -72,6 +72,11 @@ def upload_dataset():
     try:
         # Read the uploaded CSV file
         uploaded_data = pd.read_csv(file)
+
+        # if the first column is unnamed, drop it
+        if uploaded_data.columns[0] == "Unnamed: 0":
+            uploaded_data = uploaded_data.drop(columns="Unnamed: 0")
+
         mage = ConversationalAgent(uploaded_data, test_size=test_size)
 
         return jsonify({"message": "Dataset uploaded successfully"}), 200

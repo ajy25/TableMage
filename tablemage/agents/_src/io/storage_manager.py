@@ -1,5 +1,5 @@
 from llama_index.core.indices import VectorStoreIndex
-from llama_index.core.objects import ObjectIndex, SimpleObjectNodeMapping
+from llama_index.core.objects import ObjectIndex
 from llama_index.core.vector_stores import SimpleVectorStore
 from llama_index.core import StorageContext, Settings
 from llama_index.embeddings.fastembed import FastEmbedEmbedding
@@ -8,13 +8,20 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 import pandas as pd
 from json import dumps
+import os
 
+from ...._src.display.print_utils import suppress_std_output
 from ..options import options
 from ..llms.utils import describe_image
 from .._debug.logger import print_debug
 from ...._src.utils.serialize import prepare_for_json
 
-Settings.embed_model = FastEmbedEmbedding(model_name="BAAI/bge-base-en-v1.5")
+
+# set the environment variable to disable parallelism for FastEmbedEmbedding
+# parallelism conflicts with the Python environment
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+with suppress_std_output():
+    Settings.embed_model = FastEmbedEmbedding(model_name="BAAI/bge-base-en-v1.5")
 
 
 io_path = Path(__file__).resolve().parent

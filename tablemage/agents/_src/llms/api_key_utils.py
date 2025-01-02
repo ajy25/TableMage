@@ -3,11 +3,28 @@ from pathlib import Path
 import os
 from typing import Literal
 
+# clear environment
+try:
+    os.environ.pop("OPENAI_API")
+except KeyError:
+    pass
+try:
+    os.environ.pop("GROQ_API")
+except KeyError:
+    pass
 
-dotenv_path = Path(__file__).parent.parent.parent.parent.parent.resolve() / ".env"
+dotenv_path = Path(__file__).parent.parent.parent.parent.resolve() / ".env"
 if not dotenv_path.exists():
     with open(dotenv_path, "w") as f:
         f.write("OPENAI_API_KEY=...\nGROQ_API_KEY=...\n")
+    raise Warning(
+        "No .env file found. Creating a new .env file. "
+        "Please use `tm.agents.set_key()` to set your API keys. "
+        "You only need to do this once."
+    )
+else:
+    if not load_dotenv(dotenv_path=str(dotenv_path)):
+        raise RuntimeError("Error loading .env file.")
 
 
 def key_exists(
@@ -23,8 +40,6 @@ def key_exists(
     llm_type : Literal["openai"]
         The type of LLM for which to find the API key.
     """
-    load_dotenv(dotenv_path=dotenv_path)
-
     if llm_type == "openai":
         api_key = (
             str(os.getenv("OPENAI_API_KEY")) if os.getenv("OPENAI_API_KEY") else None
@@ -49,8 +64,6 @@ def find_key(llm_type: Literal["openai", "groq"]) -> str:
     llm_type : Literal["openai", "groq"]
         The type of LLM for which to find the API key.
     """
-    load_dotenv(dotenv_path=dotenv_path)
-
     if llm_type == "openai":
         api_key = (
             str(os.getenv("OPENAI_API_KEY")) if os.getenv("OPENAI_API_KEY") else None
@@ -60,7 +73,7 @@ def find_key(llm_type: Literal["openai", "groq"]) -> str:
     elif llm_type == "groq":
         api_key = str(os.getenv("GROQ_API_KEY")) if os.getenv("GROQ_API_KEY") else None
         if api_key == "..." or api_key is None:
-            raise ValueError("GROQ API key not found in .env file.")
+            raise ValueError("Groq API key not found in .env file.")
     else:
         raise ValueError("Invalid LLM type specified.")
 
@@ -92,3 +105,7 @@ def set_key(llm_type: Literal["openai", "groq"], api_key: str) -> None:
                 f.write(f"{key_name}={api_key}\n")
             else:
                 f.write(line)
+
+    # reload the .env file
+    if not load_dotenv(dotenv_path=str(dotenv_path)):
+        raise RuntimeError("Error loading .env file.")

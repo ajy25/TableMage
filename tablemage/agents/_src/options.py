@@ -21,17 +21,20 @@ class _AgentsOptions:
 
         if key_exists("openai"):
             self._llm_build_function = build_openai
-            self._multimodal_llm_build_function = build_openai_multimodal
+            try:
+                self._multimodal_llm_build_function = build_openai_multimodal
+            except Exception as e:
+                print_debug("Multimodal LLM build function not set: " + str(e))
         elif key_exists("groq"):
             self._llm_build_function = build_groq
         else:
-            raise ValueError("No API keys found in .env file.")
+            self._llm_build_function = build_ollama
 
         self._multimodal = (
             True if self._multimodal_llm_build_function is not None else False
         )
         print_debug(
-            "A new _MageOptions object has been created "
+            "A new _AgentOptions object has been created "
             "with LLM build function: "
             + str(self._llm_build_function)
             + " and multimodal LLM build function: "

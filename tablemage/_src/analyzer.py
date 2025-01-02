@@ -922,7 +922,7 @@ class Analyzer:
             - '5nn': impute with 5-nearest neighbors.
             - '10nn': impute with 10-nearest neighbors.
 
-        categorical_strategy : Literal['most_frequent']
+        categorical_strategy : Literal['most_frequent', 'missing']
             Default: 'most_frequent'.
             Strategy for imputing missing values in categorical variables.
             - 'most_frequent': impute with most frequent value.

@@ -13,7 +13,7 @@ tablemage/agents/_src/io/_vector_memory/*
 tablemage/agents/_src/io/_log/*
 tablemage/agents/_src/_debug/_debug_log.log
 
-.env
+tablemage/.env
 
 
 local_tests
@@ -26,3 +26,5 @@ storage/
 benchmarking/infiagent/data/*
 benchmarking/infiagent/url.txt/*
 benchmarking/infiagent/api_key.txt
+
+benchmarking/ml/datasets/*

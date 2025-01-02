@@ -22,7 +22,11 @@ else:
 
 
 def build_tablemage_analyzer(
-    df: pd.DataFrame, df_test: pd.DataFrame | None = None, test_size: float = 0.2
+    df: pd.DataFrame,
+    df_test: pd.DataFrame | None = None,
+    test_size: float = 0.2,
+    split_seed: int = 42,
+    name: str = "Dataset",
 ) -> Analyzer:
     """Builds a TableMage Analyzer for a DataFrame.
 
@@ -36,6 +40,12 @@ def build_tablemage_analyzer(
 
     test_size : float
         The size of the test set. Defaults to 0.2.
+
+    split_seed : int
+        The seed to use for the train-test split. Defaults to 42.
+
+    name : str
+        The name of the dataset. Defaults to "Dataset".
 
     Returns
     -------
@@ -51,13 +61,21 @@ def build_tablemage_analyzer(
     )
     debug_filehandler.setFormatter(formatter)
     debug_logger.addHandler(debug_filehandler)
-    print_options.reset_secondary_logger(logger=debug_logger)
 
     io_filehandler = logging.FileHandler(io_log_path)
     io_filehandler.setFormatter(formatter)
     debug_logger.addHandler(io_filehandler)
 
-    analyzer = Analyzer(df, df_test=df_test, test_size=test_size, verbose=True)
+    print_options.reset_secondary_logger(logger=debug_logger)
+
+    analyzer = Analyzer(
+        df,
+        df_test=df_test,
+        test_size=test_size,
+        split_seed=split_seed,
+        verbose=True,
+        name=name,
+    )
     return analyzer
 
 

@@ -1404,14 +1404,21 @@ class EDAReport:
         -------
         StatisticalTestResult
         """
-        if stratify_by not in self._categorical_vars:
+        if (
+            stratify_by not in self._categorical_vars
+            and stratify_by not in self._numeric_vars
+        ):
             if len(self._df[stratify_by].unique()) > 20:
                 raise ValueError(
                     f"Invalid input: {stratify_by}. "
                     "Must be a categorical variable or numeric variable with <= 20 unique values."
                 )
 
-        groups = self._df.groupby(stratify_by)[numeric_var].apply(list).to_dict()
+        groups = (
+            self._df.groupby(stratify_by, observed=True)[numeric_var]
+            .apply(list)
+            .to_dict()
+        )
         if len(groups) < 2:
             raise ValueError(
                 "Invalid input: stratify_by. Must have at least two unique values."

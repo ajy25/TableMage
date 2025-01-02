@@ -5,47 +5,172 @@ from .tooling_context import ToolingContext
 from .tooling_utils import tool_try_except_thought_decorator
 
 
-# Means test tool
-class _TestEqualMeansInput(BaseModel):
-    categorical_var: str = Field(
-        description="The categorical variable that defines the groups/levels."
-    )
+# t-test tool
+class _TTestInput(BaseModel):
     numeric_var: str = Field(
-        description="The numeric variable of interest to test the means of."
+        description="The numeric variable to perform the t-test on."
+    )
+    binary_var: str = Field(description="The binary variable to split the data on.")
+    test: str = Field(
+        "The type of t-test to perform. Options: `welch`, `student`, `mann-whitney`."
     )
 
 
 @tool_try_except_thought_decorator
-def _test_equal_means_function(
-    categorical_var: str, numeric_var: str, context: ToolingContext
+def _t_test_function(
+    numeric_var: str, binary_var: str, test: str, context: ToolingContext
 ) -> str:
     context.add_thought(
-        "I am going to test whether the means of the variable {numeric_var} are equal across the different levels of the variable {categorical_var}.".format(
-            numeric_var=numeric_var, categorical_var=categorical_var
+        "I am going to perform a t-test on the variable {numeric_var} split by the binary variable {binary_var}.".format(
+            numeric_var=numeric_var, binary_var=binary_var
         )
     )
     context.add_code(
-        "analyzer.eda().test_equal_means(numeric_var='{}', stratify_by='{}')".format(
-            numeric_var, categorical_var
+        "analyzer.eda().ttest(numeric_var='{}', stratify_by='{}', strategy='{}')".format(
+            numeric_var, binary_var, test
         )
     )
     dict_output = (
         context._data_container.analyzer.eda("all")
-        .test_equal_means(numeric_var=numeric_var, stratify_by=categorical_var)
+        .ttest(numeric_var=numeric_var, stratify_by=binary_var, strategy=test)
         ._to_dict()
     )
     return context.add_dict(dict_output)
 
 
-def build_test_equal_means_tool(context: ToolingContext) -> FunctionTool:
+def build_test_ttest_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
-        fn=partial(_test_equal_means_function, context=context),
-        name="test_equal_means_tool",
-        description="""Tests whether the means of a numeric variable are equal across the different levels of a categorical variable.
-        The null hypothesis is that the means are equal.
-        This tool will automatically determine the correct statistical test (e.g. t-test, ANOVA, etc.) to conduct.
-        Returns a JSON string containing results and which test used.""",
-        fn_schema=_TestEqualMeansInput,
+        fn=partial(_t_test_function, context=context),
+        name="t_test_tool",
+        description="""\
+Performs a t-test on a numeric variable split by a binary variable. \
+Returns a JSON string containing the results and which test was used.\
+""",
+        fn_schema=_TTestInput,
+    )
+
+
+# ANOVA test tool
+class _AnovaTestInput(BaseModel):
+    numeric_var: str = Field(
+        description="The numeric variable to perform the ANOVA test on."
+    )
+    categorical_var: str = Field(
+        description="The categorical variable to split the data on."
+    )
+    test: str = Field(
+        description="The type of ANOVA test to perform. Options: `anova_oneway`, `kruskal`."
+    )
+
+
+@tool_try_except_thought_decorator
+def _anova_test_function(
+    numeric_var: str, categorical_var: str, test: str, context: ToolingContext
+) -> str:
+    context.add_thought(
+        "I am going to perform an ANOVA test on the variable {numeric_var} split by the categorical variable {categorical_var}.".format(
+            numeric_var=numeric_var, categorical_var=categorical_var
+        )
+    )
+    context.add_code(
+        "analyzer.eda().anova(numeric_var='{}', stratify_by='{}', strategy='{}')".format(
+            numeric_var, categorical_var, test
+        )
+    )
+    dict_output = (
+        context._data_container.analyzer.eda("all")
+        .anova(numeric_var=numeric_var, stratify_by=categorical_var, strategy=test)
+        ._to_dict()
+    )
+    return context.add_dict(dict_output)
+
+
+def build_test_anova_tool(context: ToolingContext) -> FunctionTool:
+    return FunctionTool.from_defaults(
+        fn=partial(_anova_test_function, context=context),
+        name="anova_test_tool",
+        description="""\
+Performs an ANOVA test on a numeric variable split by a categorical variable. \
+Returns a JSON string containing the results and which test was used.\
+""",
+        fn_schema=_AnovaTestInput,
+    )
+
+
+# Normality test tool
+class _TestNormalityInput(BaseModel):
+    numeric_var: str = Field(description="The numeric variable to test for normality.")
+    test: str = Field("The test to perform. Options: `shapiro`, `kstest`, `anderson`.")
+
+
+@tool_try_except_thought_decorator
+def _test_normality_function(
+    numeric_var: str, test: str, context: ToolingContext
+) -> str:
+    context.add_thought(
+        "I am going to test whether the variable {numeric_var} is normally distributed.".format(
+            numeric_var=numeric_var
+        )
+    )
+    context.add_code(
+        "analyzer.eda().test_normality(numeric_var='{}', method='{}')".format(
+            numeric_var, test
+        )
+    )
+    dict_output = (
+        context._data_container.analyzer.eda("all")
+        .test_normality(numeric_var=numeric_var, method=test)
+        ._to_dict()
+    )
+    return context.add_dict(dict_output)
+
+
+def build_test_normality_tool(context: ToolingContext) -> FunctionTool:
+    return FunctionTool.from_defaults(
+        fn=partial(_test_normality_function, context=context),
+        name="test_normality_tool",
+        description="""Tests whether a numeric variable is normally distributed. \
+The null hypothesis is that the data is normally distributed.
+Returns a JSON string containing results and which test used.
+""",
+        fn_schema=_TestNormalityInput,
+    )
+
+
+# chi2 test tool
+class _Chi2TestInput(BaseModel):
+    x: str = Field(description="The first categorical variable.")
+    y: str = Field(description="The second categorical variable.")
+
+
+@tool_try_except_thought_decorator
+def _chi2_test_function(x: str, y: str, context: ToolingContext) -> str:
+    context.add_thought(
+        "I am going to perform a chi-squared test of independence between the variables {x} and {y}.".format(
+            x=x, y=y
+        )
+    )
+    context.add_code(
+        "analyzer.eda().chi2(categorical_var_1='{}', categorical_var_2='{}')".format(
+            x, y
+        )
+    )
+    dict_output = (
+        context._data_container.analyzer.eda("all")
+        .chi2(categorical_var_1=x, categorical_var_2=y)
+        ._to_dict()
+    )
+    return context.add_dict(dict_output)
+
+
+def build_test_chi2_tool(context: ToolingContext) -> FunctionTool:
+    return FunctionTool.from_defaults(
+        fn=partial(_chi2_test_function, context=context),
+        name="chi2_test_tool",
+        description="""Performs a chi-squared test of independence between two categorical variables. \
+The null hypothesis is that the variables are independent. \
+Returns a JSON string containing results and which test used.""",
+        fn_schema=_Chi2TestInput,
     )
 
 
