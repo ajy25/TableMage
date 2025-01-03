@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 from functools import partial
 from typing import Literal
 from .tooling_context import ToolingContext
-from .tooling_utils import tool_try_except_thought_decorator
+from .tooling_utils import tooling_decorator
 from .._debug.logger import print_debug
 from ....ml import (
     LinearC,
@@ -109,7 +109,7 @@ def parse_model_list_from_str(
     return output, output_code
 
 
-@tool_try_except_thought_decorator
+@tooling_decorator
 def parse_predictor_list_from_str(predictors_str: str) -> list[str]:
     return [predictor.strip() for predictor in predictors_str.split(",")]
 
@@ -137,7 +137,7 @@ An example input (without the quotes) is: 'OLS, Lasso, RF'.
     )
 
 
-@tool_try_except_thought_decorator
+@tooling_decorator
 def _ml_regression_function(
     models: str, target: str, predictors: str, context: ToolingContext
 ) -> str:
@@ -178,7 +178,7 @@ def _ml_regression_function(
 def build_ml_regression_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(_ml_regression_function, context=context),
-        name="ml_regression_tool",
+        name="ml_regression_function",
         description="Performs regression with a list of machine learning models that you must specify. "
         "Predicts the target variable with a list of predictor variables. "
         "Model hyperparameters are optimized automatically using cross-validation and the Optuna library. "
@@ -210,7 +210,7 @@ An example input (without the quotes) is: 'Logistic, RF, XGBoost'.
     )
 
 
-@tool_try_except_thought_decorator
+@tooling_decorator
 def _ml_classification_function(
     models: str, target: str, predictors: str, context: ToolingContext
 ) -> str:
@@ -254,7 +254,7 @@ def _ml_classification_function(
 def build_ml_classification_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(_ml_classification_function, context=context),
-        name="ml_classification_tool",
+        name="ml_classification_function",
         description="Performs classification with a list of machine learning models that you must specify. "
         "Predicts the target variable with a list of predictor variables. "
         "Model hyperparameters are optimized automatically using cross-validation and the Optuna library. "
@@ -287,7 +287,7 @@ An example input (without the quotes) is: 'var1, var2, var3'.
     )
 
 
-@tool_try_except_thought_decorator
+@tooling_decorator
 def _feature_selection_function(
     feature_selector: str,
     target: str,
@@ -362,14 +362,17 @@ def _feature_selection_function(
         feature_selectors=[fs], target=target, predictors=predictors_list
     )
 
-    output_str = context.add_dict(report._to_dict())
+    output_dict = report._to_dict()
+    context.add_dict(output_dict)
+    output_str = f"Selected features: {', '.join(report.top_features())}. "
+    output_str += f"Consider using only these features to predict {target}."
     return output_str
 
 
 def build_feature_selection_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(_feature_selection_function, context=context),
-        name="feature_selection_tool",
+        name="feature_selection_function",
         description="""\
 Performs feature selection with a specified method. \
 Automatically detecs if the target variable is categorical or continuous. \
@@ -419,7 +422,7 @@ An example input (without the quotes) is: 'PCA'.
     )
 
 
-@tool_try_except_thought_decorator
+@tooling_decorator
 def _clustering_function(
     features: str,
     model: str,
@@ -485,7 +488,7 @@ def _clustering_function(
 def build_clustering_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(_clustering_function, context=context),
-        name="clustering_tool",
+        name="clustering_function",
         description="""Performs clustering with a specified method. \
 Clusters the data using a list of variables. \
 Returns a figure showing the clusters.

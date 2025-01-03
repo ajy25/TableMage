@@ -2,7 +2,7 @@ from llama_index.core.tools import FunctionTool
 from pydantic import BaseModel, Field
 from functools import partial
 from .tooling_context import ToolingContext
-from .tooling_utils import tool_try_except_thought_decorator
+from .tooling_utils import tooling_decorator
 
 
 # t-test tool
@@ -16,7 +16,7 @@ class _TTestInput(BaseModel):
     )
 
 
-@tool_try_except_thought_decorator
+@tooling_decorator
 def _t_test_function(
     numeric_var: str, binary_var: str, test: str, context: ToolingContext
 ) -> str:
@@ -41,7 +41,7 @@ def _t_test_function(
 def build_test_ttest_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(_t_test_function, context=context),
-        name="t_test_tool",
+        name="t_test_function",
         description="""\
 Performs a t-test on a numeric variable split by a binary variable. \
 Returns a JSON string containing the results and which test was used.\
@@ -63,7 +63,7 @@ class _AnovaTestInput(BaseModel):
     )
 
 
-@tool_try_except_thought_decorator
+@tooling_decorator
 def _anova_test_function(
     numeric_var: str, categorical_var: str, test: str, context: ToolingContext
 ) -> str:
@@ -88,7 +88,7 @@ def _anova_test_function(
 def build_test_anova_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(_anova_test_function, context=context),
-        name="anova_test_tool",
+        name="anova_test_function",
         description="""\
 Performs an ANOVA test on a numeric variable split by a categorical variable. \
 Returns a JSON string containing the results and which test was used.\
@@ -103,7 +103,7 @@ class _TestNormalityInput(BaseModel):
     test: str = Field("The test to perform. Options: `shapiro`, `kstest`, `anderson`.")
 
 
-@tool_try_except_thought_decorator
+@tooling_decorator
 def _test_normality_function(
     numeric_var: str, test: str, context: ToolingContext
 ) -> str:
@@ -128,7 +128,7 @@ def _test_normality_function(
 def build_test_normality_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(_test_normality_function, context=context),
-        name="test_normality_tool",
+        name="test_normality_function",
         description="""Tests whether a numeric variable is normally distributed. \
 The null hypothesis is that the data is normally distributed.
 Returns a JSON string containing results and which test used.
@@ -143,7 +143,7 @@ class _Chi2TestInput(BaseModel):
     y: str = Field(description="The second categorical variable.")
 
 
-@tool_try_except_thought_decorator
+@tooling_decorator
 def _chi2_test_function(x: str, y: str, context: ToolingContext) -> str:
     context.add_thought(
         "I am going to perform a chi-squared test of independence between the variables {x} and {y}.".format(
@@ -166,7 +166,7 @@ def _chi2_test_function(x: str, y: str, context: ToolingContext) -> str:
 def build_test_chi2_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(_chi2_test_function, context=context),
-        name="chi2_test_tool",
+        name="chi2_test_function",
         description="""Performs a chi-squared test of independence between two categorical variables. \
 The null hypothesis is that the variables are independent. \
 Returns a JSON string containing results and which test used.""",
@@ -185,7 +185,7 @@ class _PlotInput(BaseModel):
     )
 
 
-@tool_try_except_thought_decorator
+@tooling_decorator
 def _plot_function(x: str, y: str, context: ToolingContext) -> str:
     if y == "":
         context.add_thought(
@@ -203,13 +203,13 @@ def _plot_function(x: str, y: str, context: ToolingContext) -> str:
         context.add_code("analyzer.eda().plot('{x}', '{y}')".format(x=x, y=y))
         fig = context._data_container.analyzer.eda("all").plot(x, y)
         # determine plot type
-        if x in context._data_container.analyzer.eda("all").categorical_vars:
-            if y in context._data_container.analyzer.eda("all").categorical_vars:
+        if x in context._data_container.analyzer.eda("all").categorical_vars():
+            if y in context._data_container.analyzer.eda("all").categorical_vars():
                 text_description = f"Crosstab heatmap of variables: {x} and {y}."
             else:
                 text_description = f"Box plot of variables: {x} and {y}."
         else:
-            if y in context._data_container.analyzer.eda("all").categorical_vars:
+            if y in context._data_container.analyzer.eda("all").categorical_vars():
                 text_description = f"Box plot of variables: {y} and {x}."
             else:
                 text_description = f"Scatter plot of variables: {x} and {y}."
@@ -220,7 +220,7 @@ def _plot_function(x: str, y: str, context: ToolingContext) -> str:
 def build_plot_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(_plot_function, context=context),
-        name="plot_tool",
+        name="plot_function",
         description="""\
 Versatile plotting tool. Provide one or two variables, categorical or numeric. \
 If one variable is provided, a distribution plot will be generated \
@@ -243,7 +243,7 @@ class _PlotPairsInput(BaseModel):
     )
 
 
-@tool_try_except_thought_decorator
+@tooling_decorator
 def _plot_pairs_function(vars: str, context: ToolingContext) -> str:
     vars_list = [var.strip() for var in vars.split(",")]
     context.add_thought(
@@ -261,7 +261,7 @@ def _plot_pairs_function(vars: str, context: ToolingContext) -> str:
 def build_plot_pairs_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(_plot_pairs_function, context=context),
-        name="plot_pairs_tool",
+        name="plot_pairs_function",
         description="""\
 Generates a pairplot for the specified variables. \
 Returns a JSON string describing the pairplot figure.\
@@ -278,7 +278,7 @@ class _CorrelationComparisonInput(BaseModel):
     )
 
 
-@tool_try_except_thought_decorator
+@tooling_decorator
 def _correlation_comparison_function(
     target: str, numeric_vars: str, context: ToolingContext
 ) -> str:
@@ -305,7 +305,7 @@ def _correlation_comparison_function(
 def build_correlation_comparison_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(_correlation_comparison_function, context=context),
-        name="correlation_comparison_tool",
+        name="correlation_comparison_function",
         description="Compares the correlation of a target variable with other numeric variables. "
         "Returns a JSON string containing the correlation values.",
         fn_schema=_CorrelationComparisonInput,
@@ -319,7 +319,7 @@ class _CorrelationMatrixInput(BaseModel):
     )
 
 
-@tool_try_except_thought_decorator
+@tooling_decorator
 def _correlation_matrix_function(numeric_vars: str, context: ToolingContext) -> str:
     df_output = context._data_container.analyzer.eda("all").tabulate_correlation_matrix(
         numeric_vars=[var.strip() for var in numeric_vars.split(",")]
@@ -340,7 +340,7 @@ def _correlation_matrix_function(numeric_vars: str, context: ToolingContext) -> 
 def build_correlation_matrix_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(_correlation_matrix_function, context=context),
-        name="correlation_matrix_tool",
+        name="correlation_matrix_function",
         description="Computes a correlation matrix for the specified numeric variables. "
         "Returns a JSON string containing the correlation matrix.",
         fn_schema=_CorrelationMatrixInput,
@@ -352,7 +352,7 @@ class _BlankInput(BaseModel):
 
 
 # Numeric summary statistics tool
-@tool_try_except_thought_decorator
+@tooling_decorator
 def _numeric_summary_statistics_function(context: ToolingContext) -> str:
     df_output = context._data_container.analyzer.eda("all").numeric_stats()
     context.add_thought(
@@ -368,7 +368,7 @@ def build_numeric_summary_statistics_tool(context: ToolingContext) -> FunctionTo
 
     return FunctionTool.from_defaults(
         fn=temp_fn,
-        name="numeric_summary_statistics_tool",
+        name="numeric_summary_statistics_function",
         description="""
 Generates summary statistics for the numeric variables in the dataset. \
 Returns a JSON string containing the summary statistics, including \
@@ -389,14 +389,14 @@ def _categorical_summary_statistics_function(context: ToolingContext) -> str:
     return context.add_table(df_output, add_to_vectorstore=True)
 
 
-@tool_try_except_thought_decorator
+@tooling_decorator
 def build_categorical_summary_statistics_tool(context: ToolingContext) -> FunctionTool:
     def temp_fn():
         return _categorical_summary_statistics_function(context)
 
     return FunctionTool.from_defaults(
         fn=temp_fn,
-        name="categorical_summary_statistics_tool",
+        name="categorical_summary_statistics_function",
         description="""\
 Generates summary statistics for the categorical variables in the dataset. \
 Returns a JSON string containing the summary statistics, \

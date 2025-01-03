@@ -1,20 +1,46 @@
-from .tooling_context import ToolingContext
+import functools
+from .tooling_context import ToolingContext, ToolCall
+from .._debug.logger import print_debug
+import traceback
 
 
-def tool_try_except_thought_decorator(func):
+def tooling_decorator(func):
+    @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        context = kwargs.get("context") or next(
-            (arg for arg in args if isinstance(arg, ToolingContext)), None
+        function_name = func.__name__
+        if function_name[0] == "_":
+            function_name = function_name[1:]
+
+        # get the params, but do not include the context
+        params = f"args={args}, kwargs={kwargs}"
+
+        context = kwargs.get("context")
+        if not isinstance(context, ToolingContext):
+            return func(*args, **kwargs)
+
+        new_toolcall = ToolCall(
+            tool_fn_name=function_name,
+            tool_fn_args=params,
         )
+
+        print_debug(f"Tool call: {new_toolcall}.")
+
+        if context.is_repeat_toolcall(toolcall=new_toolcall):
+            raise ValueError(
+                f"Tool call to {function_name} with args {params} is repeated."
+            )
+        context.add_toolcall(toolcall=new_toolcall)
+
         try:
             return func(*args, **kwargs)
         except Exception as e:
-            thought = f"An error occurred: {e}"
-            if thought[-1] != ".":
-                thought += "."
-            thought += " I'll try again."
+            tb_str = "".join(traceback.format_exception(None, e, e.__traceback__))
+            print_debug(f"An error occurred: {e}. " f"Traceback: {tb_str}. ")
+            thought = f"An error occurred: `{e}"
+            if thought[-1] == ".":
+                thought = thought[:-1]
+            thought += "`. I'll try again."
             context.add_thought(thought)
-            raise e
 
     return wrapper
 

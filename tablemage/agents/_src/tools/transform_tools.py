@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 from functools import partial
 from .tooling_context import ToolingContext
 from .tooling_utils import (
-    tool_try_except_thought_decorator,
+    tooling_decorator,
     parse_str_list_from_str,
     parse_num_list_from_str,
     convert_bool_str_to_bool,
@@ -26,8 +26,8 @@ class _ImputeInput(BaseModel):
     )
 
 
-@tool_try_except_thought_decorator
-def impute_function(
+@tooling_decorator
+def _impute_function(
     vars: str, numeric_strategy: str, categorical_strategy: str, context: ToolingContext
 ) -> str:
     context.add_thought(
@@ -50,8 +50,8 @@ def impute_function(
 
 def build_impute_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
-        fn=partial(impute_function, context=context),
-        name="impute_tool",
+        fn=partial(_impute_function, context=context),
+        name="impute_function",
         description="Imputes missing values in the dataset with the specified strategies.",
         fn_schema=_ImputeInput,
     )
@@ -69,8 +69,8 @@ class _DropHighlyMissingVarsInput(BaseModel):
     )
 
 
-@tool_try_except_thought_decorator
-def drop_highly_missing_vars_function(
+@tooling_decorator
+def _drop_highly_missing_vars_function(
     threshold: float, ignore_vars: str, context: ToolingContext
 ) -> str:
     threshold = float(threshold)
@@ -109,8 +109,8 @@ def drop_highly_missing_vars_function(
 
 def build_drop_highly_missing_vars_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
-        fn=partial(drop_highly_missing_vars_function, context=context),
-        name="drop_highly_missing_vars_tool",
+        fn=partial(_drop_highly_missing_vars_function, context=context),
+        name="drop_highly_missing_vars_function",
         description="Drops columns with a proportion of missing values above a specified threshold.",
         fn_schema=_DropHighlyMissingVarsInput,
     )
@@ -120,8 +120,8 @@ class _SaveStateInput(BaseModel):
     state_name: str = Field(description="The name of the state to save.")
 
 
-@tool_try_except_thought_decorator
-def save_state_function(state_name: str, context: ToolingContext) -> str:
+@tooling_decorator
+def _save_state_function(state_name: str, context: ToolingContext) -> str:
     context.add_thought(
         f"I am going to save the current state of the dataset as {state_name}."
     )
@@ -133,8 +133,8 @@ def save_state_function(state_name: str, context: ToolingContext) -> str:
 
 def build_save_state_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
-        fn=partial(save_state_function, context=context),
-        name="save_state_tool",
+        fn=partial(_save_state_function, context=context),
+        name="save_state_function",
         description="This tool allows you to save the current state of the dataset. "
         "The state can be loaded later.",
         fn_schema=_SaveStateInput,
@@ -145,8 +145,8 @@ class _LoadStateInput(BaseModel):
     state_name: str = Field(description="The name of the dataset state to load.")
 
 
-@tool_try_except_thought_decorator
-def load_state_function(state_name: str, context: ToolingContext) -> str:
+@tooling_decorator
+def _load_state_function(state_name: str, context: ToolingContext) -> str:
     context.add_thought(
         f"I am going to load the state of the dataset saved as {state_name}."
     )
@@ -185,8 +185,8 @@ def load_state_function(state_name: str, context: ToolingContext) -> str:
 
 def build_load_state_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
-        fn=partial(load_state_function, context=context),
-        name="load_state_tool",
+        fn=partial(_load_state_function, context=context),
+        name="load_state_function",
         description="This tool allows you to load a previously saved dataset state.",
         fn_schema=_LoadStateInput,
     )
@@ -196,8 +196,8 @@ class _BlankInput(BaseModel):
     pass
 
 
-@tool_try_except_thought_decorator
-def revert_to_original_function(context: ToolingContext) -> str:
+@tooling_decorator
+def _revert_to_original_function(context: ToolingContext) -> str:
     context.add_thought("I am going to revert the dataset to its original state.")
     context.add_code("analyzer.load_data_checkpoint()")
     context.data_container.analyzer.load_data_checkpoint()
@@ -234,8 +234,8 @@ def revert_to_original_function(context: ToolingContext) -> str:
 
 def build_revert_to_original_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
-        fn=partial(revert_to_original_function, context=context),
-        name="revert_to_original_tool",
+        fn=partial(_revert_to_original_function, context=context),
+        name="revert_to_original_function",
         description="This tool allows you to revert the dataset to its original state.",
         fn_schema=_BlankInput,
     )
@@ -265,7 +265,7 @@ formula, then the i-th unit of the new feature will be missing."""
     )
 
 
-@tool_try_except_thought_decorator
+@tooling_decorator
 def _engineer_numeric_feature_function(
     feature_name: str, formula: str, context: ToolingContext
 ) -> str:
@@ -285,7 +285,7 @@ def _engineer_numeric_feature_function(
 def build_engineer_numeric_feature_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(_engineer_numeric_feature_function, context=context),
-        name="engineer_numeric_feature_tool",
+        name="engineer_numeric_feature_function",
         description="This tool allows you to define/engineer/make a new numeric variable "
         "based on a formula of other numeric variables.",
         fn_schema=_EngineerNumericFeatureInput,
@@ -316,7 +316,7 @@ class _EngineerCategoricalFeatureInput(BaseModel):
     )
 
 
-@tool_try_except_thought_decorator
+@tooling_decorator
 def _engineer_categorical_feature_function(
     feature_name: str,
     numeric_var: str,
@@ -373,7 +373,7 @@ def _engineer_categorical_feature_function(
 def build_engineer_categorical_feature_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(_engineer_categorical_feature_function, context=context),
-        name="engineer_categorical_feature_tool",
+        name="engineer_categorical_feature_function",
         description="""This tool allows you to engineer a new categorical variable "
         "from a numeric variable.""",
         fn_schema=_EngineerCategoricalFeatureInput,
@@ -388,8 +388,8 @@ class _ForceBinaryInput(BaseModel):
     )
 
 
-@tool_try_except_thought_decorator
-def force_binary_function(var: str, pos_label: str, context: ToolingContext) -> str:
+@tooling_decorator
+def _force_binary_function(var: str, pos_label: str, context: ToolingContext) -> str:
     context.add_thought("I am going to force the variable " + var + " to binary.")
     context.add_code(
         f"analyzer.force_binary(var='{var}', pos_label='{pos_label}', ignore_multiclass=True, rename=True)"
@@ -416,8 +416,8 @@ def force_binary_function(var: str, pos_label: str, context: ToolingContext) -> 
 
 def build_force_binary_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
-        fn=partial(force_binary_function, context=context),
-        name="force_binary_tool",
+        fn=partial(_force_binary_function, context=context),
+        name="force_binary_function",
         description="Forces a variable to binary numeric (0 or 1).",
         fn_schema=_ForceBinaryInput,
     )
@@ -433,8 +433,8 @@ class _OnehotEncodeInput(BaseModel):
     )
 
 
-@tool_try_except_thought_decorator
-def onehot_encode_function(vars: str, dropfirst: bool, context: ToolingContext) -> str:
+@tooling_decorator
+def _onehot_encode_function(vars: str, dropfirst: bool, context: ToolingContext) -> str:
     dropfirst = convert_bool_str_to_bool(dropfirst)
 
     context.add_thought(
@@ -457,8 +457,8 @@ def onehot_encode_function(vars: str, dropfirst: bool, context: ToolingContext) 
 
 def build_onehot_encode_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
-        fn=partial(onehot_encode_function, context=context),
-        name="onehot_encode_tool",
+        fn=partial(_onehot_encode_function, context=context),
+        name="onehot_encode_function",
         description="One-hot encodes variables in the dataset. "
         "Does not overwrite original variables.",
         fn_schema=_OnehotEncodeInput,
@@ -472,8 +472,8 @@ class _DropNaInput(BaseModel):
     )
 
 
-@tool_try_except_thought_decorator
-def drop_na_function(vars: str, context: ToolingContext) -> str:
+@tooling_decorator
+def _drop_na_function(vars: str, context: ToolingContext) -> str:
     context.add_thought(
         "I am going to drop rows with missing values in the following variables: "
         + vars
@@ -500,8 +500,8 @@ def drop_na_function(vars: str, context: ToolingContext) -> str:
 
 def build_drop_na_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
-        fn=partial(drop_na_function, context=context),
-        name="drop_na_tool",
+        fn=partial(_drop_na_function, context=context),
+        name="drop_na_function",
         description="""This tool allows you to drop rows with missing values in the dataset.""",
         fn_schema=_DropNaInput,
     )
@@ -517,8 +517,8 @@ class _ScaleInput(BaseModel):
     )
 
 
-@tool_try_except_thought_decorator
-def scale_function(vars: str, method: str, context: ToolingContext) -> str:
+@tooling_decorator
+def _scale_function(vars: str, method: str, context: ToolingContext) -> str:
     context.add_thought("I am going to scale the following variables: " + vars + ".")
     context.add_code(f"analyzer.scale(include_vars={vars}, strategy={method})")
     vars_list = parse_str_list_from_str(vars)
@@ -532,8 +532,8 @@ def scale_function(vars: str, method: str, context: ToolingContext) -> str:
 
 def build_scale_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
-        fn=partial(scale_function, context=context),
-        name="scale_tool",
+        fn=partial(_scale_function, context=context),
+        name="scale_function",
         description="Scales numeric variable values in the dataset based on a specified strategy. "
         + "Standardization (scale to mean = 0, std = 1) and min-max scaling are supported.",
         fn_schema=_ScaleInput,

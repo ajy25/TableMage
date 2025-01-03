@@ -2,7 +2,7 @@ from llama_index.core.tools import FunctionTool
 from pydantic import BaseModel, Field
 from functools import partial
 from typing import Literal
-from .tooling_utils import tool_try_except_thought_decorator
+from .tooling_utils import tooling_decorator
 from .tooling_context import ToolingContext
 
 
@@ -27,8 +27,8 @@ class _CausalEffectEstimationInput(BaseModel):
     )
 
 
-@tool_try_except_thought_decorator
-def _estimate_effect(
+@tooling_decorator
+def _estimate_causal_effect_function(
     treatment: str,
     outcome: str,
     confounders: str,
@@ -74,8 +74,8 @@ def _estimate_effect(
 
 def build_estimate_causal_effect_tool(context: ToolingContext):
     return FunctionTool.from_defaults(
-        fn=partial(_estimate_effect, context=context),
-        name="estimate_causal_effect_tool",
+        fn=partial(_estimate_causal_effect_function, context=context),
+        name="estimate_causal_effect_function",
         description="Estimates the causal effect of a treatment on an outcome. "
         "Adjusts for confounders. "
         "Can estimate the average treatment effect on the treated (ATT) "

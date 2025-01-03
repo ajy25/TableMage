@@ -285,6 +285,10 @@ class Analyzer:
             if predictor not in self._datahandler.vars():
                 raise ValueError(f"Predictor {predictor} not found in data.")
 
+        # remove target from predictors, if present
+        if target in predictors:
+            predictors.remove(target)
+
         return VotingSelectionReport(
             selectors=feature_selectors,
             dataemitter=self._datahandler.train_test_emitter(

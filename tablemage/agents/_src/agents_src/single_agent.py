@@ -73,6 +73,7 @@ def build_agent(
     tool_rag_top_k: int = 5,
     react: bool = False,
     python_only: bool = False,
+    tools_only: bool = False,
 ) -> FunctionCallingAgent | ReActAgent:
     """Builds an agent.
 
@@ -111,6 +112,11 @@ def build_agent(
     python_only : bool
         If True, only the Python environment is provided. Default is False.
 
+    tools_only : bool
+        If True, only the tools are provided.
+        Otherwise, the Python environment is also provided, ignoring RAG.
+        Default is False.
+
     Returns
     -------
     FunctionCallingAgent | ReActAgent
@@ -140,9 +146,7 @@ def build_agent(
     dataset_summary_tool = build_dataset_summary_tool(context)
     memory_obj.put(
         ChatMessage.from_str(
-            content="I am a helpful data scientist. "
-            + "Here is summary information for the dataset: "
-            + str(dataset_summary_tool.call()),
+            content="Dataset summary: " + str(dataset_summary_tool.call()),
             role=MessageRole.SYSTEM,
         )
     )
@@ -185,10 +189,13 @@ def build_agent(
             build_python_env_code_run_tool(context),
         ]
     else:
-        tools_to_persist = [
-            build_python_env_code_run_tool(context),
-            build_revert_to_original_tool(context),
-        ]
+        if tools_only:
+            tools_to_persist = [build_revert_to_original_tool(context)]
+        else:
+            tools_to_persist = [
+                build_python_env_code_run_tool(context),
+                build_revert_to_original_tool(context),
+            ]
 
     if tool_rag:
         obj_index = ObjectIndex.from_objects(
@@ -260,6 +267,7 @@ class SingleAgent:
         tool_rag_top_k: int = 5,
         system_prompt: str = SINGLE_SYSTEM_PROMPT,
         python_only: bool = False,
+        tools_only: bool = False,
     ):
         """Initializes the SingleAgent object."""
         if not isinstance(llm, FunctionCallingLLM):
@@ -276,6 +284,7 @@ class SingleAgent:
             react=react,
             system_prompt=system_prompt,
             python_only=python_only,
+            tools_only=tools_only,
         )
 
         print_debug("SingleAgent initialized")

@@ -3,6 +3,8 @@ from pathlib import Path
 import os
 from typing import Literal
 
+from ...._src.display.print_utils import print_wrapped
+
 # clear environment
 try:
     os.environ.pop("OPENAI_API")
@@ -17,14 +19,22 @@ dotenv_path = Path(__file__).parent.parent.parent.parent.resolve() / ".env"
 if not dotenv_path.exists():
     with open(dotenv_path, "w") as f:
         f.write("OPENAI_API_KEY=...\nGROQ_API_KEY=...\n")
-    raise Warning(
-        "No .env file found. Creating a new .env file. "
-        "Please use `tm.agents.set_key()` to set your API keys. "
-        "You only need to do this once."
+    print_wrapped(
+        f"Created a new .env file at {str(dotenv_path)}. "
+        f"Please provide an API key with the tm.agents.add_key() function, or "
+        "use Ollama for inference.",
+        type="WARNING",
+        level="INFO",
     )
 else:
     if not load_dotenv(dotenv_path=str(dotenv_path)):
-        raise RuntimeError("Error loading .env file.")
+        print_wrapped(
+            f"Error reading .env file at {str(dotenv_path)}. "
+            "Please provide an API key with the tm.agents.add_key() function, or "
+            "use Ollama for inference.",
+            type="WARNING",
+            level="INFO",
+        )
 
 
 def key_exists(
@@ -100,11 +110,15 @@ def set_key(llm_type: Literal["openai", "groq"], api_key: str) -> None:
         lines = f.readlines()
 
     with open(dotenv_path, "w") as f:
+        wrote_key = False
         for line in lines:
             if line.startswith(key_name):
                 f.write(f"{key_name}={api_key}\n")
+                wrote_key = True
             else:
                 f.write(line)
+        if not wrote_key:
+            f.write(f"{key_name}={api_key}\n")
 
     # reload the .env file
     if not load_dotenv(dotenv_path=str(dotenv_path)):

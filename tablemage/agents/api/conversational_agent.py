@@ -23,7 +23,11 @@ class ConversationalAgent:
         test_size: float = 0.2,
         split_seed: int = 42,
         system_prompt: str = SINGLE_SYSTEM_PROMPT,
+        react: bool = False,
+        tool_rag: bool = True,
+        tool_rag_top_k: int = 5,
         python_only: bool = False,
+        tools_only: bool = False,
     ):
         """Initializes the ConversationalAgent object.
 
@@ -44,9 +48,22 @@ class ConversationalAgent:
         system_prompt : str
             The system prompt to use for the LLM. Default is provided.
 
+        react: bool
+            If True, the agent will employ the ReAct framework. Default is False.
+
+        tool_rag : bool
+            If True, the RAG-based tooling is used. Default is True.
+
+        tool_rag_top_k : int
+            The top-k value to use for the RAG-based tooling. Default is 5.
+
         python_only : bool
             If True, only the Python environment is provided.
             Default is False.
+
+        tools_only : bool
+            If True, only the tools are provided. Otherwise, the
+            Python environment is also provided, ignoring RAG. Default is False.
         """
 
         self._data_container = DataContainer()
@@ -74,11 +91,13 @@ class ConversationalAgent:
         self._single_agent = SingleAgent(
             llm=options.llm_build_function(),
             context=self._context,
-            react=False,
+            react=react,
             memory="vector",
-            tool_rag_top_k=5,
+            tool_rag_top_k=tool_rag_top_k,
+            tool_rag=tool_rag,
             system_prompt=system_prompt,
             python_only=python_only,
+            tools_only=tools_only,
         )
 
     def chat(self, message: str) -> str:
@@ -99,4 +118,17 @@ class ConversationalAgent:
             The response from the LLM.
         """
         with suppress_logging():
-            return self._single_agent.chat(message)
+            output = self._single_agent.chat(message)
+        # ensure something is returned
+        if output is None or output == "" or output == "None":
+            output = self._single_agent.chat(
+                "You didn't return anything. Please try again. "
+                "No need to repeat tool calls if you already have access to the results."
+            )
+        # check if output starts with "<function="
+        elif output.startswith("<function="):
+            output = self._single_agent.chat(
+                "You didn't successfully use a tool. Please try again.\n"
+                f"This was the output I received from you: '{output}'."
+            )
+        return output

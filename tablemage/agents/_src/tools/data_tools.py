@@ -1,7 +1,7 @@
 from llama_index.core.tools import FunctionTool
 from pydantic import BaseModel, Field
 from functools import partial
-from .tooling_utils import tool_try_except_thought_decorator
+from .tooling_utils import tooling_decorator
 from .tooling_context import ToolingContext
 
 
@@ -13,8 +13,8 @@ class PandasQueryInput(BaseModel):
     )
 
 
-@tool_try_except_thought_decorator
-def pandas_query_function(query: str, context: ToolingContext) -> str:
+@tooling_decorator
+def _pandas_query_function(query: str, context: ToolingContext) -> str:
     context.add_thought(
         f"I am going to write and run Python code to answer the query: {query}."
     )
@@ -29,8 +29,8 @@ def pandas_query_function(query: str, context: ToolingContext) -> str:
 
 def build_pandas_query_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
-        fn=partial(pandas_query_function, context=context),
-        name="pandas_query_tool",
+        fn=partial(_pandas_query_function, context=context),
+        name="pandas_query_function",
         description="""Tool for querying the dataset/dataframe using natural language.
 The tool will write and run pandas code to answer the query.
 Example use cases:
@@ -51,7 +51,7 @@ class _BlankInput(BaseModel):
     pass
 
 
-@tool_try_except_thought_decorator
+@tooling_decorator
 def _dataset_summary_function(context: ToolingContext) -> str:
     context.add_thought(
         "I am going to obtain a summary of the dataset, which includes the shape of the training and test datasets, "
@@ -94,7 +94,7 @@ def _dataset_summary_function(context: ToolingContext) -> str:
 def build_dataset_summary_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(_dataset_summary_function, context=context),
-        name="dataset_summary_tool",
+        name="dataset_summary_function",
         description="Provides a summary of the dataset, "
         "which includes the shape of the training and test datasets, "
         "as well as the names of the numeric and categorical variables in the dataset.",
@@ -107,7 +107,7 @@ class _GetVariableDescriptionInput(BaseModel):
     var: str = Field(description="The variable to get the description of.")
 
 
-@tool_try_except_thought_decorator
+@tooling_decorator
 def _get_variable_description_function(var: str, context: ToolingContext) -> str:
     return context._data_container.variable_info.get_description(var)
 
@@ -128,7 +128,7 @@ class _SetVariableDescriptionInput(BaseModel):
     description: str = Field(description="The description of the variable.")
 
 
-@tool_try_except_thought_decorator
+@tooling_decorator
 def _set_variable_description_function(
     var: str, description: str, context: ToolingContext
 ) -> str:

@@ -28,3 +28,4 @@ benchmarking/infiagent/url.txt/*
 benchmarking/infiagent/api_key.txt
 
 benchmarking/ml/datasets/*
+benchmarking/ml/api_key.txt

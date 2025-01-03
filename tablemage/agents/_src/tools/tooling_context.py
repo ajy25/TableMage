@@ -6,6 +6,32 @@ from ..._src import DataContainer, StorageManager, CanvasQueue
 from .._debug.logger import print_debug
 
 
+class ToolCall:
+    """Class for storing tool calls."""
+
+    def __init__(self, tool_fn_name: str, tool_fn_args: dict):
+        """Initializes the ToolCall object.
+
+        Parameters
+        ----------
+        tool_name : str
+            The name of the tool.
+
+        tool_args : dict
+            The arguments of the tool.
+        """
+        self.tool_name = tool_fn_name
+        self.tool_args = tool_fn_args
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, ToolCall):
+            return False
+        return self.tool_name == other.tool_name and self.tool_args == other.tool_args
+
+    def __str__(self) -> str:
+        return f"{self.tool_name}({self.tool_args})"
+
+
 class ToolingContext:
 
     def __init__(
@@ -30,6 +56,7 @@ class ToolingContext:
         self._data_container = data_container
         self._storage_manager = storage_manager
         self._canvas_queue = canvas_queue
+        self._toolcalls = []
 
     def add_figure(
         self,
@@ -160,6 +187,33 @@ class ToolingContext:
             The input code, verbatim.
         """
         return self._canvas_queue.push_code(code)
+
+    def add_toolcall(self, toolcall: ToolCall) -> None:
+        """Adds a tool call to the context.
+
+        Parameters
+        ----------
+        toolcall : ToolCall
+            The tool call to add.
+        """
+        self._toolcalls.append(toolcall)
+
+    def is_repeat_toolcall(self, toolcall: ToolCall) -> bool:
+        """Checks if a tool call is a repeat.
+
+        Parameters
+        ----------
+        toolcall : ToolCall
+            The tool call to check.
+
+        Returns
+        -------
+        bool
+            True if the tool call is a repeat, False otherwise.
+        """
+        if len(self._toolcalls) == 0:
+            return False
+        return toolcall == self._toolcalls[-1]
 
     @property
     def data_container(self) -> DataContainer:

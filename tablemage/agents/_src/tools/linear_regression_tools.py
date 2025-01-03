@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 from functools import partial
 from .tooling_context import ToolingContext
 from .._debug.logger import print_debug
-from .tooling_utils import tool_try_except_thought_decorator
+from .tooling_utils import tooling_decorator
 
 
 def parse_predictor_list_from_str(predictors_str: str) -> list[str]:
@@ -22,7 +22,7 @@ class _OLSToolInput(BaseModel):
     )
 
 
-@tool_try_except_thought_decorator
+@tooling_decorator
 def _ols_function(target: str, predictors: str, context: ToolingContext) -> str:
     """Performs ordinary least squares regression."""
     print_debug(f"_ols_function call: " f"predictors: {predictors}, target: {target}")
@@ -52,7 +52,7 @@ def _ols_function(target: str, predictors: str, context: ToolingContext) -> str:
 def build_ols_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(_ols_function, context=context),
-        name="ols_tool",
+        name="ols_function",
         description="""Performs ordinary least squares regression.
         Returns a JSON string containing coefficients and metrics.
         Also, plots diagnostic plots.""",
@@ -71,7 +71,7 @@ class _LogitToolInput(BaseModel):
     )
 
 
-@tool_try_except_thought_decorator
+@tooling_decorator
 def _logit_function(target: str, predictors: str, context: ToolingContext) -> str:
     """Performs logistic regression."""
     print_debug(f"_logit_function call: " f"predictors: {predictors}, target: {target}")
@@ -102,7 +102,7 @@ def _logit_function(target: str, predictors: str, context: ToolingContext) -> st
 def build_logit_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(_logit_function, context=context),
-        name="logit_tool",
+        name="logit_function",
         description="""Performs logistic regression.
         Returns a JSON string containing coefficients and metrics.
         Also, plots diagnostic plots.""",

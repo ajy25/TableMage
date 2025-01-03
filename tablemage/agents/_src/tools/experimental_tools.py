@@ -4,13 +4,51 @@ import sys
 import tempfile
 import os
 import pickle
-
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from matplotlib.axes import Axes
+from matplotlib.lines import Line2D
+from matplotlib.collections import Collection
 from llama_index.core.tools import FunctionTool
 from pydantic import BaseModel, Field
 from functools import partial
 from .tooling_context import ToolingContext
-from .tooling_utils import tool_try_except_thought_decorator
+from .tooling_utils import tooling_decorator
 from .._debug.logger import print_debug
+
+
+def to_figure(obj) -> tuple[Figure, bool]:
+    """
+    Converts a Matplotlib object to a Figure, if possible.
+    If the object is not from Matplotlib, it returns the object unchanged.
+
+    Parameters:
+        obj: Any Python object.
+
+    Returns:
+        A Matplotlib Figure object or the original object.
+        Also a boolean indicating whether the output object is a Figure.
+    """
+    if isinstance(obj, Figure):
+        return obj, True
+
+    if isinstance(obj, Axes):
+        return obj.figure, True
+
+    if isinstance(obj, Line2D):
+        fig, ax = plt.subplots()
+        ax.add_line(obj)
+        ax.set_xlim(obj.get_xdata().min(), obj.get_xdata().max())
+        ax.set_ylim(obj.get_ydata().min(), obj.get_ydata().max())
+        return fig, True
+
+    if isinstance(obj, Collection):
+        fig, ax = plt.subplots()
+        ax.add_collection(obj)
+        ax.autoscale_view()
+        return fig, True
+
+    return obj, False
 
 
 class _PythonToolInput(BaseModel):
@@ -18,7 +56,7 @@ class _PythonToolInput(BaseModel):
         description="The Python code to execute. "
         + "The pandas library is already imported. "
         + "The DataFrame is preloaded as `df_all`. "
-        + "You must print data or save to `result` variable to view.",
+        + "You MUST save output to `result` variable.",
     )
 
 
@@ -45,40 +83,73 @@ def python_env_code_run_backend(
     dict
         Contains `result` (deserialized output), `stdout`, `stderr`, and `returncode`.
     """
+    # if "result" not in code:
+    #     raise ValueError(
+    #         "ERROR: You must save the output data structure to the variable `result`. "
+    #         "Your current code makes no reference to `result`. "
+    #         "Please try again."
+    #     )
+    # elif "result = " not in code:
+    #     raise ValueError(
+    #         "ERROR: You must save the output data structure to the variable `result`. "
+    #         "Your current code does not assign a value to `result`. "
+    #         "Please try again."
+    #     )
 
-    # This portion is the Python script preamble. Notice there's no extra indentation
-    # inside the triple-quoted string so it can be validly executed as Python code.
     preamble = """\
 import pandas as pd
 import pickle
 import sys
 import warnings
+import matplotlib
+import matplotlib.pyplot as plt
+matplotlib.use("Agg")  # Force a non-GUI backend
+
+# Global variable
+result = None
+
+# Define a custom show function
+def custom_show():
+    global result
+    # Get the current figure
+    result = plt.gcf()  # Get Current Figure
+    plt.close(result)   # Close the figure to avoid showing it accidentally
+
+# Overwrite plt.show
+plt.show = custom_show
 
 # Preload the DataFrames
 df_train = pd.read_pickle(sys.argv[1])
 df_test = pd.read_pickle(sys.argv[2])
 df_all = pd.concat([df_train, df_test], axis=0)
 
-result = None
-
 with warnings.catch_warnings(record=True) as w:
     warnings.simplefilter("always")
 """
 
-    # Append the user-provided code plus the snippet for serializing the result.
-    # Again, ensure that indentation aligns correctly so Python doesn't complain.
     script_content = (
         preamble
         + "\n"
         + code
         + "\n"
-        + """# Serialize the result to a file
+        + """\
+# If result is a function, call it to get the result
+if callable(result):
+    result = result()
+        
+try:
+    print('Result as string: ' + result, file=sys.stdout)
+except Exception:
+    pass
 try:
     with open(sys.argv[3], 'wb') as result_file:
         pickle.dump(result, result_file)
 except Exception as e:
     try:
-        print(str(e), file=sys.stdout)
+        print(
+            "Serialization of result failed. See stdout content instead.",
+            file=sys.stdout
+        )
     except Exception:
         raise e
 """
@@ -123,7 +194,9 @@ except Exception as e:
                 with open(temp_result_path, "rb") as f:
                     output_data = pickle.load(f)
             except Exception as e:
-                print(f"An error occurred while deserializing the result: {str(e)}")
+                print_debug(
+                    f"An error occurred while deserializing the result: {str(e)}"
+                )
 
         return {
             "result": output_data,
@@ -144,8 +217,8 @@ except Exception as e:
                 os.remove(path)
 
 
-@tool_try_except_thought_decorator
-def python_env_code_run(
+@tooling_decorator
+def _python_env_code_run_function(
     code: str,
     context: ToolingContext,
 ) -> str:
@@ -178,13 +251,27 @@ def python_env_code_run(
         )
     except Exception as e:
         print_debug(
-            f"An error occurred while executing the Python code. "
-            f"The error message is: {str(e)}"
+            f"ERROR: An error occurred while executing the Python code. "
+            f"The error message is: {str(e)}."
         )
+        raise e
 
-    result_actual = result["result"]
-    if isinstance(result_actual, pd.DataFrame):
-        context.add_table(table=result_actual)
+    result_actual, is_figure = to_figure(result["result"])
+
+    print_debug(
+        f"Python code execution completed. "
+        f"Output: {result['stdout']}, "
+        f"Error: {result['stderr']}, "
+        f"Result: {result_actual}"
+    )
+    str_to_append = ""
+    if is_figure:
+        str_to_append = context.add_figure(
+            fig=result_actual,
+            text_description="The figure output of the Python code execution.",
+        )
+    elif isinstance(result_actual, pd.DataFrame):
+        str_to_append = context.add_table(table=result_actual)
     elif isinstance(result_actual, dict):
         context.add_dict(
             dictionary=result_actual,
@@ -200,21 +287,26 @@ def python_env_code_run(
             text=result_actual,
         )
     elif result_actual is None:
-        context.add_thought(
-            "The Python code did not return a result. The Python code was: \n" + code
-        )
+        context.add_thought("The Python code did not return a result.")
 
     # if everything is empty, return an error message
-    if not result["stdout"] and result["result"] is None:
+    if not result["stdout"] and not result["stderr"] and result["result"] is None:
         return "Empty output; please ensure you print or save the result to the `result` variable."
 
-    return f"StdOut:\n{result['stdout']}\nStdErr:\n{result['stderr']}\nResult:\n{result['result']}"
+    return (
+        f"Output:\n{result['stdout']}\n"
+        + f"Error:\n{result['stderr']}\n"
+        + f"Result:\n{result['result']}\n"
+        + f"Result text:\n{str_to_append}"
+    )
 
 
 python_env_code_run_descr = """\
 Use this tool ONLY when no other tools can address the task effectively. \
-This tool is particularly suited for exploring datasets and \
-performing operations using pandas functions.
+Useful for: 
+- Pandas indexing and operations
+- Plotting custom visualizations not supported by other tools
+- Statistical analysis not supported by other tools
 
 DESCRIPTION:
 - Executes Python code.
@@ -222,27 +314,23 @@ DESCRIPTION:
 - Optionally, you can work with `df_train` or `df_test` if explicitly required.
 - Save the output data structure to the variable `result`. \
     Acceptable types for `result`: dictionary or DataFrame.
-- Modifications to the DataFrames are not saved.
-- You must explicitly print data structures or save to `result` to view them \
-    in the output.
 
 IMPORTANT:
 - ONLY use this tool as a LAST RESORT. Most tasks can be accomplished using other tools.
-- Do not create plots using this tool.
+- Modifications to DataFrames are not saved.
 
-EXAMPLE INPUTS:
-1. `result = df_all.describe()`
-2. `result = df_all.head()`
-3. `result = df_all['categorical_var'].value_counts()`
-4. `print(df_all['numeric_var'].std())`
+EXAMPLES:
+1. `result = df_all.head()`
+2. `print(df_all['numeric_var'].std())`
+3. `fig, ax = plt.subplots()\nax.plot(df_all['numeric_var'])\nresult = fig`
 """
 
 
 def build_python_env_code_run_tool(context: ToolingContext) -> FunctionTool:
     """Builds a Python code execution tool."""
     return FunctionTool.from_defaults(
-        name="python_env_code_run",
-        fn=partial(python_env_code_run, context=context),
+        name="python_env_code_function",
+        fn=partial(_python_env_code_run_function, context=context),
         description=python_env_code_run_descr,
         fn_schema=_PythonToolInput,
     )
