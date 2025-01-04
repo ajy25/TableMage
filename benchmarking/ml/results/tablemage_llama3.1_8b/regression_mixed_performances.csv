@@ -1,4 +1,4 @@
 file_name,unformatted_answer,time_elapsed
-361093_analcatdata_supreme,0.086,42.88544821739197
-361094_visualizing_soil,0.14,98.3886559009552
-361288_abalone,2.137,280.5034599304199
+361093_analcatdata_supreme,The test RMSE of the best possible model is 0.123.,110.43798804283142
+361094_visualizing_soil,The best possible model for predicting the variable `track` is the Random Forest (RF) model. The test RMSE of this model is 0.130.,151.37981009483337
+361288_abalone,The best possible model for predicting the variable `Classnumberofrings` is the Random Forest (RF) model. The test RMSE of this model is 2.127.,217.49246096611023

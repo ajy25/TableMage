@@ -14,12 +14,12 @@ import tablemage as tm
 tm.use_agents()
 
 
-model_name = "llama3.1_8b"
+model_name = "llama3.3_70b"  # set to "llama3.1_8b" or "llama3.3_70b"
 
-subdir_stems_to_consider = [
+subdir_stems_to_consider = [  # optionally comment out any of these
     # "classification_mixed",
-    "regression_mixed",
-    "classification_numerical",
+    # "classification_numerical",
+    # "regression_mixed",
     "regression_numerical",
 ]
 

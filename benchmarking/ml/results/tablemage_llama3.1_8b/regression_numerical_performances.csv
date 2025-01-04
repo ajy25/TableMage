@@ -1,5 +1,5 @@
 file_name,unformatted_answer,time_elapsed
-361072_cpu_act,2.248,688.1841893196106
-361076_wine_quality,0.627,190.95270204544067
-361279_yprop_4_1,0.031,408.09938406944275
-361280_abalone,2.151,262.94165301322937
+361072_cpu_act,The test RMSE of the best possible model is 2.258.,743.7929308414459
+361076_wine_quality,The test RMSE of the best possible model is 0.663.,399.5031900405884
+361279_yprop_4_1,The test RMSE of the best possible model is 0.031.,215.8668212890625
+361280_abalone,The best possible model for predicting the variable `Classnumberofrings` is the Random Forest (RF) model. The test RMSE of this model is 2.142.,206.43032789230347

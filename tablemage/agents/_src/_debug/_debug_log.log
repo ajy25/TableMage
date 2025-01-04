@@ -1,101 +1,185 @@
-2025-01-03 06:17:24 - Agents Log - A new _AgentOptions object has been created with LLM build function: <function build_groq at 0x1682a3060> and multimodal LLM build function: None
-2025-01-03 06:17:25 - Agents Log - GROQ LLM build function has been set to: functools.partial(<function build_groq at 0x1682a3060>, temperature=0.0, model='llama-3.3-70b-versatile')
-2025-01-03 06:17:31 - Analyzer Log - Analyzer initialized for dataset 'Dataset'.
-2025-01-03 06:17:31 - Agents Log - Data container initialized with the Analyzer built from the provided DataFrame.
-2025-01-03 06:17:31 - Agents Log - IO initialized.
-2025-01-03 06:17:31 - Agents Log - Initializing the Orchestrator.
-2025-01-03 06:17:31 - Agents Log - Initializing SingleAgent
-2025-01-03 06:17:31 - Agents Log - Tool call: dataset_summary_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x17df83b90>}).
-2025-01-03 06:17:31 - Agents Log - Adding dictionary to storage.
-2025-01-03 06:17:31 - Agents Log - Added dictionary without description. First 20 characters: {"train_shape": {"n_.
-2025-01-03 06:17:35 - Agents Log - SingleAgent initialized
-2025-01-03 06:17:44 - Agents Log - Tool call: dataset_summary_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x17df83b90>}).
-2025-01-03 06:17:45 - Agents Log - Adding table to storage.
-2025-01-03 06:17:45 - Agents Log - Added table to /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl: Path to table: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl
+2025-01-03 16:52:04 - Agents Log - A new _AgentOptions object has been created with LLM build function: <function build_groq at 0x17f3a7e20> and multimodal LLM build function: None
+2025-01-03 16:52:05 - Agents Log - GROQ LLM build function has been set to: functools.partial(<function build_groq at 0x17f3a7e20>, temperature=0.0, model='llama-3.3-70b-versatile')
+2025-01-03 16:52:05 - Analyzer Log - Analyzer initialized for dataset 'Dataset'.
+2025-01-03 16:52:05 - Agents Log - Data container initialized with the Analyzer built from the provided DataFrame.
+2025-01-03 16:52:05 - Agents Log - IO initialized.
+2025-01-03 16:52:05 - Agents Log - Initializing the Orchestrator.
+2025-01-03 16:52:05 - Agents Log - Initializing SingleAgent
+2025-01-03 16:52:05 - Agents Log - Tool call: dataset_summary_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x309e53620>}).
+2025-01-03 16:52:05 - Agents Log - Adding dictionary to storage.
+2025-01-03 16:52:05 - Agents Log - Added dictionary without description. First 20 characters: {"train_shape": {"n_.
+2025-01-03 16:52:09 - Agents Log - SingleAgent initialized
+2025-01-03 16:52:10 - Agents Log - Tool call: ml_regression_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x309e53620>, 'models': 'OLS, Ridge, Lasso, ElasticNet, RF, XGBoost', 'predictors': 'atch, exec, fork, freemem, freeswap, lread, lwrite, pflt, pgfree, pgin, pgout, pgscan, ppgin, ppgout, rchar, runqsz, scall, sread, swrite, vflt, wchar', 'target': 'usr'}).
+2025-01-03 16:52:10 - Agents Log - _ml_regression_function called
+2025-01-03 16:52:10 - Agents Log - _ml_regression_function Models to test: OLS, Ridge, Lasso, ElasticNet, RF, XGBoost
+2025-01-03 16:52:10 - Agents Log - _ml_regression_function Target: usr
+2025-01-03 16:52:10 - Agents Log - _ml_regression_function Predictors: ['atch', 'exec', 'fork', 'freemem', 'freeswap', 'lread', 'lwrite', 'pflt', 'pgfree', 'pgin', 'pgout', 'pgscan', 'ppgin', 'ppgout', 'rchar', 'runqsz', 'scall', 'sread', 'swrite', 'vflt', 'wchar']
+2025-01-03 16:52:10 - Analyzer Log - Fitting model 'OLS'.
+2025-01-03 16:52:10 - Analyzer Log - Fitting 'OLS'. Search method: GridSearchCV (1 fits per fold, 5 total fits). 
+2025-01-03 16:52:10 - Analyzer Log - Successfully evaluated model 'OLS'.
+2025-01-03 16:52:10 - Analyzer Log - Fitting model 'Ridge'.
+2025-01-03 16:52:10 - Analyzer Log - Fitting 'Ridge'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2025-01-03 16:52:12 - Analyzer Log - Successfully evaluated model 'Ridge'.
+2025-01-03 16:52:12 - Analyzer Log - Fitting model 'Lasso'.
+2025-01-03 16:52:12 - Analyzer Log - Fitting 'Lasso'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2025-01-03 16:52:17 - Analyzer Log - Successfully evaluated model 'Lasso'.
+2025-01-03 16:52:17 - Analyzer Log - Fitting model 'ElasticNet'.
+2025-01-03 16:52:17 - Analyzer Log - Fitting 'ElasticNet'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2025-01-03 16:52:23 - Analyzer Log - Successfully evaluated model 'ElasticNet'.
+2025-01-03 16:52:23 - Analyzer Log - Fitting model 'RF'.
+2025-01-03 16:52:23 - Analyzer Log - Fitting 'RF'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2025-01-03 16:55:14 - Analyzer Log - Successfully evaluated model 'RF'.
+2025-01-03 16:55:14 - Analyzer Log - Fitting model 'XGBoost'.
+2025-01-03 16:55:14 - Analyzer Log - Fitting 'XGBoost'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2025-01-03 16:56:34 - Analyzer Log - Successfully evaluated model 'XGBoost'.
+2025-01-03 16:56:34 - Agents Log - Adding table to storage.
+2025-01-03 16:56:34 - Agents Log - Added table to /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl: Path to table: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl
 
-{"1stFlrSF": {"min": 334.0, "max": 4692.0, "mean": 1162.627, "std": 386.588, "variance": 149450.079, "skew": 1.375, "kurtosis": 5.722, "q1": 882.0, "median": 1087.0, "q3": 1391.25, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "2ndFlrSF": {"min": 0.0, "max": 2065.0, "mean": 346.992, "std": 436.528, "variance": 190557.075, "skew": 0.812, "kurtosis": -0.556, "q1": 0.0, "median": 0.0, "q3": 728.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "3SsnPorch": {"min": 0.0, "max": 508.0, "mean": 3.41, "std": 29.317, "variance": 859.506, "skew": 10.294, "kurtosis": 123.235, "q1": 0.0, "median": 0.0, "q3": 0.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "BedroomAbvGr": {"min": 0.0, "max": 8.0, "mean": 2.866, "std": 0.816, "variance": 0.665, "skew": 0.212, "kurtosis": 2.219, "q1": 2.0, "median": 3.0, "q3": 3.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "BsmtFinSF1": {"min": 0.0, "max": 5644.0, "mean": 443.64, "std": 456.098, "variance": 208025.468, "skew": 1.684, "kurtosis": 11.076, "q1": 0.0, "median": 383.5, "q3": 712.25, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "BsmtFinSF2": {"min": 0.0, "max": 1474.0, "mean": 46.549, "std": 161.319, "variance": 26023.908, "skew": 4.251, "kurtosis": 20.04, "q1": 0.0, "median": 0.0, "q3": 0.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "BsmtFullBath": {"min": 0.0, "max": 3.0, "mean": 0.425, "std": 0.519, "variance": 0.269, "skew": 0.595, "kurtosis": -0.84, "q1": 0.0, "median": 0.0, "q3": 1.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "BsmtHalfBath": {"min": 0.0, "max": 2.0, "mean": 0.058, "std": 0.239, "variance": 0.057, "skew": 4.099, "kurtosis": 16.336, "q1": 0.0, "median": 0.0, "q3": 0.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "BsmtUnfSF": {"min": 0.0, "max": 2336.0, "mean": 567.24, "std": 441.867, "variance": 195246.406, "skew": 0.919, "kurtosis": 0.469, "q1": 223.0, "median": 477.5, "q3": 808.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "EnclosedPorch": {"min": 0.0, "max": 552.0, "mean": 21.954, "std": 61.119, "variance": 3735.55, "skew": 3.087, "kurtosis": 10.391, "q1": 0.0, "median": 0.0, "q3": 0.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "Fireplaces": {"min": 0.0, "max": 3.0, "mean": 0.613, "std": 0.645, "variance": 0.416, "skew": 0.649, "kurtosis": -0.221, "q1": 0.0, "median": 1.0, "q3": 1.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "FullBath": {"min": 0.0, "max": 3.0, "mean": 1.565, "std": 0.551, "variance": 0.304, "skew": 0.037, "kurtosis": -0.858, "q1": 1.0, "median": 2.0, "q3": 2.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "GarageArea": {"min": 0.0, "max": 1418.0, "mean": 472.98, "std": 213.805, "variance": 45712.51, "skew": 0.18, "kurtosis": 0.91, "q1": 334.5, "median": 480.0, "q3": 576.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "GarageCars": {"min": 0.0, "max": 4.0, "mean": 1.767, "std": 0.747, "variance": 0.558, "skew": -0.342, "kurtosis": 0.216, "q1": 1.0, "median": 2.0, "q3": 2.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "GarageYrBlt": {"min": 1900.0, "max": 2010.0, "mean": 1978.506, "std": 24.69, "variance": 609.583, "skew": -0.649, "kurtosis": -0.421, "q1": 1961.0, "median": 1980.0, "q3": 2002.0, "n_missing": 81, "missing_rate": 0.055, "n": 1460}, "GrLivArea": {"min": 334.0, "max": 5642.0, "mean": 1515.464, "std": 525.48, "variance": 276129.633, "skew": 1.365, "kurtosis": 4.874, "q1": 1129.5, "median": 1464.0, "q3": 1776.75, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "HalfBath": {"min": 0.0, "max": 2.0, "mean": 0.383, "std": 0.503, "variance": 0.253, "skew": 0.675, "kurtosis": -1.077, "q1": 0.0, "median": 0.0, "q3": 1.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "Id": {"min": 1.0, "max": 1460.0, "mean": 730.5, "std": 421.61, "variance": 177755.0, "skew": 0.0, "kurtosis": -1.2, "q1": 365.75, "median": 730.5, "q3": 1095.25, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "KitchenAbvGr": {"min": 0.0, "max": 3.0, "mean": 1.047, "std": 0.22, "variance": 0.049, "skew": 4.484, "kurtosis": 21.455, "q1": 1.0, "median": 1.0, "q3": 1.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "LotArea": {"min": 1300.0, "max": 215245.0, "mean": 10516.828, "std": 9981.265, "variance": 99625649.65, "skew": 12.195, "kurtosis": 202.544, "q1": 7553.5, "median": 9478.5, "q3": 11601.5, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "LotFrontage": {"min": 21.0, "max": 313.0, "mean": 70.05, "std": 24.285, "variance": 589.749, "skew": 2.161, "kurtosis": 17.375, "q1": 59.0, "median": 69.0, "q3": 80.0, "n_missing": 259, "missing_rate": 0.177, "n": 1460}, "LowQualFinSF": {"min": 0.0, "max": 572.0, "mean": 5.845, "std": 48.623, "variance": 2364.204, "skew": 9.002, "kurtosis": 82.946, "q1": 0.0, "median": 0.0, "q3": 0.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "MSSubClass": {"min": 20.0, "max": 190.0, "mean": 56.897, "std": 42.301, "variance": 1789.338, "skew": 1.406, "kurtosis": 1.571, "q1": 20.0, "median": 50.0, "q3": 70.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "MasVnrArea": {"min": 0.0, "max": 1600.0, "mean": 103.685, "std": 181.066, "variance": 32784.971, "skew": 2.666, "kurtosis": 10.044, "q1": 0.0, "median": 0.0, "q3": 166.0, "n_missing": 8, "missing_rate": 0.005, "n": 1460}, "MiscVal": {"min": 0.0, "max": 15500.0, "mean": 43.489, "std": 496.123, "variance": 246138.055, "skew": 24.452, "kurtosis": 698.601, "q1": 0.0, "median": 0.0, "q3": 0.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "MoSold": {"min": 1.0, "max": 12.0, "mean": 6.322, "std": 2.704, "variance": 7.31, "skew": 0.212, "kurtosis": -0.407, "q1": 5.0, "median": 6.0, "q3": 8.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "OpenPorchSF": {"min": 0.0, "max": 547.0, "mean": 46.66, "std": 66.256, "variance": 4389.861, "skew": 2.362, "kurtosis": 8.457, "q1": 0.0, "median": 25.0, "q3": 68.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "OverallCond": {"min": 1.0, "max": 9.0, "mean": 5.575, "std": 1.113, "variance": 1.238, "skew": 0.692, "kurtosis": 1.099, "q1": 5.0, "median": 5.0, "q3": 6.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "OverallQual": {"min": 1.0, "max": 10.0, "mean": 6.099, "std": 1.383, "variance": 1.913, "skew": 0.217, "kurtosis": 0.092, "q1": 5.0, "median": 6.0, "q3": 7.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "PoolArea": {"min": 0.0, "max": 738.0, "mean": 2.759, "std": 40.177, "variance": 1614.216, "skew": 14.813, "kurtosis": 222.501, "q1": 0.0, "median": 0.0, "q3": 0.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "SalePrice": {"min": 34900.0, "max": 755000.0, "mean": 180921.196, "std": 79442.503, "variance": 6311111264.297, "skew": 1.881, "kurtosis": 6.51, "q1": 129975.0, "median": 163000.0, "q3": 214000.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "ScreenPorch": {"min": 0.0, "max": 480.0, "mean": 15.061, "std": 55.757, "variance": 3108.889, "skew": 4.118, "kurtosis": 18.372, "q1": 0.0, "median": 0.0, "q3": 0.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "TotRmsAbvGrd": {"min": 2.0, "max": 14.0, "mean": 6.518, "std": 1.625, "variance": 2.642, "skew": 0.676, "kurtosis": 0.874, "q1": 5.0, "median": 6.0, "q3": 7.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "TotalBsmtSF": {"min": 0.0, "max": 6110.0, "mean": 1057.429, "std": 438.705, "variance": 192462.362, "skew": 1.523, "kurtosis": 13.201, "q1": 795.75, "median": 991.5, "q3": 1298.25, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "WoodDeckSF": {"min": 0.0, "max": 857.0, "mean": 94.245, "std": 125.339, "variance": 15709.813, "skew": 1.54, "kurtosis": 2.979, "q1": 0.0, "median": 0.0, "q3": 168.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "YearBuilt": {"min": 1872.0, "max": 2010.0, "mean": 1971.268, "std": 30.203, "variance": 912.215, "skew": -0.613, "kurtosis": -0.442, "q1": 1954.0, "median": 1973.0, "q3": 2000.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "YearRemodAdd": {"min": 1950.0, "max": 2010.0, "mean": 1984.866, "std": 20.645, "variance": 426.233, "skew": -0.503, "kurtosis": -1.272, "q1": 1967.0, "median": 1994.0, "q3": 2004.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "YrSold": {"min": 2006.0, "max": 2010.0, "mean": 2007.816, "std": 1.328, "variance": 1.764, "skew": 0.096, "kurtosis": -1.191, "q1": 2007.0, "median": 2008.0, "q3": 2009.0, "n_missing": 0, "missing_rate": 0.0, "n": 1460}}
-2025-01-03 06:17:45 - Agents Log - Adding table to storage.
-2025-01-03 06:17:45 - Agents Log - Added table to /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/1.pkl: Path to table: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/1.pkl
+{"('train', 'rmse')": {"OLS": 9.797, "Ridge": 9.797, "Lasso": 9.798, "ElasticNet": 9.797, "RF": 1.092, "XGBoost": 1.24}, "('train', 'mae')": {"OLS": 6.309, "Ridge": 6.309, "Lasso": 6.307, "ElasticNet": 6.309, "RF": 0.807, "XGBoost": 0.951}, "('train', 'mape')": {"OLS": 5887305459926200.0, "Ridge": 5887305460274002.0, "Lasso": 5891016481617249.0, "ElasticNet": 5887362433724761.0, "RF": 65157851351178.664, "XGBoost": 41164115743997.555}, "('train', 'pearsonr')": {"OLS": 0.855, "Ridge": 0.855, "Lasso": 0.855, "ElasticNet": 0.855, "RF": 0.998, "XGBoost": 0.998}, "('train', 'spearmanr')": {"OLS": 0.773, "Ridge": 0.773, "Lasso": 0.773, "ElasticNet": 0.773, "RF": 0.992, "XGBoost": 0.985}, "('train', 'r2')": {"OLS": 0.73, "Ridge": 0.73, "Lasso": 0.73, "ElasticNet": 0.73, "RF": 0.997, "XGBoost": 0.996}, "('train', 'adjr2')": {"OLS": 0.729, "Ridge": 0.729, "Lasso": 0.729, "ElasticNet": 0.729, "RF": 0.997, "XGBoost": 0.996}, "('train', 'n_obs')": {"OLS": 4915.0, "Ridge": 4915.0, "Lasso": 4915.0, "ElasticNet": 4915.0, "RF": 4915.0, "XGBoost": 4915.0}, "('test', 'rmse')": {"OLS": 9.334, "Ridge": 9.334, "Lasso": 9.336, "ElasticNet": 9.334, "RF": 2.531, "XGBoost": 2.268}, "('test', 'mae')": {"OLS": 6.194, "Ridge": 6.194, "Lasso": 6.193, "ElasticNet": 6.194, "RF": 1.825, "XGBoost": 1.612}, "('test', 'mape')": {"OLS": 4988975466580154.0, "Ridge": 4988975466906362.0, "Lasso": 4993274419629774.0, "ElasticNet": 4989040167683284.0, "RF": 117025171230421.89, "XGBoost": 102826704026453.08}, "('test', 'pearsonr')": {"OLS": 0.85, "Ridge": 0.85, "Lasso": 0.85, "ElasticNet": 0.85, "RF": 0.99, "XGBoost": 0.992}, "('test', 'spearmanr')": {"OLS": 0.744, "Ridge": 0.744, "Lasso": 0.744, "ElasticNet": 0.744, "RF": 0.955, "XGBoost": 0.964}, "('test', 'r2')": {"OLS": 0.721, "Ridge": 0.721, "Lasso": 0.721, "ElasticNet": 0.721, "RF": 0.979, "XGBoost": 0.984}, "('test', 'adjr2')": {"OLS": 0.719, "Ridge": 0.719, "Lasso": 0.719, "ElasticNet": 0.719, "RF": 0.979, "XGBoost": 0.983}, "('test', 'n_obs')": {"OLS": 3277.0, "Ridge": 3277.0, "Lasso": 3277.0, "ElasticNet": 3277.0, "RF": 3277.0, "XGBoost": 3277.0}}
+2025-01-03 16:56:34 - Agents Log - Adding dictionary to storage.
+2025-01-03 16:56:34 - Agents Log - Added dictionary without description. First 20 characters: {"train_metrics": {".
+2025-01-03 16:56:36 - Analyzer Log - Renamed variables 'citric.acid', 'fixed.acidity', 'free.sulfur.dioxide', 'residual.sugar', 'total.sulfur.dioxide', 'volatile.acidity' to 'citric_acid', 'fixed_acidity', 'free_sulfur_dioxide', 'residual_sugar', 'total_sulfur_dioxide', 'volatile_acidity'.
+2025-01-03 16:56:36 - Analyzer Log - Analyzer initialized for dataset 'Dataset'.
+2025-01-03 16:56:36 - Agents Log - Data container initialized with the Analyzer built from the provided DataFrame.
+2025-01-03 16:56:36 - Agents Log - IO initialized.
+2025-01-03 16:56:36 - Agents Log - Initializing the Orchestrator.
+2025-01-03 16:56:36 - Agents Log - Initializing SingleAgent
+2025-01-03 16:56:36 - Agents Log - Tool call: dataset_summary_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x317235070>}).
+2025-01-03 16:56:36 - Agents Log - Adding dictionary to storage.
+2025-01-03 16:56:36 - Agents Log - Added dictionary without description. First 20 characters: {"train_shape": {"n_.
+2025-01-03 16:56:40 - Agents Log - SingleAgent initialized
+2025-01-03 16:56:42 - Agents Log - Tool call: feature_selection_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x317235070>, 'feature_selector': 'Boruta', 'predictors': 'alcohol, chlorides, citric_acid, density, fixed_acidity, free_sulfur_dioxide, pH, residual_sugar, sulphates, total_sulfur_dioxide, volatile_acidity', 'target': 'quality', 'task': 'regression'}).
+2025-01-03 16:56:42 - Agents Log - _feature_selection_function called
+2025-01-03 16:56:42 - Agents Log - _feature_selection_function Feature selector: Boruta
+2025-01-03 16:56:42 - Agents Log - _feature_selection_function Target: quality
+2025-01-03 16:56:42 - Agents Log - _feature_selection_function Predictors: ['alcohol', 'chlorides', 'citric_acid', 'density', 'fixed_acidity', 'free_sulfur_dioxide', 'pH', 'residual_sugar', 'sulphates', 'total_sulfur_dioxide', 'volatile_acidity']
+2025-01-03 16:56:42 - Analyzer Log - Fitting 'BorutaFSR'.
+2025-01-03 16:56:49 - Agents Log - Adding dictionary to storage.
+2025-01-03 16:56:49 - Agents Log - Added dictionary without description. First 20 characters: {"target": "quality".
+2025-01-03 16:56:49 - Agents Log - Tool call: ml_regression_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x317235070>, 'models': 'OLS, Ridge, Lasso, ElasticNet, RF, XGBoost', 'predictors': 'alcohol, chlorides, citric_acid, density, fixed_acidity, free_sulfur_dioxide, pH, residual_sugar, sulphates, total_sulfur_dioxide, volatile_acidity', 'target': 'quality'}).
+2025-01-03 16:56:49 - Agents Log - _ml_regression_function called
+2025-01-03 16:56:49 - Agents Log - _ml_regression_function Models to test: OLS, Ridge, Lasso, ElasticNet, RF, XGBoost
+2025-01-03 16:56:49 - Agents Log - _ml_regression_function Target: quality
+2025-01-03 16:56:49 - Agents Log - _ml_regression_function Predictors: ['alcohol', 'chlorides', 'citric_acid', 'density', 'fixed_acidity', 'free_sulfur_dioxide', 'pH', 'residual_sugar', 'sulphates', 'total_sulfur_dioxide', 'volatile_acidity']
+2025-01-03 16:56:49 - Analyzer Log - Fitting model 'OLS'.
+2025-01-03 16:56:49 - Analyzer Log - Fitting 'OLS'. Search method: GridSearchCV (1 fits per fold, 5 total fits). 
+2025-01-03 16:56:49 - Analyzer Log - Successfully evaluated model 'OLS'.
+2025-01-03 16:56:49 - Analyzer Log - Fitting model 'Ridge'.
+2025-01-03 16:56:49 - Analyzer Log - Fitting 'Ridge'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2025-01-03 16:56:50 - Analyzer Log - Successfully evaluated model 'Ridge'.
+2025-01-03 16:56:50 - Analyzer Log - Fitting model 'Lasso'.
+2025-01-03 16:56:50 - Analyzer Log - Fitting 'Lasso'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2025-01-03 16:56:52 - Analyzer Log - Successfully evaluated model 'Lasso'.
+2025-01-03 16:56:52 - Analyzer Log - Fitting model 'ElasticNet'.
+2025-01-03 16:56:52 - Analyzer Log - Fitting 'ElasticNet'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2025-01-03 16:56:53 - Analyzer Log - Successfully evaluated model 'ElasticNet'.
+2025-01-03 16:56:53 - Analyzer Log - Fitting model 'RF'.
+2025-01-03 16:56:53 - Analyzer Log - Fitting 'RF'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2025-01-03 16:59:02 - Analyzer Log - Successfully evaluated model 'RF'.
+2025-01-03 16:59:02 - Analyzer Log - Fitting model 'XGBoost'.
+2025-01-03 16:59:02 - Analyzer Log - Fitting 'XGBoost'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2025-01-03 17:00:11 - Analyzer Log - Successfully evaluated model 'XGBoost'.
+2025-01-03 17:00:11 - Agents Log - Adding table to storage.
+2025-01-03 17:00:11 - Agents Log - Added table to /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl: Path to table: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl
 
-{"Alley": {"n_unique": 2, "most_common": "Grvl", "least_common": "Pave", "n_missing": 1369, "missing_rate": 0.9376712328767123, "n": 1460}, "BldgType": {"n_unique": 5, "most_common": "1Fam", "least_common": "2fmCon", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "BsmtCond": {"n_unique": 4, "most_common": "TA", "least_common": "Po", "n_missing": 37, "missing_rate": 0.025342465753424658, "n": 1460}, "BsmtExposure": {"n_unique": 4, "most_common": "No", "least_common": "Mn", "n_missing": 38, "missing_rate": 0.026027397260273973, "n": 1460}, "BsmtFinType1": {"n_unique": 6, "most_common": "Unf", "least_common": "LwQ", "n_missing": 37, "missing_rate": 0.025342465753424658, "n": 1460}, "BsmtFinType2": {"n_unique": 6, "most_common": "Unf", "least_common": "GLQ", "n_missing": 38, "missing_rate": 0.026027397260273973, "n": 1460}, "BsmtQual": {"n_unique": 4, "most_common": "TA", "least_common": "Fa", "n_missing": 37, "missing_rate": 0.025342465753424658, "n": 1460}, "CentralAir": {"n_unique": 2, "most_common": "Y", "least_common": "N", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "Condition1": {"n_unique": 9, "most_common": "Norm", "least_common": "RRNe", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "Condition2": {"n_unique": 8, "most_common": "Norm", "least_common": "PosA", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "Electrical": {"n_unique": 5, "most_common": "SBrkr", "least_common": "Mix", "n_missing": 1, "missing_rate": 0.0006849315068493151, "n": 1460}, "ExterCond": {"n_unique": 5, "most_common": "TA", "least_common": "Po", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "ExterQual": {"n_unique": 4, "most_common": "TA", "least_common": "Fa", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "Exterior1st": {"n_unique": 15, "most_common": "VinylSd", "least_common": "ImStucc", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "Exterior2nd": {"n_unique": 16, "most_common": "VinylSd", "least_common": "Other", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "Fence": {"n_unique": 4, "most_common": "MnPrv", "least_common": "MnWw", "n_missing": 1179, "missing_rate": 0.8075342465753425, "n": 1460}, "FireplaceQu": {"n_unique": 5, "most_common": "Gd", "least_common": "Po", "n_missing": 690, "missing_rate": 0.4726027397260274, "n": 1460}, "Foundation": {"n_unique": 6, "most_common": "PConc", "least_common": "Wood", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "Functional": {"n_unique": 7, "most_common": "Typ", "least_common": "Sev", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "GarageCond": {"n_unique": 5, "most_common": "TA", "least_common": "Ex", "n_missing": 81, "missing_rate": 0.05547945205479452, "n": 1460}, "GarageFinish": {"n_unique": 3, "most_common": "Unf", "least_common": "Fin", "n_missing": 81, "missing_rate": 0.05547945205479452, "n": 1460}, "GarageQual": {"n_unique": 5, "most_common": "TA", "least_common": "Po", "n_missing": 81, "missing_rate": 0.05547945205479452, "n": 1460}, "GarageType": {"n_unique": 6, "most_common": "Attchd", "least_common": "2Types", "n_missing": 81, "missing_rate": 0.05547945205479452, "n": 1460}, "Heating": {"n_unique": 6, "most_common": "GasA", "least_common": "Floor", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "HeatingQC": {"n_unique": 5, "most_common": "Ex", "least_common": "Po", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "HouseStyle": {"n_unique": 8, "most_common": "1Story", "least_common": "2.5Fin", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "KitchenQual": {"n_unique": 4, "most_common": "TA", "least_common": "Fa", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "LandContour": {"n_unique": 4, "most_common": "Lvl", "least_common": "Low", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "LandSlope": {"n_unique": 3, "most_common": "Gtl", "least_common": "Sev", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "LotConfig": {"n_unique": 5, "most_common": "Inside", "least_common": "FR3", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "LotShape": {"n_unique": 4, "most_common": "Reg", "least_common": "IR3", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "MSZoning": {"n_unique": 5, "most_common": "RL", "least_common": "C (all)", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "MasVnrType": {"n_unique": 3, "most_common": "BrkFace", "least_common": "BrkCmn", "n_missing": 872, "missing_rate": 0.5972602739726027, "n": 1460}, "MiscFeature": {"n_unique": 4, "most_common": "Shed", "least_common": "TenC", "n_missing": 1406, "missing_rate": 0.963013698630137, "n": 1460}, "Neighborhood": {"n_unique": 25, "most_common": "NAmes", "least_common": "Blueste", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "PavedDrive": {"n_unique": 3, "most_common": "Y", "least_common": "P", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "PoolQC": {"n_unique": 3, "most_common": "Gd", "least_common": "Fa", "n_missing": 1453, "missing_rate": 0.9952054794520548, "n": 1460}, "RoofMatl": {"n_unique": 8, "most_common": "CompShg", "least_common": "Metal", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "RoofStyle": {"n_unique": 6, "most_common": "Gable", "least_common": "Shed", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "SaleCondition": {"n_unique": 6, "most_common": "Normal", "least_common": "AdjLand", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "SaleType": {"n_unique": 9, "most_common": "WD", "least_common": "Con", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "Street": {"n_unique": 2, "most_common": "Pave", "least_common": "Grvl", "n_missing": 0, "missing_rate": 0.0, "n": 1460}, "Utilities": {"n_unique": 2, "most_common": "AllPub", "least_common": "NoSeWa", "n_missing": 0, "missing_rate": 0.0, "n": 1460}}
-2025-01-03 06:17:56 - Agents Log - Tool call: plot_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x17df83b90>, 'x': 'SalePrice', 'y': ''}).
-2025-01-03 06:18:41 - Agents Log - Tool call: correlation_comparison_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x17df83b90>, 'numeric_vars': 'GrLivArea', 'target': 'SalePrice'}).
-2025-01-03 06:18:41 - Agents Log - Adding table to storage.
-2025-01-03 06:18:41 - Agents Log - Added table to /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/2.pkl: Path to table: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/2.pkl
+{"('train', 'rmse')": {"OLS": 0.734, "Ridge": 0.734, "Lasso": 0.734, "ElasticNet": 0.734, "RF": 0.293, "XGBoost": 0.149}, "('train', 'mae')": {"OLS": 0.566, "Ridge": 0.567, "Lasso": 0.567, "ElasticNet": 0.567, "RF": 0.225, "XGBoost": 0.107}, "('train', 'mape')": {"OLS": 0.1, "Ridge": 0.1, "Lasso": 0.1, "ElasticNet": 0.1, "RF": 0.04, "XGBoost": 0.019}, "('train', 'pearsonr')": {"OLS": 0.549, "Ridge": 0.549, "Lasso": 0.549, "ElasticNet": 0.549, "RF": 0.962, "XGBoost": 0.989}, "('train', 'spearmanr')": {"OLS": 0.572, "Ridge": 0.572, "Lasso": 0.572, "ElasticNet": 0.572, "RF": 0.933, "XGBoost": 0.938}, "('train', 'r2')": {"OLS": 0.302, "Ridge": 0.302, "Lasso": 0.301, "ElasticNet": 0.301, "RF": 0.889, "XGBoost": 0.971}, "('train', 'adjr2')": {"OLS": 0.3, "Ridge": 0.3, "Lasso": 0.299, "ElasticNet": 0.299, "RF": 0.888, "XGBoost": 0.971}, "('train', 'n_obs')": {"OLS": 3898.0, "Ridge": 3898.0, "Lasso": 3898.0, "ElasticNet": 3898.0, "RF": 3898.0, "XGBoost": 3898.0}, "('test', 'rmse')": {"OLS": 0.738, "Ridge": 0.738, "Lasso": 0.738, "ElasticNet": 0.738, "RF": 0.627, "XGBoost": 0.621}, "('test', 'mae')": {"OLS": 0.571, "Ridge": 0.571, "Lasso": 0.571, "ElasticNet": 0.571, "RF": 0.468, "XGBoost": 0.446}, "('test', 'mape')": {"OLS": 0.102, "Ridge": 0.102, "Lasso": 0.102, "ElasticNet": 0.102, "RF": 0.085, "XGBoost": 0.081}, "('test', 'pearsonr')": {"OLS": 0.526, "Ridge": 0.526, "Lasso": 0.526, "ElasticNet": 0.526, "RF": 0.693, "XGBoost": 0.697}, "('test', 'spearmanr')": {"OLS": 0.543, "Ridge": 0.543, "Lasso": 0.544, "ElasticNet": 0.544, "RF": 0.701, "XGBoost": 0.697}, "('test', 'r2')": {"OLS": 0.274, "Ridge": 0.275, "Lasso": 0.275, "ElasticNet": 0.275, "RF": 0.476, "XGBoost": 0.485}, "('test', 'adjr2')": {"OLS": 0.271, "Ridge": 0.271, "Lasso": 0.272, "ElasticNet": 0.272, "RF": 0.474, "XGBoost": 0.483}, "('test', 'n_obs')": {"OLS": 2599.0, "Ridge": 2599.0, "Lasso": 2599.0, "ElasticNet": 2599.0, "RF": 2599.0, "XGBoost": 2599.0}}
+2025-01-03 17:00:11 - Agents Log - Adding dictionary to storage.
+2025-01-03 17:00:11 - Agents Log - Added dictionary without description. First 20 characters: {"train_metrics": {".
+2025-01-03 17:00:15 - Analyzer Log - Analyzer initialized for dataset 'Dataset'.
+2025-01-03 17:00:15 - Agents Log - Data container initialized with the Analyzer built from the provided DataFrame.
+2025-01-03 17:00:15 - Agents Log - IO initialized.
+2025-01-03 17:00:15 - Agents Log - Initializing the Orchestrator.
+2025-01-03 17:00:15 - Agents Log - Initializing SingleAgent
+2025-01-03 17:00:15 - Agents Log - Tool call: dataset_summary_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x3172e56a0>}).
+2025-01-03 17:00:15 - Agents Log - Adding dictionary to storage.
+2025-01-03 17:00:15 - Agents Log - Added dictionary without description. First 20 characters: {"train_shape": {"n_.
+2025-01-03 17:00:20 - Agents Log - SingleAgent initialized
+2025-01-03 17:00:22 - Agents Log - Tool call: ml_regression_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x3172e56a0>, 'models': 'OLS, Ridge, Lasso, ElasticNet, RF, XGBoost', 'predictors': 'oz1, oz10, oz11, oz12, oz124, oz125, oz126, oz127, oz128, oz13, oz131, oz133, oz149, oz150, oz151, oz165, oz171, oz172, oz173, oz175, oz176, oz177, oz178, oz181, oz183, oz185, oz197, oz2, oz246, oz247, oz248, oz249, oz250, oz251, oz3, oz31, oz4, oz5, oz6, oz83, oz87, oz9', 'target': 'oz252'}).
+2025-01-03 17:00:22 - Agents Log - _ml_regression_function called
+2025-01-03 17:00:22 - Agents Log - _ml_regression_function Models to test: OLS, Ridge, Lasso, ElasticNet, RF, XGBoost
+2025-01-03 17:00:22 - Agents Log - _ml_regression_function Target: oz252
+2025-01-03 17:00:22 - Agents Log - _ml_regression_function Predictors: ['oz1', 'oz10', 'oz11', 'oz12', 'oz124', 'oz125', 'oz126', 'oz127', 'oz128', 'oz13', 'oz131', 'oz133', 'oz149', 'oz150', 'oz151', 'oz165', 'oz171', 'oz172', 'oz173', 'oz175', 'oz176', 'oz177', 'oz178', 'oz181', 'oz183', 'oz185', 'oz197', 'oz2', 'oz246', 'oz247', 'oz248', 'oz249', 'oz250', 'oz251', 'oz3', 'oz31', 'oz4', 'oz5', 'oz6', 'oz83', 'oz87', 'oz9']
+2025-01-03 17:00:22 - Analyzer Log - Fitting model 'OLS'.
+2025-01-03 17:00:22 - Analyzer Log - Fitting 'OLS'. Search method: GridSearchCV (1 fits per fold, 5 total fits). 
+2025-01-03 17:00:22 - Analyzer Log - Successfully evaluated model 'OLS'.
+2025-01-03 17:00:22 - Analyzer Log - Fitting model 'Ridge'.
+2025-01-03 17:00:22 - Analyzer Log - Fitting 'Ridge'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2025-01-03 17:00:55 - Analyzer Log - Successfully evaluated model 'Ridge'.
+2025-01-03 17:00:55 - Analyzer Log - Fitting model 'Lasso'.
+2025-01-03 17:00:55 - Analyzer Log - Fitting 'Lasso'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2025-01-03 17:00:59 - Analyzer Log - Successfully evaluated model 'Lasso'.
+2025-01-03 17:00:59 - Analyzer Log - Fitting model 'ElasticNet'.
+2025-01-03 17:00:59 - Analyzer Log - Fitting 'ElasticNet'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2025-01-03 17:01:05 - Analyzer Log - Successfully evaluated model 'ElasticNet'.
+2025-01-03 17:01:05 - Analyzer Log - Fitting model 'RF'.
+2025-01-03 17:01:05 - Analyzer Log - Fitting 'RF'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2025-01-03 17:58:01 - Analyzer Log - Successfully evaluated model 'RF'.
+2025-01-03 17:58:01 - Analyzer Log - Fitting model 'XGBoost'.
+2025-01-03 17:58:01 - Analyzer Log - Fitting 'XGBoost'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2025-01-03 18:55:27 - Analyzer Log - Successfully evaluated model 'XGBoost'.
+2025-01-03 18:55:27 - Agents Log - Adding table to storage.
+2025-01-03 18:55:27 - Agents Log - Added table to /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl: Path to table: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl
 
-{"GrLivArea": {"Corr. w SalePrice": "0.709", "p-value": "4.518e-223"}}
-2025-01-03 06:18:42 - Agents Log - Tool call: plot_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x17df83b90>, 'x': 'GrLivArea', 'y': 'SalePrice'}).
-2025-01-03 06:18:59 - Agents Log - Tool call: python_env_code_run_function(args=("import matplotlib.pyplot as plt\nimport pandas as pd\ndf_all = pd.read_csv('data.csv')\nplt.scatter(df_all['GrLivArea'], df_all['SalePrice'])\nplt.title('Correlation: '+ str(df_all['GrLivArea'].corr(df_all['SalePrice'])))\nplt.xlabel('GrLivArea')\nplt.ylabel('SalePrice')\nresult = plt.show()",), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x17df83b90>}).
-2025-01-03 06:18:59 - Agents Log - Executing Python code in a separate subprocess with preloaded DataFrames. Input code: 
-import matplotlib.pyplot as plt
-import pandas as pd
-df_all = pd.read_csv('data.csv')
-plt.scatter(df_all['GrLivArea'], df_all['SalePrice'])
-plt.title('Correlation: '+ str(df_all['GrLivArea'].corr(df_all['SalePrice'])))
-plt.xlabel('GrLivArea')
-plt.ylabel('SalePrice')
-result = plt.show()
-2025-01-03 06:18:59 - Agents Log - An error occurred while deserializing the result: Ran out of input
-2025-01-03 06:18:59 - Agents Log - Python code execution completed. Output: , Error: Traceback (most recent call last):
-  File "/var/folders/fz/1btg0vkx2yl8sf_1hwcxk5dw0000gn/T/tmpawz5iisp.py", line 32, in <module>
-    df_all = pd.read_csv('data.csv')
-             ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/andrewyang/anaconda3/envs/tm/lib/python3.12/site-packages/pandas/io/parsers/readers.py", line 1026, in read_csv
-    return _read(filepath_or_buffer, kwds)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/andrewyang/anaconda3/envs/tm/lib/python3.12/site-packages/pandas/io/parsers/readers.py", line 620, in _read
-    parser = TextFileReader(filepath_or_buffer, **kwds)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/andrewyang/anaconda3/envs/tm/lib/python3.12/site-packages/pandas/io/parsers/readers.py", line 1620, in __init__
-    self._engine = self._make_engine(f, self.engine)
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/andrewyang/anaconda3/envs/tm/lib/python3.12/site-packages/pandas/io/parsers/readers.py", line 1880, in _make_engine
-    self.handles = get_handle(
-                   ^^^^^^^^^^^
-  File "/Users/andrewyang/anaconda3/envs/tm/lib/python3.12/site-packages/pandas/io/common.py", line 873, in get_handle
-    handle = open(
-             ^^^^^
-FileNotFoundError: [Errno 2] No such file or directory: 'data.csv'
-, Result: None
-2025-01-03 06:19:26 - Agents Log - Tool call: python_env_code_run_function(args=("import matplotlib.pyplot as plt\nimport pandas as pd\ndf_all = pd.read_csv('data.csv')\nplt.scatter(df_all['GrLivArea'], df_all['SalePrice'])\nplt.title('Correlation: '+ str(df_all['GrLivArea'].corr(df_all['SalePrice'])))\nplt.xlabel('GrLivArea')\nplt.ylabel('SalePrice')\nresult = plt.show()",), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x17df83b90>}).
-2025-01-03 06:19:26 - Agents Log - Tool call: python_env_code_run_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x17df83b90>, 'code': "import matplotlib.pyplot as plt\nimport pandas as pd\ndf_all = pd.read_csv('data.csv')\nplt.scatter(df_all['GrLivArea'], df_all['SalePrice'])\nplt.title('Correlation: '+ str(df_all['GrLivArea'].corr(df_all['SalePrice'])))\nplt.xlabel('GrLivArea')\nplt.ylabel('SalePrice')\nresult = plt.show()"}).
-2025-01-03 06:19:26 - Agents Log - Executing Python code in a separate subprocess with preloaded DataFrames. Input code: 
-import matplotlib.pyplot as plt
-import pandas as pd
-df_all = pd.read_csv('data.csv')
-plt.scatter(df_all['GrLivArea'], df_all['SalePrice'])
-plt.title('Correlation: '+ str(df_all['GrLivArea'].corr(df_all['SalePrice'])))
-plt.xlabel('GrLivArea')
-plt.ylabel('SalePrice')
-result = plt.show()
-2025-01-03 06:19:26 - Agents Log - An error occurred while deserializing the result: Ran out of input
-2025-01-03 06:19:26 - Agents Log - Python code execution completed. Output: , Error: Traceback (most recent call last):
-  File "/var/folders/fz/1btg0vkx2yl8sf_1hwcxk5dw0000gn/T/tmpk9a91tyu.py", line 32, in <module>
-    df_all = pd.read_csv('data.csv')
-             ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/andrewyang/anaconda3/envs/tm/lib/python3.12/site-packages/pandas/io/parsers/readers.py", line 1026, in read_csv
-    return _read(filepath_or_buffer, kwds)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/andrewyang/anaconda3/envs/tm/lib/python3.12/site-packages/pandas/io/parsers/readers.py", line 620, in _read
-    parser = TextFileReader(filepath_or_buffer, **kwds)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/andrewyang/anaconda3/envs/tm/lib/python3.12/site-packages/pandas/io/parsers/readers.py", line 1620, in __init__
-    self._engine = self._make_engine(f, self.engine)
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/andrewyang/anaconda3/envs/tm/lib/python3.12/site-packages/pandas/io/parsers/readers.py", line 1880, in _make_engine
-    self.handles = get_handle(
-                   ^^^^^^^^^^^
-  File "/Users/andrewyang/anaconda3/envs/tm/lib/python3.12/site-packages/pandas/io/common.py", line 873, in get_handle
-    handle = open(
-             ^^^^^
-FileNotFoundError: [Errno 2] No such file or directory: 'data.csv'
-, Result: None
-2025-01-03 06:19:27 - Agents Log - Tool call: python_env_code_run_function(args=("import matplotlib.pyplot as plt\nplt.scatter(df_all['GrLivArea'], df_all['SalePrice'])\nplt.title('Correlation: '+ str(df_all['GrLivArea'].corr(df_all['SalePrice'])))\nplt.xlabel('GrLivArea')\nplt.ylabel('SalePrice')\nplt.show()",), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x17df83b90>}).
-2025-01-03 06:19:27 - Agents Log - Executing Python code in a separate subprocess with preloaded DataFrames. Input code: 
-import matplotlib.pyplot as plt
-plt.scatter(df_all['GrLivArea'], df_all['SalePrice'])
-plt.title('Correlation: '+ str(df_all['GrLivArea'].corr(df_all['SalePrice'])))
-plt.xlabel('GrLivArea')
-plt.ylabel('SalePrice')
-plt.show()
-2025-01-03 06:19:28 - Agents Log - Python code execution completed. Output: , Error: , Result: Figure(640x480)
+{"('train', 'rmse')": {"OLS": 0.027, "Ridge": 0.027, "Lasso": 0.027, "ElasticNet": 0.027, "RF": 0.017, "XGBoost": 0.022}, "('train', 'mae')": {"OLS": 0.019, "Ridge": 0.019, "Lasso": 0.019, "ElasticNet": 0.019, "RF": 0.012, "XGBoost": 0.016}, "('train', 'mape')": {"OLS": 0.021, "Ridge": 0.021, "Lasso": 0.021, "ElasticNet": 0.021, "RF": 0.013, "XGBoost": 0.017}, "('train', 'pearsonr')": {"OLS": 0.265, "Ridge": 0.264, "Lasso": 0.256, "ElasticNet": 0.263, "RF": 0.902, "XGBoost": 0.698}, "('train', 'spearmanr')": {"OLS": 0.239, "Ridge": 0.239, "Lasso": 0.236, "ElasticNet": 0.239, "RF": 0.818, "XGBoost": 0.573}, "('train', 'r2')": {"OLS": 0.07, "Ridge": 0.07, "Lasso": 0.065, "ElasticNet": 0.069, "RF": 0.617, "XGBoost": 0.38}, "('train', 'adjr2')": {"OLS": 0.063, "Ridge": 0.063, "Lasso": 0.057, "ElasticNet": 0.062, "RF": 0.614, "XGBoost": 0.375}, "('train', 'n_obs')": {"OLS": 5331.0, "Ridge": 5331.0, "Lasso": 5331.0, "ElasticNet": 5331.0, "RF": 5331.0, "XGBoost": 5331.0}, "('test', 'rmse')": {"OLS": 0.032, "Ridge": 0.032, "Lasso": 0.032, "ElasticNet": 0.032, "RF": 0.031, "XGBoost": 0.031}, "('test', 'mae')": {"OLS": 0.02, "Ridge": 0.02, "Lasso": 0.02, "ElasticNet": 0.02, "RF": 0.02, "XGBoost": 0.02}, "('test', 'mape')": {"OLS": 1169587274073.897, "Ridge": 1169550473660.541, "Lasso": 1167679347890.662, "ElasticNet": 1169232872054.142, "RF": 1169776588595.952, "XGBoost": 1165502262477.743}, "('test', 'pearsonr')": {"OLS": 0.193, "Ridge": 0.193, "Lasso": 0.195, "ElasticNet": 0.194, "RF": 0.245, "XGBoost": 0.238}, "('test', 'spearmanr')": {"OLS": 0.223, "Ridge": 0.223, "Lasso": 0.225, "ElasticNet": 0.224, "RF": 0.259, "XGBoost": 0.25}, "('test', 'r2')": {"OLS": 0.035, "Ridge": 0.036, "Lasso": 0.038, "ElasticNet": 0.036, "RF": 0.06, "XGBoost": 0.055}, "('test', 'adjr2')": {"OLS": 0.024, "Ridge": 0.024, "Lasso": 0.026, "ElasticNet": 0.025, "RF": 0.049, "XGBoost": 0.043}, "('test', 'n_obs')": {"OLS": 3554.0, "Ridge": 3554.0, "Lasso": 3554.0, "ElasticNet": 3554.0, "RF": 3554.0, "XGBoost": 3554.0}}
+2025-01-03 18:55:27 - Agents Log - Adding dictionary to storage.
+2025-01-03 18:55:27 - Agents Log - Added dictionary without description. First 20 characters: {"train_metrics": {".
+2025-01-03 18:55:29 - Agents Log - Tool call: ml_regression_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x3172e56a0>, 'models': 'RF', 'predictors': 'oz1, oz10, oz11, oz12, oz124, oz125, oz126, oz127, oz128, oz13, oz131, oz133, oz149, oz150, oz151, oz165, oz171, oz172, oz173, oz175, oz176, oz177, oz178, oz181, oz183, oz185, oz197, oz2, oz246, oz247, oz248, oz249, oz250, oz251, oz3, oz31, oz4, oz5, oz6, oz83, oz87, oz9', 'target': 'oz252'}).
+2025-01-03 18:55:29 - Agents Log - _ml_regression_function called
+2025-01-03 18:55:29 - Agents Log - _ml_regression_function Models to test: RF
+2025-01-03 18:55:29 - Agents Log - _ml_regression_function Target: oz252
+2025-01-03 18:55:29 - Agents Log - _ml_regression_function Predictors: ['oz1', 'oz10', 'oz11', 'oz12', 'oz124', 'oz125', 'oz126', 'oz127', 'oz128', 'oz13', 'oz131', 'oz133', 'oz149', 'oz150', 'oz151', 'oz165', 'oz171', 'oz172', 'oz173', 'oz175', 'oz176', 'oz177', 'oz178', 'oz181', 'oz183', 'oz185', 'oz197', 'oz2', 'oz246', 'oz247', 'oz248', 'oz249', 'oz250', 'oz251', 'oz3', 'oz31', 'oz4', 'oz5', 'oz6', 'oz83', 'oz87', 'oz9']
+2025-01-03 18:55:29 - Analyzer Log - Fitting model 'RF'.
+2025-01-03 18:55:29 - Analyzer Log - Fitting 'RF'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2025-01-03 19:28:15 - Analyzer Log - Successfully evaluated model 'RF'.
+2025-01-03 19:28:15 - Agents Log - Adding table to storage.
+2025-01-03 19:28:15 - Agents Log - Added table to /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/1.pkl: Path to table: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/1.pkl
+
+{"('train', 'rmse')": {"RF": 0.02}, "('train', 'mae')": {"RF": 0.014}, "('train', 'mape')": {"RF": 0.015}, "('train', 'pearsonr')": {"RF": 0.831}, "('train', 'spearmanr')": {"RF": 0.738}, "('train', 'r2')": {"RF": 0.487}, "('train', 'adjr2')": {"RF": 0.483}, "('train', 'n_obs')": {"RF": 5331.0}, "('test', 'rmse')": {"RF": 0.031}, "('test', 'mae')": {"RF": 0.02}, "('test', 'mape')": {"RF": 1169095361133.65}, "('test', 'pearsonr')": {"RF": 0.239}, "('test', 'spearmanr')": {"RF": 0.257}, "('test', 'r2')": {"RF": 0.057}, "('test', 'adjr2')": {"RF": 0.046}, "('test', 'n_obs')": {"RF": 3554.0}}
+2025-01-03 19:28:15 - Agents Log - Adding dictionary to storage.
+2025-01-03 19:28:15 - Agents Log - Added dictionary without description. First 20 characters: {"train_metrics": {".
+2025-01-03 19:28:18 - Analyzer Log - Analyzer initialized for dataset 'Dataset'.
+2025-01-03 19:28:18 - Agents Log - Data container initialized with the Analyzer built from the provided DataFrame.
+2025-01-03 19:28:18 - Agents Log - IO initialized.
+2025-01-03 19:28:18 - Agents Log - Initializing the Orchestrator.
+2025-01-03 19:28:18 - Agents Log - Initializing SingleAgent
+2025-01-03 19:28:18 - Agents Log - Tool call: dataset_summary_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x317356d80>}).
+2025-01-03 19:28:18 - Agents Log - Adding dictionary to storage.
+2025-01-03 19:28:18 - Agents Log - Added dictionary without description. First 20 characters: {"train_shape": {"n_.
+2025-01-03 19:28:22 - Agents Log - SingleAgent initialized
+2025-01-03 19:28:23 - Agents Log - Tool call: feature_selection_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x317356d80>, 'feature_selector': 'Boruta', 'predictors': 'Diameter, Height, Length, Shell_weight, Shucked_weight, Viscera_weight, Whole_weight', 'target': 'Classnumberofrings', 'task': 'regression'}).
+2025-01-03 19:28:23 - Agents Log - _feature_selection_function called
+2025-01-03 19:28:23 - Agents Log - _feature_selection_function Feature selector: Boruta
+2025-01-03 19:28:23 - Agents Log - _feature_selection_function Target: Classnumberofrings
+2025-01-03 19:28:23 - Agents Log - _feature_selection_function Predictors: ['Diameter', 'Height', 'Length', 'Shell_weight', 'Shucked_weight', 'Viscera_weight', 'Whole_weight']
+2025-01-03 19:28:23 - Analyzer Log - Fitting 'BorutaFSR'.
+2025-01-03 19:29:15 - Agents Log - Adding dictionary to storage.
+2025-01-03 19:29:15 - Agents Log - Added dictionary without description. First 20 characters: {"target": "Classnum.
+2025-01-03 19:29:15 - Agents Log - Tool call: ml_regression_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x317356d80>, 'models': 'OLS, Ridge, Lasso, ElasticNet, RF, XGBoost', 'predictors': 'Diameter, Height, Length, Shell_weight, Shucked_weight, Viscera_weight, Whole_weight', 'target': 'Classnumberofrings'}).
+2025-01-03 19:29:15 - Agents Log - _ml_regression_function called
+2025-01-03 19:29:15 - Agents Log - _ml_regression_function Models to test: OLS, Ridge, Lasso, ElasticNet, RF, XGBoost
+2025-01-03 19:29:15 - Agents Log - _ml_regression_function Target: Classnumberofrings
+2025-01-03 19:29:15 - Agents Log - _ml_regression_function Predictors: ['Diameter', 'Height', 'Length', 'Shell_weight', 'Shucked_weight', 'Viscera_weight', 'Whole_weight']
+2025-01-03 19:29:15 - Analyzer Log - Fitting model 'OLS'.
+2025-01-03 19:29:15 - Analyzer Log - Fitting 'OLS'. Search method: GridSearchCV (1 fits per fold, 5 total fits). 
+2025-01-03 19:29:15 - Analyzer Log - Successfully evaluated model 'OLS'.
+2025-01-03 19:29:15 - Analyzer Log - Fitting model 'Ridge'.
+2025-01-03 19:29:15 - Analyzer Log - Fitting 'Ridge'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2025-01-03 19:29:16 - Analyzer Log - Successfully evaluated model 'Ridge'.
+2025-01-03 19:29:16 - Analyzer Log - Fitting model 'Lasso'.
+2025-01-03 19:29:16 - Analyzer Log - Fitting 'Lasso'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2025-01-03 19:29:18 - Analyzer Log - Successfully evaluated model 'Lasso'.
+2025-01-03 19:29:18 - Analyzer Log - Fitting model 'ElasticNet'.
+2025-01-03 19:29:18 - Analyzer Log - Fitting 'ElasticNet'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2025-01-03 19:29:20 - Analyzer Log - Successfully evaluated model 'ElasticNet'.
+2025-01-03 19:29:20 - Analyzer Log - Fitting model 'RF'.
+2025-01-03 19:29:20 - Analyzer Log - Fitting 'RF'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2025-01-03 19:30:42 - Analyzer Log - Successfully evaluated model 'RF'.
+2025-01-03 19:30:42 - Analyzer Log - Fitting model 'XGBoost'.
+2025-01-03 19:30:42 - Analyzer Log - Fitting 'XGBoost'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
+2025-01-03 19:31:26 - Analyzer Log - Successfully evaluated model 'XGBoost'.
+2025-01-03 19:31:26 - Agents Log - Adding table to storage.
+2025-01-03 19:31:26 - Agents Log - Added table to /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl: Path to table: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl
+
+{"('train', 'rmse')": {"OLS": 2.228, "Ridge": 2.235, "Lasso": 2.249, "ElasticNet": 2.238, "RF": 1.582, "XGBoost": 1.801}, "('train', 'mae')": {"OLS": 1.618, "Ridge": 1.622, "Lasso": 1.632, "ElasticNet": 1.624, "RF": 1.109, "XGBoost": 1.324}, "('train', 'mape')": {"OLS": 0.163, "Ridge": 0.163, "Lasso": 0.165, "ElasticNet": 0.164, "RF": 0.11, "XGBoost": 0.134}, "('train', 'pearsonr')": {"OLS": 0.732, "Ridge": 0.731, "Lasso": 0.727, "ElasticNet": 0.73, "RF": 0.886, "XGBoost": 0.838}, "('train', 'spearmanr')": {"OLS": 0.752, "Ridge": 0.753, "Lasso": 0.754, "ElasticNet": 0.753, "RF": 0.89, "XGBoost": 0.821}, "('train', 'r2')": {"OLS": 0.536, "Ridge": 0.533, "Lasso": 0.528, "ElasticNet": 0.532, "RF": 0.766, "XGBoost": 0.697}, "('train', 'adjr2')": {"OLS": 0.535, "Ridge": 0.532, "Lasso": 0.526, "ElasticNet": 0.531, "RF": 0.766, "XGBoost": 0.696}, "('train', 'n_obs')": {"OLS": 2506.0, "Ridge": 2506.0, "Lasso": 2506.0, "ElasticNet": 2506.0, "RF": 2506.0, "XGBoost": 2506.0}, "('test', 'rmse')": {"OLS": 2.204, "Ridge": 2.205, "Lasso": 2.218, "ElasticNet": 2.206, "RF": 2.139, "XGBoost": 2.178}, "('test', 'mae')": {"OLS": 1.629, "Ridge": 1.635, "Lasso": 1.65, "ElasticNet": 1.637, "RF": 1.546, "XGBoost": 1.574}, "('test', 'mape')": {"OLS": 0.169, "Ridge": 0.17, "Lasso": 0.172, "ElasticNet": 0.17, "RF": 0.157, "XGBoost": 0.16}, "('test', 'pearsonr')": {"OLS": 0.716, "Ridge": 0.715, "Lasso": 0.71, "ElasticNet": 0.714, "RF": 0.735, "XGBoost": 0.724}, "('test', 'spearmanr')": {"OLS": 0.745, "Ridge": 0.745, "Lasso": 0.744, "ElasticNet": 0.745, "RF": 0.77, "XGBoost": 0.756}, "('test', 'r2')": {"OLS": 0.509, "Ridge": 0.509, "Lasso": 0.503, "ElasticNet": 0.508, "RF": 0.538, "XGBoost": 0.52}, "('test', 'adjr2')": {"OLS": 0.507, "Ridge": 0.507, "Lasso": 0.501, "ElasticNet": 0.506, "RF": 0.536, "XGBoost": 0.518}, "('test', 'n_obs')": {"OLS": 1671.0, "Ridge": 1671.0, "Lasso": 1671.0, "ElasticNet": 1671.0, "RF": 1671.0, "XGBoost": 1671.0}}
+2025-01-03 19:31:26 - Agents Log - Adding dictionary to storage.
+2025-01-03 19:31:26 - Agents Log - Added dictionary without description. First 20 characters: {"train_metrics": {".

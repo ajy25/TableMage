@@ -5,3 +5,4 @@ titanic: Kaggle
 wine: sklearn
 abalone: InfiAgent Github
 baseball: InfiAgent Github
+autompg: InfiAgent Github

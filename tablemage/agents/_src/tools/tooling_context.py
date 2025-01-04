@@ -199,7 +199,7 @@ class ToolingContext:
         self._toolcalls.append(toolcall)
 
     def is_repeat_toolcall(self, toolcall: ToolCall) -> bool:
-        """Checks if a tool call is a repeat.
+        """Checks if a tool call is a repeat of the most recent tool call.
 
         Parameters
         ----------
