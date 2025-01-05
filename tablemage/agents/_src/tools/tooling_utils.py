@@ -40,8 +40,9 @@ def tooling_decorator(func):
             thought = f"An error occurred: `{e}"
             if thought[-1] == ".":
                 thought = thought[:-1]
-            thought += "`. I'll try again."
+            thought += "`. Let me try again."
             context.add_thought(thought)
+            return thought
 
     return wrapper
 

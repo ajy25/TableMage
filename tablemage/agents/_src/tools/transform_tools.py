@@ -244,7 +244,7 @@ def build_revert_to_original_tool(context: ToolingContext) -> FunctionTool:
 class _EngineerNumericFeatureInput(BaseModel):
     feature_name: str = Field(description="The name of the new feature to engineer.")
     formula: str = Field(
-        description="""
+        description="""\
 Formula for the new feature. For example, "x1 + x2" would create
 a new feature that is the sum of the columns x1 and x2 in the DataFrame.
 All variables used must be numeric.
@@ -286,8 +286,12 @@ def build_engineer_numeric_feature_tool(context: ToolingContext) -> FunctionTool
     return FunctionTool.from_defaults(
         fn=partial(_engineer_numeric_feature_function, context=context),
         name="engineer_numeric_feature_function",
-        description="This tool allows you to define/engineer/make a new numeric variable "
-        "based on a formula of other numeric variables.",
+        description="""\
+Defines/engineers/makes a new numeric variable as a formula of other numeric variables.
+Example Call:
+{feature_name: 'new_feature', formula: 'x1 + x2'} 
+Example Functionality: Creates a new feature that is the sum of x1 and x2.
+""",
         fn_schema=_EngineerNumericFeatureInput,
     )
 
@@ -295,24 +299,26 @@ def build_engineer_numeric_feature_tool(context: ToolingContext) -> FunctionTool
 class _EngineerCategoricalFeatureInput(BaseModel):
     feature_name: str = Field(description="The name of the new feature to engineer.")
     numeric_var: str = Field(
-        description="The numeric variable to use for engineering the new feature."
+        description="The numeric variable to use for engineering the new categorical variable."
     )
     level_names: str = Field(
-        description="A comma delimited string of level names for the new categorical feature. "
-        "The first level is the lowest level, and the last level is the highest level. "
+        description="A comma-delimited string of names for the levels of the new categorical variable. "
         "There must be one more level name than the number of thresholds."
     )
     thresholds: str = Field(
-        description="A comma delimited string of upper cutoffs/thresholds for the new categorical feature. "
-        "The thresholds must be in ascending order. "
-        "For example, if thresholds = '0, 10, 20', "
-        "and level_names = 'Low, Medium, High, Very High', "
-        "then the new variable will have the following levels: "
-        "Low (x < 0), Medium (0 <= x < 10), High (10 <= x < 20), Very High (x >= 20)."
+        description="A comma-delimited string of numeric thresholds for creating the categorical variable levels. "
+        "Thresholds must be specified in ascending order."
     )
     leq: bool = Field(
-        description="Boolean for whether the upper cutoffs/thresholds are inclusive "
-        "(True) or exclusive (False)."
+        description="""\
+Specifies how the boundaries of the levels are defined.
+If True, levels are inclusive on the upper end of a threshold.
+For example, with thresholds = '0, 10', level_names = 'Low, Medium, High', \
+and leq = True, the levels are: \
+'Low (x <= 0), Medium (0 < x <= 10), High (x > 10)'.
+If leq = False, the levels are:
+'Low (x < 0), Medium (0 <= x < 10), High (x >= 10)'.
+"""
     )
 
 
@@ -367,15 +373,24 @@ def _engineer_categorical_feature_function(
         leq=leq,
     )
     context.data_container.update_df()
-    return "The dataset has been transformed: " + f"Feature {feature_name} engineered."
+    return (
+        "The dataset has been transformed: "
+        + f"Feature {feature_name} engineered with thresholds {thresholds_str}."
+    )
 
 
 def build_engineer_categorical_feature_tool(context: ToolingContext) -> FunctionTool:
     return FunctionTool.from_defaults(
         fn=partial(_engineer_categorical_feature_function, context=context),
         name="engineer_categorical_feature_function",
-        description="""This tool allows you to engineer a new categorical variable "
-        "from a numeric variable.""",
+        description="""\
+Engineers a new categorical variable from a numeric variable. \
+The new variable is created based on specified thresholds.
+Example Call:
+{feature_name: 'new_feature', numeric_var: 'x1', level_names: 'Low, Medium, High', thresholds: '0, 10', leq: True}
+Example Functionality: Creates a new categorical variable \
+with levels 'Low (x <= 0), Medium (0 < x <= 10), High (x > 10)'.
+""",
         fn_schema=_EngineerCategoricalFeatureInput,
     )
 

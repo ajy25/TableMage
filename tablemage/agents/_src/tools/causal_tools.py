@@ -79,6 +79,6 @@ def build_estimate_causal_effect_tool(context: ToolingContext):
         description="Estimates the causal effect of a treatment on an outcome. "
         "Adjusts for confounders. "
         "Can estimate the average treatment effect on the treated (ATT) "
-        "or the average treatment effect (ATE).",
+        "or the average treatment effect (ATE). ",
         fn_schema=_CausalEffectEstimationInput,
     )

@@ -1,8 +1,9 @@
 from llama_index.core.agent import (
     FunctionCallingAgent,
     ReActAgent,
-    StructuredPlannerAgent,
 )
+from llama_index.agent.openai import OpenAIAgent
+from llama_index.llms.openai import OpenAI
 from llama_index.core.llms.function_calling import FunctionCallingLLM
 from llama_index.core import VectorStoreIndex
 from llama_index.core.base.llms.types import ChatMessage, MessageRole
@@ -227,13 +228,22 @@ def build_agent(
                 max_iterations=20,
             )
         else:
-            agent = FunctionCallingAgent.from_tools(
-                llm=llm,
-                tool_retriever=tool_retriever,
-                verbose=True,
-                system_prompt=system_prompt,
-                memory=memory_obj,
-            )
+            if isinstance(llm, OpenAI):
+                agent = OpenAIAgent.from_tools(
+                    llm=llm,
+                    tool_retriever=tool_retriever,
+                    verbose=True,
+                    system_prompt=system_prompt,
+                    memory=memory_obj,
+                )
+            else:
+                agent = FunctionCallingAgent.from_tools(
+                    llm=llm,
+                    tool_retriever=tool_retriever,
+                    verbose=True,
+                    system_prompt=system_prompt,
+                    memory=memory_obj,
+                )
     else:
         if react:
             agent = ReActAgent.from_tools(
@@ -245,13 +255,22 @@ def build_agent(
                 max_iterations=10,
             )
         else:
-            agent = FunctionCallingAgent.from_tools(
-                llm=llm,
-                tools=tools + tools_to_persist,
-                verbose=True,
-                system_prompt=system_prompt,
-                memory=memory_obj,
-            )
+            if isinstance(llm, OpenAI):
+                agent = OpenAIAgent.from_tools(
+                    llm=llm,
+                    tools=tools + tools_to_persist,
+                    verbose=True,
+                    system_prompt=system_prompt,
+                    memory=memory_obj,
+                )
+            else:
+                agent = FunctionCallingAgent.from_tools(
+                    llm=llm,
+                    tools=tools + tools_to_persist,
+                    verbose=True,
+                    system_prompt=system_prompt,
+                    memory=memory_obj,
+                )
     return agent
 
 

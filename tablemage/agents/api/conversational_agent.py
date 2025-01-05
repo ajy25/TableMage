@@ -121,14 +121,15 @@ class ConversationalAgent:
             output = self._single_agent.chat(message)
         # ensure something is returned
         if output is None or output == "" or output == "None":
-            output = self._single_agent.chat(
+            raise ValueError(
                 "You didn't return anything. Please try again. "
                 "No need to repeat tool calls if you already have access to the results."
             )
         # check if output starts with "<function="
         elif output.startswith("<function="):
-            output = self._single_agent.chat(
+            raise ValueError(
                 "You didn't successfully use a tool. Please try again.\n"
-                f"This was the output I received from you: '{output}'."
+                f"This was the output I received from you: '{output}'.\n"
+                "Double check your structured outputs for calling tools/functions."
             )
         return output

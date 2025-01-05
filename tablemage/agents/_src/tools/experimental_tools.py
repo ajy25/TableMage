@@ -138,20 +138,14 @@ if callable(result):
     result = result()
         
 try:
-    print('Result as string: ' + result, file=sys.stdout)
-except Exception:
-    pass
-try:
     with open(sys.argv[3], 'wb') as result_file:
         pickle.dump(result, result_file)
 except Exception as e:
     try:
-        print(
-            "Serialization of result failed. See stdout content instead.",
-            file=sys.stdout
-        )
+        print(str(result), file=sys.stdout)
     except Exception:
-        raise e
+        print('Result could not be serialized or converted to string.', file=sys.stdout)
+        print('Try again and print the result to see the output.', file=sys.stdout)
 """
     )
 
@@ -287,7 +281,9 @@ def _python_env_code_run_function(
             text=result_actual,
         )
     elif result_actual is None:
-        context.add_thought("The Python code did not return a result.")
+        # try to get the result from the stdout
+        result_actual = result["stdout"]
+        context.add_thought(f"`{result_actual}`")
 
     # if everything is empty, return an error message
     if not result["stdout"] and not result["stderr"] and result["result"] is None:
@@ -317,7 +313,8 @@ DESCRIPTION:
 
 IMPORTANT:
 - ONLY use this tool as a LAST RESORT. Most tasks can be accomplished using other tools.
-- Modifications to DataFrames are not saved.
+- Transformations to DataFrames (scaling, imputation, feature engineering) are not saved. \
+    Do not use this tool for data transformations.
 
 EXAMPLES:
 1. `result = df_all.head()`

@@ -1,3 +1,0 @@
-file_name,unformatted_answer,time_elapsed
-361070_eye_movements,The best possible model for predicting the variable `label` is the XGBoost model with a test AUROC of 0.715.,363.382040977478
-361278_heloc,The test AUROC of the best possible model is 0.795.,200.98491597175598
