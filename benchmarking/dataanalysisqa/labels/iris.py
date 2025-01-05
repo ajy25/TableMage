@@ -8,6 +8,9 @@ datasets_dir = Path(__file__).resolve().parent.parent / "datasets"
 # import dataset
 df = pd.read_csv(datasets_dir / "iris.csv")
 df_train, df_test = train_test_split(df, test_size=0.2, random_state=42)
+df_train_idx = df_train.index
+df_test_idx = df_test.index
+del df_train, df_test
 
 
 # Question 1 - Compute the mean and median of "SepalLengthCm".
@@ -50,11 +53,10 @@ def q5():
 
 # Question 6 - Make a new variable named "PetalAreaCm" that is defined as the product of "PetalWidthCm" and "PetalLengthCm". What is the mean and standard deviation of this new variable?
 def q6():
-    global df, df_train, df_test
+    global df
     keyword1 = "mean"
     keyword2 = "std"
     df["PetalAreaCm"] = df["PetalWidthCm"] * df["PetalLengthCm"]
-    df_train, df_test = train_test_split(df, test_size=0.2, random_state=42)
     answer1 = df["PetalAreaCm"].mean()
     answer2 = df["PetalAreaCm"].std()
     return f"{keyword1}={answer1:.3f}, {keyword2}={answer2:.3f}"

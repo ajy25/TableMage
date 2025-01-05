@@ -10,6 +10,9 @@ datasets_dir = Path(__file__).resolve().parent.parent / "datasets"
 # import dataset
 df = pd.read_csv(datasets_dir / "autompg.csv")
 df_train, df_test = train_test_split(df, test_size=0.2, random_state=42)
+df_train_idx = df_train.index
+df_test_idx = df_test.index
+del df_train, df_test
 
 
 # Question 1 - What's the average miles per gallon ("mpg")?
@@ -47,6 +50,10 @@ def q4():
 def q5():
     keyword1 = "coef"
     keyword2 = "r2"
+
+    df_train = df.loc[df_train_idx]
+    df_test = df.loc[df_test_idx]
+
     X_train = df_train[["weight"]]
     y_train = df_train["acceleration"]
 
@@ -64,10 +71,9 @@ def q5():
 
 # Question 6 - Create a new variable named "heavy" with categories "heavy" and "light". An observation is "heavy" if its weight is at least 3200 and "light" otherwise. How many heavy observations are there?
 def q6():
-    global df, df_train, df_test
+    global df
     keyword = "n_examples"
     df["heavy"] = np.where(df["weight"] >= 3200, "heavy", "light")
-    df_train, df_test = train_test_split(df, test_size=0.2, random_state=42)
     n_heavy = df[df["heavy"] == "heavy"].shape[0]
     return f"{keyword}={n_heavy}"
 
@@ -83,10 +89,9 @@ def q7():
 
 # Question 8 - Make a new variable, "powerful", with category "powerful" for those with "cylinder" of 8, and category "weak" for those with "cylinder" less than 8. How many "weak" vehicles are there?
 def q8():
-    global df, df_train, df_test
+    global df
     keyword = "n_examples"
     df["powerful"] = np.where(df["cylinders"] == 8, "powerful", "weak")
-    df_train, df_test = train_test_split(df, test_size=0.2, random_state=42)
     n_weak = df[df["powerful"] == "weak"].shape[0]
     return f"{keyword}={n_weak}"
 

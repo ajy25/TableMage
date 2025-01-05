@@ -11,6 +11,9 @@ datasets_dir = Path(__file__).resolve().parent.parent / "datasets"
 # import dataset
 df = pd.read_csv(datasets_dir / "baseball.csv")
 df_train, df_test = train_test_split(df, test_size=0.2, random_state=42)
+df_train_idx = df_train.index
+df_test_idx = df_test.index
+del df_train, df_test
 
 
 # Question 1 - What is the mean batting average? What is the standard deviation?
@@ -40,17 +43,23 @@ def q3():
 
 # Question 4 - Min-max scale the salary. Report the new mean and standard deviation of the salary.
 def q4():
-    global df, df_train, df_test
+    global df
     keyword1 = "mean"
     keyword2 = "std"
     scaler = MinMaxScaler()
+
+    df_train = df.loc[df_train_idx]
+    df_test = df.loc[df_test_idx]
+
     df_train["salary_in_thousands_of_dollars"] = scaler.fit_transform(
         df_train[["salary_in_thousands_of_dollars"]]
     )
     df_test["salary_in_thousands_of_dollars"] = scaler.transform(
         df_test[["salary_in_thousands_of_dollars"]]
     )
-    df = pd.concat([df_train, df_test])
+
+    df = pd.concat([df_train, df_test]).loc[df.index]
+
     answer1 = df["salary_in_thousands_of_dollars"].mean()
     answer2 = df["salary_in_thousands_of_dollars"].std()
     return f"{keyword1}={answer1:.3f}, {keyword2}={answer2:.3f}"
@@ -60,10 +69,10 @@ def q4():
 def q5():
     keyword = "rmse"
 
-    df_train_temp = df_train.dropna(
+    df_train_temp = df.loc[df_train_idx].dropna(
         subset=["salary_in_thousands_of_dollars", "batting_average"]
     )
-    df_test_temp = df_test.dropna(
+    df_test_temp = df.loc[df_test_idx].dropna(
         subset=["salary_in_thousands_of_dollars", "batting_average"]
     )
 
@@ -98,11 +107,10 @@ def q6():
 
 # Question 7 - Make a new variable called "hits_and_runs" that is the sum of number of runs and number of hits. What is the mean and kurtosis of this new variable?
 def q7():
-    global df, df_train, df_test
+    global df
     keyword1 = "mean"
     keyword2 = "kurtosis"
     df["hits_and_runs"] = df["number_of_runs"] + df["number_of_hits"]
-    df_train, df_test = train_test_split(df, test_size=0.2, random_state=42)
     answer1 = df["hits_and_runs"].mean()
     answer2 = df["hits_and_runs"].kurtosis()
     return f"{keyword1}={answer1:.3f}, {keyword2}={answer2:.3f}"
@@ -110,11 +118,16 @@ def q7():
 
 # Question 8 - Standard scale "hits_and_runs". Find the median.
 def q8():
+    global df
     keyword = "median"
     scaler = StandardScaler()
+
+    df_train = df.loc[df_train_idx]
+    df_test = df.loc[df_test_idx]
+
     df_train["hits_and_runs"] = scaler.fit_transform(df_train[["hits_and_runs"]])
     df_test["hits_and_runs"] = scaler.transform(df_test[["hits_and_runs"]])
-    df = pd.concat([df_train, df_test])
+    df = pd.concat([df_train, df_test]).loc[df.index]
     answer = df["hits_and_runs"].median()
     return f"{keyword}={answer:.3f}"
 
@@ -142,10 +155,9 @@ def q9():
 
 # Question 10 - Undo all prior data transformations. What's the average salary?
 def q10():
-    global df, df_train, df_test
+    global df
     keyword = "mean"
     df = pd.read_csv(datasets_dir / "baseball.csv")
-    df_train, df_test = train_test_split(df, test_size=0.2, random_state=42)
     answer = df["salary_in_thousands_of_dollars"].mean()
     return f"{keyword}={answer:.3f}"
 

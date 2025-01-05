@@ -12,6 +12,9 @@ datasets_dir = Path(__file__).resolve().parent.parent / "datasets"
 # import dataset
 df = pd.read_csv(datasets_dir / "simulated_healthcare.csv")
 df_train, df_test = train_test_split(df, test_size=0.2, random_state=42)
+df_train_idx = df_train.index
+df_test_idx = df_test.index
+del df_train, df_test
 
 
 # Question 1 - How many different blood types are there?
@@ -49,6 +52,10 @@ def q4():
 def q5():
     keyword1 = "r2"
     keyword2 = "rmse"
+
+    df_train = df.loc[df_train_idx]
+    df_test = df.loc[df_test_idx]
+
     X_train = df_train[["Gender", "Insurance Provider"]]
     y_train = df_train["Billing Amount"]
 
@@ -93,16 +100,20 @@ def q7():
 
 # Question 8 - Min-max scale the billing amount. What is the variance of the billing amount?
 def q8():
-    global df, df_train, df_test
+    global df
     keyword = "variance"
     scaler = MinMaxScaler()
+
+    df_train = df.loc[df_train_idx]
+    df_test = df.loc[df_test_idx]
+
     df_train["Billing Amount"] = scaler.fit_transform(
         df_train["Billing Amount"].values.reshape(-1, 1)
     )
     df_test["Billing Amount"] = scaler.transform(
         df_test["Billing Amount"].values.reshape(-1, 1)
     )
-    df = pd.concat([df_train, df_test])
+    df = pd.concat([df_train, df_test]).loc[df.index]
     return f"{keyword}={df['Billing Amount'].var():.3f}"
 
 
