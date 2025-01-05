@@ -148,7 +148,7 @@ def q9():
     return f"{keyword}={r_squared:.3f}"
 
 
-def run_wine():
+def get_labels():
     return {
         1: q1(),
         2: q2(),
@@ -163,4 +163,4 @@ def run_wine():
 
 
 if __name__ == "__main__":
-    print(run_wine())
+    print(get_labels())

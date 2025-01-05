@@ -52,7 +52,7 @@ def q5():
     keyword1 = "corr"
     keyword2 = "pval"
     correlation, p_value = pearsonr(df["Diameter"], df["Rings"])
-    return f"{keyword1}={correlation:.3f}, {keyword2} = {p_value:.3f}"
+    return f"{keyword1}={correlation:.3f}, {keyword2}={p_value:.3f}"
 
 
 # Question 6 - Is the diameter normally distributed?
@@ -131,7 +131,7 @@ def q11():
     return f"{keyword}={answer}"
 
 
-def run_abalone():
+def get_labels():
     return {
         1: q1(),
         2: q2(),
@@ -148,4 +148,4 @@ def run_abalone():
 
 
 if __name__ == "__main__":
-    print(run_abalone())
+    print(get_labels())

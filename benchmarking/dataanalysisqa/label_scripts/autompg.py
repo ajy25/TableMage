@@ -110,7 +110,7 @@ def q10():
     return f"{keyword}={'yes' if pval > 0.05 else 'no'}"
 
 
-def run_autompg():
+def get_labels():
     return {
         1: q1(),
         2: q2(),
@@ -126,4 +126,4 @@ def run_autompg():
 
 
 if __name__ == "__main__":
-    print(run_autompg())
+    print(get_labels())

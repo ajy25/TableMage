@@ -134,7 +134,7 @@ def q10():
     return f"{keyword}={answer}"
 
 
-def run_credit():
+def get_labels():
     return {
         1: q1(),
         2: q2(),
@@ -150,4 +150,4 @@ def run_credit():
 
 
 if __name__ == "__main__":
-    print(run_credit())
+    print(get_labels())

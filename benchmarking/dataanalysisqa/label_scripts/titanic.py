@@ -143,7 +143,7 @@ def q10():
     return f"{keyword}={f1:.3f}"
 
 
-def run_titanic():
+def get_labels():
     return {
         1: q1(),
         2: q2(),
@@ -159,4 +159,4 @@ def run_titanic():
 
 
 if __name__ == "__main__":
-    print(run_titanic())
+    print(get_labels())

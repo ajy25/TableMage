@@ -90,7 +90,7 @@ def q5():
     intercept_train = model_train.params["const"]
 
     answer2 = "yes" if p_value_total_sf_train <= 0.05 else "no"
-    return f"{keyword1}={coefficient_total_sf_train:.3f}, {keyword2}={answer2}, {keyword3}={intercept_train}"
+    return f"{keyword1}={coefficient_total_sf_train:.3f}, {keyword2}={answer2}, {keyword3}={intercept_train:.3f}"
 
 
 # Question 6 - Regress "SalePrice" on "TotalSF", "LotShape", and "GarageArea" with linear regression. Report the train R-squared and the test RMSE.
@@ -210,7 +210,7 @@ def q12():
     return f"{keyword1}={train_r2:.3f}, {keyword2}={test_rmse:.3f}"
 
 
-def run_house_prices():
+def get_labels():
     return {
         1: q1(),
         2: q2(),
@@ -228,4 +228,4 @@ def run_house_prices():
 
 
 if __name__ == "__main__":
-    print(run_house_prices())
+    print(get_labels())

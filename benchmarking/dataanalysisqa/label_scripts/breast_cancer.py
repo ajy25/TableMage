@@ -163,7 +163,7 @@ def q9():
     return f"{keyword}={num_outliers:.3f}"
 
 
-def run_breast_cancer():
+def get_labels():
     return {
         1: q1(),
         2: q2(),
@@ -178,4 +178,4 @@ def run_breast_cancer():
 
 
 if __name__ == "__main__":
-    print(run_breast_cancer())
+    print(get_labels())

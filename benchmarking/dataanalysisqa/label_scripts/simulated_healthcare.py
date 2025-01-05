@@ -132,7 +132,7 @@ def q10():
     return f"{keyword1}={answer}, {keyword2}={df.groupby('Medical Condition')['Billing Amount'].mean().max():.3f}"
 
 
-def run_simulated_healthcare():
+def get_labels():
     return {
         1: q1(),
         2: q2(),
@@ -148,4 +148,4 @@ def run_simulated_healthcare():
 
 
 if __name__ == "__main__":
-    print(run_simulated_healthcare())
+    print(get_labels())

@@ -162,7 +162,7 @@ def q10():
     return f"{keyword}={answer:.3f}"
 
 
-def run_baseball():
+def get_labels():
     return {
         1: q1(),
         2: q2(),
@@ -178,4 +178,4 @@ def run_baseball():
 
 
 if __name__ == "__main__":
-    print(run_baseball())
+    print(get_labels())
