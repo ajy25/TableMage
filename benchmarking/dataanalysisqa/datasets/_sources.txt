@@ -6,3 +6,5 @@ wine: sklearn
 abalone: InfiAgent Github
 baseball: InfiAgent Github
 autompg: InfiAgent Github
+simulated_healthcare: Kaggle
+iris: Kaggle

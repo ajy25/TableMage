@@ -1,185 +1,94 @@
-2025-01-03 16:52:04 - Agents Log - A new _AgentOptions object has been created with LLM build function: <function build_groq at 0x17f3a7e20> and multimodal LLM build function: None
-2025-01-03 16:52:05 - Agents Log - GROQ LLM build function has been set to: functools.partial(<function build_groq at 0x17f3a7e20>, temperature=0.0, model='llama-3.3-70b-versatile')
-2025-01-03 16:52:05 - Analyzer Log - Analyzer initialized for dataset 'Dataset'.
-2025-01-03 16:52:05 - Agents Log - Data container initialized with the Analyzer built from the provided DataFrame.
-2025-01-03 16:52:05 - Agents Log - IO initialized.
-2025-01-03 16:52:05 - Agents Log - Initializing the Orchestrator.
-2025-01-03 16:52:05 - Agents Log - Initializing SingleAgent
-2025-01-03 16:52:05 - Agents Log - Tool call: dataset_summary_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x309e53620>}).
-2025-01-03 16:52:05 - Agents Log - Adding dictionary to storage.
-2025-01-03 16:52:05 - Agents Log - Added dictionary without description. First 20 characters: {"train_shape": {"n_.
-2025-01-03 16:52:09 - Agents Log - SingleAgent initialized
-2025-01-03 16:52:10 - Agents Log - Tool call: ml_regression_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x309e53620>, 'models': 'OLS, Ridge, Lasso, ElasticNet, RF, XGBoost', 'predictors': 'atch, exec, fork, freemem, freeswap, lread, lwrite, pflt, pgfree, pgin, pgout, pgscan, ppgin, ppgout, rchar, runqsz, scall, sread, swrite, vflt, wchar', 'target': 'usr'}).
-2025-01-03 16:52:10 - Agents Log - _ml_regression_function called
-2025-01-03 16:52:10 - Agents Log - _ml_regression_function Models to test: OLS, Ridge, Lasso, ElasticNet, RF, XGBoost
-2025-01-03 16:52:10 - Agents Log - _ml_regression_function Target: usr
-2025-01-03 16:52:10 - Agents Log - _ml_regression_function Predictors: ['atch', 'exec', 'fork', 'freemem', 'freeswap', 'lread', 'lwrite', 'pflt', 'pgfree', 'pgin', 'pgout', 'pgscan', 'ppgin', 'ppgout', 'rchar', 'runqsz', 'scall', 'sread', 'swrite', 'vflt', 'wchar']
-2025-01-03 16:52:10 - Analyzer Log - Fitting model 'OLS'.
-2025-01-03 16:52:10 - Analyzer Log - Fitting 'OLS'. Search method: GridSearchCV (1 fits per fold, 5 total fits). 
-2025-01-03 16:52:10 - Analyzer Log - Successfully evaluated model 'OLS'.
-2025-01-03 16:52:10 - Analyzer Log - Fitting model 'Ridge'.
-2025-01-03 16:52:10 - Analyzer Log - Fitting 'Ridge'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2025-01-03 16:52:12 - Analyzer Log - Successfully evaluated model 'Ridge'.
-2025-01-03 16:52:12 - Analyzer Log - Fitting model 'Lasso'.
-2025-01-03 16:52:12 - Analyzer Log - Fitting 'Lasso'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2025-01-03 16:52:17 - Analyzer Log - Successfully evaluated model 'Lasso'.
-2025-01-03 16:52:17 - Analyzer Log - Fitting model 'ElasticNet'.
-2025-01-03 16:52:17 - Analyzer Log - Fitting 'ElasticNet'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2025-01-03 16:52:23 - Analyzer Log - Successfully evaluated model 'ElasticNet'.
-2025-01-03 16:52:23 - Analyzer Log - Fitting model 'RF'.
-2025-01-03 16:52:23 - Analyzer Log - Fitting 'RF'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2025-01-03 16:55:14 - Analyzer Log - Successfully evaluated model 'RF'.
-2025-01-03 16:55:14 - Analyzer Log - Fitting model 'XGBoost'.
-2025-01-03 16:55:14 - Analyzer Log - Fitting 'XGBoost'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2025-01-03 16:56:34 - Analyzer Log - Successfully evaluated model 'XGBoost'.
-2025-01-03 16:56:34 - Agents Log - Adding table to storage.
-2025-01-03 16:56:34 - Agents Log - Added table to /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl: Path to table: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl
+2025-01-04 02:58:49 - Agents Log - A new _AgentOptions object has been created with LLM build function: <function build_groq at 0x301c9f060> and multimodal LLM build function: None
+2025-01-04 02:58:57 - Agents Log - GROQ LLM build function has been set to: functools.partial(<function build_groq at 0x301c9f060>, temperature=0.0, model='llama-3.3-70b-versatile')
+2025-01-04 02:59:01 - Analyzer Log - Analyzer initialized for dataset 'Dataset'.
+2025-01-04 02:59:02 - Agents Log - Data container initialized with the Analyzer built from the provided DataFrame.
+2025-01-04 02:59:02 - Agents Log - IO initialized.
+2025-01-04 02:59:02 - Agents Log - Initializing the Orchestrator.
+2025-01-04 02:59:02 - Agents Log - Initializing SingleAgent
+2025-01-04 02:59:02 - Agents Log - Tool call: dataset_summary_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x32c67e360>}).
+2025-01-04 02:59:02 - Agents Log - Adding dictionary to storage.
+2025-01-04 02:59:02 - Agents Log - Added dictionary without description. First 20 characters: {"train_shape": {"n_.
+2025-01-04 02:59:06 - Agents Log - SingleAgent initialized
+2025-01-04 02:59:25 - Agents Log - Tool call: ols_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x32c67e360>, 'predictors': 'oz1, oz10, oz11, oz12, oz124, oz125, oz126, oz127, oz128, oz13, oz131, oz133, oz149, oz150, oz151, oz165, oz171, oz172, oz173, oz175, oz176, oz177, oz178, oz181, oz183, oz185, oz197, oz2, oz246, oz247, oz248, oz249, oz250, oz251, oz3, oz31, oz4, oz5, oz6, oz83, oz87, oz9', 'target': 'oz252'}).
+2025-01-04 02:59:25 - Agents Log - _ols_function call: predictors: oz1, oz10, oz11, oz12, oz124, oz125, oz126, oz127, oz128, oz13, oz131, oz133, oz149, oz150, oz151, oz165, oz171, oz172, oz173, oz175, oz176, oz177, oz178, oz181, oz183, oz185, oz197, oz2, oz246, oz247, oz248, oz249, oz250, oz251, oz3, oz31, oz4, oz5, oz6, oz83, oz87, oz9, target: oz252
+2025-01-04 02:59:25 - Agents Log - summary: ========================================================================================
+[1mOrdinary Least Squares Regression Report[0m
+----------------------------------------------------------------------------------------
+[1mTarget variable:[0m
+  [95m'oz252'[0m 
+                                                                                        
+[1mPredictor variables (42):[0m
+  [95m'oz1', [0m[95m'oz10', [0m[95m'oz11', [0m[95m'oz12', [0m[95m'oz124', [0m[95m'oz125', [0m[95m'oz126', [0m[95m'oz127', [0m[95m'oz128', [0m[95m'oz13', 
+  [0m[95m'oz131', [0m[95m'oz133', [0m[95m'oz149', [0m[95m'oz150', [0m[95m'oz151', [0m[95m'oz165', [0m[95m'oz171', [0m[95m'oz172', [0m[95m'oz173', 
+  [0m[95m'oz175', [0m[95m'oz176', [0m[95m'oz177', [0m[95m'oz178', [0m[95m'oz181', [0m[95m'oz183', [0m[95m'oz185', [0m[95m'oz197', [0m[95m'oz2', 
+  [0m[95m'oz246', [0m[95m'oz247', [0m[95m'oz248', [0m[95m'oz249', [0m[95m'oz250', [0m[95m'oz251', [0m[95m'oz3', [0m[95m'oz31', [0m[95m'oz4', [0m[95m'oz5', 
+  [0m[95m'oz6', [0m[95m'oz83', [0m[95m'oz87', [0m[95m'oz9'[0m 
+----------------------------------------------------------------------------------------
+[1mMetrics:[0m
+  [1mTrain (7108)[0m                               [1mTest (1777)[0m 
+    R2:       [93m0.058[0m                            R2:       [93m0.045[0m 
+    Adj. R2:  [93m0.053[0m                            Adj. R2:  [93m0.022[0m 
+    RMSE:     [93m0.029[0m                            RMSE:     [93m0.028[0m 
+----------------------------------------------------------------------------------------
+[1mCoefficients:[0m
+[1m                            Estimate         Std. Error            p-value [0m
+[1m  Predictor                                                                [0m
+  const                        0.946              0.021              0.000 
+  oz1                          0.093              0.102              0.359 
+  oz10                        -0.013              0.012              0.293 
+  oz11                        -0.002              0.008              0.807 
+  oz12                        -0.079              0.035              0.024 
+  oz124                        0.010              0.007              0.155 
+  oz125                       -0.025              0.008              0.003 
+  oz126                       -0.006              0.025              0.799 
+  oz127                        0.004              0.066              0.950 
+  oz128                        0.005              0.011              0.622 
+  oz13                        -0.029              0.009              0.001 
+  oz131                        0.031              0.045              0.492 
+  oz133                        0.021              0.013              0.093 
+  oz149                        0.003              0.041              0.938 
+  oz150                        0.021              0.012              0.068 
+  oz151                        0.033              0.006              0.000 
+  oz165                       -0.023              0.006              0.000 
+  oz171                       -0.007              0.032              0.817 
+  oz172                       -0.033              0.025              0.176 
+  oz173                        0.003              0.010              0.740 
+  oz175                       -0.013              0.008              0.104 
+  oz176                       -0.015              0.012              0.215 
+  oz177                        0.000              0.015              0.994 
+  oz178                       -0.000              0.007              0.971 
+  oz181                       -0.005              0.021              0.803 
+  oz183                       -0.016              0.008              0.059 
+  oz185                        0.000              0.009              0.963 
+  oz197                        0.003              0.008              0.663 
+  oz2                         -0.051              0.010              0.000 
+  oz246                        0.035              0.007              0.000 
+  oz247                       -0.023              0.009              0.009 
+  oz248                        0.008              0.004              0.046 
+  oz249                        0.105              0.020              0.000 
+  oz250                       -0.006              0.011              0.555 
+  oz251                        0.007              0.009              0.464 
+  oz3                          0.069              0.075              0.360 
+  oz31                         0.028              0.011              0.014 
+  oz4                         -0.203              0.113              0.072 
+  oz5                         -0.019              0.021              0.362 
+  oz6                         -0.035              0.066              0.601 
+  oz83                        -0.014              0.025              0.580 
+  oz87                         0.032              0.016              0.045 
+  oz9                         -0.027              0.042              0.514 
+========================================================================================
+2025-01-04 02:59:25 - Agents Log - Adding table to storage.
+2025-01-04 02:59:25 - Agents Log - Added table to /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl: Path to table: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl
 
-{"('train', 'rmse')": {"OLS": 9.797, "Ridge": 9.797, "Lasso": 9.798, "ElasticNet": 9.797, "RF": 1.092, "XGBoost": 1.24}, "('train', 'mae')": {"OLS": 6.309, "Ridge": 6.309, "Lasso": 6.307, "ElasticNet": 6.309, "RF": 0.807, "XGBoost": 0.951}, "('train', 'mape')": {"OLS": 5887305459926200.0, "Ridge": 5887305460274002.0, "Lasso": 5891016481617249.0, "ElasticNet": 5887362433724761.0, "RF": 65157851351178.664, "XGBoost": 41164115743997.555}, "('train', 'pearsonr')": {"OLS": 0.855, "Ridge": 0.855, "Lasso": 0.855, "ElasticNet": 0.855, "RF": 0.998, "XGBoost": 0.998}, "('train', 'spearmanr')": {"OLS": 0.773, "Ridge": 0.773, "Lasso": 0.773, "ElasticNet": 0.773, "RF": 0.992, "XGBoost": 0.985}, "('train', 'r2')": {"OLS": 0.73, "Ridge": 0.73, "Lasso": 0.73, "ElasticNet": 0.73, "RF": 0.997, "XGBoost": 0.996}, "('train', 'adjr2')": {"OLS": 0.729, "Ridge": 0.729, "Lasso": 0.729, "ElasticNet": 0.729, "RF": 0.997, "XGBoost": 0.996}, "('train', 'n_obs')": {"OLS": 4915.0, "Ridge": 4915.0, "Lasso": 4915.0, "ElasticNet": 4915.0, "RF": 4915.0, "XGBoost": 4915.0}, "('test', 'rmse')": {"OLS": 9.334, "Ridge": 9.334, "Lasso": 9.336, "ElasticNet": 9.334, "RF": 2.531, "XGBoost": 2.268}, "('test', 'mae')": {"OLS": 6.194, "Ridge": 6.194, "Lasso": 6.193, "ElasticNet": 6.194, "RF": 1.825, "XGBoost": 1.612}, "('test', 'mape')": {"OLS": 4988975466580154.0, "Ridge": 4988975466906362.0, "Lasso": 4993274419629774.0, "ElasticNet": 4989040167683284.0, "RF": 117025171230421.89, "XGBoost": 102826704026453.08}, "('test', 'pearsonr')": {"OLS": 0.85, "Ridge": 0.85, "Lasso": 0.85, "ElasticNet": 0.85, "RF": 0.99, "XGBoost": 0.992}, "('test', 'spearmanr')": {"OLS": 0.744, "Ridge": 0.744, "Lasso": 0.744, "ElasticNet": 0.744, "RF": 0.955, "XGBoost": 0.964}, "('test', 'r2')": {"OLS": 0.721, "Ridge": 0.721, "Lasso": 0.721, "ElasticNet": 0.721, "RF": 0.979, "XGBoost": 0.984}, "('test', 'adjr2')": {"OLS": 0.719, "Ridge": 0.719, "Lasso": 0.719, "ElasticNet": 0.719, "RF": 0.979, "XGBoost": 0.983}, "('test', 'n_obs')": {"OLS": 3277.0, "Ridge": 3277.0, "Lasso": 3277.0, "ElasticNet": 3277.0, "RF": 3277.0, "XGBoost": 3277.0}}
-2025-01-03 16:56:34 - Agents Log - Adding dictionary to storage.
-2025-01-03 16:56:34 - Agents Log - Added dictionary without description. First 20 characters: {"train_metrics": {".
-2025-01-03 16:56:36 - Analyzer Log - Renamed variables 'citric.acid', 'fixed.acidity', 'free.sulfur.dioxide', 'residual.sugar', 'total.sulfur.dioxide', 'volatile.acidity' to 'citric_acid', 'fixed_acidity', 'free_sulfur_dioxide', 'residual_sugar', 'total_sulfur_dioxide', 'volatile_acidity'.
-2025-01-03 16:56:36 - Analyzer Log - Analyzer initialized for dataset 'Dataset'.
-2025-01-03 16:56:36 - Agents Log - Data container initialized with the Analyzer built from the provided DataFrame.
-2025-01-03 16:56:36 - Agents Log - IO initialized.
-2025-01-03 16:56:36 - Agents Log - Initializing the Orchestrator.
-2025-01-03 16:56:36 - Agents Log - Initializing SingleAgent
-2025-01-03 16:56:36 - Agents Log - Tool call: dataset_summary_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x317235070>}).
-2025-01-03 16:56:36 - Agents Log - Adding dictionary to storage.
-2025-01-03 16:56:36 - Agents Log - Added dictionary without description. First 20 characters: {"train_shape": {"n_.
-2025-01-03 16:56:40 - Agents Log - SingleAgent initialized
-2025-01-03 16:56:42 - Agents Log - Tool call: feature_selection_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x317235070>, 'feature_selector': 'Boruta', 'predictors': 'alcohol, chlorides, citric_acid, density, fixed_acidity, free_sulfur_dioxide, pH, residual_sugar, sulphates, total_sulfur_dioxide, volatile_acidity', 'target': 'quality', 'task': 'regression'}).
-2025-01-03 16:56:42 - Agents Log - _feature_selection_function called
-2025-01-03 16:56:42 - Agents Log - _feature_selection_function Feature selector: Boruta
-2025-01-03 16:56:42 - Agents Log - _feature_selection_function Target: quality
-2025-01-03 16:56:42 - Agents Log - _feature_selection_function Predictors: ['alcohol', 'chlorides', 'citric_acid', 'density', 'fixed_acidity', 'free_sulfur_dioxide', 'pH', 'residual_sugar', 'sulphates', 'total_sulfur_dioxide', 'volatile_acidity']
-2025-01-03 16:56:42 - Analyzer Log - Fitting 'BorutaFSR'.
-2025-01-03 16:56:49 - Agents Log - Adding dictionary to storage.
-2025-01-03 16:56:49 - Agents Log - Added dictionary without description. First 20 characters: {"target": "quality".
-2025-01-03 16:56:49 - Agents Log - Tool call: ml_regression_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x317235070>, 'models': 'OLS, Ridge, Lasso, ElasticNet, RF, XGBoost', 'predictors': 'alcohol, chlorides, citric_acid, density, fixed_acidity, free_sulfur_dioxide, pH, residual_sugar, sulphates, total_sulfur_dioxide, volatile_acidity', 'target': 'quality'}).
-2025-01-03 16:56:49 - Agents Log - _ml_regression_function called
-2025-01-03 16:56:49 - Agents Log - _ml_regression_function Models to test: OLS, Ridge, Lasso, ElasticNet, RF, XGBoost
-2025-01-03 16:56:49 - Agents Log - _ml_regression_function Target: quality
-2025-01-03 16:56:49 - Agents Log - _ml_regression_function Predictors: ['alcohol', 'chlorides', 'citric_acid', 'density', 'fixed_acidity', 'free_sulfur_dioxide', 'pH', 'residual_sugar', 'sulphates', 'total_sulfur_dioxide', 'volatile_acidity']
-2025-01-03 16:56:49 - Analyzer Log - Fitting model 'OLS'.
-2025-01-03 16:56:49 - Analyzer Log - Fitting 'OLS'. Search method: GridSearchCV (1 fits per fold, 5 total fits). 
-2025-01-03 16:56:49 - Analyzer Log - Successfully evaluated model 'OLS'.
-2025-01-03 16:56:49 - Analyzer Log - Fitting model 'Ridge'.
-2025-01-03 16:56:49 - Analyzer Log - Fitting 'Ridge'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2025-01-03 16:56:50 - Analyzer Log - Successfully evaluated model 'Ridge'.
-2025-01-03 16:56:50 - Analyzer Log - Fitting model 'Lasso'.
-2025-01-03 16:56:50 - Analyzer Log - Fitting 'Lasso'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2025-01-03 16:56:52 - Analyzer Log - Successfully evaluated model 'Lasso'.
-2025-01-03 16:56:52 - Analyzer Log - Fitting model 'ElasticNet'.
-2025-01-03 16:56:52 - Analyzer Log - Fitting 'ElasticNet'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2025-01-03 16:56:53 - Analyzer Log - Successfully evaluated model 'ElasticNet'.
-2025-01-03 16:56:53 - Analyzer Log - Fitting model 'RF'.
-2025-01-03 16:56:53 - Analyzer Log - Fitting 'RF'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2025-01-03 16:59:02 - Analyzer Log - Successfully evaluated model 'RF'.
-2025-01-03 16:59:02 - Analyzer Log - Fitting model 'XGBoost'.
-2025-01-03 16:59:02 - Analyzer Log - Fitting 'XGBoost'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2025-01-03 17:00:11 - Analyzer Log - Successfully evaluated model 'XGBoost'.
-2025-01-03 17:00:11 - Agents Log - Adding table to storage.
-2025-01-03 17:00:11 - Agents Log - Added table to /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl: Path to table: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl
+{"('train', 'rmse')": {"OLS Linear Model": 0.029}, "('train', 'mae')": {"OLS Linear Model": 0.02}, "('train', 'mape')": {"OLS Linear Model": 582879099184.062}, "('train', 'pearsonr')": {"OLS Linear Model": 0.241}, "('train', 'spearmanr')": {"OLS Linear Model": 0.24}, "('train', 'r2')": {"OLS Linear Model": 0.058}, "('train', 'adjr2')": {"OLS Linear Model": 0.053}, "('train', 'n_obs')": {"OLS Linear Model": 7108.0}, "('test', 'rmse')": {"OLS Linear Model": 0.028}, "('test', 'mae')": {"OLS Linear Model": 0.02}, "('test', 'mape')": {"OLS Linear Model": 0.022}, "('test', 'pearsonr')": {"OLS Linear Model": 0.22}, "('test', 'spearmanr')": {"OLS Linear Model": 0.206}, "('test', 'r2')": {"OLS Linear Model": 0.045}, "('test', 'adjr2')": {"OLS Linear Model": 0.022}, "('test', 'n_obs')": {"OLS Linear Model": 1777.0}}
+2025-01-04 02:59:25 - Agents Log - Adding table to storage.
+2025-01-04 02:59:25 - Agents Log - Added table to /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/1.pkl: Path to table: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/1.pkl
 
-{"('train', 'rmse')": {"OLS": 0.734, "Ridge": 0.734, "Lasso": 0.734, "ElasticNet": 0.734, "RF": 0.293, "XGBoost": 0.149}, "('train', 'mae')": {"OLS": 0.566, "Ridge": 0.567, "Lasso": 0.567, "ElasticNet": 0.567, "RF": 0.225, "XGBoost": 0.107}, "('train', 'mape')": {"OLS": 0.1, "Ridge": 0.1, "Lasso": 0.1, "ElasticNet": 0.1, "RF": 0.04, "XGBoost": 0.019}, "('train', 'pearsonr')": {"OLS": 0.549, "Ridge": 0.549, "Lasso": 0.549, "ElasticNet": 0.549, "RF": 0.962, "XGBoost": 0.989}, "('train', 'spearmanr')": {"OLS": 0.572, "Ridge": 0.572, "Lasso": 0.572, "ElasticNet": 0.572, "RF": 0.933, "XGBoost": 0.938}, "('train', 'r2')": {"OLS": 0.302, "Ridge": 0.302, "Lasso": 0.301, "ElasticNet": 0.301, "RF": 0.889, "XGBoost": 0.971}, "('train', 'adjr2')": {"OLS": 0.3, "Ridge": 0.3, "Lasso": 0.299, "ElasticNet": 0.299, "RF": 0.888, "XGBoost": 0.971}, "('train', 'n_obs')": {"OLS": 3898.0, "Ridge": 3898.0, "Lasso": 3898.0, "ElasticNet": 3898.0, "RF": 3898.0, "XGBoost": 3898.0}, "('test', 'rmse')": {"OLS": 0.738, "Ridge": 0.738, "Lasso": 0.738, "ElasticNet": 0.738, "RF": 0.627, "XGBoost": 0.621}, "('test', 'mae')": {"OLS": 0.571, "Ridge": 0.571, "Lasso": 0.571, "ElasticNet": 0.571, "RF": 0.468, "XGBoost": 0.446}, "('test', 'mape')": {"OLS": 0.102, "Ridge": 0.102, "Lasso": 0.102, "ElasticNet": 0.102, "RF": 0.085, "XGBoost": 0.081}, "('test', 'pearsonr')": {"OLS": 0.526, "Ridge": 0.526, "Lasso": 0.526, "ElasticNet": 0.526, "RF": 0.693, "XGBoost": 0.697}, "('test', 'spearmanr')": {"OLS": 0.543, "Ridge": 0.543, "Lasso": 0.544, "ElasticNet": 0.544, "RF": 0.701, "XGBoost": 0.697}, "('test', 'r2')": {"OLS": 0.274, "Ridge": 0.275, "Lasso": 0.275, "ElasticNet": 0.275, "RF": 0.476, "XGBoost": 0.485}, "('test', 'adjr2')": {"OLS": 0.271, "Ridge": 0.271, "Lasso": 0.272, "ElasticNet": 0.272, "RF": 0.474, "XGBoost": 0.483}, "('test', 'n_obs')": {"OLS": 2599.0, "Ridge": 2599.0, "Lasso": 2599.0, "ElasticNet": 2599.0, "RF": 2599.0, "XGBoost": 2599.0}}
-2025-01-03 17:00:11 - Agents Log - Adding dictionary to storage.
-2025-01-03 17:00:11 - Agents Log - Added dictionary without description. First 20 characters: {"train_metrics": {".
-2025-01-03 17:00:15 - Analyzer Log - Analyzer initialized for dataset 'Dataset'.
-2025-01-03 17:00:15 - Agents Log - Data container initialized with the Analyzer built from the provided DataFrame.
-2025-01-03 17:00:15 - Agents Log - IO initialized.
-2025-01-03 17:00:15 - Agents Log - Initializing the Orchestrator.
-2025-01-03 17:00:15 - Agents Log - Initializing SingleAgent
-2025-01-03 17:00:15 - Agents Log - Tool call: dataset_summary_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x3172e56a0>}).
-2025-01-03 17:00:15 - Agents Log - Adding dictionary to storage.
-2025-01-03 17:00:15 - Agents Log - Added dictionary without description. First 20 characters: {"train_shape": {"n_.
-2025-01-03 17:00:20 - Agents Log - SingleAgent initialized
-2025-01-03 17:00:22 - Agents Log - Tool call: ml_regression_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x3172e56a0>, 'models': 'OLS, Ridge, Lasso, ElasticNet, RF, XGBoost', 'predictors': 'oz1, oz10, oz11, oz12, oz124, oz125, oz126, oz127, oz128, oz13, oz131, oz133, oz149, oz150, oz151, oz165, oz171, oz172, oz173, oz175, oz176, oz177, oz178, oz181, oz183, oz185, oz197, oz2, oz246, oz247, oz248, oz249, oz250, oz251, oz3, oz31, oz4, oz5, oz6, oz83, oz87, oz9', 'target': 'oz252'}).
-2025-01-03 17:00:22 - Agents Log - _ml_regression_function called
-2025-01-03 17:00:22 - Agents Log - _ml_regression_function Models to test: OLS, Ridge, Lasso, ElasticNet, RF, XGBoost
-2025-01-03 17:00:22 - Agents Log - _ml_regression_function Target: oz252
-2025-01-03 17:00:22 - Agents Log - _ml_regression_function Predictors: ['oz1', 'oz10', 'oz11', 'oz12', 'oz124', 'oz125', 'oz126', 'oz127', 'oz128', 'oz13', 'oz131', 'oz133', 'oz149', 'oz150', 'oz151', 'oz165', 'oz171', 'oz172', 'oz173', 'oz175', 'oz176', 'oz177', 'oz178', 'oz181', 'oz183', 'oz185', 'oz197', 'oz2', 'oz246', 'oz247', 'oz248', 'oz249', 'oz250', 'oz251', 'oz3', 'oz31', 'oz4', 'oz5', 'oz6', 'oz83', 'oz87', 'oz9']
-2025-01-03 17:00:22 - Analyzer Log - Fitting model 'OLS'.
-2025-01-03 17:00:22 - Analyzer Log - Fitting 'OLS'. Search method: GridSearchCV (1 fits per fold, 5 total fits). 
-2025-01-03 17:00:22 - Analyzer Log - Successfully evaluated model 'OLS'.
-2025-01-03 17:00:22 - Analyzer Log - Fitting model 'Ridge'.
-2025-01-03 17:00:22 - Analyzer Log - Fitting 'Ridge'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2025-01-03 17:00:55 - Analyzer Log - Successfully evaluated model 'Ridge'.
-2025-01-03 17:00:55 - Analyzer Log - Fitting model 'Lasso'.
-2025-01-03 17:00:55 - Analyzer Log - Fitting 'Lasso'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2025-01-03 17:00:59 - Analyzer Log - Successfully evaluated model 'Lasso'.
-2025-01-03 17:00:59 - Analyzer Log - Fitting model 'ElasticNet'.
-2025-01-03 17:00:59 - Analyzer Log - Fitting 'ElasticNet'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2025-01-03 17:01:05 - Analyzer Log - Successfully evaluated model 'ElasticNet'.
-2025-01-03 17:01:05 - Analyzer Log - Fitting model 'RF'.
-2025-01-03 17:01:05 - Analyzer Log - Fitting 'RF'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2025-01-03 17:58:01 - Analyzer Log - Successfully evaluated model 'RF'.
-2025-01-03 17:58:01 - Analyzer Log - Fitting model 'XGBoost'.
-2025-01-03 17:58:01 - Analyzer Log - Fitting 'XGBoost'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2025-01-03 18:55:27 - Analyzer Log - Successfully evaluated model 'XGBoost'.
-2025-01-03 18:55:27 - Agents Log - Adding table to storage.
-2025-01-03 18:55:27 - Agents Log - Added table to /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl: Path to table: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl
+{"const": {"Estimate (Std. Error)": "0.946 (0.021)", "p-value": 0.0}, "oz1": {"Estimate (Std. Error)": "0.093 (0.102)", "p-value": 0.359}, "oz10": {"Estimate (Std. Error)": "-0.013 (0.012)", "p-value": 0.293}, "oz11": {"Estimate (Std. Error)": "-0.002 (0.008)", "p-value": 0.807}, "oz12": {"Estimate (Std. Error)": "-0.079 (0.035)", "p-value": 0.024}, "oz124": {"Estimate (Std. Error)": "0.01 (0.007)", "p-value": 0.155}, "oz125": {"Estimate (Std. Error)": "-0.025 (0.008)", "p-value": 0.003}, "oz126": {"Estimate (Std. Error)": "-0.006 (0.025)", "p-value": 0.799}, "oz127": {"Estimate (Std. Error)": "0.004 (0.066)", "p-value": 0.95}, "oz128": {"Estimate (Std. Error)": "0.005 (0.011)", "p-value": 0.622}, "oz13": {"Estimate (Std. Error)": "-0.029 (0.009)", "p-value": 0.001}, "oz131": {"Estimate (Std. Error)": "0.031 (0.045)", "p-value": 0.492}, "oz133": {"Estimate (Std. Error)": "0.021 (0.013)", "p-value": 0.093}, "oz149": {"Estimate (Std. Error)": "0.003 (0.041)", "p-value": 0.938}, "oz150": {"Estimate (Std. Error)": "0.021 (0.012)", "p-value": 0.068}, "oz151": {"Estimate (Std. Error)": "0.033 (0.006)", "p-value": 0.0}, "oz165": {"Estimate (Std. Error)": "-0.023 (0.006)", "p-value": 0.0}, "oz171": {"Estimate (Std. Error)": "-0.007 (0.032)", "p-value": 0.817}, "oz172": {"Estimate (Std. Error)": "-0.033 (0.025)", "p-value": 0.176}, "oz173": {"Estimate (Std. Error)": "0.003 (0.01)", "p-value": 0.74}, "oz175": {"Estimate (Std. Error)": "-0.013 (0.008)", "p-value": 0.104}, "oz176": {"Estimate (Std. Error)": "-0.015 (0.012)", "p-value": 0.215}, "oz177": {"Estimate (Std. Error)": "0.0 (0.015)", "p-value": 0.994}, "oz178": {"Estimate (Std. Error)": "-0.0 (0.007)", "p-value": 0.971}, "oz181": {"Estimate (Std. Error)": "-0.005 (0.021)", "p-value": 0.803}, "oz183": {"Estimate (Std. Error)": "-0.016 (0.008)", "p-value": 0.059}, "oz185": {"Estimate (Std. Error)": "0.0 (0.009)", "p-value": 0.963}, "oz197": {"Estimate (Std. Error)": "0.003 (0.008)", "p-value": 0.663}, "oz2": {"Estimate (Std. Error)": "-0.051 (0.01)", "p-value": 0.0}, "oz246": {"Estimate (Std. Error)": "0.035 (0.007)", "p-value": 0.0}, "oz247": {"Estimate (Std. Error)": "-0.023 (0.009)", "p-value": 0.009}, "oz248": {"Estimate (Std. Error)": "0.008 (0.004)", "p-value": 0.046}, "oz249": {"Estimate (Std. Error)": "0.105 (0.02)", "p-value": 0.0}, "oz250": {"Estimate (Std. Error)": "-0.006 (0.011)", "p-value": 0.555}, "oz251": {"Estimate (Std. Error)": "0.007 (0.009)", "p-value": 0.464}, "oz3": {"Estimate (Std. Error)": "0.069 (0.075)", "p-value": 0.36}, "oz31": {"Estimate (Std. Error)": "0.028 (0.011)", "p-value": 0.014}, "oz4": {"Estimate (Std. Error)": "-0.203 (0.113)", "p-value": 0.072}, "oz5": {"Estimate (Std. Error)": "-0.019 (0.021)", "p-value": 0.362}, "oz6": {"Estimate (Std. Error)": "-0.035 (0.066)", "p-value": 0.601}, "oz83": {"Estimate (Std. Error)": "-0.014 (0.025)", "p-value": 0.58}, "oz87": {"Estimate (Std. Error)": "0.032 (0.016)", "p-value": 0.045}, "oz9": {"Estimate (Std. Error)": "-0.027 (0.042)", "p-value": 0.514}}
+2025-01-04 02:59:25 - Agents Log - Adding dictionary to storage.
+2025-01-04 02:59:25 - Agents Log - Added dictionary without description. First 20 characters: {"coefficients": {"c.
+2025-01-04 02:59:26 - Agents Log - _ols_function output: {"coefficients": {"const": {"Estimate (Std. Error)": "0.946 (0.021)", "p-value": 0.0}, "oz1": {"Estimate (Std. Error)": "0.093 (0.102)", "p-value": 0.359}, "oz10": {"Estimate (Std. Error)": "-0.013 (0.012)", "p-value": 0.293}, "oz11": {"Estimate (Std. Error)": "-0.002 (0.008)", "p-value": 0.807}, "oz12": {"Estimate (Std. Error)": "-0.079 (0.035)", "p-value": 0.024}, "oz124": {"Estimate (Std. Error)": "0.01 (0.007)", "p-value": 0.155}, "oz125": {"Estimate (Std. Error)": "-0.025 (0.008)", "p-value": 0.003}, "oz126": {"Estimate (Std. Error)": "-0.006 (0.025)", "p-value": 0.799}, "oz127": {"Estimate (Std. Error)": "0.004 (0.066)", "p-value": 0.95}, "oz128": {"Estimate (Std. Error)": "0.005 (0.011)", "p-value": 0.622}, "oz13": {"Estimate (Std. Error)": "-0.029 (0.009)", "p-value": 0.001}, "oz131": {"Estimate (Std. Error)": "0.031 (0.045)", "p-value": 0.492}, "oz133": {"Estimate (Std. Error)": "0.021 (0.013)", "p-value": 0.093}, "oz149": {"Estimate (Std. Error)": "0.003 (0.041)", "p-value": 0.938}, "oz150": {"Estimate (Std. Error)": "0.021 (0.012)", "p-value": 0.068}, "oz151": {"Estimate (Std. Error)": "0.033 (0.006)", "p-value": 0.0}, "oz165": {"Estimate (Std. Error)": "-0.023 (0.006)", "p-value": 0.0}, "oz171": {"Estimate (Std. Error)": "-0.007 (0.032)", "p-value": 0.817}, "oz172": {"Estimate (Std. Error)": "-0.033 (0.025)", "p-value": 0.176}, "oz173": {"Estimate (Std. Error)": "0.003 (0.01)", "p-value": 0.74}, "oz175": {"Estimate (Std. Error)": "-0.013 (0.008)", "p-value": 0.104}, "oz176": {"Estimate (Std. Error)": "-0.015 (0.012)", "p-value": 0.215}, "oz177": {"Estimate (Std. Error)": "0.0 (0.015)", "p-value": 0.994}, "oz178": {"Estimate (Std. Error)": "-0.0 (0.007)", "p-value": 0.971}, "oz181": {"Estimate (Std. Error)": "-0.005 (0.021)", "p-value": 0.803}, "oz183": {"Estimate (Std. Error)": "-0.016 (0.008)", "p-value": 0.059}, "oz185": {"Estimate (Std. Error)": "0.0 (0.009)", "p-value": 0.963}, "oz197": {"Estimate (Std. Error)": "0.003 (0.008)", "p-value": 0.663}, "oz2": {"Estimate (Std. Error)": "-0.051 (0.01)", "p-value": 0.0}, "oz246": {"Estimate (Std. Error)": "0.035 (0.007)", "p-value": 0.0}, "oz247": {"Estimate (Std. Error)": "-0.023 (0.009)", "p-value": 0.009}, "oz248": {"Estimate (Std. Error)": "0.008 (0.004)", "p-value": 0.046}, "oz249": {"Estimate (Std. Error)": "0.105 (0.02)", "p-value": 0.0}, "oz250": {"Estimate (Std. Error)": "-0.006 (0.011)", "p-value": 0.555}, "oz251": {"Estimate (Std. Error)": "0.007 (0.009)", "p-value": 0.464}, "oz3": {"Estimate (Std. Error)": "0.069 (0.075)", "p-value": 0.36}, "oz31": {"Estimate (Std. Error)": "0.028 (0.011)", "p-value": 0.014}, "oz4": {"Estimate (Std. Error)": "-0.203 (0.113)", "p-value": 0.072}, "oz5": {"Estimate (Std. Error)": "-0.019 (0.021)", "p-value": 0.362}, "oz6": {"Estimate (Std. Error)": "-0.035 (0.066)", "p-value": 0.601}, "oz83": {"Estimate (Std. Error)": "-0.014 (0.025)", "p-value": 0.58}, "oz87": {"Estimate (Std. Error)": "0.032 (0.016)", "p-value": 0.045}, "oz9": {"Estimate (Std. Error)": "-0.027 (0.042)", "p-value": 0.514}}, "train_metrics": {"rmse": {"OLS Linear Model": 0.029}, "mae": {"OLS Linear Model": 0.02}, "mape": {"OLS Linear Model": 582879099184.062}, "pearsonr": {"OLS Linear Model": 0.241}, "spearmanr": {"OLS Linear Model": 0.24}, "r2": {"OLS Linear Model": 0.058}, "adjr2": {"OLS Linear Model": 0.053}, "n_obs": {"OLS Linear Model": 7108.0}}, "test_metrics": {"rmse": {"OLS Linear Model": 0.028}, "mae": {"OLS Linear Model": 0.02}, "mape": {"OLS Linear Model": 0.022}, "pearsonr": {"OLS Linear Model": 0.22}, "spearmanr": {"OLS Linear Model": 0.206}, "r2": {"OLS Linear Model": 0.045}, "adjr2": {"OLS Linear Model": 0.022}, "n_obs": {"OLS Linear Model": 1777.0}}}
+Path to image: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_img_store/0.png
 
-{"('train', 'rmse')": {"OLS": 0.027, "Ridge": 0.027, "Lasso": 0.027, "ElasticNet": 0.027, "RF": 0.017, "XGBoost": 0.022}, "('train', 'mae')": {"OLS": 0.019, "Ridge": 0.019, "Lasso": 0.019, "ElasticNet": 0.019, "RF": 0.012, "XGBoost": 0.016}, "('train', 'mape')": {"OLS": 0.021, "Ridge": 0.021, "Lasso": 0.021, "ElasticNet": 0.021, "RF": 0.013, "XGBoost": 0.017}, "('train', 'pearsonr')": {"OLS": 0.265, "Ridge": 0.264, "Lasso": 0.256, "ElasticNet": 0.263, "RF": 0.902, "XGBoost": 0.698}, "('train', 'spearmanr')": {"OLS": 0.239, "Ridge": 0.239, "Lasso": 0.236, "ElasticNet": 0.239, "RF": 0.818, "XGBoost": 0.573}, "('train', 'r2')": {"OLS": 0.07, "Ridge": 0.07, "Lasso": 0.065, "ElasticNet": 0.069, "RF": 0.617, "XGBoost": 0.38}, "('train', 'adjr2')": {"OLS": 0.063, "Ridge": 0.063, "Lasso": 0.057, "ElasticNet": 0.062, "RF": 0.614, "XGBoost": 0.375}, "('train', 'n_obs')": {"OLS": 5331.0, "Ridge": 5331.0, "Lasso": 5331.0, "ElasticNet": 5331.0, "RF": 5331.0, "XGBoost": 5331.0}, "('test', 'rmse')": {"OLS": 0.032, "Ridge": 0.032, "Lasso": 0.032, "ElasticNet": 0.032, "RF": 0.031, "XGBoost": 0.031}, "('test', 'mae')": {"OLS": 0.02, "Ridge": 0.02, "Lasso": 0.02, "ElasticNet": 0.02, "RF": 0.02, "XGBoost": 0.02}, "('test', 'mape')": {"OLS": 1169587274073.897, "Ridge": 1169550473660.541, "Lasso": 1167679347890.662, "ElasticNet": 1169232872054.142, "RF": 1169776588595.952, "XGBoost": 1165502262477.743}, "('test', 'pearsonr')": {"OLS": 0.193, "Ridge": 0.193, "Lasso": 0.195, "ElasticNet": 0.194, "RF": 0.245, "XGBoost": 0.238}, "('test', 'spearmanr')": {"OLS": 0.223, "Ridge": 0.223, "Lasso": 0.225, "ElasticNet": 0.224, "RF": 0.259, "XGBoost": 0.25}, "('test', 'r2')": {"OLS": 0.035, "Ridge": 0.036, "Lasso": 0.038, "ElasticNet": 0.036, "RF": 0.06, "XGBoost": 0.055}, "('test', 'adjr2')": {"OLS": 0.024, "Ridge": 0.024, "Lasso": 0.026, "ElasticNet": 0.025, "RF": 0.049, "XGBoost": 0.043}, "('test', 'n_obs')": {"OLS": 3554.0, "Ridge": 3554.0, "Lasso": 3554.0, "ElasticNet": 3554.0, "RF": 3554.0, "XGBoost": 3554.0}}
-2025-01-03 18:55:27 - Agents Log - Adding dictionary to storage.
-2025-01-03 18:55:27 - Agents Log - Added dictionary without description. First 20 characters: {"train_metrics": {".
-2025-01-03 18:55:29 - Agents Log - Tool call: ml_regression_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x3172e56a0>, 'models': 'RF', 'predictors': 'oz1, oz10, oz11, oz12, oz124, oz125, oz126, oz127, oz128, oz13, oz131, oz133, oz149, oz150, oz151, oz165, oz171, oz172, oz173, oz175, oz176, oz177, oz178, oz181, oz183, oz185, oz197, oz2, oz246, oz247, oz248, oz249, oz250, oz251, oz3, oz31, oz4, oz5, oz6, oz83, oz87, oz9', 'target': 'oz252'}).
-2025-01-03 18:55:29 - Agents Log - _ml_regression_function called
-2025-01-03 18:55:29 - Agents Log - _ml_regression_function Models to test: RF
-2025-01-03 18:55:29 - Agents Log - _ml_regression_function Target: oz252
-2025-01-03 18:55:29 - Agents Log - _ml_regression_function Predictors: ['oz1', 'oz10', 'oz11', 'oz12', 'oz124', 'oz125', 'oz126', 'oz127', 'oz128', 'oz13', 'oz131', 'oz133', 'oz149', 'oz150', 'oz151', 'oz165', 'oz171', 'oz172', 'oz173', 'oz175', 'oz176', 'oz177', 'oz178', 'oz181', 'oz183', 'oz185', 'oz197', 'oz2', 'oz246', 'oz247', 'oz248', 'oz249', 'oz250', 'oz251', 'oz3', 'oz31', 'oz4', 'oz5', 'oz6', 'oz83', 'oz87', 'oz9']
-2025-01-03 18:55:29 - Analyzer Log - Fitting model 'RF'.
-2025-01-03 18:55:29 - Analyzer Log - Fitting 'RF'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2025-01-03 19:28:15 - Analyzer Log - Successfully evaluated model 'RF'.
-2025-01-03 19:28:15 - Agents Log - Adding table to storage.
-2025-01-03 19:28:15 - Agents Log - Added table to /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/1.pkl: Path to table: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/1.pkl
-
-{"('train', 'rmse')": {"RF": 0.02}, "('train', 'mae')": {"RF": 0.014}, "('train', 'mape')": {"RF": 0.015}, "('train', 'pearsonr')": {"RF": 0.831}, "('train', 'spearmanr')": {"RF": 0.738}, "('train', 'r2')": {"RF": 0.487}, "('train', 'adjr2')": {"RF": 0.483}, "('train', 'n_obs')": {"RF": 5331.0}, "('test', 'rmse')": {"RF": 0.031}, "('test', 'mae')": {"RF": 0.02}, "('test', 'mape')": {"RF": 1169095361133.65}, "('test', 'pearsonr')": {"RF": 0.239}, "('test', 'spearmanr')": {"RF": 0.257}, "('test', 'r2')": {"RF": 0.057}, "('test', 'adjr2')": {"RF": 0.046}, "('test', 'n_obs')": {"RF": 3554.0}}
-2025-01-03 19:28:15 - Agents Log - Adding dictionary to storage.
-2025-01-03 19:28:15 - Agents Log - Added dictionary without description. First 20 characters: {"train_metrics": {".
-2025-01-03 19:28:18 - Analyzer Log - Analyzer initialized for dataset 'Dataset'.
-2025-01-03 19:28:18 - Agents Log - Data container initialized with the Analyzer built from the provided DataFrame.
-2025-01-03 19:28:18 - Agents Log - IO initialized.
-2025-01-03 19:28:18 - Agents Log - Initializing the Orchestrator.
-2025-01-03 19:28:18 - Agents Log - Initializing SingleAgent
-2025-01-03 19:28:18 - Agents Log - Tool call: dataset_summary_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x317356d80>}).
-2025-01-03 19:28:18 - Agents Log - Adding dictionary to storage.
-2025-01-03 19:28:18 - Agents Log - Added dictionary without description. First 20 characters: {"train_shape": {"n_.
-2025-01-03 19:28:22 - Agents Log - SingleAgent initialized
-2025-01-03 19:28:23 - Agents Log - Tool call: feature_selection_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x317356d80>, 'feature_selector': 'Boruta', 'predictors': 'Diameter, Height, Length, Shell_weight, Shucked_weight, Viscera_weight, Whole_weight', 'target': 'Classnumberofrings', 'task': 'regression'}).
-2025-01-03 19:28:23 - Agents Log - _feature_selection_function called
-2025-01-03 19:28:23 - Agents Log - _feature_selection_function Feature selector: Boruta
-2025-01-03 19:28:23 - Agents Log - _feature_selection_function Target: Classnumberofrings
-2025-01-03 19:28:23 - Agents Log - _feature_selection_function Predictors: ['Diameter', 'Height', 'Length', 'Shell_weight', 'Shucked_weight', 'Viscera_weight', 'Whole_weight']
-2025-01-03 19:28:23 - Analyzer Log - Fitting 'BorutaFSR'.
-2025-01-03 19:29:15 - Agents Log - Adding dictionary to storage.
-2025-01-03 19:29:15 - Agents Log - Added dictionary without description. First 20 characters: {"target": "Classnum.
-2025-01-03 19:29:15 - Agents Log - Tool call: ml_regression_function(args=(), kwargs={'context': <tablemage.agents._src.tools.tooling_context.ToolingContext object at 0x317356d80>, 'models': 'OLS, Ridge, Lasso, ElasticNet, RF, XGBoost', 'predictors': 'Diameter, Height, Length, Shell_weight, Shucked_weight, Viscera_weight, Whole_weight', 'target': 'Classnumberofrings'}).
-2025-01-03 19:29:15 - Agents Log - _ml_regression_function called
-2025-01-03 19:29:15 - Agents Log - _ml_regression_function Models to test: OLS, Ridge, Lasso, ElasticNet, RF, XGBoost
-2025-01-03 19:29:15 - Agents Log - _ml_regression_function Target: Classnumberofrings
-2025-01-03 19:29:15 - Agents Log - _ml_regression_function Predictors: ['Diameter', 'Height', 'Length', 'Shell_weight', 'Shucked_weight', 'Viscera_weight', 'Whole_weight']
-2025-01-03 19:29:15 - Analyzer Log - Fitting model 'OLS'.
-2025-01-03 19:29:15 - Analyzer Log - Fitting 'OLS'. Search method: GridSearchCV (1 fits per fold, 5 total fits). 
-2025-01-03 19:29:15 - Analyzer Log - Successfully evaluated model 'OLS'.
-2025-01-03 19:29:15 - Analyzer Log - Fitting model 'Ridge'.
-2025-01-03 19:29:15 - Analyzer Log - Fitting 'Ridge'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2025-01-03 19:29:16 - Analyzer Log - Successfully evaluated model 'Ridge'.
-2025-01-03 19:29:16 - Analyzer Log - Fitting model 'Lasso'.
-2025-01-03 19:29:16 - Analyzer Log - Fitting 'Lasso'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2025-01-03 19:29:18 - Analyzer Log - Successfully evaluated model 'Lasso'.
-2025-01-03 19:29:18 - Analyzer Log - Fitting model 'ElasticNet'.
-2025-01-03 19:29:18 - Analyzer Log - Fitting 'ElasticNet'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2025-01-03 19:29:20 - Analyzer Log - Successfully evaluated model 'ElasticNet'.
-2025-01-03 19:29:20 - Analyzer Log - Fitting model 'RF'.
-2025-01-03 19:29:20 - Analyzer Log - Fitting 'RF'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2025-01-03 19:30:42 - Analyzer Log - Successfully evaluated model 'RF'.
-2025-01-03 19:30:42 - Analyzer Log - Fitting model 'XGBoost'.
-2025-01-03 19:30:42 - Analyzer Log - Fitting 'XGBoost'. Search method: OptunaSearchCV (100 trials, 500 total fits). 
-2025-01-03 19:31:26 - Analyzer Log - Successfully evaluated model 'XGBoost'.
-2025-01-03 19:31:26 - Agents Log - Adding table to storage.
-2025-01-03 19:31:26 - Agents Log - Added table to /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl: Path to table: /Users/andrewyang/Desktop/research/TableMage/tablemage/agents/_src/io/_table_store/0.pkl
-
-{"('train', 'rmse')": {"OLS": 2.228, "Ridge": 2.235, "Lasso": 2.249, "ElasticNet": 2.238, "RF": 1.582, "XGBoost": 1.801}, "('train', 'mae')": {"OLS": 1.618, "Ridge": 1.622, "Lasso": 1.632, "ElasticNet": 1.624, "RF": 1.109, "XGBoost": 1.324}, "('train', 'mape')": {"OLS": 0.163, "Ridge": 0.163, "Lasso": 0.165, "ElasticNet": 0.164, "RF": 0.11, "XGBoost": 0.134}, "('train', 'pearsonr')": {"OLS": 0.732, "Ridge": 0.731, "Lasso": 0.727, "ElasticNet": 0.73, "RF": 0.886, "XGBoost": 0.838}, "('train', 'spearmanr')": {"OLS": 0.752, "Ridge": 0.753, "Lasso": 0.754, "ElasticNet": 0.753, "RF": 0.89, "XGBoost": 0.821}, "('train', 'r2')": {"OLS": 0.536, "Ridge": 0.533, "Lasso": 0.528, "ElasticNet": 0.532, "RF": 0.766, "XGBoost": 0.697}, "('train', 'adjr2')": {"OLS": 0.535, "Ridge": 0.532, "Lasso": 0.526, "ElasticNet": 0.531, "RF": 0.766, "XGBoost": 0.696}, "('train', 'n_obs')": {"OLS": 2506.0, "Ridge": 2506.0, "Lasso": 2506.0, "ElasticNet": 2506.0, "RF": 2506.0, "XGBoost": 2506.0}, "('test', 'rmse')": {"OLS": 2.204, "Ridge": 2.205, "Lasso": 2.218, "ElasticNet": 2.206, "RF": 2.139, "XGBoost": 2.178}, "('test', 'mae')": {"OLS": 1.629, "Ridge": 1.635, "Lasso": 1.65, "ElasticNet": 1.637, "RF": 1.546, "XGBoost": 1.574}, "('test', 'mape')": {"OLS": 0.169, "Ridge": 0.17, "Lasso": 0.172, "ElasticNet": 0.17, "RF": 0.157, "XGBoost": 0.16}, "('test', 'pearsonr')": {"OLS": 0.716, "Ridge": 0.715, "Lasso": 0.71, "ElasticNet": 0.714, "RF": 0.735, "XGBoost": 0.724}, "('test', 'spearmanr')": {"OLS": 0.745, "Ridge": 0.745, "Lasso": 0.744, "ElasticNet": 0.745, "RF": 0.77, "XGBoost": 0.756}, "('test', 'r2')": {"OLS": 0.509, "Ridge": 0.509, "Lasso": 0.503, "ElasticNet": 0.508, "RF": 0.538, "XGBoost": 0.52}, "('test', 'adjr2')": {"OLS": 0.507, "Ridge": 0.507, "Lasso": 0.501, "ElasticNet": 0.506, "RF": 0.536, "XGBoost": 0.518}, "('test', 'n_obs')": {"OLS": 1671.0, "Ridge": 1671.0, "Lasso": 1671.0, "ElasticNet": 1671.0, "RF": 1671.0, "XGBoost": 1671.0}}
-2025-01-03 19:31:26 - Agents Log - Adding dictionary to storage.
-2025-01-03 19:31:26 - Agents Log - Added dictionary without description. First 20 characters: {"train_metrics": {".
+Description: Diagnostic plots.
+A detailed description is unavailable.
