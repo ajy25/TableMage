@@ -44,7 +44,8 @@ def parse_formula(formula: str, df: pd.DataFrame) -> pd.Series:
             if is_safe_name(col):
                 safe_mapping[col] = col
             else:
-                safe_mapping[col] = f"col_{re.sub(r'\\W+', '_', str(col))}"
+                pattern = r"\W+"
+                safe_mapping[col] = f"col_{re.sub(pattern, '_', str(col))}"
         return safe_mapping
 
     def validate_formula(formula: str) -> bool:
