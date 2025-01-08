@@ -1,11 +1,9 @@
 from pathlib import Path
 from sklearn.model_selection import train_test_split
 import pandas as pd
-from scipy.stats import shapiro
-import statsmodels.api as sm
+import scipy.stats as stats
 import statsmodels.formula.api as smf
 from sklearn.metrics import r2_score
-from scipy.stats import ttest_ind
 
 datasets_dir = Path(__file__).resolve().parent.parent / "datasets"
 
@@ -21,6 +19,7 @@ del df_train, df_test
 def q1():
     keyword = "mean_income"
     answer = df["Income"].mean()
+    answer = round(answer, 3)
     return f"{keyword}={answer:.3f}"
 
 
@@ -28,6 +27,7 @@ def q1():
 def q2():
     keyword = "n_married"
     answer = df["Married"].value_counts().get("Yes", 0)
+    answer = round(answer, 3)
     return f"{keyword}={answer:.3f}"
 
 
@@ -35,6 +35,7 @@ def q2():
 def q3():
     keyword = "mean"
     answer = df["Cards"].mean()
+    answer = round(answer, 3)
     return f"{keyword}={answer:.3f}"
 
 
@@ -53,7 +54,8 @@ def q4():
     # Calculate the difference between the average ratings
     rating_difference = highest_earners_avg_rating - lowest_earners_avg_rating
 
-    answer = rating_difference
+    answer = round(rating_difference, 3)
+
     return f"{keyword}={answer:.3f}"
 
 
@@ -61,6 +63,9 @@ def q4():
 def q5():
     keyword = "n_ethnicities"
     answer = df["Ethnicity"].nunique()
+
+    answer = round(answer, 3)
+
     return f"{keyword}={answer:.3f}"
 
 
@@ -76,14 +81,33 @@ def q6():
     # Count the number of high-income earners
     high_income = df[df["income_categories"] == "high"]
     answer = high_income.shape[0]
+
+    answer = round(answer, 3)
+
     return f"{keyword}={answer:.3f}"
 
 
-# Question 7 - Check if the distribution of age adheres to the Gaussian distribution.
+# Question 7 - Does average number of cards differ significantly between the categories of "income_categories"?
 def q7():
     keyword = "yes_or_no"
-    shapiro_test_stat, shapiro_p_value = shapiro(df["Age"])
-    answer = "no" if shapiro_p_value < 0.05 else "yes"
+
+    # Perform a one-way ANOVA test
+    _, p_value = stats.f_oneway(
+        df.loc[df["income_categories"] == "low", "Cards"],
+        df.loc[df["income_categories"] == "medium", "Cards"],
+        df.loc[df["income_categories"] == "high", "Cards"],
+    )
+
+    # try kruskal test
+    pval_kruskal = stats.kruskal(
+        df.loc[df["income_categories"] == "low", "Cards"],
+        df.loc[df["income_categories"] == "medium", "Cards"],
+        df.loc[df["income_categories"] == "high", "Cards"],
+    ).pvalue
+
+    assert (p_value <= 0.05) == (pval_kruskal <= 0.05)
+
+    answer = "yes" if p_value <= 0.05 else "no"
     return f"{keyword}={answer}"
 
 
@@ -102,6 +126,9 @@ def q8():
 
     # Calculate R-squared on the test set
     test_r_squared_smf = r2_score(df_test["Limit"], y_pred_smf)
+
+    test_r_squared_smf = round(test_r_squared_smf, 3)
+
     return f"{keyword}={test_r_squared_smf:.3f}"
 
 
@@ -118,6 +145,9 @@ def q9():
 
     # Extract the coefficient for "Age"
     age_coefficient = model_with_age.params["Age"]
+
+    age_coefficient = round(age_coefficient, 3)
+
     return f"{keyword}={age_coefficient:.3f}"
 
 
@@ -126,11 +156,21 @@ def q10():
     keyword = "yes_or_no"
 
     student_groups = df.groupby("Student")["Limit"]
-    t_stat, p_value = ttest_ind(
+    _, p_value = stats.ttest_ind(
         student_groups.get_group("Yes"), student_groups.get_group("No"), equal_var=False
     )
+    # test other methods to allow for method flexibility
+    pval_student = stats.ttest_ind(
+        student_groups.get_group("Yes"), student_groups.get_group("No"), equal_var=True
+    ).pvalue
 
-    answer = "yes" if p_value < 0.05 else "no"
+    pval_mannwhitneyu = stats.mannwhitneyu(
+        student_groups.get_group("Yes"), student_groups.get_group("No")
+    ).pvalue
+
+    assert (p_value <= 0.05) == (pval_mannwhitneyu <= 0.05) == (pval_student <= 0.05)
+
+    answer = "yes" if p_value <= 0.05 else "no"
     return f"{keyword}={answer}"
 
 

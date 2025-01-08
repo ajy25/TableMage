@@ -14,27 +14,37 @@ import tablemage as tm
 tm.use_agents()
 
 
-model_name = "llama3.3_70b"  # set to "llama3.1_8b" or "llama3.3_70b"
+model_name = "llama3.1_8b"
 
 subdir_stems_to_consider = [  # optionally comment out any of these
-    "classification_mixed",
-    "classification_numerical",
-    "regression_mixed",
+    # "classification_mixed",
+    # "classification_numerical",
+    # "regression_mixed",
     "regression_numerical",
 ]
 
 
 if model_name == "llama3.1_8b":
     tm.agents.options.set_llm(
-        llm_type="groq", model_name="llama-3.1-8b-instant", temperature=0.0
+        llm_type="groq", model_name="llama-3.1-8b-instant", temperature=0.1
     )
-    output_dir = curr_dir / "results" / "tablemage_llama3.1_8b"
+    output_dir = curr_dir / "results" / "tablemage_llama3.1_8b_test"
 
 elif model_name == "llama3.3_70b":
     tm.agents.options.set_llm(
-        llm_type="groq", model_name="llama-3.3-70b-versatile", temperature=0.0
+        llm_type="groq", model_name="llama-3.3-70b-versatile", temperature=0.1
     )
     output_dir = curr_dir / "results" / "tablemage_llama3.3_70b"
+
+elif model_name == "gpt4o":
+    tm.agents.options.set_llm(llm_type="openai", model_name="gpt-4o", temperature=0.1)
+    output_dir = curr_dir / "results" / "tablemage_gpt4o"
+
+elif model_name == "gpt4o_mini":
+    tm.agents.options.set_llm(
+        llm_type="openai", model_name="gpt-4o-mini", temperature=0.1
+    )
+    output_dir = curr_dir / "results" / "tablemage_gpt4o_mini"
 
 
 output_dir.mkdir(exist_ok=True)

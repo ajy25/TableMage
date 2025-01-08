@@ -18,7 +18,7 @@ class _TTestInput(BaseModel):
 
 @tooling_decorator
 def _t_test_function(
-    numeric_var: str, binary_var: str, test: str, context: ToolingContext
+    context: ToolingContext, numeric_var: str, binary_var: str, test: str = "welch"
 ) -> str:
     context.add_thought(
         "I am going to perform a t-test on the variable {numeric_var} split by the binary variable {binary_var}.".format(
@@ -44,6 +44,7 @@ def build_test_ttest_tool(context: ToolingContext) -> FunctionTool:
         name="t_test_function",
         description="""\
 Performs a t-test on a numeric variable split by a binary variable. \
+Tests the null hypothesis that the means of the groups are equal. \
 Returns a JSON string containing the results and which test was used.\
 """,
         fn_schema=_TTestInput,
@@ -65,7 +66,10 @@ class _AnovaTestInput(BaseModel):
 
 @tooling_decorator
 def _anova_test_function(
-    numeric_var: str, categorical_var: str, test: str, context: ToolingContext
+    context: ToolingContext,
+    numeric_var: str,
+    categorical_var: str,
+    test: str = "anova_oneway",
 ) -> str:
     context.add_thought(
         "I am going to perform an ANOVA test on the variable {numeric_var} split by the categorical variable {categorical_var}.".format(
@@ -91,6 +95,7 @@ def build_test_anova_tool(context: ToolingContext) -> FunctionTool:
         name="anova_test_function",
         description="""\
 Performs an ANOVA test on a numeric variable split by a categorical variable. \
+Tests the null hypothesis that the means of the groups are equal. \
 Returns a JSON string containing the results and which test was used.\
 """,
         fn_schema=_AnovaTestInput,
@@ -105,7 +110,9 @@ class _TestNormalityInput(BaseModel):
 
 @tooling_decorator
 def _test_normality_function(
-    numeric_var: str, test: str, context: ToolingContext
+    context: ToolingContext,
+    numeric_var: str,
+    test: str = "shapiro",
 ) -> str:
     context.add_thought(
         "I am going to test whether the variable {numeric_var} is normally distributed.".format(
@@ -144,7 +151,7 @@ class _Chi2TestInput(BaseModel):
 
 
 @tooling_decorator
-def _chi2_test_function(x: str, y: str, context: ToolingContext) -> str:
+def _chi2_test_function(context: ToolingContext, x: str, y: str) -> str:
     context.add_thought(
         "I am going to perform a chi-squared test of independence between the variables {x} and {y}.".format(
             x=x, y=y
@@ -179,14 +186,14 @@ class _PlotInput(BaseModel):
     x: str = Field(description="Variable to place on the x-axis of plot.")
     y: str = Field(
         description="Variable to place on the y-axis of plot. "
-        "If an empty string is provided, the distribution of x will be plotted. "
+        "If an empty string ('') is provided, the distribution of x will be plotted. "
         "Otherwise, a scatter plot, box plot, or crosstab heatmap will be generated, "
         "depending on the data types of x and y.",
     )
 
 
 @tooling_decorator
-def _plot_function(x: str, y: str, context: ToolingContext) -> str:
+def _plot_function(context: ToolingContext, x: str, y: str = "") -> str:
     if y == "":
         context.add_thought(
             "I am going to plot the distribution of the variable: {x}.".format(x=x)
@@ -244,7 +251,10 @@ class _PlotPairsInput(BaseModel):
 
 
 @tooling_decorator
-def _plot_pairs_function(vars: str, context: ToolingContext) -> str:
+def _plot_pairs_function(
+    context: ToolingContext,
+    vars: str,
+) -> str:
     vars_list = [var.strip() for var in vars.split(",")]
     context.add_thought(
         "I am going to generate a pairplot for the following variables: {vars_list}.".format(
@@ -280,9 +290,17 @@ class _CorrelationComparisonInput(BaseModel):
 
 @tooling_decorator
 def _correlation_comparison_function(
-    target: str, numeric_vars: str, context: ToolingContext
+    context: ToolingContext,
+    target: str,
+    numeric_vars: str = "",
 ) -> str:
-    vars_list = [var.strip() for var in numeric_vars.split(",")]
+    if target not in context.data_container.analyzer.eda("all").numeric_vars():
+        raise ValueError("The target variable must be numeric.")
+    if numeric_vars == "":
+        # use all numeric variables
+        vars_list = context.data_container.analyzer.eda("all").numeric_vars()
+    else:
+        vars_list = [var.strip() for var in numeric_vars.split(",")]
     df_output = context.data_container.analyzer.eda(
         "all"
     ).tabulate_correlation_comparison(
@@ -320,18 +338,26 @@ class _CorrelationMatrixInput(BaseModel):
 
 
 @tooling_decorator
-def _correlation_matrix_function(numeric_vars: str, context: ToolingContext) -> str:
+def _correlation_matrix_function(
+    context: ToolingContext, numeric_vars: str = ""
+) -> str:
+    if numeric_vars == "":
+        # use all numeric variables
+        numeric_vars_list = context._data_container.analyzer.eda("all").numeric_vars()
+    else:
+        numeric_vars_list = [var.strip() for var in numeric_vars.split(",")]
+
     df_output = context._data_container.analyzer.eda("all").tabulate_correlation_matrix(
-        numeric_vars=[var.strip() for var in numeric_vars.split(",")]
+        numeric_vars=numeric_vars_list
     )
     context.add_thought(
         "I am going to compute the correlation matrix for the following variables: {vars_list}.".format(
-            vars_list=numeric_vars
+            vars_list=", ".join(numeric_vars_list)
         )
     )
     context.add_code(
         "analyzer.eda().tabulate_correlation_matrix(numeric_vars=['{}'])".format(
-            "', '".join([numeric_vars])
+            "', '".join(numeric_vars_list)
         )
     )
     return context.add_table(df_output, add_to_vectorstore=True)

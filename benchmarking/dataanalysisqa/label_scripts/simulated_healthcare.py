@@ -21,6 +21,9 @@ del df_train, df_test
 def q1():
     keyword = "n_types"
     answer = df["Blood Type"].nunique()
+
+    answer = round(answer, 3)
+
     return f"{keyword}={answer:.3f}"
 
 
@@ -28,6 +31,9 @@ def q1():
 def q2():
     keyword = "n_insurance_providers"
     answer = df["Insurance Provider"].nunique()
+
+    answer = round(answer, 3)
+
     return f"{keyword}={answer:.3f}"
 
 
@@ -73,7 +79,10 @@ def q5():
     y_pred_test = model.predict(X_test)
 
     r2 = r2_score(y_train, y_pred_train)
-    rmse = np.sqrt(root_mean_squared_error(y_test, y_pred_test))
+    rmse = root_mean_squared_error(y_test, y_pred_test)
+
+    r2 = round(r2, 3)
+    rmse = round(rmse, 3)
 
     return f"{keyword1}={r2:.3f}, {keyword2}={rmse:.3f}"
 
@@ -89,13 +98,21 @@ def q6():
 def q7():
     keyword1 = "coef"
     keyword2 = "intercept"
-    X = df["Age"]
-    y = df["Billing Amount"]
+
+    df_train = df.loc[df_train_idx]
+
+    X = df_train[["Age"]]
+    y = df_train["Billing Amount"]
     X = sm.add_constant(X)
     model = sm.OLS(y, X).fit()
-    return (
-        f"{keyword1}={model.params['Age']:.3f}, {keyword2}={model.params['const']:.3f}"
-    )
+
+    age_coef = model.params["Age"]
+    intercept = model.params["const"]
+
+    age_coef = round(age_coef, 3)
+    intercept = round(intercept, 3)
+
+    return f"{keyword1}={age_coef:.3f}, {keyword2}={intercept:.3f}"
 
 
 # Question 8 - Min-max scale the billing amount. What is the variance of the billing amount?
@@ -114,22 +131,32 @@ def q8():
         df_test["Billing Amount"].values.reshape(-1, 1)
     )
     df = pd.concat([df_train, df_test]).loc[df.index]
-    return f"{keyword}={df['Billing Amount'].var():.3f}"
+
+    var = df["Billing Amount"].var()
+    var = round(var, 3)
+
+    return f"{keyword}={var:.3f}"
 
 
 # Question 9 - What is the average billing amount?
 def q9():
     keyword = "mean"
     answer = df["Billing Amount"].mean()
+
+    answer = round(answer, 3)
+
     return f"{keyword}={answer:.3f}"
 
 
 # Question 10 - Which medical condition is associated with the highest billing amount? What is the average?
 def q10():
     keyword1 = "medical_condition"
-    keyword2 = "average"
-    answer = df.groupby("Medical Condition")["Billing Amount"].mean().idxmax()
-    return f"{keyword1}={answer}, {keyword2}={df.groupby('Medical Condition')['Billing Amount'].mean().max():.3f}"
+    keyword2 = "mean"
+    answer1 = df.groupby("Medical Condition")["Billing Amount"].mean().idxmax()
+
+    answer2 = df.groupby("Medical Condition")["Billing Amount"].mean().max()
+    answer2 = round(answer2, 3)
+    return f"{keyword1}={answer1}, {keyword2}={answer2:.3f}"
 
 
 def get_labels():

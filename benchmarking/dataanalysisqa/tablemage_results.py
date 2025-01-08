@@ -11,25 +11,39 @@ import tablemage as tm
 
 tm.use_agents()
 
-model_name = "gpt4o"
+
+# set model name
+model_name = "llama3.1_8b"
+
+# set subset of datasets to generate answers for (must have already ran on all datasets)
+# leave empty to generate answers for all datasets
+subset = ["Healthcare"]
+
 
 if model_name == "llama3.1_8b":
     tm.agents.options.set_llm(
-        llm_type="groq", model_name="llama-3.1-8b-instant", temperature=0.0
+        llm_type="groq", model_name="llama-3.1-8b-instant", temperature=0.1
     )
     output_dir = curr_dir / "results" / "tablemage_llama3.1_8b"
-    delay = 5
+    delay = 2
 
 elif model_name == "llama3.3_70b":
     tm.agents.options.set_llm(
-        llm_type="groq", model_name="llama-3.3-70b-versatile", temperature=0.0
+        llm_type="groq", model_name="llama-3.3-70b-versatile", temperature=0.1
     )
     output_dir = curr_dir / "results" / "tablemage_llama3.3_70b"
-    delay = 5
+    delay = 2
 
 elif model_name == "gpt4o":
     tm.agents.options.set_llm(llm_type="openai", model_name="gpt-4o", temperature=0.0)
     output_dir = curr_dir / "results" / "tablemage_gpt4o"
+    delay = 3
+
+elif model_name == "gpt4o_mini":
+    tm.agents.options.set_llm(
+        llm_type="openai", model_name="gpt-4o-mini", temperature=0.0
+    )
+    output_dir = curr_dir / "results" / "tablemage_gpt4o_mini"
     delay = 5
 
 output_dir.mkdir(exist_ok=True, parents=True)
@@ -51,6 +65,13 @@ dataset_name_to_filestem = {
 
 # read in the questions
 questions_df = pd.read_csv(curr_dir / "dataanalysisqa.tsv", sep="\t")
+results_df = None
+if len(subset) != 0 and len(subset) < len(dataset_name_to_filestem):
+    # try to read in full output
+    results_df = pd.read_csv(output_dir / "answers.csv")
+    dataset_name_to_filestem = {
+        k: v for k, v in dataset_name_to_filestem.items() if k in subset
+    }
 
 
 question_ids = []
@@ -106,11 +127,19 @@ Round answers to 3 decimal places. \
         time.sleep(delay)
 
 
-results_df = pd.DataFrame(
-    {
-        "Question ID": question_ids,
-        "Unformatted Answer": unformatted_answers,
-    }
-)
+if results_df is not None:
+    # if we're working with a subset, update only the rows that have been updated
+    for i, question_id in enumerate(question_ids):
+        results_df.loc[
+            results_df["Question ID"] == question_id, "Unformatted Answer"
+        ] = unformatted_answers[i]
+
+else:
+    results_df = pd.DataFrame(
+        {
+            "Question ID": question_ids,
+            "Unformatted Answer": unformatted_answers,
+        }
+    )
 
 results_df.to_csv(output_dir / "answers.csv", index=False)

@@ -16,7 +16,7 @@ from .preprocessing import (
 
 from ..utils import ensure_arg_list_uniqueness
 from .utils.formula import parse_formula
-from .utils.var_naming import rename_var
+from .utils.var_naming import rename_var, rename_vars
 from ..display.print_utils import (
     print_wrapped,
 )
@@ -1282,6 +1282,12 @@ class DataEmitter:
                 self._second_onehot_encoder = encoder
             else:
                 self._onehot_encoder = encoder
+
+            # for all columns in df_encoded, rename
+            curr_vars = df_encoded.columns.to_list()
+            curr_to_new = rename_vars(curr_vars)
+            new_columns = [curr_to_new[var] for var in curr_vars]
+            df_encoded.columns = new_columns
 
             if keep_original:
                 return pd.concat([df_encoded, df], axis=1)

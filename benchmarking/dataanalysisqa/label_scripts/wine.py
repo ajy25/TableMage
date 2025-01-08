@@ -2,7 +2,7 @@ from pathlib import Path
 from sklearn.model_selection import train_test_split
 import pandas as pd
 from scipy.stats import skew, kurtosis
-from sklearn.metrics import accuracy_score, f1_score
+from sklearn.metrics import roc_auc_score
 import statsmodels.api as sm
 import numpy as np
 from sklearn.metrics import r2_score
@@ -24,6 +24,10 @@ def q1():
 
     mean = df["alcohol"].mean()
     std = df["alcohol"].std()
+
+    mean = round(mean, 3)
+    std = round(std, 3)
+
     return f"{keyword1}={mean:.3f}, {keyword2}={std:.3f}"
 
 
@@ -34,6 +38,10 @@ def q2():
 
     mean_malic_acid = df["malic_acid"].mean()
     std_malic_acid = df["malic_acid"].std()
+
+    mean_malic_acid = round(mean_malic_acid, 3)
+    std_malic_acid = round(std_malic_acid, 3)
+
     return f"{keyword1}={mean_malic_acid:.3f}, {keyword2}={std_malic_acid:.3f}"
 
 
@@ -46,6 +54,10 @@ def q3():
     kurtosis_alcohol = kurtosis(
         df["alcohol"], fisher=True
     )  # Fisher=True for excess kurtosis
+
+    skew_alcohol = round(skew_alcohol, 3)
+    kurtosis_alcohol = round(kurtosis_alcohol, 3)
+
     return f"{keyword1}={skew_alcohol:.3f}, {keyword2}={kurtosis_alcohol:.3f}"
 
 
@@ -53,13 +65,15 @@ def q3():
 def q4():
     keyword = "corr"
     correlation = df["alcohol"].corr(df["malic_acid"])
+
+    correlation = round(correlation, 3)
+
     return f"{keyword}={correlation:.3f}"
 
 
-# Question 5 - Fit a logistic regression model to predict "wine_class" from "alcohol", "malic_acid", and "flavanoids". Report the test F1 score and accuracy.
+# Question 5 - Fit a logistic regression model to predict "wine_class" from "alcohol", "malic_acid", and "flavanoids". Report the test one-vs-one AUROC.
 def q5():
-    keyword1 = "f1"
-    keyword2 = "acc"
+    keyword = "auroc"
 
     df_train = df.loc[df_train_idx]
     df_test = df.loc[df_test_idx]
@@ -77,15 +91,13 @@ def q5():
 
     # Make predictions on the test set
     y_pred_probs = model.predict(X_test)
-    y_pred = np.argmax(
-        y_pred_probs.values, axis=1
-    )  # Convert probabilities to class predictions
 
-    # Calculate accuracy and F1 score
-    f1 = f1_score(y_test, y_pred, average="weighted")
-    accuracy = accuracy_score(y_test, y_pred)
+    # Calculate the AUROC score, one-vs-one
+    auroc = roc_auc_score(y_test, y_pred_probs, multi_class="ovo")
 
-    return f"{keyword1}={f1:.3f}, {keyword2}={accuracy:.3f}"
+    auroc = round(auroc, 3)
+
+    return f"{keyword}={auroc:.3f}"
 
 
 # Question 6 - Engineer a new variable, "meaningless", that is defined as ("proline" - "alcohol" * "malic_acid"). Find its median.
@@ -97,6 +109,9 @@ def q6():
 
     # Calculate the median of "meaningless"
     median_meaningless = df["meaningless"].median()
+
+    median_meaningless = round(median_meaningless, 3)
+
     return f"{keyword}={median_meaningless:.3f}"
 
 
@@ -104,6 +119,9 @@ def q6():
 def q7():
     keyword = "value"
     third_largest_alcohol = df["alcohol"].nlargest(3).iloc[-1]
+
+    third_largest_alcohol = round(third_largest_alcohol, 3)
+
     return f"{keyword}={third_largest_alcohol:.3f}"
 
 
@@ -116,6 +134,11 @@ def q8():
     count_0 = df["wine_class"].value_counts().get(0, 0)
     count_1 = df["wine_class"].value_counts().get(1, 0)
     count_2 = df["wine_class"].value_counts().get(2, 0)
+
+    count_0 = round(count_0, 3)
+    count_1 = round(count_1, 3)
+    count_2 = round(count_2, 3)
+
     return (
         f"{keyword1}={count_0:.3f}, {keyword2}={count_1:.3f}, {keyword3}={count_2:.3f}"
     )
@@ -145,6 +168,9 @@ def q9():
 
     # Calculate the R-squared value on the test set
     r_squared = r2_score(y_test, y_pred)
+
+    r_squared = round(r_squared, 3)
+
     return f"{keyword}={r_squared:.3f}"
 
 

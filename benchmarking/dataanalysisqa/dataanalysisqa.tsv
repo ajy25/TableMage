@@ -1,101 +1,101 @@
-Question ID	Dataset	Split Details	Question Order	Question	Category	Output Keywords
-1	Titanic	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	1	How many passengers survived?	Summary Statistics	n_passengers_survived
-2	Titanic	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	2	How many male and female passengers are there?	Summary Statistics	n_male; n_female
-3	Titanic	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	3	Find the mean, median, and standard deviation of "Age".	Summary Statistics	mean; median; std
-4	Titanic	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	4	How many different values of "Pclass" are there?	Summary Statistics	n_unique
-5	Titanic	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	5	What's the average "Fare" price?	Summary Statistics	mean
-6	Titanic	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	6	What is the correlation between "Pclass" and "Fare"?	Statistical Testing	corr
-7	Titanic	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	7	Is there a statistically significant difference in fare price between those who survived and those who did not? 	Statistical Testing	yes_or_no
-8	Titanic	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	8	Is there a statistically significant difference in fare price between men and women?	Statistical Testing	yes_or_no
-9	Titanic	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	9	Create a new categorical variable, "Age_categorical", with two levels: "young" and "old". Define "old" as those aged at least 50 years. Is there a statistically significant difference in fare price between young and old passengers?	Data Transformation; Statistical Testing	yes_or_no
-10	Titanic	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	10	Use logistic regression to predict survival using "Pclass", "Age_categorical", and "Fare". Report the test F1 score.	Regression Analysis; Persistence	f1
-11	House Prices	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	1	Compute the average "SalePrice" along with the standard deviation.	Summary Statistics	mean; std
-12	House Prices	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	2	Create a new variable, "TotalSF", which is defined as the sum of "1stFlrSF" and "2ndFlrSF". Find this new variable's mean.	Data Transformation; Summary Statistics	mean
-13	House Prices	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	3	Impute missing values of "GarageYrBlt" with the median. Report its new mean. 	Data Transformation; Summary Statistics	mean
-14	House Prices	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	4	Which variable has the highest missingness? Report its name and its number of missing values.	Indexing, Summary Statistics	name; n_missing
-15	House Prices	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	5	Regress "SalePrice" on "TotalSF" with linear regression. What is the value for the coefficient of "TotalSF"? Is the coefficient statistically significant? What is the intercept value?	Regression Analysis; Persistence	totalsf_coef; totalsf_significant_yes_or_no; intercept
-16	House Prices	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	6	Regress "SalePrice" on "TotalSF", "LotShape", and "GarageArea" with linear regression. Report the train R-squared and the test RMSE.	Regression Analysis; Persistence	r2; rmse
-17	House Prices	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	7	Is there a statistically significant difference in "SalePrice" between the values of "LotShape"?	Statistical Testing	yes_or_no
-18	House Prices	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	8	Compute the correlation between "SalePrice" and "TotalSF". Report the correlation as well as the p-value.	Statistical Testing; Persistence	corr; pval
-19	House Prices	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	9	Is the distribution of "SalePrice" normal?	Statistical Testing	yes_or_no
-20	House Prices	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	10	Engineer a new variable, "PriceRange", with values "Low", "Medium", and "High", based on "SalePrice". "Low" is defined as having "SalePrice" below 100,000. "Medium" is defined as having "SalePrice" at least 100,000 but below 300,000. "High" is defined as having "SalePrice" at least 300,000. Find the average "SalePrice" among houses considered in the "Medium" price range.	Data Transformation; Summary Statistics	mean
-21	House Prices	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	11	Report the value counts of "PriceRange". 	Summary Statistics; Persistence	n_low; n_medium; n_high
-22	House Prices	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	12	Regress "SalePrice" on "TotalSF", "GarageYrBlt", and "GarageArea" with linear regression. Report the train R-squared and the test RMSE.	Regression Analysis; Persistence	r2; rmse
-23	Wine	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	1	Compute the mean and standard deviation for "alcohol".	Summary Statistics	mean; std
-24	Wine	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	2	Compute the mean and standard deviation for "malic_acid".	Summary Statistics	mean; std
-25	Wine	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	3	What is the skew and kurthosis of "alcohol"?	Summary Statistics	skew; kurtosis
-26	Wine	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	4	Compute the correlation between "alcohol" and "malic_acid". 	Summary Statistics	corr
-27	Wine	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	5	Fit a logistic regression model to predict "wine_class" from "alcohol", "malic_acid", and "flavanoids". Report the test F1 score and accuracy.	Regression Analysis	f1; acc
-28	Wine	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	6	Engineer a new variable, "meaningless", that is defined as ("proline" - "alcohol" * "malic_acid"). Find its median.	Data Transformation; Summary Statistics	median
-29	Wine	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	7	What is the third largest value of "alcohol"?	Indexing	value
-30	Wine	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	8	How many of each "wine_class" class are there in the dataset?	Summary Statistics	class_0_count; class_1_count; class_2_count 
-31	Wine	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	9	Regress "meaningless" on "flavanoids" with linear regression. Report the test R-squared.	Regression Analysis; Persistence	r2
-32	Breast Cancer	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	1	Find the average and standard deviation of the mean radius.	Summary Statistics	mean; std
-33	Breast Cancer	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	2	Compute the correlation between mean radius and the breast cancer indicator variable.	Statistical Testing	corr
-34	Breast Cancer	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	3	Is there a difference in mean radius between those with and those without breast cancer?	Statistical Testing	yes_or_no
-35	Breast Cancer	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	4	Is there a difference in area error between those with and those without breast cancer?	Statistical Testing	yes_or_no
-36	Breast Cancer	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	5	Min-max scale mean radius. Then, regress with linear regression the breast cancer indicator on mean radius, and report the coefficient for mean radius.	Data Transformation; Regression Analysis	coef
-37	Breast Cancer	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	6	Standard scale mean area. Then, regress with linear regression the breast cancer indicator on mean area, and report the coefficient for mean area.	Data Transformation; Regression Analysis	coef
-38	Breast Cancer	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	7	Find the difference in the mean area between those with and those without breast cancer.	Summary Statistics	difference
-39	Breast Cancer	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	8	What is the fifth largest mean radius value?	Indexing	value
-40	Breast Cancer	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	9	Compute the interquartile range of "mean radius". Identify outliers, based on 1.5 times the interquartile range. How many outliers are there?	Indexing	n_outliers
-41	Credit	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	1	What is the average income?	Summary Statistics	mean_income
-42	Credit	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	2	How many are married?	Summary Statistics	n_married
-43	Credit	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	3	What is the average number of cards?	Summary Statistics	mean
-44	Credit	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	4	Identify the five highest earners and the five lowest earners. What is the difference between the two groups' average ratings?	Indexing; Summary Statistics	difference
-45	Credit	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	5	How many ethnicities are in the dataset?	Summary Statistics	n_ethnicities
-46	Credit	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	6	Make a new variable, "income_categories", based on the income split into "low", "medium", and "high" levels. Define low as < 40. Define medium as at least 40 but less than 80. Define high as at least 80. How many high income earners are there?	Summary Statistics	n_high
-47	Credit	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	7	Check if the distribution of age adheres to the Gaussian distribution.	Summary Statistics	yes_or_no
-48	Credit	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	8	Regress "Limit" on "income_categories" with linear regression. What is the test R-squared?	Regression Analysis; Persistence	r2
-49	Credit	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	9	Regress "Limit" on "income_categories" and "Age" with linear regression. What is the coefficient for "Age"?	Regression Analysis; Persistence	coef
-50	Credit	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	10	Is there a statistically significant difference in means in "Limit" between "Student" levels?	Statistical Testing	yes_or_no
-51	Abalone	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	1	How many different classes of "Sex" are there?	Summary Statistics	n_sex_classes
-52	Abalone	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	2	Find the mean diameter.	Summary Statistics	mean
-53	Abalone	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	3	Compute the variance of shucked weight.	Summary Statistics	variance
-54	Abalone	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	4	What is the average diameter for those with "Sex" set to "M"?	Summary Statistics; Indexing	mean
-55	Abalone	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	5	Find the correlation between diameter and rings. Report the correlation and the p-value.	Statistical Testing	corr; pval
-56	Abalone	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	6	Is the diameter normally distributed?	Statistical Testing	yes_or_no
-57	Abalone	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	7	Is there a statistically significant difference in average "Diameter" between the "Sex" categories?	Statistical Testing	yes_or_no
-58	Abalone	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	8	Create a new variable, "Area", which is the product of "Length" and "Height". Report its median.	Data Transformation; Summary Statistics	median
-59	Abalone	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	9	Based on "Area", create a new variable named "LargeArea" with category "Yes" if "Area" is at least the median, "No" otherwise. Find the number of examples with "Yes" for "LargeArea".	Data Transformation; Summary Statistics; Persistence	n_yes
-60	Abalone	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	10	Fit a linear regression model to predict shucked weight with "LargeArea" and "Area". Report the test mean absolute error.	Regression Analysis; Persistence	mae
-61	Abalone	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	11	Are "LargeArea" and "Sex" statistically independent?	Statistical Testing; Persistence	yes_or_no
-62	Baseball	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	1	What is the mean batting average? What is the standard deviation?	Summary Statistics	mean; std
-63	Baseball	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	2	Report whether or not batting average adheres to a normal distribution.	Summary Statistics	yes_or_no
-64	Baseball	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	3	Is batting average correlated with salary?	Statistical Testing	yes_or_no
-65	Baseball	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	4	Min-max scale the salary. Report the new mean and standard deviation of the salary.	Data Transformation; Summary Statistics	mean; std
-66	Baseball	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	5	Use linear regression to regress salary on batting_average. What is the test RMSE of the model?	Regression Analysis; Persistence	rmse
-67	Baseball	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	6	Compute the interquartile range of batting_average. Identify outliers, based on 1.5 times the interquartile range. How many outliers are there?	Indexing	n_outliers
-68	Baseball	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	7	Make a new variable called "hits_and_runs" that is the sum of number of runs and number of hits. What is the mean and kurtosis of this new variable?	Data Transformation; Summary Statistics	mean; kurtosis
-69	Baseball	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	8	Standard scale "hits_and_runs". Find the median.	Data Transformation; Summary Statistics; Persistence	median
-70	Baseball	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	9	Among batting_average, on_base_percentage, number_of_runs, and number_of_hits, which variable is most highly correlated with salary_in_thousands_of_dollars?	Summary Statistics; Indexing	variable
-71	Baseball	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	10	Undo all prior data transformations. What's the average salary?	Data Transformation; Summary Statistics	mean
-72	Auto MPG	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	1	What's the average miles per gallon ("mpg")?	Summary Statistics; Persistence	mean
-73	Auto MPG	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	2	Find the average miles per gallon for cars of model year 70.	Indexing; Summary Statistics	mean
-74	Auto MPG	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	3	How many cars are of model year 75 or later? What's the mean horsepower of these cars?	Indexing	n_rows; mean
-75	Auto MPG	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	4	Find the correlation between acceleration and weight. Report both the correlation coefficient and the p-value.	Statistical Testing	corr; pval
-76	Auto MPG	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	5	Make a linear regression model predicting the acceleration from weight. What is the coefficient for weight? What is the model's train R-squared?	Regression Analysis	coef; r2
-77	Auto MPG	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	6	Create a new variable named "heavy" with categories "heavy" and "light". An observation is "heavy" if its weight is at least 3200 and "light" otherwise. How many heavy observations are there?	Data Transformation	n_examples
-78	Auto MPG	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	7	Is there a statistically significant difference in average miles per gallon between heavy and light vehicles?	Statistical Testing; Persistence	yes_or_no
-79	Auto MPG	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	8	Make a new variable, "powerful", with category "powerful" for those with "cylinder" of 8, and category "weak" for those with "cylinder" less than 8. How many "weak" vehicles are there?	Data Transformation	n_examples
-80	Auto MPG	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	9	Are the variables "powerful" and "heavy" statistically independent?	Statistical Testing; Persistence	yes_or_no
-81	Auto MPG	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	10	Is model year normally distributed?	Statistical Testing	yes_or_no
-82	Healthcare	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	1	How many different blood types are there?	Summary Statistics	n_types
-83	Healthcare	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	2	How many different insurance providers are there?	Summary Statistics	n_insurance_providers
-84	Healthcare	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	3	Which insurance provider is associated with the highest average billing amount?	Summary Statistics; Indexing	insurance_provider
-85	Healthcare	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	4	Is there a statistically significant difference in average billing amount between males and females?	Statistical Testing	yes_or_no
-86	Healthcare	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	5	Use linear regression to predict billing amount from gender and insurance provider. What is the train R-squared of the model? What about the test RMSE?	Regression Analysis	r2; rmse
-87	Healthcare	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	6	Are the variables blood type and gender statistically independent?	Statistical Testing	yes_or_no
-88	Healthcare	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	7	Regress billing amount on age with linear regression. What is the coefficient associated with age? What is the intercept value?	Regression Analysis	coef; intercept
-89	Healthcare	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	8	Min-max scale the billing amount. What is the variance of the billing amount?	Data Transformation; Summary Statistics	variance
-90	Healthcare	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	9	What is the average billing amount?	Summary Statistics; Persistence	mean
-91	Healthcare	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	10	Which medical condition is associated with the highest billing amount? What is the average?	Summary Statistics; Indexing; Persistence	medical_condition; mean
-92	Iris	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	1	Compute the mean and median of "SepalLengthCm".	Summary Statistics	mean; median
-93	Iris	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	2	Is the distribution of "SepalLengthCm" normal?	Statistical Testing	yes_or_no
-94	Iris	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	3	How many different species categories are there?	Summary Statistics	n_species
-95	Iris	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	4	What is the mean "SepalLengthCm" for species "Iris-setosa"?	Summary Statistics; Indexing	mean
-96	Iris	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	5	Find the correlation between "PetalWidthCm" and "PetalLengthCm". What is the correlation coefficient, and what is the p-value?	Statistical Testing	corr; pval
-97	Iris	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	6	Make a new variable named "PetalAreaCm" that is defined as the product of "PetalWidthCm" and "PetalLengthCm". What is the mean and standard deviation of this new variable?	Data Transformation; Summary Statistics	mean; std
-98	Iris	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	7	Find the mean "PetalAreaCm" for species "Iris-setosa".	Summary Statistics; Indexing; Persistence	mean
-99	Iris	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	8	Is there a statistically significant correlation between "SepalLengthCm" and "PetalAreaCm"?	Statistical Testing; Persistence	yes_or_no
-100	Iris	Use sklearn train_test_split to split the dataset into 80/20 train/test. Use seed 42.	9	Engineer a new variable, "LargeArea", that is given label "large" if "PetalAreaCm" is at least its median and label "small" if "PetalAreaCm" is less than its median. Report the number of "large" observations.	Data Transformation; Persistence; Summary Statistics	n_large
+Question ID	Dataset	Question Order	Question	Category	Output Keywords
+1	Titanic	1	How many passengers survived?	Summary Statistics	n_passengers_survived
+2	Titanic	2	How many male and female passengers are there?	Summary Statistics	n_male; n_female
+3	Titanic	3	Find the mean, median, and standard deviation of "Age".	Summary Statistics	mean; median; std
+4	Titanic	4	How many different values of "Pclass" are there?	Summary Statistics	n_unique
+5	Titanic	5	What's the average "Fare" price?	Summary Statistics	mean
+6	Titanic	6	What is the correlation between "Pclass" and "Fare"?	Statistical Testing	corr
+7	Titanic	7	Is there a statistically significant difference in fare price between those who survived and those who did not? 	Statistical Testing	yes_or_no
+8	Titanic	8	Is there a statistically significant difference in fare price between men and women?	Statistical Testing	yes_or_no
+9	Titanic	9	Create a new categorical variable, "Age_categorical", with two levels: "young" and "old". Define "old" as those aged at least 50 years. Is there a statistically significant difference in fare price between young and old passengers?	Data Transformation; Statistical Testing	yes_or_no
+10	Titanic	10	Use logistic regression to predict survival using "Pclass", "Age_categorical", and "Fare". Report the test AUROC score.	Regression Analysis; Persistence	auroc
+11	House Prices	1	Compute the average "SalePrice" along with the standard deviation.	Summary Statistics	mean; std
+12	House Prices	2	Create a new variable, "TotalSF", which is defined as the sum of "1stFlrSF" and "2ndFlrSF". Find this new variable's mean.	Data Transformation; Summary Statistics	mean
+13	House Prices	3	Impute missing values of "GarageYrBlt" with the median. Report its new mean. 	Data Transformation; Summary Statistics	mean
+14	House Prices	4	Which variable has the highest missingness? Report its name and its number of missing values.	Indexing, Summary Statistics	name; n_missing
+15	House Prices	5	Regress "SalePrice" on "TotalSF" with linear regression. What is the value for the coefficient of "TotalSF"? Is the coefficient statistically significant? What is the intercept value?	Regression Analysis; Persistence	totalsf_coef; totalsf_significant_yes_or_no; intercept
+16	House Prices	6	Regress "SalePrice" on "TotalSF", "LotShape", and "GarageArea" with linear regression. Report the train R-squared and the test RMSE.	Regression Analysis; Persistence	r2; rmse
+17	House Prices	7	Is there a statistically significant difference in "SalePrice" between the values of "LotShape"?	Statistical Testing	yes_or_no
+18	House Prices	8	Compute the correlation between "SalePrice" and "TotalSF". Report the correlation as well as the p-value.	Statistical Testing; Persistence	corr; pval
+19	House Prices	9	Is the distribution of "SalePrice" normal?	Statistical Testing	yes_or_no
+20	House Prices	10	Engineer a new variable, "PriceRange", with values "Low", "Medium", and "High", based on "SalePrice". "Low" is defined as having "SalePrice" below 100,000. "Medium" is defined as having "SalePrice" at least 100,000 but below 300,000. "High" is defined as having "SalePrice" at least 300,000. Find the average "SalePrice" among houses considered in the "Medium" price range.	Data Transformation; Summary Statistics	mean
+21	House Prices	11	Report the value counts of "PriceRange". 	Summary Statistics; Persistence	n_low; n_medium; n_high
+22	House Prices	12	Regress "SalePrice" on "TotalSF", "GarageYrBlt", and "GarageArea" with linear regression. Report the train R-squared and the test RMSE.	Regression Analysis; Persistence	r2; rmse
+23	Wine	1	Compute the mean and standard deviation for "alcohol".	Summary Statistics	mean; std
+24	Wine	2	Compute the mean and standard deviation for "malic_acid".	Summary Statistics	mean; std
+25	Wine	3	What is the skew and kurthosis of "alcohol"?	Summary Statistics	skew; kurtosis
+26	Wine	4	Compute the correlation between "alcohol" and "malic_acid". 	Summary Statistics	corr
+27	Wine	5	Fit a logistic regression model to predict "wine_class" from "alcohol", "malic_acid", and "flavanoids". Report the test one-vs-one AUROC.	Regression Analysis	auroc
+28	Wine	6	Engineer a new variable, "meaningless", that is defined as ("proline" - "alcohol" * "malic_acid"). Find its median.	Data Transformation; Summary Statistics	median
+29	Wine	7	What is the third largest value of "alcohol"?	Indexing	value
+30	Wine	8	How many of each "wine_class" class are there in the dataset?	Summary Statistics	class_0_count; class_1_count; class_2_count 
+31	Wine	9	Regress "meaningless" on "flavanoids" with linear regression. Report the test R-squared.	Regression Analysis; Persistence	r2
+32	Breast Cancer	1	Find the average and standard deviation of the mean radius.	Summary Statistics	mean; std
+33	Breast Cancer	2	Compute the correlation between mean radius and the breast cancer indicator variable.	Statistical Testing	corr
+34	Breast Cancer	3	Is there a difference in mean radius between those with and those without breast cancer?	Statistical Testing	yes_or_no
+35	Breast Cancer	4	Is there a difference in area error between those with and those without breast cancer?	Statistical Testing	yes_or_no
+36	Breast Cancer	5	Min-max scale mean radius. Then, regress with linear regression the breast cancer indicator on mean radius, and report the coefficient for mean radius.	Data Transformation; Regression Analysis	coef
+37	Breast Cancer	6	Standard scale mean area. Then, regress with linear regression the breast cancer indicator on mean area, and report the coefficient for mean area.	Data Transformation; Regression Analysis	coef
+38	Breast Cancer	7	Find the difference in the mean area between those with and those without breast cancer.	Summary Statistics	difference
+39	Breast Cancer	8	What is the fifth largest mean radius value?	Indexing	value
+40	Breast Cancer	9	Compute the interquartile range of "mean radius". Identify outliers, based on 1.5 times the interquartile range. How many outliers are there?	Indexing	n_outliers
+41	Credit	1	What is the average income?	Summary Statistics	mean_income
+42	Credit	2	How many are married?	Summary Statistics	n_married
+43	Credit	3	What is the average number of cards?	Summary Statistics	mean
+44	Credit	4	Identify the five highest earners and the five lowest earners. What is the difference between the two groups' average ratings?	Indexing; Summary Statistics	difference
+45	Credit	5	How many ethnicities are in the dataset?	Summary Statistics	n_ethnicities
+46	Credit	6	Make a new variable, "income_categories", based on the income split into "low", "medium", and "high" levels. Define low as < 40. Define medium as at least 40 but less than 80. Define high as at least 80. How many high income earners are there?	Summary Statistics	n_high
+47	Credit	7	Does average number of cards differ significantly between the categories of "income_categories"?	Summary Statistics; Persistence	yes_or_no
+48	Credit	8	Regress "Limit" on "income_categories" with linear regression. What is the test R-squared?	Regression Analysis; Persistence	r2
+49	Credit	9	Regress "Limit" on "income_categories" and "Age" with linear regression. What is the coefficient for "Age"?	Regression Analysis; Persistence	coef
+50	Credit	10	Is there a statistically significant difference in means in "Limit" between "Student" levels?	Statistical Testing	yes_or_no
+51	Abalone	1	How many different classes of "Sex" are there?	Summary Statistics	n_sex_classes
+52	Abalone	2	Find the mean diameter.	Summary Statistics	mean
+53	Abalone	3	Compute the variance of shucked weight.	Summary Statistics	variance
+54	Abalone	4	What is the average diameter for those with "Sex" set to "M"?	Summary Statistics; Indexing	mean
+55	Abalone	5	Find the correlation between diameter and rings. Report the correlation and the p-value.	Statistical Testing	corr; pval
+56	Abalone	6	Is the diameter normally distributed?	Statistical Testing	yes_or_no
+57	Abalone	7	Is there a statistically significant difference in average "Diameter" between the "Sex" categories?	Statistical Testing	yes_or_no
+58	Abalone	8	Create a new variable, "Area", which is the product of "Length" and "Height". Report its median.	Data Transformation; Summary Statistics	median
+59	Abalone	9	Based on "Area", create a new variable named "LargeArea" with category "Yes" if "Area" is at least 0.0775, "No" otherwise. Find the number of examples with "Yes" for "LargeArea".	Data Transformation; Summary Statistics; Persistence	n_yes
+60	Abalone	10	Fit a linear regression model to predict shucked weight with "LargeArea" and "Area". Report the test mean absolute error.	Regression Analysis; Persistence	mae
+61	Abalone	11	Are "LargeArea" and "Sex" statistically independent?	Statistical Testing; Persistence	yes_or_no
+62	Baseball	1	What is the mean batting average? What is the standard deviation?	Summary Statistics	mean; std
+63	Baseball	2	Report whether or not batting average adheres to a normal distribution.	Summary Statistics	yes_or_no
+64	Baseball	3	Is batting average significantly correlated with salary?	Statistical Testing	yes_or_no
+65	Baseball	4	Min-max scale the salary. Report the new mean and standard deviation of the salary.	Data Transformation; Summary Statistics	mean; std
+66	Baseball	5	Use linear regression to regress salary on batting_average. What is the test RMSE of the model?	Regression Analysis; Persistence	rmse
+67	Baseball	6	Compute the interquartile range of batting_average. Identify outliers, based on 1.5 times the interquartile range. How many outliers are there?	Indexing	n_outliers
+68	Baseball	7	Make a new variable called "hits_and_runs" that is the sum of number of runs and number of hits. What is the mean and kurtosis of this new variable?	Data Transformation; Summary Statistics	mean; kurtosis
+69	Baseball	8	Standard scale "hits_and_runs". Find the median.	Data Transformation; Summary Statistics; Persistence	median
+70	Baseball	9	Among batting_average, on_base_percentage, number_of_runs, and number_of_hits, which variable is most highly correlated with salary_in_thousands_of_dollars?	Summary Statistics; Indexing; Persistence	variable
+71	Baseball	10	Undo all prior data transformations. What's the average salary?	Data Transformation; Summary Statistics	mean
+72	Auto MPG	1	What's the average miles per gallon ("mpg")?	Summary Statistics; Persistence	mean
+73	Auto MPG	2	Find the average miles per gallon for cars of model year 70.	Indexing; Summary Statistics	mean
+74	Auto MPG	3	How many cars are of model year 75 or later? What's the mean horsepower of these cars?	Indexing	n_rows; mean
+75	Auto MPG	4	Find the correlation between acceleration and weight. Report both the correlation coefficient and the p-value.	Statistical Testing	corr; pval
+76	Auto MPG	5	Make a linear regression model predicting the acceleration from weight. What is the coefficient for weight? What is the model's train R-squared?	Regression Analysis	coef; r2
+77	Auto MPG	6	Create a new variable named "heavy" with categories "heavy" and "light". An observation is "heavy" if its weight is at least 3200 and "light" otherwise. How many heavy observations are there?	Data Transformation	n_examples
+78	Auto MPG	7	Is there a statistically significant difference in average miles per gallon between heavy and light vehicles?	Statistical Testing; Persistence	yes_or_no
+79	Auto MPG	8	Make a new variable, "powerful", with category "powerful" for those with "cylinder" of 8, and category "weak" for those with "cylinder" less than 8. How many "weak" vehicles are there?	Data Transformation	n_examples
+80	Auto MPG	9	Are the variables "powerful" and "heavy" statistically independent?	Statistical Testing; Persistence	yes_or_no
+81	Auto MPG	10	Is model year normally distributed?	Statistical Testing	yes_or_no
+82	Healthcare	1	How many different blood types are there?	Summary Statistics	n_types
+83	Healthcare	2	How many different insurance providers are there?	Summary Statistics	n_insurance_providers
+84	Healthcare	3	Which insurance provider is associated with the highest average billing amount?	Summary Statistics; Indexing	insurance_provider
+85	Healthcare	4	Is there a statistically significant difference in average billing amount between males and females?	Statistical Testing	yes_or_no
+86	Healthcare	5	Use linear regression to predict billing amount from gender and insurance provider. What is the train R-squared of the model? What about the test RMSE?	Regression Analysis	r2; rmse
+87	Healthcare	6	Are the variables blood type and gender statistically independent?	Statistical Testing	yes_or_no
+88	Healthcare	7	Regress billing amount on age with linear regression. What is the coefficient associated with age? What is the intercept value?	Regression Analysis	coef; intercept
+89	Healthcare	8	Min-max scale the billing amount. What is the variance of the billing amount?	Data Transformation; Summary Statistics	variance
+90	Healthcare	9	What is the average billing amount?	Summary Statistics; Persistence	mean
+91	Healthcare	10	Which medical condition is associated with the highest billing amount? What is the average?	Summary Statistics; Indexing; Persistence	medical_condition; mean
+92	Iris	1	Compute the mean and median of "SepalLengthCm".	Summary Statistics	mean; median
+93	Iris	2	What is the tenth largest "SepalLengthCm" value?	Indexing	value
+94	Iris	3	How many different species categories are there?	Summary Statistics	n_species
+95	Iris	4	What is the mean "SepalLengthCm" for species "Iris-setosa"?	Summary Statistics; Indexing	mean
+96	Iris	5	Find the correlation between "PetalWidthCm" and "PetalLengthCm". What is the correlation coefficient, and what is the p-value?	Statistical Testing	corr; pval
+97	Iris	6	Make a new variable named "PetalAreaCm" that is defined as the product of "PetalWidthCm" and "PetalLengthCm". What is the mean and standard deviation of this new variable?	Data Transformation; Summary Statistics	mean; std
+98	Iris	7	Find the mean "PetalAreaCm" for species "Iris-setosa".	Summary Statistics; Indexing; Persistence	mean
+99	Iris	8	Is there a statistically significant correlation between "SepalLengthCm" and "PetalAreaCm"?	Statistical Testing; Persistence	yes_or_no
+100	Iris	9	Engineer a new variable, "LargeArea", that is given label "large" if "PetalAreaCm" is at least its median and label "small" if "PetalAreaCm" is less than its median. Report the number of "large" observations.	Data Transformation; Persistence; Summary Statistics	n_large

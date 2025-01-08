@@ -1,12 +1,9 @@
 from pathlib import Path
 from sklearn.model_selection import train_test_split
 import pandas as pd
-from scipy.stats import pearsonr
-from scipy.stats import shapiro
-from scipy.stats import f_oneway
+import scipy.stats as stats
 import statsmodels.formula.api as smf
 from sklearn.metrics import mean_absolute_error
-from scipy.stats import chi2_contingency
 
 
 datasets_dir = Path(__file__).resolve().parent.parent / "datasets"
@@ -23,6 +20,7 @@ del df_train, df_test
 def q1():
     keyword = "n_sex_classes"
     answer = len(df["Sex"].unique())
+    answer = round(answer, 3)
     return f"{keyword}={answer:.3f}"
 
 
@@ -30,6 +28,7 @@ def q1():
 def q2():
     keyword = "mean"
     answer = df["Diameter"].mean()
+    answer = round(answer, 3)
     return f"{keyword}={answer:.3f}"
 
 
@@ -37,6 +36,7 @@ def q2():
 def q3():
     keyword = "variance"
     answer = df["Shucked weight"].var()
+    answer = round(answer, 3)
     return f"{keyword}={answer:.3f}"
 
 
@@ -44,6 +44,7 @@ def q3():
 def q4():
     keyword = "mean"
     answer = df[df["Sex"] == "M"]["Diameter"].mean()
+    answer = round(answer, 3)
     return f"{keyword}={answer:.3f}"
 
 
@@ -51,27 +52,48 @@ def q4():
 def q5():
     keyword1 = "corr"
     keyword2 = "pval"
-    correlation, p_value = pearsonr(df["Diameter"], df["Rings"])
+    correlation, p_value = stats.pearsonr(df["Diameter"], df["Rings"])
+    correlation = round(correlation, 3)
+    p_value = round(p_value, 3)
     return f"{keyword1}={correlation:.3f}, {keyword2}={p_value:.3f}"
 
 
 # Question 6 - Is the diameter normally distributed?
 def q6():
     keyword = "yes_or_no"
-    stat, p_value_normality = shapiro(df["Diameter"])
-    answer = "no" if (p_value_normality < 0.05) else "yes"
+    _, p_value_normality = stats.shapiro(df["Diameter"])
+
+    # check other methods so that this assessment is flexible to method choice
+    _, p_value_k2 = stats.kstest(df["Diameter"], "norm")
+    _, p_value_normaltest = stats.normaltest(df["Diameter"])
+
+    assert (
+        (p_value_normality > 0.05) == (p_value_k2 > 0.05) == (p_value_normaltest > 0.05)
+    )
+
+    answer = "no" if (p_value_normality <= 0.05) else "yes"
     return f"{keyword}={answer}"
 
 
 # Question 7 - Is there a statistically significant difference in average "Diameter" between the "Sex" categories?
 def q7():
     keyword = "yes_or_no"
-    anova_stat, anova_p_value = f_oneway(
+    _, anova_p_value = stats.f_oneway(
         df[df["Sex"] == "M"]["Diameter"],
         df[df["Sex"] == "F"]["Diameter"],
         df[df["Sex"] == "I"]["Diameter"],
     )
-    answer = "yes" if anova_p_value < 0.05 else "no"
+
+    # check other methods so that this assessment is flexible to method choice
+    _, p_value_k2 = stats.kruskal(
+        df[df["Sex"] == "M"]["Diameter"],
+        df[df["Sex"] == "F"]["Diameter"],
+        df[df["Sex"] == "I"]["Diameter"],
+    )
+
+    assert (anova_p_value <= 0.05) == (p_value_k2 <= 0.05)
+
+    answer = "yes" if anova_p_value <= 0.05 else "no"
     return f"{keyword}={answer}"
 
 
@@ -81,19 +103,17 @@ def q8():
     keyword = "median"
     df["Area"] = df["Length"] * df["Height"]
     answer = df["Area"].median()
+    answer = round(answer, 3)
     return f"{keyword}={answer:.3f}"
 
 
-# Question 9 - Based on "Area", create a new variable named "LargeArea" with category "Yes" if "Area" is at least the median, "No" otherwise. Find the number of examples with "Yes" for "LargeArea".
+# Question 9 - Based on "Area", create a new variable named "LargeArea" with category "Yes" if "Area" is at least 0.0775, "No" otherwise. Find the number of examples with "Yes" for "LargeArea".
 def q9():
     global df
-
     keyword = "n_yes"
-
-    median_area = df["Area"].median()
-    df["LargeArea"] = df["Area"].apply(lambda x: "Yes" if x >= median_area else "No")
-
+    df["LargeArea"] = df["Area"].apply(lambda x: "Yes" if x >= 0.0775 else "No")
     answer = df[df["LargeArea"] == "Yes"].shape[0]
+    answer = round(answer, 3)
     return f"{keyword}={answer:.3f}"
 
 
@@ -114,6 +134,7 @@ def q10():
 
     # Calculate the test mean absolute error
     test_mae = mean_absolute_error(df_test["Shucked weight"], test_predictions)
+    test_mae = round(test_mae, 3)
     return f"{keyword}={test_mae:.3f}"
 
 
@@ -125,9 +146,9 @@ def q11():
     contingency_table = pd.crosstab(df["LargeArea"], df["Sex"])
 
     # Perform the chi-squared test for independence
-    chi2_stat, p_value_independence, dof, expected = chi2_contingency(contingency_table)
+    _, p_value_independence, _, _ = stats.chi2_contingency(contingency_table)
 
-    answer = "no" if p_value_independence < 0.05 else "yes"
+    answer = "no" if p_value_independence <= 0.05 else "yes"
     return f"{keyword}={answer}"
 
 

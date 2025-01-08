@@ -1,9 +1,9 @@
 from pathlib import Path
 from sklearn.model_selection import train_test_split
 import pandas as pd
-from scipy.stats import ttest_ind
+import scipy.stats as stats
 import statsmodels.api as sm
-from sklearn.metrics import f1_score
+from sklearn.metrics import roc_auc_score
 import statsmodels.formula.api as smf
 
 datasets_dir = Path(__file__).resolve().parent.parent / "datasets"
@@ -20,6 +20,9 @@ del df_train, df_test
 def q1():
     keyword = "n_passengers_survived"
     answer = sum(df["Survived"])
+
+    answer = round(answer, 3)
+
     return f"{keyword}={answer:.3f}"
 
 
@@ -29,6 +32,10 @@ def q2():
     keyword2 = "n_female"
     n_male = sum(df["Sex"] == "male")
     n_female = sum(df["Sex"] == "female")
+
+    n_male = round(n_male, 3)
+    n_female = round(n_female, 3)
+
     return f"{keyword1}={n_male:.3f}, {keyword2}={n_female:.3f}"
 
 
@@ -42,6 +49,10 @@ def q3():
     age_median = df["Age"].median()
     age_std = df["Age"].std()
 
+    age_mean = round(age_mean, 3)
+    age_median = round(age_median, 3)
+    age_std = round(age_std, 3)
+
     return f"{keyword1}={age_mean:.3f}, {keyword2}={age_median:.3f}, {keyword3}={age_std:.3f}"
 
 
@@ -49,6 +60,9 @@ def q3():
 def q4():
     keyword = "n_unique"
     num_vals = len(df["Pclass"].unique())
+
+    num_vals = round(num_vals, 3)
+
     return f"{keyword}={num_vals:.3f}"
 
 
@@ -56,6 +70,9 @@ def q4():
 def q5():
     keyword = "mean"
     ave_fare = df["Fare"].mean()
+
+    ave_fare = round(ave_fare, 3)
+
     return f"{keyword}={ave_fare:.3f}"
 
 
@@ -63,6 +80,9 @@ def q5():
 def q6():
     keyword = "corr"
     corr = df["Pclass"].corr(df["Fare"])
+
+    corr = round(corr, 3)
+
     return f"{keyword}={corr:.3f}"
 
 
@@ -75,7 +95,13 @@ def q7():
     Dead_fare = df[df["Survived"] == 0]["Fare"]
 
     # Welch's t-test
-    t_stat, p_value = ttest_ind(Survived_fare, Dead_fare, equal_var=False)
+    _, p_value = stats.ttest_ind(Survived_fare, Dead_fare, equal_var=False)
+
+    # consider other methods to allow flexible method choice
+    pval_student = stats.ttest_ind(Survived_fare, Dead_fare, equal_var=True)[1]
+    pval_mannwhitney = stats.mannwhitneyu(Survived_fare, Dead_fare)[1]
+
+    assert (p_value > 0.05) == (pval_student > 0.05) == (pval_mannwhitney > 0.05)
 
     answer = "yes" if (p_value <= 0.05) else "no"
     return f"{keyword}={answer}"
@@ -90,7 +116,13 @@ def q8():
     women_fare = df[df["Sex"] == "female"]["Fare"]
 
     # Welch's t-test
-    t_stat, p_value = ttest_ind(men_fare, women_fare, equal_var=False)
+    _, p_value = stats.ttest_ind(men_fare, women_fare, equal_var=False)
+
+    # consider other methods to allow flexible method choice
+    pval_student = stats.ttest_ind(men_fare, women_fare, equal_var=True)[1]
+    pval_mannwhitney = stats.mannwhitneyu(men_fare, women_fare)[1]
+
+    assert (p_value > 0.05) == (pval_student > 0.05) == (pval_mannwhitney > 0.05)
 
     answer = "yes" if (p_value <= 0.05) else "no"
 
@@ -110,17 +142,24 @@ def q9():
     young_fare = df.loc[df["Age_categorical"] == "young"]["Fare"]
     old_fare = df.loc[df["Age_categorical"] == "old"]["Fare"]
 
-    # Step 3: Perform a t-test to determine if there is a significant difference
-    t_stat, p_value = ttest_ind(young_fare.dropna(), old_fare.dropna())
+    _, p_value = stats.ttest_ind(young_fare.dropna(), old_fare.dropna())
+
+    # consider other methods to allow flexible method choice
+    pval_student = stats.ttest_ind(
+        young_fare.dropna(), old_fare.dropna(), equal_var=True
+    )[1]
+    pval_mannwhitney = stats.mannwhitneyu(young_fare.dropna(), old_fare.dropna())[1]
+
+    assert (p_value > 0.05) == (pval_student > 0.05) == (pval_mannwhitney > 0.05)
 
     answer = "yes" if (p_value <= 0.05) else "no"
 
     return f"{keyword}={answer}"
 
 
-# Question 10 - Use logistic regression to predict survival using "Pclass", "Age_categorical", and "Fare". Report the test F1 score.
+# Question 10 - Use logistic regression to predict survival using "Pclass", "Age_categorical", and "Fare". Report the test AUROC score.
 def q10():
-    keyword = "f1"
+    keyword = "auroc"
 
     df_train = df.loc[df_train_idx]
     df_test = df.loc[df_test_idx]
@@ -135,12 +174,12 @@ def q10():
     # Make predictions on the test set
     y_test = df_test["Survived"]
     y_pred_proba = logit_model.predict(df_test)
-    y_pred = (y_pred_proba >= 0.5).astype(int)
 
-    # Calculate the F1 score
-    f1 = f1_score(y_test, y_pred)
+    # Calculate the AUROC score
+    auroc = roc_auc_score(y_test, y_pred_proba)
+    auroc = round(auroc, 3)
 
-    return f"{keyword}={f1:.3f}"
+    return f"{keyword}={auroc:.3f}"
 
 
 def get_labels():

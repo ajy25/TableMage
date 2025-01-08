@@ -19,20 +19,28 @@ def q1():
     keyword2 = "median"
     answer1 = df["SepalLengthCm"].mean()
     answer2 = df["SepalLengthCm"].median()
+
+    answer1 = round(answer1, 3)
+    answer2 = round(answer2, 3)
+
     return f"{keyword1}={answer1:.3f}, {keyword2}={answer2:.3f}"
 
 
-# Question 2 - Is the distribution of "SepalLengthCm" normal?
+# Question 2 - What is the tenth largest "SepalLengthCm" value?
 def q2():
-    keyword = "yes_or_no"
-    _, pval = stats.normaltest(df["SepalLengthCm"])
-    return f"{keyword}={'yes' if pval > 0.05 else 'no'}"
+    keyword = "value"
+    answer = df["SepalLengthCm"].nlargest(10).iloc[-1]
+    answer = round(answer, 3)
+    return f"{keyword}={answer:.3f}"
 
 
 # Question 3 - How many different species categories are there?
 def q3():
     keyword = "n_species"
     answer = df["Species"].nunique()
+
+    answer = round(answer, 3)
+
     return f"{keyword}={answer:.3f}"
 
 
@@ -40,6 +48,9 @@ def q3():
 def q4():
     keyword = "mean"
     answer = df[df["Species"] == "Iris-setosa"]["SepalLengthCm"].mean()
+
+    answer = round(answer, 3)
+
     return f"{keyword}={answer:.3f}"
 
 
@@ -48,6 +59,10 @@ def q5():
     keyword1 = "corr"
     keyword2 = "pval"
     corr, pval = stats.pearsonr(df["PetalWidthCm"], df["PetalLengthCm"])
+
+    corr = round(corr, 3)
+    pval = round(pval, 3)
+
     return f"{keyword1}={corr:.3f}, {keyword2}={pval:.3f}"
 
 
@@ -59,6 +74,10 @@ def q6():
     df["PetalAreaCm"] = df["PetalWidthCm"] * df["PetalLengthCm"]
     answer1 = df["PetalAreaCm"].mean()
     answer2 = df["PetalAreaCm"].std()
+
+    answer1 = round(answer1, 3)
+    answer2 = round(answer2, 3)
+
     return f"{keyword1}={answer1:.3f}, {keyword2}={answer2:.3f}"
 
 
@@ -83,6 +102,9 @@ def q9():
         lambda x: "large" if x >= df["PetalAreaCm"].median() else "small"
     )
     answer = df[df["LargeArea"] == "large"].shape[0]
+
+    answer = round(answer, 3)
+
     return f"{keyword}={answer:.3f}"
 
 

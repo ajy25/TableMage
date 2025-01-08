@@ -28,7 +28,10 @@ class _ImputeInput(BaseModel):
 
 @tooling_decorator
 def _impute_function(
-    vars: str, numeric_strategy: str, categorical_strategy: str, context: ToolingContext
+    context: ToolingContext,
+    vars: str,
+    numeric_strategy: str = "5nn",
+    categorical_strategy: str = "missing",
 ) -> str:
     context.add_thought(
         "I am going to impute missing values in the dataset using the following strategies: "
@@ -71,7 +74,9 @@ class _DropHighlyMissingVarsInput(BaseModel):
 
 @tooling_decorator
 def _drop_highly_missing_vars_function(
-    threshold: float, ignore_vars: str, context: ToolingContext
+    context: ToolingContext,
+    threshold: float = 0.2,
+    ignore_vars: str = "",
 ) -> str:
     threshold = float(threshold)
 
@@ -313,11 +318,13 @@ class _EngineerCategoricalFeatureInput(BaseModel):
         description="""\
 Specifies how the boundaries of the levels are defined.
 If True, levels are inclusive on the upper end of a threshold.
+
 For example, with thresholds = '0, 10', level_names = 'Low, Medium, High', \
-and leq = True, the levels are: \
-'Low (x <= 0), Medium (0 < x <= 10), High (x > 10)'.
+and leq = True, the levels are:
+Low (x <= 0), Medium (0 < x <= 10), High (x > 10).
+
 If leq = False, the levels are:
-'Low (x < 0), Medium (0 <= x < 10), High (x >= 10)'.
+Low (x < 0), Medium (0 <= x < 10), High (x >= 10).
 """
     )
 
@@ -386,10 +393,17 @@ def build_engineer_categorical_feature_tool(context: ToolingContext) -> Function
         description="""\
 Engineers a new categorical variable from a numeric variable. \
 The new variable is created based on specified thresholds.
-Example Call:
-{feature_name: 'new_feature', numeric_var: 'x1', level_names: 'Low, Medium, High', thresholds: '0, 10', leq: True}
-Example Functionality: Creates a new categorical variable \
-with levels 'Low (x <= 0), Medium (0 < x <= 10), High (x > 10)'.
+
+-- Example --
+Task: 
+Create a new categorical variable 'new_feature' from numeric variable 'x1' \
+with label 'High' if 'x1' is at least 10, 'Low' otherwise.
+
+Function Call:
+{feature_name: 'new_feature', numeric_var: 'x1', level_names: 'Low, High', thresholds: '10', leq: False}
+
+Functionality: 
+Creates a new categorical variable with levels 'Low' (x1 < 10) and 'High' (x1 >= 10).
 """,
         fn_schema=_EngineerCategoricalFeatureInput,
     )
@@ -425,7 +439,8 @@ def _force_binary_function(var: str, pos_label: str, context: ToolingContext) ->
     return (
         "The dataset has been transformed: "
         + f"Variable {var} forced to binary with positive label {pos_label}. "
-        + f"The new binary variable is named {new_var_name}."
+        + f"The new binary variable is named {new_var_name}. "
+        + f"The variable {var} has been removed from the dataset."
     )
 
 

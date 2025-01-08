@@ -19,6 +19,9 @@ del df_train, df_test
 def q1():
     keyword = "mean"
     answer = df["mpg"].mean()
+
+    answer = round(answer, 3)
+
     return f"{keyword}={answer:.3f}"
 
 
@@ -26,6 +29,9 @@ def q1():
 def q2():
     keyword = "mean"
     answer = df[df["modelyear"] == 70]["mpg"].mean()
+
+    answer = round(answer, 3)
+
     return f"{keyword}={answer:.3f}"
 
 
@@ -35,7 +41,11 @@ def q3():
     keyword2 = "mean"
     n_cars = df[df["modelyear"] >= 75].shape[0]
     mean_hp = df[df["modelyear"] >= 75]["horsepower"].mean()
-    return f"{keyword1}={n_cars}, {keyword2}={mean_hp:.3f}"
+
+    n_cars = round(n_cars, 3)
+    mean_hp = round(mean_hp, 3)
+
+    return f"{keyword1}={n_cars:.3f}, {keyword2}={mean_hp:.3f}"
 
 
 # Question 4 - Find the correlation between acceleration and weight. Report both the correlation coefficient and the p-value.
@@ -43,6 +53,10 @@ def q4():
     keyword1 = "corr"
     keyword2 = "pval"
     corr, pval = stats.pearsonr(df["acceleration"], df["weight"])
+
+    corr = round(corr, 3)
+    pval = round(pval, 3)
+
     return f"{keyword1}={corr:.3f}, {keyword2}={pval:.3f}"
 
 
@@ -66,6 +80,9 @@ def q5():
     model = sm.OLS(y_train, X_train).fit()
     coef = model.params["weight"]
     r2 = model.rsquared
+
+    coef = round(coef, 3)
+    r2 = round(r2, 3)
     return f"{keyword1}={coef:.3f}, {keyword2}={r2:.3f}"
 
 
@@ -75,7 +92,8 @@ def q6():
     keyword = "n_examples"
     df["heavy"] = np.where(df["weight"] >= 3200, "heavy", "light")
     n_heavy = df[df["heavy"] == "heavy"].shape[0]
-    return f"{keyword}={n_heavy}"
+    n_heavy = round(n_heavy, 3)
+    return f"{keyword}={n_heavy:.3f}"
 
 
 # Question 7 - Is there a statistically significant difference in average miles per gallon between heavy and light vehicles?
@@ -84,7 +102,30 @@ def q7():
     pval = stats.ttest_ind(
         df[df["heavy"] == "heavy"]["mpg"], df[df["heavy"] == "light"]["mpg"]
     ).pvalue
-    return f"{keyword}={'yes' if pval < 0.05 else 'no'}"
+
+    # check other methods to allow for more flexibility
+    pval_welch = stats.ttest_ind(
+        df[df["heavy"] == "heavy"]["mpg"],
+        df[df["heavy"] == "light"]["mpg"],
+        equal_var=False,
+    ).pvalue
+
+    pval_mannwhitneyu = stats.mannwhitneyu(
+        df[df["heavy"] == "heavy"]["mpg"], df[df["heavy"] == "light"]["mpg"]
+    ).pvalue
+
+    pval_yuen = stats.ttest_ind(
+        df[df["heavy"] == "heavy"]["mpg"], df[df["heavy"] == "light"]["mpg"], trim=0.2
+    ).pvalue
+
+    assert (
+        (pval <= 0.05)
+        == (pval_welch <= 0.05)
+        == (pval_mannwhitneyu <= 0.05)
+        == (pval_yuen <= 0.05)
+    )
+
+    return f"{keyword}={'yes' if pval <= 0.05 else 'no'}"
 
 
 # Question 8 - Make a new variable, "powerful", with category "powerful" for those with "cylinder" of 8, and category "weak" for those with "cylinder" less than 8. How many "weak" vehicles are there?
@@ -93,13 +134,20 @@ def q8():
     keyword = "n_examples"
     df["powerful"] = np.where(df["cylinders"] == 8, "powerful", "weak")
     n_weak = df[df["powerful"] == "weak"].shape[0]
-    return f"{keyword}={n_weak}"
+    n_weak = round(n_weak, 3)
+    return f"{keyword}={n_weak:.3f}"
 
 
 # Question 9 - Are the variables "powerful" and "heavy" statistically independent?
 def q9():
     keyword = "yes_or_no"
     pval = stats.chi2_contingency(pd.crosstab(df["powerful"], df["heavy"]))[1]
+
+    # check other methods to allow for more flexibility
+    pval_fisher = stats.fisher_exact(pd.crosstab(df["powerful"], df["heavy"]))[1]
+
+    assert (pval <= 0.05) == (pval_fisher <= 0.05)
+
     return f"{keyword}={'yes' if pval > 0.05 else 'no'}"
 
 
@@ -107,6 +155,13 @@ def q9():
 def q10():
     keyword = "yes_or_no"
     pval = stats.shapiro(df["modelyear"])[1]
+
+    # test other methods to allow for more flexibility
+    pval_kstest = stats.kstest(df["modelyear"], "norm")[1]
+    pval_normaltest = stats.normaltest(df["modelyear"])[1]
+
+    assert (pval > 0.05) == (pval_kstest > 0.05) == (pval_normaltest > 0.05)
+
     return f"{keyword}={'yes' if pval > 0.05 else 'no'}"
 
 

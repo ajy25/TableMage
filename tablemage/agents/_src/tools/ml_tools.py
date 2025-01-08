@@ -126,7 +126,6 @@ The available models are (in 'Model Name': Description format)...
 5. 'RF': Random forest regressor
 6. 'XGBoost': XGBoost regressor
 7. 'SVM': Support vector machine regressor with radial basis function kernel
-8. 'MLP': Multilayer perceptron regressor
 An example input (without the quotes) is: 'OLS, Lasso, RF'.
 """
     )
@@ -199,7 +198,6 @@ The available models are (in 'Model Name': Description format)...
 5. 'RF': Random forest classifier
 6. 'XGBoost': XGBoost classifier
 7. 'SVM': Support vector machine classifier with radial basis function kernel
-8. 'MLP': Multilayer perceptron classifier
 An example input (without the quotes) is: 'Logistic, RF, XGBoost'.
 """
     )

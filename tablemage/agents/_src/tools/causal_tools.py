@@ -14,10 +14,7 @@ class _CausalEffectEstimationInput(BaseModel):
     outcome: str = Field(description="The outcome variable.")
     confounders: str = Field(description="The confounding variables, comma delimited.")
     effect_type: Literal["ATT", "ATE"] = Field(
-        description="The type of effect to estimate. "
-        "Either 'ATT' or 'ATE'. "
-        "ATT: average treatment effect on the treated. "
-        "ATE: average treatment effect."
+        description="The type of effect to estimate. " "Either 'ATT' or 'ATE'."
     )
     method: Literal["ipw_estimator", "ipw_weighted_regression"] = Field(
         description="The method to use for estimation. "
@@ -29,13 +26,17 @@ class _CausalEffectEstimationInput(BaseModel):
 
 @tooling_decorator
 def _estimate_causal_effect_function(
+    context: ToolingContext,
     treatment: str,
     outcome: str,
     confounders: str,
-    effect_type: Literal["ATT", "ATE"],
-    method: Literal["ipw_estimator", "ipw_weighted_regression"],
-    context: ToolingContext,
+    effect_type: Literal["ATT", "ATE"] = "ATE",
+    method: Literal["ipw_estimator", "ipw_weighted_regression"] = "ipw_estimator",
 ) -> str:
+    # ensure binary treatment
+    if context.data_container.analyzer.df_all()[treatment].nunique() != 2:
+        raise ValueError("Treatment variable must be binary.")
+
     if method == "ipw_estimator":
         method_string = "inverse probability weighting (IPW) estimator"
     elif method == "ipw_weighted_regression":
@@ -77,8 +78,6 @@ def build_estimate_causal_effect_tool(context: ToolingContext):
         fn=partial(_estimate_causal_effect_function, context=context),
         name="estimate_causal_effect_function",
         description="Estimates the causal effect of a treatment on an outcome. "
-        "Adjusts for confounders. "
-        "Can estimate the average treatment effect on the treated (ATT) "
-        "or the average treatment effect (ATE). ",
+        "Adjusts for confounders. NOT FOR STATISTICAL TESTING.",
         fn_schema=_CausalEffectEstimationInput,
     )

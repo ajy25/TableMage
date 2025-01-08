@@ -1,4 +1,5 @@
 import pandas as pd
+from typing import Literal
 from .._src import (
     build_tablemage_analyzer,
     StorageManager,
@@ -9,7 +10,7 @@ from .._src import (
 )
 from ..._src.display.print_utils import suppress_logging
 from .._src.agents_src.single_agent import SingleAgent
-from .._src.agents_src.prompt.single_agent_system_prompt import SINGLE_SYSTEM_PROMPT
+from .._src.agents_src.prompt.single_agent_system_prompt import DEFAULT_SYSTEM_PROMPT
 from .._src.options import options
 
 
@@ -22,8 +23,10 @@ class ConversationalAgent:
         df_test: pd.DataFrame | None = None,
         test_size: float = 0.2,
         split_seed: int = 42,
-        system_prompt: str = SINGLE_SYSTEM_PROMPT,
+        system_prompt: str = DEFAULT_SYSTEM_PROMPT,
         react: bool = False,
+        memory_type: Literal["buffer", "vector"] = "vector",
+        memory_size: int = 3000,
         tool_rag: bool = True,
         tool_rag_top_k: int = 5,
         python_only: bool = False,
@@ -51,6 +54,12 @@ class ConversationalAgent:
         react: bool
             If True, the agent will employ the ReAct framework. Default is False.
 
+        memory_type : Literal["buffer", "vector"]
+            The type of memory to use. Default is "vector".
+
+        memory_size : int
+            The size of the memory to use. Token limit synonym. Default is 3000.
+
         tool_rag : bool
             If True, the RAG-based tooling is used. Default is True.
 
@@ -65,7 +74,6 @@ class ConversationalAgent:
             If True, only the tools are provided. Otherwise, the
             Python environment is also provided, ignoring RAG. Default is False.
         """
-
         self._data_container = DataContainer()
         self._data_container.set_analyzer(
             build_tablemage_analyzer(
@@ -87,17 +95,21 @@ class ConversationalAgent:
             canvas_queue=self._canvas_queue,
         )
         print_debug("IO initialized.")
-        print_debug("Initializing the Orchestrator.")
+        print_debug("Initializing the Agent.")
         self._single_agent = SingleAgent(
             llm=options.llm_build_function(),
             context=self._context,
             react=react,
-            memory="vector",
+            memory=memory_type,
+            memory_size=memory_size,
             tool_rag_top_k=tool_rag_top_k,
             tool_rag=tool_rag,
             system_prompt=system_prompt,
             python_only=python_only,
             tools_only=tools_only,
+        )
+        print_debug(
+            f"Agent initialized. Agent type: {self._single_agent.__class__.__name__}"
         )
 
     def chat(self, message: str) -> str:
@@ -108,28 +120,9 @@ class ConversationalAgent:
         message : str
             The message to send to the LLM.
 
-        which : Literal["multi", "single"]
-            If multi, the message is sent to the Orchestrator (multiple agent).
-            If single, the message is sent to a single agent.
-
         Returns
         -------
         str
             The response from the LLM.
         """
-        with suppress_logging():
-            output = self._single_agent.chat(message)
-        # ensure something is returned
-        if output is None or output == "" or output == "None":
-            raise ValueError(
-                "You didn't return anything. Please try again. "
-                "No need to repeat tool calls if you already have access to the results."
-            )
-        # check if output starts with "<function="
-        elif output.startswith("<function="):
-            raise ValueError(
-                "You didn't successfully use a tool. Please try again.\n"
-                f"This was the output I received from you: '{output}'.\n"
-                "Double check your structured outputs for calling tools/functions."
-            )
-        return output
+        return self._single_agent.chat(message)

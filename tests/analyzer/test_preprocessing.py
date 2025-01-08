@@ -42,7 +42,8 @@ def test_standard_scaling(setup_data):
 
     analyzer.scale(include_vars=scaled_vars, strategy="standardize")
 
-    analyzer_working_df_train = analyzer.datahandler().df_train()[scaled_vars]
+    analyzer_working_df_train = analyzer.df_train()[scaled_vars]
+    print(analyzer_working_df_train.shape)
 
     scaler = StandardScaler()
 
@@ -52,7 +53,8 @@ def test_standard_scaling(setup_data):
         atol=1e-5,
     )
 
-    analyzer_working_df_test = analyzer.datahandler().df_test()[scaled_vars]
+    analyzer_working_df_test = analyzer.df_test()[scaled_vars]
+    print(analyzer_working_df_test.shape)
 
     assert np.allclose(
         analyzer_working_df_test.to_numpy(),

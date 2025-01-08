@@ -616,11 +616,11 @@ def test_emitter_feature_selection(setup_data):
     emitter.select_predictors(["sepal_length_(cm)", "petal_length_(cm)"])
     assert np.allclose(
         emitter.emit_train_Xy()[0].to_numpy(),
-        df_iris_train[["sepal_length_(cm)", "petal_length_(cm)"]].to_numpy(),
+        df_iris_train[["sepal length (cm)", "petal length (cm)"]].to_numpy(),
     )
     assert np.allclose(
         emitter.emit_test_Xy()[0].to_numpy(),
-        df_iris_test[["sepal_length_(cm)", "petal_length_(cm)"]].to_numpy(),
+        df_iris_test[["sepal length (cm)", "petal length (cm)"]].to_numpy(),
     )
     assert np.allclose(
         emitter.emit_train_Xy()[1].to_numpy(), df_iris_train["target"].to_numpy()

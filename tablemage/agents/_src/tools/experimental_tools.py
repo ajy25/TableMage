@@ -83,19 +83,21 @@ def python_env_code_run_backend(
     dict
         Contains `result` (deserialized output), `stdout`, `stderr`, and `returncode`.
     """
-    # if "result" not in code:
-    #     raise ValueError(
-    #         "ERROR: You must save the output data structure to the variable `result`. "
-    #         "Your current code makes no reference to `result`. "
-    #         "Please try again."
-    #     )
-    # elif "result = " not in code:
-    #     raise ValueError(
-    #         "ERROR: You must save the output data structure to the variable `result`. "
-    #         "Your current code does not assign a value to `result`. "
-    #         "Please try again."
-    #     )
-
+    sklearn_error_raise_phrases = [
+        "MinMaxScaler",
+        "StandardScaler",
+        "OneHotEncoder",
+        "SimpleImputer",
+        "KNNImputer",
+    ]
+    if "sklearn" in code:
+        for phrase in sklearn_error_raise_phrases:
+            if phrase in code:
+                raise ValueError(
+                    "ERROR: You should not use scikit-learn transformers in this tool. "
+                    "Data transformations are not saved when using this tool. "
+                    "Data transformations should be performed with other tools."
+                )
     preamble = """\
 import pandas as pd
 import pickle
@@ -213,8 +215,8 @@ except Exception as e:
 
 @tooling_decorator
 def _python_env_code_run_function(
-    code: str,
     context: ToolingContext,
+    code: str,
 ) -> str:
     print_debug(
         "Executing Python code in a separate subprocess with preloaded DataFrames. "
@@ -308,13 +310,12 @@ DESCRIPTION:
 - Executes Python code.
 - A preloaded DataFrame, `df_all`, serves as the primary dataset for analysis. 
 - Optionally, you can work with `df_train` or `df_test` if explicitly required.
-- Save the output data structure to the variable `result`. \
-    Acceptable types for `result`: dictionary or DataFrame.
+- Save the output data structure to the variable `result`.
 
 IMPORTANT:
 - ONLY use this tool as a LAST RESORT. Most tasks can be accomplished using other tools.
 - Transformations to DataFrames (scaling, imputation, feature engineering) are not saved. \
-    Do not use this tool for data transformations.
+    DO NOT USE THIS TOOL FOR DATA TRANSFORMATIONS.
 
 EXAMPLES:
 1. `result = df_all.head()`

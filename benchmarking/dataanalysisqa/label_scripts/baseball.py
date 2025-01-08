@@ -22,6 +22,10 @@ def q1():
     keyword2 = "std"
     answer1 = df["batting_average"].mean()
     answer2 = df["batting_average"].std()
+
+    answer1 = round(answer1, 3)
+    answer2 = round(answer2, 3)
+
     return f"{keyword1}={answer1:.3f}, {keyword2}={answer2:.3f}"
 
 
@@ -29,16 +33,24 @@ def q1():
 def q2():
     keyword = "yes_or_no"
     _, pval = stats.normaltest(df["batting_average"])
+
+    # check other methods
+    _, pval_shapiro = stats.shapiro(df["batting_average"])
+    _, pval_k2 = stats.kstest(df["batting_average"], "norm")
+
+    assert (pval > 0.05) == (pval_shapiro > 0.05) == (pval_k2 > 0.05)
+
     return f"{keyword}={'yes' if pval > 0.05 else 'no'}"
 
 
-# Question 3 - Is batting average correlated with salary?
+# Question 3 - Is batting average significantly correlated with salary?
 def q3():
     keyword = "yes_or_no"
+    df_temp = df.dropna(subset=["batting_average", "salary_in_thousands_of_dollars"])
     corr, pval = stats.pearsonr(
-        df["batting_average"], df["salary_in_thousands_of_dollars"]
+        df_temp["batting_average"], df_temp["salary_in_thousands_of_dollars"]
     )
-    return f"{keyword}={'yes' if pval < 0.05 else 'no'}"
+    return f"{keyword}={'yes' if pval <= 0.05 else 'no'}"
 
 
 # Question 4 - Min-max scale the salary. Report the new mean and standard deviation of the salary.
@@ -62,6 +74,10 @@ def q4():
 
     answer1 = df["salary_in_thousands_of_dollars"].mean()
     answer2 = df["salary_in_thousands_of_dollars"].std()
+
+    answer1 = round(answer1, 3)
+    answer2 = round(answer2, 3)
+
     return f"{keyword1}={answer1:.3f}, {keyword2}={answer2:.3f}"
 
 
@@ -88,6 +104,9 @@ def q5():
     model = sm.OLS(y_train, X_train).fit()
     y_pred = model.predict(X_test)
     rmse = np.sqrt(((y_test - y_pred) ** 2).mean())
+
+    rmse = round(rmse, 3)
+
     return f"{keyword}={rmse:.3f}"
 
 
@@ -102,7 +121,10 @@ def q6():
     n_outliers = df[
         (df["batting_average"] < lower_bound) | (df["batting_average"] > upper_bound)
     ].shape[0]
-    return f"{keyword}={n_outliers}"
+
+    n_outliers = round(n_outliers, 3)
+
+    return f"{keyword}={n_outliers:.3f}"
 
 
 # Question 7 - Make a new variable called "hits_and_runs" that is the sum of number of runs and number of hits. What is the mean and kurtosis of this new variable?
@@ -113,6 +135,10 @@ def q7():
     df["hits_and_runs"] = df["number_of_runs"] + df["number_of_hits"]
     answer1 = df["hits_and_runs"].mean()
     answer2 = df["hits_and_runs"].kurtosis()
+
+    answer1 = round(answer1, 3)
+    answer2 = round(answer2, 3)
+
     return f"{keyword1}={answer1:.3f}, {keyword2}={answer2:.3f}"
 
 
@@ -129,12 +155,15 @@ def q8():
     df_test["hits_and_runs"] = scaler.transform(df_test[["hits_and_runs"]])
     df = pd.concat([df_train, df_test]).loc[df.index]
     answer = df["hits_and_runs"].median()
+
+    answer = round(answer, 3)
+
     return f"{keyword}={answer:.3f}"
 
 
 # Question 9 - Among batting_average, on_base_percentage, number_of_runs, and number_of_hits, which variable is most highly correlated with salary_in_thousands_of_dollars?
 def q9():
-    keyword = "most_correlated"
+    keyword = "variable"
     corr = df[
         [
             "batting_average",
@@ -159,6 +188,9 @@ def q10():
     keyword = "mean"
     df = pd.read_csv(datasets_dir / "baseball.csv")
     answer = df["salary_in_thousands_of_dollars"].mean()
+
+    answer = round(answer, 3)
+
     return f"{keyword}={answer:.3f}"
 
 

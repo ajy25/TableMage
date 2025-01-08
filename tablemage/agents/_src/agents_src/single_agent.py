@@ -4,6 +4,7 @@ from llama_index.core.agent import (
 )
 from llama_index.agent.openai import OpenAIAgent
 from llama_index.llms.openai import OpenAI
+from llama_index.llms.openai_like import OpenAILike
 from llama_index.core.llms.function_calling import FunctionCallingLLM
 from llama_index.core import VectorStoreIndex
 from llama_index.core.base.llms.types import ChatMessage, MessageRole
@@ -20,6 +21,7 @@ from llama_index.core import Settings
 from typing import Literal
 from pathlib import Path
 
+from ...._src.display.print_utils import suppress_logging
 from .._debug.logger import print_debug
 
 from ..tools.ml_tools import (
@@ -50,16 +52,13 @@ from ..tools.transform_tools import (
     build_impute_tool,
     build_scale_tool,
     build_onehot_encode_tool,
-    build_force_binary_tool,
     build_revert_to_original_tool,
-    build_load_state_tool,
-    build_save_state_tool,
 )
 from ..tools.experimental_tools import build_python_env_code_run_tool
 from ..tools.causal_tools import build_estimate_causal_effect_tool
 from ..tools.tooling_context import ToolingContext
 
-from .prompt.single_agent_system_prompt import SINGLE_SYSTEM_PROMPT
+from .prompt.single_agent_system_prompt import DEFAULT_SYSTEM_PROMPT
 
 
 io_path = Path(__file__).resolve().parent.parent / "io"
@@ -68,8 +67,9 @@ io_path = Path(__file__).resolve().parent.parent / "io"
 def build_agent(
     llm: FunctionCallingLLM,
     context: ToolingContext,
-    system_prompt: str = SINGLE_SYSTEM_PROMPT,
+    system_prompt: str = DEFAULT_SYSTEM_PROMPT,
     memory: Literal["buffer", "vector"] = "vector",
+    memory_size: int = 3000,
     tool_rag: bool = True,
     tool_rag_top_k: int = 5,
     react: bool = False,
@@ -91,6 +91,9 @@ def build_agent(
 
     memory : Literal["buffer", "vector"]
         Memory type to use. Default is "vector".
+
+    memory_size : int
+        Memory size (buffer token limit). Default is 3000.
 
     tool_rag : bool
         If True, uses RAG for tool retrieval. Default is True.
@@ -123,14 +126,15 @@ def build_agent(
     FunctionCallingAgent | ReActAgent
         Either a FunctionCallingAgent or a ReActAgent
     """
+
     if memory == "buffer":
-        memory_obj = ChatMemoryBuffer.from_defaults(token_limit=3000)
+        memory_obj = ChatMemoryBuffer.from_defaults(token_limit=memory_size)
 
     elif memory == "vector":
         vector_store, _ = context.storage_manager.setup_vector_store(
             path=io_path / "_vector_memory",
         )
-        buffer_memory = ChatMemoryBuffer.from_defaults(token_limit=3000)
+        buffer_memory = ChatMemoryBuffer.from_defaults(token_limit=memory_size)
         vector_memory = VectorMemory.from_defaults(
             vector_store=vector_store,
             embed_model=Settings.embed_model,
@@ -145,9 +149,11 @@ def build_agent(
         raise ValueError("The memory type must be either 'buffer' or 'vector'.")
 
     dataset_summary_tool = build_dataset_summary_tool(context)
+    summary_str = str(dataset_summary_tool.call())
+    print_debug(f"Dataset summary: {summary_str}")
     memory_obj.put(
         ChatMessage.from_str(
-            content="Dataset summary: " + str(dataset_summary_tool.call()),
+            content="Dataset summary: " + summary_str,
             role=MessageRole.SYSTEM,
         )
     )
@@ -181,7 +187,6 @@ def build_agent(
             build_impute_tool(context),
             build_scale_tool(context),
             build_onehot_encode_tool(context),
-            build_force_binary_tool(context),
             dataset_summary_tool,
         ]
 
@@ -228,7 +233,7 @@ def build_agent(
                 max_iterations=20,
             )
         else:
-            if isinstance(llm, OpenAI):
+            if isinstance(llm, OpenAI) and not isinstance(llm, OpenAILike):
                 agent = OpenAIAgent.from_tools(
                     llm=llm,
                     tool_retriever=tool_retriever,
@@ -255,7 +260,7 @@ def build_agent(
                 max_iterations=10,
             )
         else:
-            if isinstance(llm, OpenAI):
+            if isinstance(llm, OpenAI) and not isinstance(llm, OpenAILike):
                 agent = OpenAIAgent.from_tools(
                     llm=llm,
                     tools=tools + tools_to_persist,
@@ -282,9 +287,10 @@ class SingleAgent:
         context: ToolingContext,
         react: bool,
         memory: Literal["buffer", "vector"] = "vector",
+        memory_size: int = 3000,
         tool_rag: bool = True,
         tool_rag_top_k: int = 5,
-        system_prompt: str = SINGLE_SYSTEM_PROMPT,
+        system_prompt: str = DEFAULT_SYSTEM_PROMPT,
         python_only: bool = False,
         tools_only: bool = False,
     ):
@@ -292,12 +298,15 @@ class SingleAgent:
         if not isinstance(llm, FunctionCallingLLM):
             raise ValueError("The provided LLM must be a FunctionCallingLLM.")
 
+        self._context = context
+
         print_debug("Initializing SingleAgent")
 
         self._agent = build_agent(
             llm=llm,
             context=context,
             memory=memory,
+            memory_size=memory_size,
             tool_rag=tool_rag,
             tool_rag_top_k=tool_rag_top_k,
             react=react,
@@ -306,7 +315,19 @@ class SingleAgent:
             tools_only=tools_only,
         )
 
-        print_debug("SingleAgent initialized")
+        self._build_agent_kwargs = {
+            "llm": llm,
+            "context": context,
+            "memory": memory,
+            "memory_size": memory_size,
+            "tool_rag": tool_rag,
+            "tool_rag_top_k": tool_rag_top_k,
+            "system_prompt": system_prompt,
+            "python_only": python_only,
+            "tools_only": tools_only,
+        }
+
+        print_debug("SingleAgent instance initialized")
 
     def chat(self, message: str) -> str:
         """Interacts with the LLM to provide data analysis insights.
@@ -321,4 +342,58 @@ class SingleAgent:
         str
             The response from the LLM.
         """
-        return str(self._agent.chat(message))
+
+        def check_valid_output(output: str) -> bool:
+            if (
+                output is None
+                or output.isspace()
+                or output == "None"
+                or output.startswith("<function=")
+                or output.endswith("</function>")
+            ):
+                return False
+            return True
+
+        def recursive_validated_chat(
+            message: str,
+            max_retries: int = 5,
+        ) -> str:
+            for i in range(max_retries):
+                try:
+                    with suppress_logging():
+                        output = str(self._agent.chat(message))
+                    return output
+
+                except Exception as e:
+                    # if all retries are exhausted, return the default output
+                    if i == max_retries:
+                        return f"Error: {e}."
+                    summary_str = str(build_dataset_summary_tool(self._context).call())
+                    self._agent = build_agent(**self._build_agent_kwargs)
+                    self._agent.memory.put(
+                        ChatMessage.from_str(
+                            content="Dataset summary: " + summary_str,
+                            role=MessageRole.SYSTEM,
+                        )
+                    )
+                    print_debug(
+                        f"Agent reset after error: {e}. "
+                        f"Dataset summary added to memory."
+                    )
+                    output = str(self._agent.chat(message))
+
+                if not check_valid_output(output):
+                    # if all retries are exhausted, return the default output
+                    if i == max_retries:
+                        return (
+                            "I wasn't able to answer your question. "
+                            "Could you please rephrase?"
+                        )
+                    self._agent.chat(
+                        f"Your output, '{output}', doesn't answer the question. "
+                        "Please try again. "
+                        f"Here is the original question: '{message}'."
+                    )
+                    print_debug(f"Output '{output}' was invalid. Retrying.")
+
+        return recursive_validated_chat(message)

@@ -4,9 +4,7 @@ import pandas as pd
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 import numpy as np
-from scipy.stats import f_oneway
-from scipy.stats import pearsonr
-from scipy.stats import shapiro
+import scipy.stats as stats
 
 datasets_dir = Path(__file__).resolve().parent.parent / "datasets"
 
@@ -25,6 +23,10 @@ def q1():
 
     mean = df["SalePrice"].mean()
     std = df["SalePrice"].std()
+
+    mean = round(mean, 3)
+    std = round(std, 3)
+
     return f"{keyword1}={mean:.3f}, {keyword2}={std:.3f}"
 
 
@@ -35,6 +37,9 @@ def q2():
 
     df["TotalSF"] = df["1stFlrSF"] + df["2ndFlrSF"]
     mean = df["TotalSF"].mean()
+
+    mean = round(mean, 3)
+
     return f"{keyword}={mean:.3f}"
 
 
@@ -53,6 +58,8 @@ def q3():
 
     mean = df["GarageYrBlt"].mean()
 
+    mean = round(mean, 3)
+
     return f"{keyword}={mean:.3f}"
 
 
@@ -64,6 +71,8 @@ def q4():
     missing_counts = df.isnull().sum()
     max_missing_variable = missing_counts.idxmax()
     max_missing_value = missing_counts.max()
+
+    max_missing_value = round(max_missing_value, 3)
 
     return f"{keyword1}={max_missing_variable}, {keyword2}={max_missing_value:.3f}"
 
@@ -86,8 +95,12 @@ def q5():
 
     # Extract coefficients
     coefficient_total_sf_train = model_train.params["TotalSF"]
+    coefficient_total_sf_train = round(coefficient_total_sf_train, 3)
+
     p_value_total_sf_train = model_train.pvalues["TotalSF"]
     intercept_train = model_train.params["const"]
+
+    intercept_train = round(intercept_train, 3)
 
     answer2 = "yes" if p_value_total_sf_train <= 0.05 else "no"
     return f"{keyword1}={coefficient_total_sf_train:.3f}, {keyword2}={answer2}, {keyword3}={intercept_train:.3f}"
@@ -106,6 +119,7 @@ def q6():
     ).fit()  # Constant automatically added
 
     train_r2 = model_train.rsquared
+    train_r2 = round(train_r2, 3)
 
     test_predictions = model_train.predict(df_test)
 
@@ -113,6 +127,7 @@ def q6():
     y_test = df_test["SalePrice"]
 
     test_rmse = np.sqrt(np.mean((test_predictions - y_test) ** 2))
+    test_rmse = round(test_rmse, 3)
 
     return f"{keyword1}={train_r2:.3f}, {keyword2}={test_rmse:.3f}"
 
@@ -131,7 +146,12 @@ def q7():
     shape_IR3 = filtered_data[filtered_data["LotShape"] == "IR3"]["SalePrice"]
 
     # Perform one-way ANOVA
-    statistic, pval = f_oneway(shape_reg, shape_IR1, shape_IR2, shape_IR3)
+    statistic, pval = stats.f_oneway(shape_reg, shape_IR1, shape_IR2, shape_IR3)
+
+    # Ensure other methods return same y/n answer
+    _, kruskal_p_value = stats.kruskal(shape_reg, shape_IR1, shape_IR2, shape_IR3)
+
+    assert (pval > 0.05) == (kruskal_p_value > 0.05)
 
     answer = "yes" if pval <= 0.05 else "no"
 
@@ -143,7 +163,7 @@ def q8():
     keyword1 = "corr"
     keyword2 = "pval"
 
-    correlation, p_value = pearsonr(df["SalePrice"], df["TotalSF"])
+    correlation, p_value = stats.pearsonr(df["SalePrice"], df["TotalSF"])
 
     return f"{keyword1}={correlation:.3f}, {keyword2}={p_value:.3f}"
 
@@ -154,7 +174,17 @@ def q9():
     SalePriceCol = df["SalePrice"]
 
     # Perform a Shapiro-Wilk test for normality. Null is that the data is normally distributed
-    shapiro_test_stat, shapiro_p_value = shapiro(SalePriceCol)
+    _, shapiro_p_value = stats.shapiro(SalePriceCol)
+
+    # Ensure other methods return same y/n answer
+    _, normaltest_p_value = stats.normaltest(SalePriceCol)
+    _, kstest_p_value = stats.kstest(SalePriceCol, "norm")
+
+    assert (
+        (shapiro_p_value > 0.05)
+        == (normaltest_p_value > 0.05)
+        == (kstest_p_value > 0.05)
+    )
 
     answer = "no" if (shapiro_p_value <= 0.05) else "yes"
     return f"{keyword}={answer}"
@@ -171,6 +201,9 @@ def q10():
         )
     )
     medium_price_avg_lambda = df[df["PriceRange"] == "Medium"]["SalePrice"].mean()
+
+    medium_price_avg_lambda = round(medium_price_avg_lambda, 3)
+
     return f"{keyword}={medium_price_avg_lambda:.3f}"
 
 
@@ -183,6 +216,10 @@ def q11():
     low = df["PriceRange"].value_counts().get("Low", 0)
     medium = df["PriceRange"].value_counts().get("Medium", 0)
     high = df["PriceRange"].value_counts().get("High", 0)
+
+    low = round(low, 3)
+    medium = round(medium, 3)
+    high = round(high, 3)
 
     return f"{keyword1}={low:.3f}, {keyword2}={medium:.3f}, {keyword3}={high:.3f}"
 
@@ -206,6 +243,9 @@ def q12():
     # Calculate RMSE
     y_test = df_test["SalePrice"]
     test_rmse = np.sqrt(np.mean((test_predictions - y_test) ** 2))
+
+    train_r2 = round(train_r2, 3)
+    test_rmse = round(test_rmse, 3)
 
     return f"{keyword1}={train_r2:.3f}, {keyword2}={test_rmse:.3f}"
 

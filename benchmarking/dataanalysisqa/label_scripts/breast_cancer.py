@@ -1,7 +1,7 @@
 from pathlib import Path
 from sklearn.model_selection import train_test_split
 import pandas as pd
-from scipy.stats import ttest_ind
+import scipy.stats as stats
 from sklearn.preprocessing import MinMaxScaler
 import statsmodels.formula.api as smf
 from sklearn.preprocessing import StandardScaler
@@ -24,7 +24,7 @@ def q1():
     mean_radius_avg = df["mean radius"].mean()
     mean_radius_std = df["mean radius"].std()
 
-    mean, std = mean_radius_avg, mean_radius_std
+    mean, std = round(mean_radius_avg, 3), round(mean_radius_std, 3)
     return f"{keyword1}={mean:.3f}, {keyword2}={std:.3f}"
 
 
@@ -32,6 +32,9 @@ def q1():
 def q2():
     keyword = "corr"
     correlation = df["mean radius"].corr(df["breast_cancer_yn"])
+
+    correlation = round(correlation, 3)
+
     return f"{keyword}={correlation:.3f}"
 
 
@@ -42,7 +45,7 @@ def q3():
     group_without_cancer = df[df["breast_cancer_yn"] == 0]["mean radius"]
 
     # Perform a t-test to compare the means of the two groups
-    t_stat, p_value = ttest_ind(
+    t_stat, p_value = stats.ttest_ind(
         group_with_cancer, group_without_cancer, equal_var=False
     )  # Welch's t-test
 
@@ -58,11 +61,22 @@ def q4():
     area_error_without_cancer = df[df["breast_cancer_yn"] == 0]["area error"]
 
     # Perform a t-test to compare the means of the "area error" for both groups using scipy
-    t_stat_area, p_value_area = ttest_ind(
+    _, p_value_area = stats.ttest_ind(
         area_error_with_cancer, area_error_without_cancer, equal_var=False
     )  # Welch's t-test
 
-    answer = "yes" if p_value_area < 0.05 else "no"
+    # test other methods to ensure agreement
+    pval_student = stats.ttest_ind(
+        area_error_with_cancer, area_error_without_cancer, equal_var=True
+    ).pvalue
+
+    pval_mannwhitney = stats.mannwhitneyu(
+        area_error_with_cancer, area_error_without_cancer
+    ).pvalue
+
+    assert (pval_student <= 0.05) == (pval_mannwhitney <= 0.05)
+
+    answer = "yes" if p_value_area <= 0.05 else "no"
     return f"{keyword}={answer}"
 
 
@@ -89,6 +103,9 @@ def q5():
 
     mean_radius_scaled_coef_train = minmax_model_train.params['Q("mean radius")']
     answer = mean_radius_scaled_coef_train
+
+    answer = round(answer, 3)
+
     return f"{keyword}={answer:.3f}"
 
 
@@ -115,7 +132,7 @@ def q6():
 
     # Print the coefficient and summary
     mean_area_scaled_coef_train = standard_model_train.params['Q("mean area")']
-    answer = mean_area_scaled_coef_train
+    answer = round(mean_area_scaled_coef_train, 3)
     return f"{keyword}={answer:.3f}"
 
 
@@ -130,7 +147,8 @@ def q7():
     # Calculate the difference
     difference_in_mean_area = mean_area_without_cancer - mean_area_with_cancer
 
-    answer = difference_in_mean_area
+    answer = round(difference_in_mean_area, 3)
+
     return f"{keyword}={answer:.3f}"
 
 
@@ -138,7 +156,7 @@ def q7():
 def q8():
     keyword = "value"
     fifth_largest_mean_radius = df["mean radius"].nlargest(5).iloc[-1]
-
+    fifth_largest_mean_radius = round(fifth_largest_mean_radius, 3)
     return f"{keyword}={fifth_largest_mean_radius:.3f}"
 
 
@@ -160,6 +178,8 @@ def q9():
 
     # Count the number of outliers
     num_outliers = len(outliers)
+
+    num_outliers = round(num_outliers, 3)
     return f"{keyword}={num_outliers:.3f}"
 
 

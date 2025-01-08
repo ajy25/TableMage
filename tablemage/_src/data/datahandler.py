@@ -55,6 +55,10 @@ class DataHandler:
         verbose : bool
             Default: True. If True, prints updates and warnings.
         """
+        # force align columns
+        df_train = df_train.copy()
+        df_test = df_test[df_train.columns].copy()
+
         self._checkpoint_name_to_df: dict[str, tuple[pd.DataFrame, pd.DataFrame]] = (
             dict()
         )
@@ -823,11 +827,18 @@ class DataHandler:
         ) = self._compute_categorical_numeric_vars(self._working_df_train)
 
         if self._verbose:
-            print_wrapped(
-                f"One-hot encoded {list_to_string(include_vars)}. "
-                + f"Drop first: {color_text(dropfirst, 'yellow')}.",
-                type="UPDATE",
-            )
+            if dropfirst:
+                dropfirst_str = "For each variable, the first category was ignored."
+                print_wrapped(
+                    f"One-hot encoded {list_to_string(include_vars)}. " + dropfirst_str,
+                    type="UPDATE",
+                )
+            else:
+                print_wrapped(
+                    f"One-hot encoded {list_to_string(include_vars)}. "
+                    + "All categories were encoded",
+                    type="UPDATE",
+                )
 
         self._preprocess_step_tracer.add_step(
             "onehot",
@@ -1606,7 +1617,9 @@ class DataHandler:
 
         return df_train, df_test
 
-    def _rename_varnames(self, df_train: pd.DataFrame, df_test: pd.DataFrame):
+    def _rename_varnames(
+        self, df_train: pd.DataFrame, df_test: pd.DataFrame, silent: bool = False
+    ):
         """Renames variables to remove 'problematic' characters. We allow
         underscores, colons, semicolons, and parentheses in variable names,
         in addition to alphanumeric characters. We replace other characters with
@@ -1758,6 +1771,12 @@ class DataHandler:
                 df_encoded = pd.DataFrame(
                     encoded, columns=feature_names, index=df.index
                 )
+
+            # for all columns in df_encoded, rename
+            curr_vars = df_encoded.columns.to_list()
+            curr_to_new = rename_vars(curr_vars)
+            new_columns = [curr_to_new[var] for var in curr_vars]
+            df_encoded.columns = new_columns
 
             if keep_original:
                 return pd.concat([df_encoded, df], axis=1)
