@@ -33,7 +33,6 @@ class ToolCall:
 
 
 class ToolingContext:
-
     def __init__(
         self,
         data_container: DataContainer,

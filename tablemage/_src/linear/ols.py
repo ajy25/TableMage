@@ -157,6 +157,7 @@ class OLSLinearModel:
             )
 
         y_pred_train = self.estimator.predict(X_train).to_numpy()
+
         if y_scaler is not None:
             y_pred_train = y_scaler.inverse_transform(y_pred_train)
             y_train = y_scaler.inverse_transform(y_train)

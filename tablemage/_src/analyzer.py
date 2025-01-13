@@ -16,7 +16,6 @@ from .linear import (
     LogitReport,
     MNLogitLinearModel,
     MNLogitReport,
-    parse_and_transform_rlike,
 )
 from .exploratory import (
     EDAReport,
@@ -320,10 +319,6 @@ class Analyzer:
             Default: None.
             If None, all variables except target will be used as predictors.
 
-        formula : str | None
-            Default: None. If not None, uses formula to specify the regression
-            (overrides target and predictors).
-
         alpha : float
             Default: 0. Regularization strength. Must be a positive float.
 
@@ -336,80 +331,28 @@ class Analyzer:
             The OLSReport object contains a variety of OLS regression methods,
             including summary statistics, model coefficients, and data visualizations.
         """
-        if formula is None and target is None:
-            raise ValueError("target must be specified if formula is None.")
-
-        elif formula is None:
-            if target not in self._datahandler.numeric_vars():
-                raise ValueError(
-                    f"Target variable {quote_and_color(target, 'yellow')} "
-                    + "is not numeric."
-                )
-            if predictors is None:
-                predictors = self._datahandler.vars()
-                if target in predictors:
-                    if self._verbose:
-                        print_wrapped(
-                            f"Removing target variable {quote_and_color(target, 'yellow')} "
-                            + "from predictors.",
-                            type="WARNING",
-                        )
-                    predictors.remove(target)
-            return OLSReport(
-                OLSLinearModel(alpha=alpha, l1_weight=l1_weight),
-                self._datahandler,
-                target,
-                predictors,
+        if target not in self._datahandler.numeric_vars():
+            raise ValueError(
+                f"Target variable {quote_and_color(target, 'yellow')} "
+                + "is not numeric."
             )
+        if predictors is None:
+            predictors = self._datahandler.vars()
+            if target in predictors:
+                if self._verbose:
+                    print_wrapped(
+                        f"Removing target variable {quote_and_color(target, 'yellow')} "
+                        + "from predictors.",
+                        type="WARNING",
+                    )
+                predictors.remove(target)
 
-        else:
-            try:
-                y_series_train, y_scaler, X_df_train = parse_and_transform_rlike(
-                    formula, self._datahandler.df_train()
-                )
-                y_series_test, _, X_df_test = parse_and_transform_rlike(
-                    formula, self._datahandler.df_test()
-                )
-            except Exception as e:
-                raise ValueError(f"Invalid formula: {formula}. Error: {e}.")
-
-            # ensure missing values are dropped
-            y_X_df_combined_train = pd.DataFrame(y_series_train).join(X_df_train)
-            y_X_df_combined_test = pd.DataFrame(y_series_test).join(X_df_test)
-            y_X_df_combined_train = y_X_df_combined_train.dropna()
-            y_X_df_combined_test = y_X_df_combined_test.dropna()
-            (
-                y_X_df_combined_train,
-                y_X_df_combined_test,
-            ) = self._datahandler._force_train_test_var_agreement(
-                y_X_df_combined_train, y_X_df_combined_test
-            )
-
-            predictors = y_X_df_combined_train.columns.to_list()
-            target = y_series_train.name
-            predictors.remove(target)
-
-            if target not in self._datahandler.numeric_vars():
-                raise ValueError(
-                    f"Target variable {quote_and_color(target, 'yellow')} "
-                    + "is not numeric."
-                )
-
-            datahandler = DataHandler(
-                y_X_df_combined_train, y_X_df_combined_test, verbose=False
-            )
-
-            if y_scaler is not None:
-                datahandler.add_scaler(y_scaler, target)
-            elif self._datahandler.scaler(target) is not None:
-                datahandler.add_scaler(self._datahandler.scaler(target), target)
-
-            return OLSReport(
-                OLSLinearModel(alpha=alpha, l1_weight=l1_weight),
-                datahandler,
-                target,
-                predictors,
-            )
+        return OLSReport(
+            OLSLinearModel(alpha=alpha, l1_weight=l1_weight),
+            self._datahandler,
+            target,
+            predictors,
+        )
 
     @ensure_arg_list_uniqueness()
     def logit(
@@ -434,10 +377,6 @@ class Analyzer:
             Default: None.
             If None, all variables except target will be used as predictors.
 
-        formula : str | None
-            Default: None. If not None, uses formula to specify the regression
-            (overrides target and predictors).
-
         alpha : float
             Default: 0. Regularization strength. Must be a positive float.
 
@@ -453,101 +392,40 @@ class Analyzer:
         LogitReport | MNLogitReport
             The appropriate regression report object is returned.
         """
-        if formula is None and target is None:
-            raise ValueError("target must be specified if formula is None.")
-
-        elif formula is None:
-            if predictors is None:
-                predictors = self._datahandler.vars()
-                if target in predictors:
-                    if self._verbose:
-                        print_wrapped(
-                            f"Removing target variable "
-                            f"{quote_and_color(target, 'yellow')} "
-                            + "from predictors.",
-                            type="WARNING",
-                        )
-                    predictors.remove(target)
-            # decide between binary and multinomial logit
-            df_all = self._datahandler.df_all()
-            if len(df_all[target].unique()) == 2:
-                return LogitReport(
-                    LogitLinearModel(
-                        alpha=alpha,
-                        l1_weight=l1_weight,
-                        threshold_strategy=threshold_strategy,
-                    ),
-                    self._datahandler,
-                    target,
-                    predictors,
-                )
-            else:
-                return MNLogitReport(
-                    MNLogitLinearModel(
-                        alpha=alpha,
-                        l1_weight=l1_weight,
-                        threshold_strategy=threshold_strategy,
-                    ),
-                    self._datahandler,
-                    target,
-                    predictors,
-                )
-
+        if predictors is None:
+            predictors = self._datahandler.vars()
+            if target in predictors:
+                if self._verbose:
+                    print_wrapped(
+                        f"Removing target variable "
+                        f"{quote_and_color(target, 'yellow')} " + "from predictors.",
+                        type="WARNING",
+                    )
+                predictors.remove(target)
+        # decide between binary and multinomial logit
+        df_all = self._datahandler.df_all()
+        if len(df_all[target].unique()) == 2:
+            return LogitReport(
+                LogitLinearModel(
+                    alpha=alpha,
+                    l1_weight=l1_weight,
+                    threshold_strategy=threshold_strategy,
+                ),
+                self._datahandler,
+                target,
+                predictors,
+            )
         else:
-            try:
-                y_series_train, _, X_df_train = parse_and_transform_rlike(
-                    formula, self._datahandler.df_train()
-                )
-                y_series_test, _, X_df_test = parse_and_transform_rlike(
-                    formula, self._datahandler.df_test()
-                )
-            except Exception as e:
-                raise ValueError(f"Invalid formula: {formula}. Error: {e}.")
-
-            # ensure missing values are dropped
-            y_X_df_combined_train = pd.DataFrame(y_series_train).join(X_df_train)
-            y_X_df_combined_test = pd.DataFrame(y_series_test).join(X_df_test)
-            y_X_df_combined_train = y_X_df_combined_train.dropna()
-            y_X_df_combined_test = y_X_df_combined_test.dropna()
-            (
-                y_X_df_combined_train,
-                y_X_df_combined_test,
-            ) = self._datahandler._force_train_test_var_agreement(
-                y_X_df_combined_train, y_X_df_combined_test
+            return MNLogitReport(
+                MNLogitLinearModel(
+                    alpha=alpha,
+                    l1_weight=l1_weight,
+                    threshold_strategy=threshold_strategy,
+                ),
+                self._datahandler,
+                target,
+                predictors,
             )
-
-            predictors = y_X_df_combined_train.columns.to_list()
-            target = y_series_train.name
-            predictors.remove(target)
-
-            datahandler = DataHandler(
-                y_X_df_combined_train, y_X_df_combined_test, verbose=False
-            )
-
-            # decide between binary and multinomial logit
-            df_all = datahandler.df_all()
-            if len(df_all[target].unique()) == 2:
-                return LogitReport(
-                    LogitLinearModel(
-                        alpha=alpha,
-                        l1_weight=l1_weight,
-                        threshold_strategy=threshold_strategy,
-                    ),
-                    datahandler,
-                    target,
-                    predictors,
-                )
-            else:
-                return MNLogitReport(
-                    MNLogitLinearModel(
-                        alpha=alpha,
-                        l1_weight=l1_weight,
-                        threshold_strategy=threshold_strategy,
-                    ),
-                    datahandler,
-                    target,
-                    predictors,
-                )
 
     # --------------------------------------------------------------------------
     # MACHINE LEARNING
@@ -868,7 +746,15 @@ class Analyzer:
         self,
         include_vars: list[str] | None = None,
         exclude_vars: list[str] | None = None,
-        strategy: Literal["standardize", "minmax", "log", "log1p"] = "standardize",
+        strategy: Literal[
+            "standardize",
+            "minmax",
+            "log",
+            "log1p",
+            "robust_standardize",
+            "normal_quantile",
+            "uniform_quantile",
+        ] = "standardize",
     ) -> "Analyzer":
         """Scales the variables.
 
@@ -882,7 +768,7 @@ class Analyzer:
             Default: None. List of variables to exclude from scaling.
             If None, no variables are excluded.
 
-        strategy : Literal["standardize", "minmax", "log", "log1p"]
+        strategy : str
             Default: 'standardize'. The scaling strategy.
 
         Returns

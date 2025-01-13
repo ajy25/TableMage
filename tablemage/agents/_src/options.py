@@ -9,9 +9,7 @@ from .llms.api_key_utils import key_exists
 
 
 class _AgentsOptions:
-
     def __init__(self):
-
         self._multimodal_llm_build_function = None
         self._llm_build_function = None
 

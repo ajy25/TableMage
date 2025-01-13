@@ -167,7 +167,6 @@ class ClusterReport:
         X_df: pd.DataFrame = None
 
         with suppress_print_output():
-
             if dataset == "train":
                 X_df = self._emitter.emit_train_X()
             elif dataset == "test":
@@ -180,7 +179,6 @@ class ClusterReport:
         X_reduced = None
 
         if x_axis_var is None and y_axis_var is None:
-
             if dim_reduction_method == "pca":
                 pca = PCA(n_components=2)
                 X_reduced = pca.fit_transform(X_df)
@@ -206,7 +204,6 @@ class ClusterReport:
                 raise ValueError("dim_reduction_method must be 'pca' or 'tsne'.")
 
         else:
-
             # obtain the entire dataset, indexed by the label data subset
             # (this accounts for missing values and other data transformations)
             # note: DataHandler reflects correct transformation methods

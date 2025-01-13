@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 import pathlib
 import sys
 
-parent_dir = pathlib.Path(__file__).resolve().parent.parent.parent
+parent_dir = pathlib.Path(__file__).resolve().parent.parent.parent.parent
 sys.path.append(str(parent_dir))
 
 from tablemage._src.data.datahandler import (
@@ -601,8 +601,8 @@ def test_kfold_basic_init(setup_data):
     idxs = np.concatenate(idxs)
     for idx in idxs:
         assert idx in dh._working_df_train.index
-    assert emitters[0].y_scaler().min == 4.3
-    assert emitters[2].y_scaler().min != 4.3
+    assert emitters[0].y_scaler().scalers[0].min == 4.3
+    assert emitters[2].y_scaler().scalers[0].min != 4.3
 
 
 def test_emitter_feature_selection(setup_data):
@@ -728,7 +728,6 @@ def test_datahandler_engineer_feature(setup_data):
 
 
 def test_datahandler_engineer_feature_transform(setup_data):
-
     train_data = setup_data["df_house_train"]
     test_data = setup_data["df_house_test"]
     dh = DataHandler(train_data, test_data, verbose=False)

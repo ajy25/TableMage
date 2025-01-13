@@ -30,9 +30,7 @@ output = {
 
 
 for subdir in subdirs:
-
     for file in sorted(list(subdir.iterdir())):
-
         full_file_name = file.stem
         id = full_file_name.split("_")[0]
         file_name = "_".join(full_file_name.split("_")[1:])

@@ -108,7 +108,6 @@ def get_analysis_history():
         analysis_items = get_analysis()
         items = []
         for item in analysis_items:
-
             if isinstance(item, CanvasFigure):
                 path_obj = Path(item.path)
                 items.append(

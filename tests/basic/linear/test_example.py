@@ -6,7 +6,7 @@ import numpy as np
 import statsmodels.api as sm
 
 
-parent_dir = pathlib.Path(__file__).resolve().parent.parent.parent
+parent_dir = pathlib.Path(__file__).resolve().parent.parent.parent.parent
 sys.path.append(str(parent_dir))
 
 
@@ -60,7 +60,7 @@ def math_linear_regression(X, y):
 
 def tm_linear_regression(data):
     analyzer = tm.Analyzer(data, test_size=0.0, verbose=False)
-    report = analyzer.ols(formula="mpg ~ cyl + disp")
+    report = analyzer.ols(target="mpg", predictors=["cyl", "disp"])
     extract_model = report._model.estimator
     return (
         extract_model.params.iloc[0],
@@ -111,8 +111,8 @@ def test_partialf_ols(setup_data):
     r_f_stat, r_p_val = 0.4416, 0.5118
 
     analyzer = tm.Analyzer(df_mtcars, test_size=0.0, verbose=False)
-    lm_report_red = analyzer.ols(formula="hp ~ am + qsec")
-    lm_report_full = analyzer.ols(formula="hp ~ am + qsec + gear")
+    lm_report_red = analyzer.ols(target="hp", predictors=["am", "qsec"])
+    lm_report_full = analyzer.ols(target="hp", predictors=["am", "qsec", "gear"])
 
     tm_pval1 = lm_report_full.test_partialf(lm_report_red).pval()
     tm_pval2 = lm_report_red.test_partialf(lm_report_full).pval()

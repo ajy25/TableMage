@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-parent_dir = pathlib.Path(__file__).resolve().parent.parent.parent
+parent_dir = pathlib.Path(__file__).resolve().parent.parent.parent.parent
 sys.path.append(str(parent_dir))
 
 
@@ -109,64 +109,3 @@ def test_output_errorless(setup_data):
     logit_report.coefs("coef|ci_low|ci_high|pval")
     logit_report.plot_diagnostics("train", show_outliers=True)
     logit_report.plot_diagnostics("test", show_outliers=True)
-
-
-def test_formula_vs_parameter_agreement(setup_data):
-    df = setup_data["df_ols"]
-    analyzer = tm.Analyzer(df=df)
-    lmreport = analyzer.ols(
-        target="y",
-        predictors=["x1", "x2", "cat1", "cat2", "x3"],
-    )
-    lmreport_formula = analyzer.ols(formula="y ~ x1 + x2 + cat1 + cat2 + x3")
-    assert np.allclose(
-        lmreport.metrics("test").values, lmreport_formula.metrics("test").values
-    )
-    assert np.allclose(
-        lmreport.step("forward").metrics("test").values,
-        lmreport_formula.step("forward").metrics("test").values,
-    )
-    analyzer.scale(strategy="minmax")
-    lmreport = analyzer.ols(
-        target="y",
-        predictors=["x1", "x2", "cat1", "cat2", "x3"],
-    )
-    lmreport_formula = analyzer.ols(formula="y ~ x1 + x2 + cat1 + cat2 + x3")
-    assert np.allclose(
-        lmreport.metrics("test").values, lmreport_formula.metrics("test").values
-    )
-    assert np.allclose(
-        lmreport.step("forward").metrics("test").values,
-        lmreport_formula.step("forward").metrics("test").values,
-    )
-
-    df = setup_data["df_logistic"]
-    analyzer = tm.Analyzer(df=df)
-    lmreport = analyzer.logit(
-        target="y",
-        predictors=["x1", "x2", "cat1", "cat2", "x3"],
-    )
-    lmreport_formula = analyzer.logit(formula="y ~ x1 + x2 + cat1 + cat2 + x3")
-    assert np.allclose(
-        lmreport.metrics("test").values, lmreport_formula.metrics("test").values
-    )
-    analyzer.scale(strategy="minmax")
-    lmreport = analyzer.logit(
-        target="y",
-        predictors=["x1", "x2", "cat1", "cat2", "x3"],
-    )
-    lmreport_formula = analyzer.logit(formula="y ~ x1 + x2 + cat1 + cat2 + x3")
-    assert np.allclose(
-        lmreport.metrics("test").values, lmreport_formula.metrics("test").values
-    )
-    analyzer.engineer_numeric_var("x4", "x1 * x2")
-    lmreport = analyzer.logit(
-        target="y",
-        predictors=["x1", "x2", "cat1", "cat2", "x3", "x4"],
-    )
-    lmreport_formula = analyzer.logit(
-        formula="y ~ x1 + x2 + cat1 + cat2 + x3 + x1 * x2"
-    )
-    assert np.allclose(
-        lmreport.metrics("test").values, lmreport_formula.metrics("test").values
-    )

@@ -8,7 +8,7 @@ from llama_index.core.prompts import PromptTemplate
 curr_dir = Path(__file__).resolve().parent
 
 
-results_folder = curr_dir / "results" / "ada_gpt4o"  # change appropriately
+results_folder = curr_dir / "results" / "di_gpt4o"  # change appropriately
 
 questions_df = pd.read_csv(curr_dir / "dataanalysisqa.tsv", sep="\t")
 results_unformatted_df = pd.read_csv(results_folder / "answers.csv")

@@ -17,9 +17,9 @@ tm.use_agents()
 model_name = "llama3.1_8b"
 
 subdir_stems_to_consider = [  # optionally comment out any of these
-    # "classification_mixed",
-    # "classification_numerical",
-    # "regression_mixed",
+    "classification_mixed",
+    "classification_numerical",
+    "regression_mixed",
     "regression_numerical",
 ]
 
@@ -70,15 +70,12 @@ for subdir in subdirs:
     results_dict = {
         "file_name": [],
         "unformatted_answer": [],
-        "time_elapsed": [],
     }
 
     for file in sorted(list(subdir.iterdir())):
         df = pd.read_csv(file)
 
         print(df.shape)
-
-        start = time.time()
 
         target = df.columns[0]
 
@@ -102,10 +99,6 @@ Use your tools to help the user train the best possible model for the given data
             "feature scaling/transformation to improve model performance. "
             f"Only report the test {metric} value, rounded to 3 decimal points."
         )
-
-        end = time.time()
-        elapsed = end - start
-
         print(
             "\n\n"
             + "-" * 80
@@ -118,7 +111,6 @@ Use your tools to help the user train the best possible model for the given data
 
         results_dict["file_name"].append(file.stem)
         results_dict["unformatted_answer"].append(response)
-        results_dict["time_elapsed"].append(elapsed)
 
     results_df = pd.DataFrame(results_dict)
     results_df.to_csv(output_path, index=False)

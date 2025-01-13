@@ -12,6 +12,10 @@ from .preprocessing import (
     MinMaxSingleVar,
     StandardizeSingleVar,
     CustomOneHotEncoder,
+    RobustStandardizeSingleVar,
+    NormalQuantileTransformSingleVar,
+    UniformQuantileTransformSingleVar,
+    CombinedSingleVarScaler,
 )
 
 from ..utils import ensure_arg_list_uniqueness
@@ -75,6 +79,9 @@ class PreprocessStepTracer:
         new._steps = self._steps.copy()
         return new
 
+    def __str__(self):
+        return str(self._steps)
+
 
 class DataEmitter:
     """DataEmitter is a class that emits data for model fitting and other computational
@@ -113,11 +120,6 @@ class DataEmitter:
 
         step_tracer: PreprocessStepTracer
         """
-        # force bool to int, force object to category
-        bool_cols = df_train.select_dtypes(include=["bool"]).columns
-        df_train[bool_cols] = df_train[bool_cols].astype(int)
-        df_test[bool_cols] = df_test[bool_cols].astype(int)
-
         self._working_df_train = df_train.copy()
         self._working_df_test = df_test.copy()
 
@@ -131,15 +133,16 @@ class DataEmitter:
         self._highly_missing_vars_dropped = None
         self._onehot_encoder = None
         self._second_onehot_encoder = None
-        self._var_to_scaler = dict()
-
-        self._yscaler = None
 
         (
             self._categorical_vars,
             self._numeric_vars,
             self._categorical_to_categories,
         ) = self._compute_categorical_numeric_vars(self._working_df_train)
+
+        self._numeric_var_to_scalers: dict[str, list[BaseSingleVarScaler]] = {
+            var: [] for var in self._numeric_vars
+        }
 
         self._pre_onehot_X_vars_subset = None
         self._final_X_vars_subset = None
@@ -178,15 +181,17 @@ class DataEmitter:
             else:
                 raise ValueError("Invalid step.")
 
-    def y_scaler(self) -> BaseSingleVarScaler | None:
-        """Returns the scaler for the y variable, which could be None.
+    def y_scaler(self) -> CombinedSingleVarScaler | None:
+        """Returns the scaler for the y variable. Or, returns None if
+        the y variable has not been scaled.
 
         Returns
         -------
-        BaseSingleVarScaler | None
-            If the y variable is not scaled, returns None.
+        CombinedSingleVarScaler | None
         """
-        return self._yscaler
+        if len(self._numeric_var_to_scalers[self._yvar]) == 0:
+            return None
+        return CombinedSingleVarScaler(scalers=self._numeric_var_to_scalers[self._yvar])
 
     def emit_train_test_Xy(
         self,
@@ -876,7 +881,15 @@ class DataEmitter:
     def _scale(
         self,
         vars: list[str],
-        strategy: Literal["standardize", "minmax", "log", "log1p"] = "standardize",
+        strategy: Literal[
+            "standardize",
+            "minmax",
+            "log",
+            "log1p",
+            "robust_standardize",
+            "normal_quantile",
+            "uniform_quantile",
+        ] = "standardize",
         X: pd.DataFrame | None = None,
     ) -> pd.DataFrame | None:
         """Scales variable values.
@@ -887,7 +900,7 @@ class DataEmitter:
             List of variables to scale. If None, scales all numeric
             variables.
 
-        strategy : Literal['standardize', 'minmax', 'log', 'log1p']
+        strategy : str
 
         X : pd.DataFrame | None
             Default: None. If not None, scales the specified variables in X.
@@ -905,8 +918,8 @@ class DataEmitter:
                 continue
 
             if X is not None:
-                if var in self._var_to_scaler:
-                    X[var] = self._var_to_scaler[var].transform(X[var].to_numpy())
+                for scaler in self._numeric_var_to_scalers[var]:
+                    X[var] = scaler.transform(X[var].to_numpy())
                 continue
 
             train_data = self._working_df_train[var].to_numpy()
@@ -918,10 +931,16 @@ class DataEmitter:
                 scaler = LogTransformSingleVar(var, train_data)
             elif strategy == "log1p":
                 scaler = Log1PTransformSingleVar(var, train_data)
+            elif strategy == "robust_standardize":
+                scaler = RobustStandardizeSingleVar(var, train_data)
+            elif strategy == "normal_quantile":
+                scaler = NormalQuantileTransformSingleVar(var, train_data)
+            elif strategy == "uniform_quantile":
+                scaler = UniformQuantileTransformSingleVar(var, train_data)
             else:
                 raise ValueError("Invalid scaling strategy.")
 
-            self._var_to_scaler[var] = scaler
+            self._numeric_var_to_scalers[var].append(scaler)
 
             self._working_df_train[var] = scaler.transform(
                 self._working_df_train[var].to_numpy()
@@ -929,9 +948,6 @@ class DataEmitter:
             self._working_df_test[var] = scaler.transform(
                 self._working_df_test[var].to_numpy()
             )
-
-            if var == self._yvar:
-                self._yscaler = scaler
 
         return X
 
@@ -1344,9 +1360,7 @@ class DataEmitter:
         DataEmitter
             Returns self for method chaining.
         """
-        if self._yvar is not None:
-            if var == self._yvar:
-                self._yscaler = scaler
+        self._numeric_var_to_scalers[var].append(scaler)
         return self
 
     def X_vars(self) -> list[str]:

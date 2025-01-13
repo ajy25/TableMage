@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-parent_dir = pathlib.Path(__file__).resolve().parent.parent.parent
+parent_dir = pathlib.Path(__file__).resolve().parent.parent.parent.parent
 sys.path.append(str(parent_dir))
 
 

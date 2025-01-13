@@ -16,4 +16,5 @@ __all__ = [
     "LogitReport",
     "OLSReport",
     "MNLogitLinearModel",
+    "MNLogitReport",
 ]

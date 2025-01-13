@@ -1,5 +1,4 @@
 import pandas as pd
-from pandas.api.types import is_numeric_dtype
 import numpy as np
 from typing import Literal
 from copy import deepcopy
@@ -21,6 +20,10 @@ from .preprocessing import (
     MinMaxSingleVar,
     StandardizeSingleVar,
     CustomOneHotEncoder,
+    RobustStandardizeSingleVar,
+    NormalQuantileTransformSingleVar,
+    UniformQuantileTransformSingleVar,
+    CombinedSingleVarScaler,
 )
 from ..display.print_options import print_options
 from .dataemitter import DataEmitter, PreprocessStepTracer
@@ -91,7 +94,7 @@ class DataHandler:
         self._working_df_test = self._orig_df_test.copy()
 
         # keep track of scalers
-        self._numeric_var_to_scaler = {var: None for var in self._numeric_vars}
+        self._numeric_var_to_scalers = {var: [] for var in self._numeric_vars}
 
         # set the name
         if name is None:
@@ -126,7 +129,7 @@ class DataHandler:
         if checkpoint is None:
             self._working_df_test = self._orig_df_test.copy()
             self._working_df_train = self._orig_df_train.copy()
-            self._numeric_var_to_scaler = {var: None for var in self._numeric_vars}
+            self._numeric_var_to_scalers = {var: [] for var in self._numeric_vars}
             self._preprocess_step_tracer = PreprocessStepTracer()
             if self._verbose:
                 shapes_dict = self._shapes_str_formatted()
@@ -139,7 +142,7 @@ class DataHandler:
         else:
             self._working_df_test = self._checkpoint_name_to_df[checkpoint][0].copy()
             self._working_df_train = self._checkpoint_name_to_df[checkpoint][1].copy()
-            self._numeric_var_to_scaler = self._checkpoint_name_to_df[checkpoint][
+            self._numeric_var_to_scalers = self._checkpoint_name_to_df[checkpoint][
                 2
             ].copy()
             self._preprocess_step_tracer: PreprocessStepTracer = (
@@ -185,7 +188,7 @@ class DataHandler:
         self._checkpoint_name_to_df[checkpoint] = (
             self._working_df_test.copy(),
             self._working_df_train.copy(),
-            self._numeric_var_to_scaler.copy(),
+            self._numeric_var_to_scalers.copy(),
             self._preprocess_step_tracer.copy(),
         )
 
@@ -289,7 +292,7 @@ class DataHandler:
         out = self._categorical_vars.copy()
         return out
 
-    def scaler(self, var: str) -> BaseSingleVarScaler | None:
+    def scaler(self, var: str) -> CombinedSingleVarScaler | None:
         """Returns the scaler for a numeric variable, which could be None.
 
         Parameters
@@ -299,10 +302,11 @@ class DataHandler:
 
         Returns
         -------
-        BaseSingleVarScaler | None
-            Returns None if there is no scaler for the variable.
+        CombinedSingleVarScaler | None
         """
-        return self._numeric_var_to_scaler[var]
+        if len(self._numeric_var_to_scalers[var]) == 0:
+            return None
+        return CombinedSingleVarScaler(self._numeric_var_to_scalers[var])
 
     def train_test_emitter(self, y_var: str | None, X_vars: list[str]) -> DataEmitter:
         """Returns a DataEmitter object for the working train DataFrame and
@@ -1005,7 +1009,7 @@ class DataHandler:
             print_wrapped(
                 f"Numeric variables {list_to_string(vars_not_missing)} "
                 + "have no missing values. "
-                + "Imputer will be fit on all variables regardless.",
+                + "Imputer will consider all specified variables regardless.",
                 type="NOTE",
             )
 
@@ -1016,7 +1020,7 @@ class DataHandler:
             print_wrapped(
                 f"Categorical variables {list_to_string(vars_not_missing)} "
                 + "have no missing values. "
-                + "Imputer will be fit on all variables regardless.",
+                + "Imputer will consider all specified variables regardless.",
                 type="NOTE",
             )
 
@@ -1061,7 +1065,6 @@ class DataHandler:
             )
 
         if self._verbose:
-
             message = "Imputed missing values with "
 
             if len(numeric_vars) > 0:
@@ -1100,7 +1103,15 @@ class DataHandler:
         self,
         include_vars: list[str] | None = None,
         exclude_vars: list[str] | None = None,
-        strategy: Literal["standardize", "minmax", "log", "log1p"] = "standardize",
+        strategy: Literal[
+            "standardize",
+            "minmax",
+            "log",
+            "log1p",
+            "robust_standardize",
+            "normal_quantile",
+            "uniform_quantile",
+        ] = "standardize",
     ) -> "DataHandler":
         """Scales variable values.
 
@@ -1114,7 +1125,8 @@ class DataHandler:
             Default: None. List of variables to exclude from scaling.
             If None, no variables are excluded.
 
-        strategy : Literal["standardize", "minmax", "log", "log1p"]
+        strategy : str
+            Name of the scaling strategy.
 
         Returns
         -------
@@ -1142,23 +1154,22 @@ class DataHandler:
                 scaler = LogTransformSingleVar(var, train_data)
             elif strategy == "log1p":
                 scaler = Log1PTransformSingleVar(var, train_data)
+            elif strategy == "robust_standardize":
+                scaler = RobustStandardizeSingleVar(var, train_data)
+            elif strategy == "normal_quantile":
+                scaler = NormalQuantileTransformSingleVar(var, train_data)
+            elif strategy == "uniform_quantile":
+                scaler = UniformQuantileTransformSingleVar(var, train_data)
             else:
                 raise ValueError("Invalid scaling strategy.")
 
-            if var in self._numeric_var_to_scaler:
-                if self._numeric_var_to_scaler[var] is not None:
-                    print_wrapped(
-                        f"Variable {var} has already been scaled. "
-                        "The new scaler will replace the old one.",
-                        type="WARNING",
-                    )
             self._working_df_train[var] = scaler.transform(
                 self._working_df_train[var].to_numpy()
             )
             self._working_df_test[var] = scaler.transform(
                 self._working_df_test[var].to_numpy()
             )
-            self._numeric_var_to_scaler[var] = scaler
+            self._numeric_var_to_scalers[var].append(scaler)
 
         if self._verbose:
             print_wrapped(
@@ -1188,13 +1199,11 @@ class DataHandler:
         DataHandler
             Returns self.
         """
-        if self._numeric_var_to_scaler[var] is not None:
-            print_wrapped(
-                f"Variable {var} has already been scaled. "
-                "The new scaler will replace the old one.",
-                type="WARNING",
+        if var not in self._numeric_vars:
+            raise ValueError(
+                f"Variable {var} is not found in the set of numeric variables."
             )
-        self._numeric_var_to_scaler[var] = scaler
+        self._numeric_var_to_scalers[var].append(scaler)
         self._preprocess_step_tracer.add_step(
             "add_scaler", {"scaler": scaler, "var": var}
         )
@@ -1547,11 +1556,12 @@ class DataHandler:
         categorical_vars = df.select_dtypes(
             include=["category", "object"]
         ).columns.to_list()
+
+        numeric_vars = df.select_dtypes(include=["number"]).columns.to_list()
+
         # force categorical vars to be strings
         for var in categorical_vars:
             df[var] = df[var].apply(lambda x: str(x) if pd.notna(x) else np.nan)
-
-        numeric_vars = df.select_dtypes(include=["number"]).columns.to_list()
 
         all_vars = df.columns.to_list()
 
@@ -1652,7 +1662,7 @@ class DataHandler:
         renamed_vars = [curr_to_new[var] for var in orig_renamed_vars]
         df_train.columns = new_columns
         df_test.columns = new_columns
-        if self._verbose:
+        if self._verbose and not silent:
             if len(renamed_vars) > 0:
                 print_wrapped(
                     f"Renamed variables {list_to_string(orig_renamed_vars)} "

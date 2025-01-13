@@ -56,7 +56,6 @@ class ObjectWrappingNode:
 
 
 class StorageManager:
-
     def __init__(self, multimodal: bool = True, vectorstore: bool = False):
         """Initializes the StorageManager object.
 
@@ -245,7 +244,6 @@ class StorageManager:
         return str_res, table_path
 
     def reset(self):
-
         # delete all images
         for img in img_store_path.iterdir():
             img.unlink()

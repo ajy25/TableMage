@@ -323,10 +323,10 @@ class BaseR(BasePredictModel):
                 ]
             )
 
-        if self._dataemitter._yscaler is not None:
+        if self._dataemitter.y_scaler() is not None:
             pipeline = InverseTransformRegressor(
                 model=pipeline,
-                inverse_func=self._dataemitter._yscaler.inverse_transform,
+                inverse_func=self._dataemitter.y_scaler().inverse_transform,
             )
 
         return pipeline

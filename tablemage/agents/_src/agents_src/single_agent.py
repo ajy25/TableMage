@@ -280,7 +280,6 @@ def build_agent(
 
 
 class SingleAgent:
-
     def __init__(
         self,
         llm: FunctionCallingLLM,

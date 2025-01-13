@@ -864,7 +864,6 @@ class EDAReport:
         fig.subplots_adjust(
             left=0.1, bottom=0.1, wspace=0.2, hspace=0.2, right=right_adjust
         )
-        fig.tight_layout()
         plt.close(fig)
         return fig
 
@@ -922,6 +921,8 @@ class EDAReport:
                     alpha=plot_options._bar_alpha,
                     ax=ax,
                 )
+                # set y axis label
+                ax.set_ylabel("Frequency")
             else:
                 # plot a bar plot through sns.countplot
                 sns.countplot(
@@ -966,7 +967,12 @@ class EDAReport:
                         linewidth=plot_options._line_width,
                     ),
                 )
-                ax.set_yticklabels(ax.get_yticklabels(), rotation=45, ha="right")
+                ax.set_yticklabels(
+                    ax.get_yticklabels(),
+                    rotation=45,
+                    ha="right",
+                    fontsize=plot_options._axis_major_ticklabel_font_size,
+                )
             # categorical-numeric
             elif not pd.api.types.is_numeric_dtype(
                 x_series
@@ -984,7 +990,12 @@ class EDAReport:
                         linewidth=plot_options._line_width,
                     ),
                 )
-                ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
+                ax.set_xticklabels(
+                    ax.get_xticklabels(),
+                    rotation=45,
+                    ha="right",
+                    fontsize=plot_options._axis_major_ticklabel_font_size,
+                )
             # categorical-categorical
             else:
                 freq = pd.crosstab(y_series, x_series)
@@ -999,8 +1010,18 @@ class EDAReport:
                     cmap=plot_options._cmap,
                     ax=ax,
                 )
-                ax.set_yticklabels(ax.get_yticklabels(), rotation=45, ha="right")
-                ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
+                ax.set_yticklabels(
+                    ax.get_yticklabels(),
+                    rotation=45,
+                    ha="right",
+                    fontsize=plot_options._axis_major_ticklabel_font_size,
+                )
+                ax.set_xticklabels(
+                    ax.get_xticklabels(),
+                    rotation=45,
+                    ha="right",
+                    fontsize=plot_options._axis_major_ticklabel_font_size,
+                )
 
         try:
             ax.ticklabel_format(
@@ -1014,6 +1035,17 @@ class EDAReport:
             )
         except:
             pass
+
+        ax.tick_params(
+            axis="both",
+            which="major",
+            labelsize=plot_options._axis_major_ticklabel_font_size,
+        )
+        ax.tick_params(
+            axis="both",
+            which="minor",
+            labelsize=plot_options._axis_minor_ticklabel_font_size,
+        )
 
         plt.close(fig)
         return fig
@@ -1305,7 +1337,7 @@ class EDAReport:
                 corr,
                 annot=corr_formatted,
                 annot_kws={
-                    "size": plot_options._axis_title_font_size,
+                    "size": plot_options._axis_major_ticklabel_font_size,
                     "ha": "center",
                     "va": "center",
                 },

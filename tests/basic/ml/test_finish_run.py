@@ -2,12 +2,10 @@ import pathlib
 import sys
 import pandas as pd
 import pytest
-import numpy as np
-from sklearn.datasets import make_regression, make_classification
 from sklearn.linear_model import Ridge, LogisticRegression
 
 
-parent_dir = pathlib.Path(__file__).resolve().parent.parent.parent
+parent_dir = pathlib.Path(__file__).resolve().parent.parent.parent.parent
 sys.path.append(str(parent_dir))
 
 

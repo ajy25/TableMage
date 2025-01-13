@@ -343,11 +343,6 @@ def _engineer_categorical_feature_function(
     level_names_list = parse_str_list_from_str(level_names)
     thresholds_list = parse_num_list_from_str(thresholds)
 
-    assert (
-        len(level_names_list) == len(thresholds_list) + 1,
-        "There must be one more level name than the number of thresholds.",
-    )
-
     thresholds_str = ""
     for i, level in enumerate(level_names_list):
         if i == len(level_names_list) - 1:

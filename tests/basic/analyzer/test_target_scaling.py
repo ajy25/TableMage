@@ -4,16 +4,17 @@ import numpy as np
 import pathlib
 import sys
 
-parent_dir = pathlib.Path(__file__).resolve().parent.parent.parent
+parent_dir = pathlib.Path(__file__).resolve().parent.parent.parent.parent
 sys.path.append(str(parent_dir))
 
 
 import tablemage as tm
 from tablemage._src.data.preprocessing import (
-    MinMaxSingleVar,
-    StandardizeSingleVar,
+    CombinedSingleVarScaler,
     LogTransformSingleVar,
     Log1PTransformSingleVar,
+    MinMaxSingleVar,
+    StandardizeSingleVar,
 )
 
 
@@ -45,7 +46,10 @@ def test_ols_scaling_simple(setup_data):
     report = analyzer.ols(target="y")
     rmse_scaled = report.metrics("test").loc["rmse", "OLS Linear Model"]
 
-    assert isinstance(report.model()._dataemitter.y_scaler(), MinMaxSingleVar)
+    scaler = report.model()._dataemitter.y_scaler()
+    assert len(scaler) == 1
+    assert isinstance(scaler, CombinedSingleVarScaler)
+    assert isinstance(scaler.scalers[0], MinMaxSingleVar)
 
     assert pytest.approx(rmse_unscaled) == pytest.approx(rmse_scaled)
 
@@ -63,16 +67,26 @@ def test_ols_scaling_simple(setup_data):
     analyzer.scale(strategy="standardize")
     report = analyzer.ols(target="y")
     rmse_scaled = report.metrics("test").loc["rmse", "OLS Linear Model"]
-    assert isinstance(report.model()._dataemitter.y_scaler(), StandardizeSingleVar)
+    scaler = report.model()._dataemitter.y_scaler()
+    assert len(scaler) == 1
+    assert isinstance(scaler, CombinedSingleVarScaler)
+    assert isinstance(scaler.scalers[0], StandardizeSingleVar)
     assert pytest.approx(rmse_unscaled) == pytest.approx(rmse_scaled)
 
     # quick dual scale test
     analyzer.load_data_checkpoint()
     analyzer.scale(include_vars=["y"], strategy="standardize")
-    analyzer.scale(include_vars=["x1"], strategy="minmax")
+    analyzer.scale(include_vars=["x1", "y"], strategy="minmax")
+    yscaler = analyzer.datahandler().scaler("y")
+    assert isinstance(yscaler, CombinedSingleVarScaler)
+    assert isinstance(yscaler.scalers[0], StandardizeSingleVar)
+    assert isinstance(yscaler.scalers[1], MinMaxSingleVar)
     report = analyzer.ols(target="y")
     rmse_scaled = report.metrics("test").loc["rmse", "OLS Linear Model"]
-    assert isinstance(report.model()._dataemitter.y_scaler(), StandardizeSingleVar)
+    yscaler = report.model()._dataemitter.y_scaler()
+    assert isinstance(yscaler, CombinedSingleVarScaler)
+    assert isinstance(yscaler.scalers[0], StandardizeSingleVar)
+    assert isinstance(yscaler.scalers[1], MinMaxSingleVar)
     assert pytest.approx(rmse_unscaled) == pytest.approx(rmse_scaled)
 
 
@@ -89,32 +103,16 @@ def test_ols_scaling_log(setup_data):
     analyzer.scale(include_vars=["y"], strategy="log")
 
     report = analyzer.ols(target="y")
-    assert isinstance(report.model()._dataemitter.y_scaler(), LogTransformSingleVar)
+    yscaler = report.model()._dataemitter.y_scaler()
+    assert isinstance(yscaler, CombinedSingleVarScaler)
+    assert isinstance(yscaler.scalers[0], LogTransformSingleVar)
 
     analyzer.load_data_checkpoint()
     analyzer.scale(include_vars=["y"], strategy="log1p")
     report = analyzer.ols(target="y")
-    assert isinstance(report.model()._dataemitter.y_scaler(), Log1PTransformSingleVar)
-
-
-def test_ols_scaling_with_formula(setup_data):
-    """Tests minmax and standard scaling on a simple dataset."""
-
-    df_simple = setup_data["df_simple"]
-
-    analyzer = tm.Analyzer(df_simple, test_size=0.2, verbose=False)
-
-    # quick minmax test
-    report = analyzer.ols(formula="log(y) ~ x1 + x2")
-    assert isinstance(report.model()._dataemitter.y_scaler(), LogTransformSingleVar)
-    rmse_1 = report.metrics("test").loc["rmse", "OLS Linear Model"]
-
-    analyzer.scale(include_vars=["y"], strategy="log")
-    report = analyzer.ols(formula="y ~ x1 + x2")
-    assert isinstance(report.model()._dataemitter.y_scaler(), LogTransformSingleVar)
-    rmse_2 = report.metrics("test").loc["rmse", "OLS Linear Model"]
-
-    assert pytest.approx(rmse_1) == pytest.approx(rmse_2)
+    yscaler = report.model()._dataemitter.y_scaler()
+    assert isinstance(yscaler, CombinedSingleVarScaler)
+    assert isinstance(yscaler.scalers[0], Log1PTransformSingleVar)
 
 
 def test_ml_scaling_simple(setup_data):
@@ -131,7 +129,9 @@ def test_ml_scaling_simple(setup_data):
 
     analyzer.scale(strategy="minmax")
     report = analyzer.regress(models=[tm.ml.LinearR(name="ols")], target="y")
-    assert isinstance(report.model("ols")._dataemitter.y_scaler(), MinMaxSingleVar)
+    yscaler = report.model("ols")._dataemitter.y_scaler()
+    assert isinstance(yscaler, CombinedSingleVarScaler)
+    assert isinstance(yscaler.scalers[0], MinMaxSingleVar)
     rmse_scaled = report.metrics("test").loc["rmse", "ols"]
 
     assert pytest.approx(rmse_unscaled) == pytest.approx(rmse_scaled)
@@ -158,9 +158,9 @@ def test_ml_scaling_simple(setup_data):
     analyzer.load_data_checkpoint()
     analyzer.scale(include_vars=["y"], strategy="log")
     report = analyzer.regress(models=[tm.ml.LinearR(name="ols")], target="y")
-    assert isinstance(
-        report.model("ols")._dataemitter.y_scaler(), LogTransformSingleVar
-    )
+    yscaler = report.model("ols")._dataemitter.y_scaler()
+    assert isinstance(yscaler, CombinedSingleVarScaler)
+    assert isinstance(yscaler.scalers[0], LogTransformSingleVar)
 
     analyzer.load_data_checkpoint()
     analyzer.scale(include_vars=["y"], strategy="log1p")
@@ -169,8 +169,8 @@ def test_ml_scaling_simple(setup_data):
         target="y",
     )
     assert isinstance(
-        report.model("ols")._dataemitter.y_scaler(), Log1PTransformSingleVar
+        report.model("ols")._dataemitter.y_scaler(), CombinedSingleVarScaler
     )
     assert isinstance(
-        report.model("tree")._dataemitter.y_scaler(), Log1PTransformSingleVar
+        report.model("tree")._dataemitter.y_scaler(), CombinedSingleVarScaler
     )
