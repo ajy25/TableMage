@@ -13,8 +13,10 @@ import tablemage as tm
 
 tm.use_agents()
 
+print("TableMage loaded.")
 
-model_name = "llama3.1_8b"
+
+model_name = "gpt4o"
 
 subdir_stems_to_consider = [  # optionally comment out any of these
     "classification_mixed",
@@ -84,6 +86,7 @@ for subdir in subdirs:
             test_size=0.4,
             split_seed=42,
             tool_rag_top_k=5,
+            react=True,
             tools_only=True,
             system_prompt="""\
 You are a helpful assistant. \
