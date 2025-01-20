@@ -136,6 +136,120 @@ def plot_residuals_vs_fitted(
     return fig
 
 
+def plot_pearson_vs_observation(
+    std_residuals: np.ndarray,
+    df_idx: pd.Series,
+    outliers_idx: np.ndarray,
+    outliers_mask: np.ndarray,
+    show_outliers: bool = True,
+    include_text: bool = False,
+    figsize: tuple[float, float] = (5.0, 5.0),
+    ax: plt.Axes | None = None,
+) -> plt.Figure:
+    """Plots Pearson residuals against observation number.
+
+    Parameters
+    ----------
+    std_residuals : np.ndarray
+        The standardized residuals (Pearson residuals).
+
+    df_idx : pd.Series
+        The index of the dataset (e.g., observation numbers).
+
+    outliers_idx : np.ndarray
+        The indices of the outliers.
+
+    outliers_mask : np.ndarray
+        The mask of the outliers.
+
+    show_outliers : bool
+        Whether to highlight outliers in the plot, by default True.
+
+    include_text : bool
+        Whether to annotate the outliers with their observation numbers, by default False.
+
+    figsize : tuple[float, float]
+        The size of the figure, by default (5.0, 5.0).
+
+    ax : plt.Axes | None
+        The axes to plot on, by default None.
+
+    Returns
+    -------
+    plt.Figure
+    """
+    fig = None
+    if ax is None:
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
+
+    n_outliers = 0 if outliers_idx is None else len(outliers_idx)
+
+    ax.axhline(
+        y=0,
+        color=plot_options._reference_line_color,
+        linestyle="--",
+        linewidth=plot_options._line_width,
+    )
+    if show_outliers and n_outliers > 0:
+        ax.scatter(
+            df_idx[~outliers_mask],
+            std_residuals[~outliers_mask],
+            s=plot_options._dot_size,
+            color=plot_options._dot_color,
+        )
+        ax.scatter(
+            df_idx[outliers_mask],
+            std_residuals[outliers_mask],
+            s=plot_options._dot_size,
+            color="red",
+        )
+        if include_text and n_outliers <= MAX_N_OUTLIERS_TEXT:
+            annotations = []
+            for i, label in enumerate(outliers_idx):
+                annotations.append(
+                    ax.annotate(
+                        label,
+                        (
+                            df_idx[outliers_mask][i],
+                            std_residuals[outliers_mask][i],
+                        ),
+                        color="red",
+                        fontsize=plot_options._axis_minor_ticklabel_font_size,
+                    )
+                )
+            adjust_text(annotations, ax=ax)
+    else:
+        ax.scatter(
+            df_idx,
+            std_residuals,
+            s=plot_options._dot_size,
+            color=plot_options._dot_color,
+        )
+
+    ax.set_xlabel("Observation Number")
+    ax.set_ylabel("Standardized Residuals")
+    ax.set_title("Pearson Residuals vs. Observation Number")
+    ax.ticklabel_format(style="sci", axis="both", scilimits=plot_options._scilimits)
+
+    ax.title.set_fontsize(plot_options._title_font_size)
+    ax.xaxis.label.set_fontsize(plot_options._axis_title_font_size)
+    ax.yaxis.label.set_fontsize(plot_options._axis_title_font_size)
+    ax.tick_params(
+        axis="both",
+        which="major",
+        labelsize=plot_options._axis_major_ticklabel_font_size,
+    )
+    ax.tick_params(
+        axis="both",
+        which="minor",
+        labelsize=plot_options._axis_minor_ticklabel_font_size,
+    )
+
+    if fig is not None:
+        fig.tight_layout()
+        plt.close()
+    return fig
+
 def plot_residuals_vs_var(
     predictor: str,
     X_eval_df: pd.DataFrame,

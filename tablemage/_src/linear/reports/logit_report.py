@@ -21,6 +21,7 @@ from ..lmutils.plot import (
     plot_scale_location,
     plot_residuals_vs_leverage,
     plot_qq,
+    plot_pearson_vs_observation,
 )
 
 from ...metrics.visualization import plot_roc_curve, plot_confusion_matrix
@@ -355,6 +356,42 @@ class _SingleDatasetLogitReport:
             figsize=figsize,
             ax=ax,
         )
+    
+    def plot_pearson_vs_observation(
+        self,
+        show_outliers: bool = True,
+        figsize: tuple[float, float] = (7.0, 5.0),
+        ax: plt.Axes | None = None,
+    ) -> plt.Figure:
+        """Plots Pearson residuals against observation number.
+
+        Parameters
+        ----------
+        show_outliers : bool
+            Default: True. If True, highlights the outliers in red.
+
+        figsize : tuple[float, float]
+            Default: (7.0, 5.0). Determines the size of the returned figure.
+
+        ax : plt.Axes
+            Default: None. The axes on which to plot the figure. If None,
+            a new figure is created.
+
+        Returns
+        -------
+        plt.Figure
+            The resulting plot as a figure.
+        """
+        return plot_pearson_vs_observation(
+            std_residuals=self._stdresiduals,
+            df_idx=self._X_eval_df.index,
+            outliers_idx=self._outliers_df_idx,
+            outliers_mask=self._outliers_residual_mask,
+            show_outliers=show_outliers,
+            include_text=self._include_text,
+            figsize=figsize,
+            ax=ax,
+        ) 
 
     def plot_diagnostics(
         self, show_outliers: bool = False, figsize: tuple[float, float] = (7.0, 7.0)
@@ -722,6 +759,49 @@ class LogitReport:
             )
         else:
             raise ValueError('The dataset must be either "train" or "test".')
+        
+    def plot_pearson_vs_observation(
+        self,
+        dataset: Literal["train", "test"],
+        show_outliers: bool = True,
+        figsize: tuple[float, float] = (7.0, 5.0),
+        ax: plt.Axes | None = None,
+    ) -> plt.Figure:
+        """Plots Pearson residuals against observation number.
+
+        Parameters
+        ----------
+        show_outliers : bool
+            Default: True. If True, highlights the outliers in red.
+
+        figsize : tuple[float, float]
+            Default: (7.0, 5.0). Determines the size of the returned figure.
+
+        ax : plt.Axes
+            Default: None. The axes on which to plot the figure. If None,
+            a new figure is created.
+
+        Returns
+        -------
+        plt.Figure
+            The resulting plot as a figure.
+        """
+
+        if dataset == "train":
+            return self._train_report.plot_pearson_vs_observation(
+                show_outliers=show_outliers,
+                figsize=figsize,
+                ax=ax,
+            )
+        elif dataset == "test":
+            return self._test_report.plot_pearson_vs_observation(
+                show_outliers=show_outliers,
+                figsize=figsize,
+                ax=ax,
+            )
+        else:
+            raise ValueError('The dataset must be either "train" or "test".')
+
 
     def plot_scale_location(
         self,
