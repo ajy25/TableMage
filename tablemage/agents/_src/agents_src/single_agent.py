@@ -20,6 +20,7 @@ from llama_index.core import Settings
 
 from typing import Literal
 from pathlib import Path
+import time
 
 from ...._src.display.print_utils import suppress_logging
 from .._debug.logger import print_debug
@@ -153,8 +154,8 @@ def build_agent(
     print_debug(f"Dataset summary: {summary_str}")
     memory_obj.put(
         ChatMessage.from_str(
-            content="Dataset summary: " + summary_str,
-            role=MessageRole.SYSTEM,
+            content="Here is a summary of my dataset:\n" + summary_str,
+            role=MessageRole.USER,
         )
     )
 
@@ -347,8 +348,8 @@ class SingleAgent:
                 output is None
                 or output.isspace()
                 or output == "None"
-                or output.startswith("<function=")
-                or output.endswith("</function>")
+                or "function>" in output
+                # or "</function>" in output
             ):
                 return False
             return True
@@ -361,7 +362,6 @@ class SingleAgent:
                 try:
                     with suppress_logging():
                         output = str(self._agent.chat(message))
-                    return output
 
                 except Exception as e:
                     # if all retries are exhausted, return the default output
@@ -371,8 +371,8 @@ class SingleAgent:
                     self._agent = build_agent(**self._build_agent_kwargs)
                     self._agent.memory.put(
                         ChatMessage.from_str(
-                            content="Dataset summary: " + summary_str,
-                            role=MessageRole.SYSTEM,
+                            content="Here is a summary of my dataset:\n" + summary_str,
+                            role=MessageRole.USER,
                         )
                     )
                     print_debug(
@@ -389,10 +389,15 @@ class SingleAgent:
                             "Could you please rephrase?"
                         )
                     self._agent.chat(
-                        f"Your output, '{output}', doesn't answer the question. "
+                        f"Your response, '{output}', doesn't answer my question. "
+                        "Check your tool-calling format and try again. "
                         "Please try again. "
                         f"Here is the original question: '{message}'."
                     )
-                    print_debug(f"Output '{output}' was invalid. Retrying.")
+                    print_debug(f"Output '{output}' was invalid. Retrying in 2 secs.")
+                else:
+                    return output
+
+                time.sleep(2.0)
 
         return recursive_validated_chat(message)

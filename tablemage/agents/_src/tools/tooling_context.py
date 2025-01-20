@@ -210,9 +210,13 @@ class ToolingContext:
         bool
             True if the tool call is a repeat, False otherwise.
         """
-        if len(self._toolcalls) == 0:
+        if len(self._toolcalls) < 3:
             return False
-        return toolcall == self._toolcalls[-1]
+        return (
+            toolcall == self._toolcalls[-1]
+            and toolcall == self._toolcalls[-2]
+            and toolcall == self._toolcalls[-3]
+        )
 
     @property
     def data_container(self) -> DataContainer:

@@ -2,12 +2,12 @@ from llama_index.llms.ollama import Ollama
 
 
 def build_ollama(model: str | None = None, temperature: float = 0.0) -> Ollama:
-    """Builds a Ollama object using LlamaIndex.
+    """Builds an Ollama object using LlamaIndex.
 
     Parameters
     ----------
     model : str
-        The model to use, by default "lmannix/llama3-groq-tool-8b".
+        The model to use, by default "llama3.1:8b-instruct-q4_K_M".
         Must support function calling.
 
     temperature : float
@@ -19,5 +19,5 @@ def build_ollama(model: str | None = None, temperature: float = 0.0) -> Ollama:
         An Ollama object from LlamaIndex.
     """
     if model is None:
-        model = "mannix/llama3-groq-tool-8b"
-    return Ollama(model=model, temperature=temperature, request_timeout=60)
+        model = "llama3.1:8b-instruct-q4_K_M"
+    return Ollama(model=model, temperature=temperature, request_timeout=120)

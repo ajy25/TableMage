@@ -20,23 +20,23 @@ from tablemage.agents._src.io.canvas import (
     CanvasThought,
 )
 
-mage: ConversationalAgent = None
+agent: ConversationalAgent = None
 
 
 def chat(msg: str) -> str:
     """
     Chat function that processes natural language queries on the uploaded dataset.
     """
-    global mage
-    if mage is None:
+    global agent
+    if agent is None:
         return "No dataset uploaded. Please upload a dataset first."
 
     else:
-        return mage.chat(msg)
+        return agent.chat(msg)
 
 
 def get_analysis():
-    return mage._canvas_queue.get_analysis()
+    return agent._canvas_queue.get_analysis()
 
 
 # Initialize Flask app
@@ -53,7 +53,7 @@ def upload_dataset():
     """
     Handle dataset upload and store it for the chat function.
     """
-    global mage
+    global agent
     if "file" not in request.files:
         return jsonify({"error": "No file part in the request"}), 400
     file = request.files["file"]
@@ -77,7 +77,7 @@ def upload_dataset():
         if uploaded_data.columns[0] == "Unnamed: 0":
             uploaded_data = uploaded_data.drop(columns="Unnamed: 0")
 
-        mage = ConversationalAgent(uploaded_data, test_size=test_size)
+        agent = ConversationalAgent(uploaded_data, memory_size=500, test_size=test_size)
 
         return jsonify({"message": "Dataset uploaded successfully"}), 200
     except Exception as e:
@@ -98,7 +98,7 @@ def get_analysis_history():
     """
     Retrieve the current analysis history (figures, tables, thoughts, code).
     """
-    if mage is None:
+    if agent is None:
         return (
             jsonify({"error": "No dataset uploaded. Please upload a dataset first."}),
             400,
@@ -156,7 +156,7 @@ def serve_file(filename):
     """
     Serve static files (figures) from the analysis queue.
     """
-    if mage is None:
+    if agent is None:
         return (
             jsonify({"error": "No dataset uploaded. Please upload a dataset first."}),
             400,

@@ -26,9 +26,15 @@ def tooling_decorator(func):
         print_debug(f"Tool call: {new_toolcall}.")
 
         if context.is_repeat_toolcall(toolcall=new_toolcall):
-            raise ValueError(
+            print_debug(
                 f"A tool call to `{function_name}` with identical arguments "
-                "was repeated. Please use a different tool or change the arguments."
+                "was repeated several times."
+            )
+            return (
+                f"A tool call to `{function_name}` with identical arguments "
+                "was repeated several times. "
+                "Use a different tool or change the arguments, "
+                "OR respond to the user immediately."
             )
         context.add_toolcall(toolcall=new_toolcall)
 

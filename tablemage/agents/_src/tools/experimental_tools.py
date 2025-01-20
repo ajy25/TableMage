@@ -215,8 +215,8 @@ except Exception as e:
 
 @tooling_decorator
 def _python_env_code_run_function(
-    context: ToolingContext,
     code: str,
+    context: ToolingContext,
 ) -> str:
     print_debug(
         "Executing Python code in a separate subprocess with preloaded DataFrames. "

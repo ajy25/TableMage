@@ -23,11 +23,15 @@ def use_agents():
             __all__.append("agents")
 
         print_wrapped(
-            text="The `agents` module has been imported.", type="UPDATE", level="INFO"
+            text="The 'tablemage.agents' module has been imported.",
+            type="UPDATE",
+            level="INFO",
         )
     except Exception:
         print_wrapped(
-            text="Could not import the `agents` module.", type="WARNING", level="INFO"
+            text="Could not import the 'tablemage.agents' module.",
+            type="WARNING",
+            level="INFO",
         )
 
 

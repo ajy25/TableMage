@@ -17,7 +17,7 @@ model_name = "llama3.1_8b"
 
 # set subset of datasets to generate answers for (must have already ran on all datasets)
 # leave empty to generate answers for all datasets
-subset = ["Healthcare"]
+subset = []
 
 
 if model_name == "llama3.1_8b":
@@ -25,23 +25,23 @@ if model_name == "llama3.1_8b":
         llm_type="groq", model_name="llama-3.1-8b-instant", temperature=0.1
     )
     output_dir = curr_dir / "results" / "tablemage_llama3.1_8b"
-    delay = 2
+    delay = 5
 
 elif model_name == "llama3.3_70b":
     tm.agents.options.set_llm(
         llm_type="groq", model_name="llama-3.3-70b-versatile", temperature=0.1
     )
     output_dir = curr_dir / "results" / "tablemage_llama3.3_70b"
-    delay = 2
+    delay = 4
 
 elif model_name == "gpt4o":
-    tm.agents.options.set_llm(llm_type="openai", model_name="gpt-4o", temperature=0.0)
+    tm.agents.options.set_llm(llm_type="openai", model_name="gpt-4o", temperature=0.1)
     output_dir = curr_dir / "results" / "tablemage_gpt4o"
     delay = 3
 
 elif model_name == "gpt4o_mini":
     tm.agents.options.set_llm(
-        llm_type="openai", model_name="gpt-4o-mini", temperature=0.0
+        llm_type="openai", model_name="gpt-4o-mini", temperature=0.1
     )
     output_dir = curr_dir / "results" / "tablemage_gpt4o_mini"
     delay = 5
