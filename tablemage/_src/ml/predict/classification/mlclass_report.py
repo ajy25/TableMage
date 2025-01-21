@@ -772,7 +772,7 @@ class MLClassificationReport:
         else:
             fig = ax.get_figure()
 
-        color_palette = sns.color_palette("tab10")
+        color_palette = plot_options._color_palette
 
         for i, model_id in enumerate(self._id_to_report):
             if dataset == "train":

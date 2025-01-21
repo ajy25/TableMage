@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tablemage._src.causal.report &mdash; TableMage 0.1.0a1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            TableMage
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python_api/api_reference.html">Python API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../python_api/classes/tm_analyzer.html">Analyzer <code class="xref py py-mod docutils literal notranslate"><span class="pre">(tm.Analyzer)</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../python_api/classes/tm_ml.html">Machine Learning Models <code class="xref py py-mod docutils literal notranslate"><span class="pre">(tm.ml)</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_ml.html#tm-ml-linearr"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm.ml.LinearR</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_ml.html#tm-ml-robustlinearr"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm.ml.RobustLinearR</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_ml.html#tm-ml-treesr"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm.ml.TreesR</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_ml.html#tm-ml-svmr"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm.ml.SVMR</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_ml.html#tm-ml-mlpr"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm.ml.MLPR</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_ml.html#tm-ml-linearc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm.ml.LinearC</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_ml.html#tm-ml-treesc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm.ml.TreesC</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_ml.html#tm-ml-svmc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm.ml.SVMC</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_ml.html#tm-ml-mlpc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm.ml.MLPC</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../python_api/classes/tm_fs.html">Feature Selectors <code class="xref py py-mod docutils literal notranslate"><span class="pre">(tm.fs)</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_fs.html#tm-fs-kbestfsr"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm.fs.KBestFSR</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_fs.html#tm-fs-lassofsr"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm.fs.LassoFSR</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_fs.html#tm-fs-borutafsr"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm.fs.BorutaFSR</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_fs.html#tm-fs-kbestfsc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm.fs.KBestFSC</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_fs.html#tm-fs-lassofsc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm.fs.LassoFSC</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_fs.html#tm-fs-borutafsc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm.fs.BorutaFSC</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html">Reports <code class="xref py py-mod docutils literal notranslate"><span class="pre">(tm._reports)</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-mlclassificationreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.MLClassificationReport</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-mlregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.MLRegressionReport</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-olsreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.OLSReport</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-edareport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.EDAReport</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-votingselectionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.VotingSelectionReport</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-statisticaltestreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.StatisticalTestReport</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-causalreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.CausalReport</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributors/contributors.html">Contributors</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">TableMage</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tablemage._src.causal.report</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tablemage._src.causal.report</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">..display.print_options</span> <span class="kn">import</span> <span class="n">print_options</span>
+<span class="kn">from</span> <span class="nn">..display.print_utils</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">color_text</span><span class="p">,</span>
+    <span class="n">bold_text</span><span class="p">,</span>
+    <span class="n">list_to_string</span><span class="p">,</span>
+    <span class="n">fill_ignore_format</span><span class="p">,</span>
+    <span class="n">format_two_column</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">norm</span>
+
+
+<div class="viewcode-block" id="CausalReport"><a class="viewcode-back" href="../../../../python_api/classes/tm_reports.html#tablemage._reports.CausalReport">[docs]</a><span class="k">class</span> <span class="nc">CausalReport</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class for storing and displaying causal inference results.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">estimate</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">se</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">n_units</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">n_units_treated</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">outcome_var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">treatment_var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">confounders</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">estimand</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">method_description</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">p_value</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes a CausalReport object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        estimate : float</span>
+<span class="sd">            The estimate of the causal effect.</span>
+
+<span class="sd">        se : float</span>
+<span class="sd">            The standard error of the estimator.</span>
+
+<span class="sd">        n_units : int</span>
+<span class="sd">            The number of units in the data.</span>
+
+<span class="sd">        n_units_treated : int</span>
+<span class="sd">            The number of treated units in the data.</span>
+
+<span class="sd">        outcome_var : str</span>
+<span class="sd">            The name of the outcome variable.</span>
+
+<span class="sd">        treatment_var : str</span>
+<span class="sd">            The name of the treatment variable.</span>
+
+<span class="sd">        confounders : list[str]</span>
+<span class="sd">            The names of the confounding variables.</span>
+
+<span class="sd">        estimand : str</span>
+<span class="sd">            The estimand of the causal effect. Either &quot;ate&quot; or &quot;att&quot;.</span>
+
+<span class="sd">        method : str</span>
+<span class="sd">            The method used to estimate the causal effect.</span>
+
+<span class="sd">        method_description : str</span>
+<span class="sd">            A description of the method used to estimate the causal effect.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_estimate</span> <span class="o">=</span> <span class="n">estimate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_estimate_se</span> <span class="o">=</span> <span class="n">se</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n_units</span> <span class="o">=</span> <span class="n">n_units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n_units_treated</span> <span class="o">=</span> <span class="n">n_units_treated</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_outcome_var</span> <span class="o">=</span> <span class="n">outcome_var</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_treatment_var</span> <span class="o">=</span> <span class="n">treatment_var</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_confounders</span> <span class="o">=</span> <span class="n">confounders</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_estimand</span> <span class="o">=</span> <span class="n">estimand</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_method</span> <span class="o">=</span> <span class="n">method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_method_description</span> <span class="o">=</span> <span class="n">method_description</span>
+
+        <span class="k">if</span> <span class="n">p_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_p_value</span> <span class="o">=</span> <span class="n">p_value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Calculate p-value from standard error</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_p_value</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_estimate</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimate_se</span><span class="p">))</span>
+
+<div class="viewcode-block" id="CausalReport.effect"><a class="viewcode-back" href="../../../../python_api/classes/tm_reports.html#tablemage._reports.CausalReport.effect">[docs]</a>    <span class="k">def</span> <span class="nf">effect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the estimate of the causal effect.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimate</span></div>
+
+<div class="viewcode-block" id="CausalReport.se"><a class="viewcode-back" href="../../../../python_api/classes/tm_reports.html#tablemage._reports.CausalReport.se">[docs]</a>    <span class="k">def</span> <span class="nf">se</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the standard error of the estimator.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimate_se</span></div>
+
+<div class="viewcode-block" id="CausalReport.n_units"><a class="viewcode-back" href="../../../../python_api/classes/tm_reports.html#tablemage._reports.CausalReport.n_units">[docs]</a>    <span class="k">def</span> <span class="nf">n_units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the number of units in the data.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_units</span></div>
+
+<div class="viewcode-block" id="CausalReport.pval"><a class="viewcode-back" href="../../../../python_api/classes/tm_reports.html#tablemage._reports.CausalReport.pval">[docs]</a>    <span class="k">def</span> <span class="nf">pval</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the p-value of the estimator.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_p_value</span></div>
+
+    <span class="k">def</span> <span class="nf">_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts the CausalReport object to a dictionary.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;estimand&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimand</span><span class="p">,</span>
+            <span class="s2">&quot;estimate&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimate</span><span class="p">,</span>
+            <span class="s2">&quot;se&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimate_se</span><span class="p">,</span>
+            <span class="s2">&quot;p_value&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_p_value</span><span class="p">,</span>
+            <span class="s2">&quot;n_units&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_units</span><span class="p">,</span>
+            <span class="s2">&quot;n_units_treated&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_units_treated</span><span class="p">,</span>
+            <span class="s2">&quot;outcome_var&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_outcome_var</span><span class="p">,</span>
+            <span class="s2">&quot;treatment_var&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_treatment_var</span><span class="p">,</span>
+            <span class="s2">&quot;confounders&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_confounders</span><span class="p">,</span>
+            <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_method</span><span class="p">,</span>
+            <span class="s2">&quot;method_description&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_method_description</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">max_width</span> <span class="o">=</span> <span class="n">print_options</span><span class="o">.</span><span class="n">_max_line_width</span>
+        <span class="n">n_dec</span> <span class="o">=</span> <span class="n">print_options</span><span class="o">.</span><span class="n">_n_decimals</span>
+
+        <span class="n">top_divider</span> <span class="o">=</span> <span class="n">color_text</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="n">max_width</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">bottom_divider</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">color_text</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="n">max_width</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">)</span>
+        <span class="n">divider</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">color_text</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="n">max_width</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">divider_invisible</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="n">max_width</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="n">title_message</span> <span class="o">=</span> <span class="n">bold_text</span><span class="p">(</span><span class="s2">&quot;Causal Effect Estimation Report&quot;</span><span class="p">)</span>
+
+        <span class="n">estimand</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Avg Trmt Effect (ATE)&quot;</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimand</span> <span class="o">==</span> <span class="s2">&quot;ate&quot;</span>
+            <span class="k">else</span> <span class="s2">&quot;Avg Trmt Effect on Trtd (ATT)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">estimate_message</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">estimate_message</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="n">format_two_column</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">bold_text</span><span class="p">(</span><span class="s1">&#39;Estimate:&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">color_text</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_estimate</span><span class="si">:</span><span class="s1">.</span><span class="si">{</span><span class="n">n_dec</span><span class="si">}</span><span class="s1">f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;yellow&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">bold_text</span><span class="p">(</span><span class="s1">&#39;Std Err:&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">color_text</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_estimate_se</span><span class="si">:</span><span class="s1">.</span><span class="si">{</span><span class="n">n_dec</span><span class="si">}</span><span class="s1">f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;yellow&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">max_width</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="n">pval_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_p_value</span><span class="si">:</span><span class="s2">.</span><span class="si">{</span><span class="n">n_dec</span><span class="si">}</span><span class="s2">e</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_p_value</span> <span class="o">&lt;=</span> <span class="mf">0.05</span><span class="p">:</span>
+            <span class="n">pval_color</span> <span class="o">=</span> <span class="s2">&quot;green&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pval_color</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span>
+        <span class="n">estimate_message</span> <span class="o">+=</span> <span class="n">format_two_column</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">bold_text</span><span class="p">(</span><span class="s1">&#39;Estimand:&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> &quot;</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">color_text</span><span class="p">(</span><span class="n">estimand</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;blue&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">bold_text</span><span class="p">(</span><span class="s1">&#39;p-value:&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> &quot;</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">color_text</span><span class="p">(</span><span class="n">pval_str</span><span class="p">,</span><span class="w"> </span><span class="n">pval_color</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">max_width</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">treatment_message</span> <span class="o">=</span> <span class="n">bold_text</span><span class="p">(</span><span class="s2">&quot;Treatment variable:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">color_text</span><span class="p">(</span>
+            <span class="s2">&quot;  &#39;&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_treatment_var</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;purple&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">outcome_message</span> <span class="o">=</span> <span class="n">bold_text</span><span class="p">(</span><span class="s2">&quot;Outcome variable:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">color_text</span><span class="p">(</span>
+            <span class="s2">&quot;  &#39;&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_outcome_var</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;purple&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">confounders_message</span> <span class="o">=</span> <span class="n">bold_text</span><span class="p">(</span><span class="s2">&quot;Confounders:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">fill_ignore_format</span><span class="p">(</span>
+            <span class="n">list_to_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_confounders</span><span class="p">),</span> <span class="n">initial_indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">subsequent_indent</span><span class="o">=</span><span class="mi">2</span>
+        <span class="p">)</span>
+
+        <span class="n">method_message</span> <span class="o">=</span> <span class="n">bold_text</span><span class="p">(</span><span class="s2">&quot;Method:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">fill_ignore_format</span><span class="p">(</span>
+            <span class="n">color_text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_method</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">),</span> <span class="n">initial_indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">subsequent_indent</span><span class="o">=</span><span class="mi">2</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">top_divider</span>
+            <span class="o">+</span> <span class="n">title_message</span>
+            <span class="o">+</span> <span class="n">divider</span>
+            <span class="o">+</span> <span class="n">estimate_message</span>
+            <span class="o">+</span> <span class="n">divider</span>
+            <span class="o">+</span> <span class="n">treatment_message</span>
+            <span class="o">+</span> <span class="n">divider_invisible</span>
+            <span class="o">+</span> <span class="n">outcome_message</span>
+            <span class="o">+</span> <span class="n">divider_invisible</span>
+            <span class="o">+</span> <span class="n">confounders_message</span>
+            <span class="o">+</span> <span class="n">divider</span>
+            <span class="o">+</span> <span class="n">method_message</span>
+            <span class="o">+</span> <span class="n">bottom_divider</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_repr_pretty_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">cycle</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">cycle</span><span class="p">:</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s2">&quot;(...)&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Andrew Yang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

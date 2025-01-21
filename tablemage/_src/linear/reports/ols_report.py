@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from typing import Literal
 import warnings
 from adjustText import adjust_text
+from statsmodels.regression.linear_model import OLSResults, RegressionResultsWrapper
 from ...data import DataHandler, DataEmitter
 from ...metrics.visualization import plot_obs_vs_pred, decrease_font_sizes_axs
 from ..ols import OLSLinearModel
@@ -18,6 +19,7 @@ from ..lmutils.plot import (
     plot_qq,
 )
 from ...display.print_options import print_options
+from ...display.plot_options import plot_options
 from ...display.print_utils import (
     print_wrapped,
     color_text,
@@ -107,7 +109,7 @@ class _SingleDatasetOLSReport:
             ax.scatter(
                 self._y_pred[self._outliers_residual_mask],
                 self._y_true[self._outliers_residual_mask],
-                s=2,
+                s=plot_options._dot_size,
                 color="red",
             )
             if self._include_text and self._n_outliers <= MAX_N_OUTLIERS_TEXT:
@@ -121,7 +123,7 @@ class _SingleDatasetOLSReport:
                                 self._y_true[self._outliers_residual_mask][i],
                             ),
                             color="red",
-                            fontsize=6,
+                            fontsize=plot_options._axis_minor_ticklabel_font_size,
                         )
                     )
                 adjust_text(annotations, ax=ax)
@@ -316,7 +318,14 @@ class _SingleDatasetOLSReport:
         if not self._is_train:
             print_wrapped(TRAIN_ONLY_MESSAGE, type="WARNING")
             return None
-        leverage = self.model.estimator._results.get_influence().hat_matrix_diag
+
+        if isinstance(self.model.estimator, RegressionResultsWrapper):
+            leverage = self.model.estimator._results.get_influence().hat_matrix_diag
+        else:
+            raise ValueError(
+                "Leverage/influence statistics are not available for regularized models. "
+                f"The statsmodels output type is {type(self.model.estimator)}."
+            )
 
         return plot_residuals_vs_leverage(
             leverage=leverage,
@@ -387,22 +396,16 @@ class _SingleDatasetOLSReport:
         plt.Figure
         """
         fig, axs = plt.subplots(2, 2, figsize=figsize)
-
         self.plot_obs_vs_pred(show_outliers=show_outliers, ax=axs[0][0])
         self.plot_residuals_vs_fitted(show_outliers=show_outliers, ax=axs[0][1])
-
-        if self._is_train:
+        if self._is_train and isinstance(self.model.estimator, OLSResults):
             self.plot_residuals_vs_leverage(show_outliers=show_outliers, ax=axs[1][0])
         else:
             self.plot_scale_location(show_outliers=show_outliers, ax=axs[1][0])
-
         self.plot_qq(show_outliers=show_outliers, ax=axs[1][1])
-
         fig.subplots_adjust(hspace=0.3, wspace=0.3)
-
         decrease_font_sizes_axs(axs, 2, 2, 0)
-
-        plt.close()
+        plt.close(fig)
         return fig
 
     def set_outlier_threshold(self, threshold: float) -> "_SingleDatasetOLSReport":
@@ -659,7 +662,7 @@ class OLSReport:
             OLSLinearModel(
                 alpha=self._model.alpha,
                 l1_weight=self._model.l1_weight,
-                name=self._model._name + f"__reduced(step_direction={direction})",
+                name=self._model._name + f" (reduced, direction={direction})",
             ),
             self._datahandler,  # only used for y var scaler
             self._target,  # ignored
@@ -682,6 +685,11 @@ class OLSReport:
         -------
         StatisticalTestReport
         """
+        if not isinstance(self._model.estimator, RegressionResultsWrapper):
+            raise ValueError(
+                "Partial F-tests are not available for regularized models. "
+                f"The model type is {type(self._model.estimator)}."
+            )
         # Determine which report is the reduced model
 
         # Get the models from each report
@@ -748,6 +756,10 @@ class OLSReport:
         -------
         StatisticalTestReport
         """
+        if not isinstance(self._model.estimator, RegressionResultsWrapper):
+            raise ValueError(
+                "Partial F-tests are not available for regularized models."
+            )
         # Determine which report is the reduced model
 
         # Get the models from each report
@@ -1282,7 +1294,7 @@ class OLSReport:
         )
 
         predictors_message = (
-            f"{bold_text(f'Predictor variables ({self._model._n_predictors}):')}\n"
+            f"{bold_text(f'Predictor variables ({len(self._predictors)}):')}\n"
         )
         predictors_message += fill_ignore_format(
             list_to_string(self._predictors),

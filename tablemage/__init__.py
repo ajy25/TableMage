@@ -1,7 +1,21 @@
 """
 TableMage
+=========
+Python package for rapid low-code data science. 
+
+Classes
+-------
+Analyzer : Main class for TableMage. Used to analyze data and train/evaluate models.
+
+Functions
 ---------
-Python package for low-code/no-code data science on tabular data.
+use_agents : Import the agents module.
+
+Submodules
+----------
+ml : Module containing machine learning models.
+fs : Module containing feature selectors.
+agents : Module containing AI agents and helper functions for conversational data analysis.
 """
 
 from ._src.analyzer import Analyzer
@@ -35,7 +49,7 @@ def use_agents():
         )
 
 
-__all__ = ["Analyzer", "ml", "options", "fs"]
+__all__ = ["Analyzer", "ml", "options", "fs", "use_agents"]
 
 __version__ = "0.1.0a1"
-__author__ = "Andrew J. Yang"
+__author__ = "Andrew ang"

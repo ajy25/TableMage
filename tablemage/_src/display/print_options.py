@@ -48,6 +48,16 @@ class _PrintOptions:
             else:
                 self._logger.debug(msg)
 
+    def set_max_line_width(self, width: int):
+        """Sets the maximum line width for wrapping text.
+
+        Parameters
+        ----------
+        width : int
+            The maximum line width.
+        """
+        self._max_line_width = width
+
     def reset_logger(self, logger: logging.Logger | None = None):
         """Sets a new logger.
 

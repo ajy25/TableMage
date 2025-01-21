@@ -73,14 +73,11 @@
 <li class="toctree-l2"><a class="reference internal" href="tm_reports.html">Reports <code class="xref py py-mod docutils literal notranslate"><span class="pre">(tm._reports)</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="tm_reports.html#tm-reports-mlclassificationreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.MLClassificationReport</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tm_reports.html#tm-reports-mlregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.MLRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="tm_reports.html#tm-reports-olsregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.OLSRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="tm_reports.html#tm-reports-poissonregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.PoissonRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="tm_reports.html#tm-reports-negativebinomialregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.NegativeBinomialRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="tm_reports.html#tm-reports-binomialregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.BinomialRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="tm_reports.html#tm-reports-countregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.CountRegressionReport</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tm_reports.html#tm-reports-olsreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.OLSReport</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tm_reports.html#tm-reports-edareport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.EDAReport</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tm_reports.html#tm-reports-votingselectionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.VotingSelectionReport</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tm_reports.html#tm-reports-statisticaltestreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.StatisticalTestReport</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tm_reports.html#tm-reports-causalreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.CausalReport</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -115,13 +112,12 @@
              
   <section id="analyzer-tm-analyzer">
 <h1>Analyzer <code class="xref py py-mod docutils literal notranslate"><span class="pre">(tm.Analyzer)</span></code><a class="headerlink" href="#analyzer-tm-analyzer" title="Permalink to this heading"></a></h1>
-<p>The Analyzer class handles data wrangling, exploratory data analysis,
-regression analysis, and machine learning model benchmarking.</p>
+<p><cite>tablemage.Analyzer</cite> is a high-level class that provides low-code tools for data analysis.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="tablemage.Analyzer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tablemage.</span></span><span class="sig-name descname"><span class="pre">Analyzer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Unnamed</span> <span class="pre">Dataset'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer" title="Permalink to this definition"></a></dt>
 <dd><p>Analyzer is a class designed for conducting exploratory data analysis (EDA),
-regression analysis, and machine learning modeling on wide format tabular data.</p>
+regression analysis, and machine learning modeling on tabular data.</p>
 <p>An Analyzer object can be initialized from a single DataFrame which is then
 split into train and test DataFrames, or, alternatively, from pre-split
 train and test DataFrames. The object can then be used to conduct
@@ -168,6 +164,42 @@ initialized for.</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="tablemage.Analyzer.categorical_vars">
+<span class="sig-name descname"><span class="pre">categorical_vars</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.categorical_vars"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.categorical_vars" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the categorical variables in the working train DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The categorical variables.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tablemage.Analyzer.causal">
+<span class="sig-name descname"><span class="pre">causal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">treatment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outcome</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confounders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'train'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'test'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'all'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'all'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">CausalModel</span></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.causal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.causal" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a CausalModel object for estimating causal effects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>treatment</strong> (<em>str</em>) – The treatment variable.</p></li>
+<li><p><strong>outcome</strong> (<em>str</em>) – The outcome variable.</p></li>
+<li><p><strong>confounders</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – The confounding variables.</p></li>
+<li><p><strong>dataset</strong> (<em>Literal</em><em>[</em><em>'train'</em><em>, </em><em>'test'</em><em>, </em><em>'all'</em><em>]</em>) – The dataset to be analyzed. By default, analyzes all data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The CausalModel object contains methods for estimating causal effects.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>CausalModel</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="tablemage.Analyzer.classify">
 <span class="sig-name descname"><span class="pre">classify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">models</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tablemage._src.ml.predict.classification.base.BaseC</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predictors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_selectors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tablemage._src.feature_selection.base_feature_selection.BaseFSC</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_n_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outer_cv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outer_cv_seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">42</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="tm_reports.html#tablemage._reports.MLClassificationReport" title="tablemage._src.ml.predict.classification.mlclass_report.MLClassificationReport"><span class="pre">MLClassificationReport</span></a></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.classify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.classify" title="Permalink to this definition"></a></dt>
 <dd><p>Conducts a comprehensive classification ML model benchmarking exercise.
@@ -196,6 +228,67 @@ The random seed for the outer cross validation loop.</p></li>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="tm_reports.html#tablemage._reports.MLClassificationReport" title="tablemage._reports.MLClassificationReport">MLClassificationReport</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tablemage.Analyzer.cluster">
+<span class="sig-name descname"><span class="pre">cluster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">models</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tablemage._src.ml.cluster.base_cluster.BaseClust</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'train'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'all'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'all'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ClusterReport</span></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.cluster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.cluster" title="Permalink to this definition"></a></dt>
+<dd><p>Conducts a clustering exercise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>models</strong> (<em>list</em><em>[</em><em>BaseClust</em><em>]</em>) – Models to be evaluated.</p></li>
+<li><p><strong>features</strong> (<em>list</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>) – Default: None. The features to cluster on.
+If None, uses all the variables.</p></li>
+<li><p><strong>dataset</strong> (<em>Literal</em><em>[</em><em>'train'</em><em>, </em><em>'all'</em><em>]</em>) – Dataset to fit models on. If “train”, only fits models on training data.
+Then, cluster predictions can be made on test data.
+If “all”, fits models on all data.
+By default, fits models on all data.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tablemage.Analyzer.df_all">
+<span class="sig-name descname"><span class="pre">df_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.df_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.df_all" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the working DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The working DataFrame.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tablemage.Analyzer.df_test">
+<span class="sig-name descname"><span class="pre">df_test</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.df_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.df_test" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the working test DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The working test DataFrame.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tablemage.Analyzer.df_train">
+<span class="sig-name descname"><span class="pre">df_train</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.df_train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.df_train" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the working train DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The working train DataFrame.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -272,8 +365,91 @@ categorical variables, t-tests, and data visualizations.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="tablemage.Analyzer.engineer_categorical_var">
+<span class="sig-name descname"><span class="pre">engineer_categorical_var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numeric_var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresholds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#tablemage.Analyzer" title="tablemage._src.analyzer.Analyzer"><span class="pre">Analyzer</span></a></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.engineer_categorical_var"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.engineer_categorical_var" title="Permalink to this definition"></a></dt>
+<dd><p>Engineers a new categorical variable/feature based on a list of thresholds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – The name of the new variable engineered.</p></li>
+<li><p><strong>numeric_var</strong> (<em>str</em>) – The name of the numeric variable.</p></li>
+<li><p><strong>level_names</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – The names of the levels of the new categorical variable.
+The first level is the lowest level, and the last level is the highest level.</p></li>
+<li><p><strong>thresholds</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – <p>The (upper) thresholds for the levels of the new categorical variable.
+The thresholds must be in ascending order.
+For example, if thresholds = [0, 10, 20],
+and level_names = [“Low”, “Medium”, “High”, “Very High”],
+then the new variable will have the following levels:</p>
+<ul>
+<li><p>”Low” for values less than 0,</p></li>
+<li><p>”Medium” for other values less than 10,</p></li>
+<li><p>”High” for other values less than 20,</p></li>
+<li><p>”Very High” for values greater than or equal to 20.</p></li>
+</ul>
+</p></li>
+<li><p><strong>leq</strong> (<em>bool</em>) – Default: False. If True, the thresholds are inclusive.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Returns self for method chaining.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#tablemage.Analyzer" title="tablemage.Analyzer">Analyzer</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tablemage.Analyzer.engineer_numeric_var">
+<span class="sig-name descname"><span class="pre">engineer_numeric_var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">formula</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#tablemage.Analyzer" title="tablemage._src.analyzer.Analyzer"><span class="pre">Analyzer</span></a></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.engineer_numeric_var"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.engineer_numeric_var" title="Permalink to this definition"></a></dt>
+<dd><p>Engineers a new variable/feature based on a formula. The formula
+can only involve numeric variables. Creates another numeric variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – The name of the new variable engineered.</p></li>
+<li><p><strong>formula</strong> (<em>str</em>) – <p>Formula for the new feature. For example, “x1 + x2” would create
+a new feature that is the sum of the columns x1 and x2 in the DataFrame.
+All variables used must be numeric.
+Handles the following operations:
+- Addition (+)
+- Subtraction (-)
+- Multiplication (*)
+- Division (/)
+- Parentheses ()
+- Exponentiation (**)
+- Logarithm (log)
+- Exponential (exp)
+- Square root (sqrt)</p>
+<p>If the i-th unit is missing a value in any of the variables used in the
+formula, then the i-th unit of the new feature will be missing.</p>
+</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">analyzer</span><span class="o">.</span><span class="n">engineer_numeric_feature</span><span class="p">(</span><span class="s2">&quot;x3&quot;</span><span class="p">,</span> <span class="s2">&quot;x1 + x2&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="s2">&quot;x3&quot;</span> <span class="ow">in</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">vars</span><span class="p">()</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">df_train</span><span class="p">()[</span><span class="s2">&quot;x3&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">analyzer</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">df_train</span><span class="p">()[</span><span class="s2">&quot;x1&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">datahandler</span><span class="o">.</span><span class="n">df_train</span><span class="p">()[</span><span class="s2">&quot;x2&quot;</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Returns self for method chaining.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#tablemage.Analyzer" title="tablemage.Analyzer">Analyzer</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="tablemage.Analyzer.force_binary">
-<span class="sig-name descname"><span class="pre">force_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_multiclass</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#tablemage.Analyzer" title="tablemage._src.analyzer.Analyzer"><span class="pre">Analyzer</span></a></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.force_binary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.force_binary" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">force_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_multiclass</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#tablemage.Analyzer" title="tablemage._src.analyzer.Analyzer"><span class="pre">Analyzer</span></a></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.force_binary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.force_binary" title="Permalink to this definition"></a></dt>
 <dd><p>Forces variables to be binary (0 and 1 valued numeric variables).
 Does nothing if the data contains more than two classes unless
 ignore_multiclass is True and pos_label is specified,
@@ -281,12 +457,12 @@ in which case all classes except pos_label are labeled with zero.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>vars</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Name of variables to force to binary.</p></li>
-<li><p><strong>pos_labels</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Default: None. The positive labels.
-If None, the first class for each var is the positive label.</p></li>
+<li><p><strong>vars</strong> (<em>str</em>) – Name of variable to force to binary.</p></li>
+<li><p><strong>pos_labels</strong> (<em>str</em>) – Default: None. The positive label.
+If None, the most common class is labeled as the positive class.</p></li>
 <li><p><strong>ignore_multiclass</strong> (<em>bool</em>) – Default: False. If True, all classes except pos_label are labeled with
 zero. Otherwise raises ValueError.</p></li>
-<li><p><strong>rename</strong> (<em>bool</em>) – Default: False. If True, the variables are renamed to
+<li><p><strong>rename</strong> (<em>bool</em>) – Default: True. If True, the variable is renamed to
 {var}::{pos_label}.</p></li>
 </ul>
 </dd>
@@ -352,7 +528,7 @@ Strategy for imputing missing values in numeric variables.
 - ‘mean’: impute with mean.
 - ‘5nn’: impute with 5-nearest neighbors.
 - ‘10nn’: impute with 10-nearest neighbors.</p></li>
-<li><p><strong>categorical_strategy</strong> (<em>Literal</em><em>[</em><em>'most_frequent'</em><em>]</em>) – Default: ‘most_frequent’.
+<li><p><strong>categorical_strategy</strong> (<em>Literal</em><em>[</em><em>'most_frequent'</em><em>, </em><em>'missing'</em><em>]</em>) – Default: ‘most_frequent’.
 Strategy for imputing missing values in categorical variables.
 - ‘most_frequent’: impute with most frequent value.
 - ‘missing’: impute with ‘missing’.</p></li>
@@ -386,8 +562,75 @@ If None, loads the original train and test DataFrames.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="tablemage.Analyzer.logit">
+<span class="sig-name descname"><span class="pre">logit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predictors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l1_weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold_strategy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'f1'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'roc'</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tablemage._src.linear.reports.logit_report.LogitReport</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tablemage._src.linear.reports.mnlogit_report.MNLogitReport</span></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.logit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.logit" title="Permalink to this definition"></a></dt>
+<dd><p>Performs logistic regression.
+if formula is provided, performs logistic regression via formula.
+Units with missing data will be dropped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> (<em>str</em><em> | </em><em>None</em>) – Default: None. The variable to be predicted.</p></li>
+<li><p><strong>predictors</strong> (<em>list</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>) – Default: None.
+If None, all variables except target will be used as predictors.</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – Default: 0. Regularization strength. Must be a positive float.</p></li>
+<li><p><strong>l1_weight</strong> (<em>float</em>) – Default: 0. The weight of the L1 penalty. Must be a float between 0 and 1.</p></li>
+<li><p><strong>threshold_strategy</strong> (<em>Literal</em><em>[</em><em>'f1'</em><em>, </em><em>'roc'</em><em>] </em><em>| </em><em>None</em>) – Default: None. The strategy for determining the threshold for binary
+classification. If None, the threshold is set to 0.5.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The appropriate regression report object is returned.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>LogitReport | MNLogitReport</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tablemage.Analyzer.numeric_vars">
+<span class="sig-name descname"><span class="pre">numeric_vars</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.numeric_vars"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.numeric_vars" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the numeric variables in the working train DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The numeric variables.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tablemage.Analyzer.ols">
+<span class="sig-name descname"><span class="pre">ols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predictors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l1_weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="tm_reports.html#tablemage._reports.OLSReport" title="tablemage._src.linear.reports.ols_report.OLSReport"><span class="pre">OLSReport</span></a></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.ols"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.ols" title="Permalink to this definition"></a></dt>
+<dd><p>Performs OLS regression.
+If formula is provided, performs regression with OLS via formula.
+Units with missing data will be dropped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> (<em>str</em><em> | </em><em>None</em>) – Default: None. The variable to be predicted.</p></li>
+<li><p><strong>predictors</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Default: None.
+If None, all variables except target will be used as predictors.</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – Default: 0. Regularization strength. Must be a positive float.</p></li>
+<li><p><strong>l1_weight</strong> (<em>float</em>) – Default: 0. The weight of the L1 penalty. Must be a float between 0 and 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The OLSReport object contains a variety of OLS regression methods,
+including summary statistics, model coefficients, and data visualizations.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="tm_reports.html#tablemage._reports.OLSReport" title="tablemage._reports.OLSReport">OLSReport</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="tablemage.Analyzer.onehot">
-<span class="sig-name descname"><span class="pre">onehot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_vars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_vars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropfirst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#tablemage.Analyzer" title="tablemage._src.analyzer.Analyzer"><span class="pre">Analyzer</span></a></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.onehot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.onehot" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">onehot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_vars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_vars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropfirst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_original</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#tablemage.Analyzer" title="tablemage._src.analyzer.Analyzer"><span class="pre">Analyzer</span></a></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.onehot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.onehot" title="Permalink to this definition"></a></dt>
 <dd><p>One-hot encodes the specified variables (columns).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -397,6 +640,7 @@ If None, one-hot encodes all categorical variables.</p></li>
 <li><p><strong>exclude_vars</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Default: None. List of variables to exclude from one-hot encoding.
 If None, no variables are excluded.</p></li>
 <li><p><strong>dropfirst</strong> (<em>bool</em>) – Default: True. If True, drops the first one-hot encoded column.</p></li>
+<li><p><strong>keep_original</strong> (<em>bool</em>) – Default: False. If True, keeps the original variables in the DataFrame.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -439,6 +683,23 @@ If None, then all features with at least 50% support are selected.</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="tablemage.Analyzer.remove_data_checkpoint">
+<span class="sig-name descname"><span class="pre">remove_data_checkpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">checkpoint_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#tablemage.Analyzer" title="tablemage._src.analyzer.Analyzer"><span class="pre">Analyzer</span></a></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.remove_data_checkpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.remove_data_checkpoint" title="Permalink to this definition"></a></dt>
+<dd><p>Deletes a saved checkpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>checkpoint_name</strong> (<em>str</em>) – The name of the checkpoint to delete.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Returns self for method chaining.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#tablemage.Analyzer" title="tablemage.Analyzer">Analyzer</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="tablemage.Analyzer.save_data_checkpoint">
 <span class="sig-name descname"><span class="pre">save_data_checkpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">checkpoint_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#tablemage.Analyzer" title="tablemage._src.analyzer.Analyzer"><span class="pre">Analyzer</span></a></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.save_data_checkpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.save_data_checkpoint" title="Permalink to this definition"></a></dt>
 <dd><p>Saves the current train and test DataFrames.</p>
@@ -457,7 +718,7 @@ If None, then all features with at least 50% support are selected.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="tablemage.Analyzer.scale">
-<span class="sig-name descname"><span class="pre">scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_vars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_vars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'standardize'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'minmax'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'log'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'log1p'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'standardize'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#tablemage.Analyzer" title="tablemage._src.analyzer.Analyzer"><span class="pre">Analyzer</span></a></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.scale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.scale" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_vars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_vars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'standardize'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'minmax'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'log'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'log1p'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'robust_standardize'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'normal_quantile'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'uniform_quantile'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'standardize'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#tablemage.Analyzer" title="tablemage._src.analyzer.Analyzer"><span class="pre">Analyzer</span></a></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.scale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.scale" title="Permalink to this definition"></a></dt>
 <dd><p>Scales the variables.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -466,7 +727,7 @@ If None, then all features with at least 50% support are selected.</p></li>
 If None, scales values in all columns.</p></li>
 <li><p><strong>exclude_vars</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Default: None. List of variables to exclude from scaling.
 If None, no variables are excluded.</p></li>
-<li><p><strong>strategy</strong> (<em>Literal</em><em>[</em><em>&quot;standardize&quot;</em><em>, </em><em>&quot;minmax&quot;</em><em>, </em><em>&quot;log&quot;</em><em>, </em><em>&quot;log1p&quot;</em><em>]</em>) – Default: ‘standardize’. The scaling strategy.</p></li>
+<li><p><strong>strategy</strong> (<em>str</em>) – Default: ‘standardize’. The scaling strategy.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -474,6 +735,33 @@ If None, no variables are excluded.</p></li>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#tablemage.Analyzer" title="tablemage.Analyzer">Analyzer</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tablemage.Analyzer.select_features">
+<span class="sig-name descname"><span class="pre">select_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predictors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_selectors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tablemage._src.feature_selection.base_feature_selection.BaseFSR</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tablemage._src.feature_selection.base_feature_selection.BaseFSC</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_n_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="tm_reports.html#tablemage._reports.VotingSelectionReport" title="tablemage._src.feature_selection.voteselect_report.VotingSelectionReport"><span class="pre">VotingSelectionReport</span></a></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.select_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.select_features" title="Permalink to this definition"></a></dt>
+<dd><p>Selects the most important features using a variety of feature selection
+methods. The feature selection methods can be used to select the most
+important predictors for regression or classification.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> (<em>str</em>) – The target variable.</p></li>
+<li><p><strong>predictors</strong> (<em>list</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>) – Default: None. The predictors to select from.
+If None, uses all variables except the target as predictors.</p></li>
+<li><p><strong>feature_selectors</strong> (<em>list</em><em>[</em><em>BaseFSR</em><em>] </em><em>| </em><em>list</em><em>[</em><em>BaseFSC</em><em>] </em><em>| </em><em>None</em>) – Default: None. The feature selection methods to use.
+If None, uses all feature selection methods.</p></li>
+<li><p><strong>max_n_features</strong> (<em>int</em><em> | </em><em>None</em>) – Default: None. Maximum number of features to select.
+If None, then all features with at least 50% support are selected.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Report object containing the results of the feature selection methods.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="tm_reports.html#tablemage._reports.VotingSelectionReport" title="tablemage._reports.VotingSelectionReport">VotingSelectionReport</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -496,6 +784,57 @@ If None, no variables are excluded.</p></li>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#tablemage.Analyzer" title="tablemage.Analyzer">Analyzer</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tablemage.Analyzer.shape">
+<span class="sig-name descname"><span class="pre">shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'train'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'test'</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.shape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.shape" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the shape of the working train DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataset</strong> (<em>Literal</em><em>[</em><em>'train'</em><em>, </em><em>'test'</em><em>]</em>) – The dataset to get the shape of.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The shape of the working DataFrame.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[int, int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tablemage.Analyzer.value_counts">
+<span class="sig-name descname"><span class="pre">value_counts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'train'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'test'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'both'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'both'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Series</span></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.value_counts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.value_counts" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the value counts of a variable in the working train DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var</strong> (<em>str</em>) – The variable to get the value counts of.</p></li>
+<li><p><strong>dataset</strong> (<em>Literal</em><em>[</em><em>'train'</em><em>, </em><em>'test'</em><em>]</em>) – The dataset to get the value counts of.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The value counts of the variable.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tablemage.Analyzer.vars">
+<span class="sig-name descname"><span class="pre">vars</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.vars"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.vars" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the variables in the working train DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The variables.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[str]</p>
 </dd>
 </dl>
 </dd></dl>

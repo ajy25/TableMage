@@ -91,7 +91,7 @@ class CausalReport:
         """Returns the number of units in the data."""
         return self._n_units
 
-    def p_val(self):
+    def pval(self):
         """Returns the p-value of the estimator."""
         return self._p_value
 

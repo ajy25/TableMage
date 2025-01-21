@@ -70,14 +70,11 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html">Reports <code class="xref py py-mod docutils literal notranslate"><span class="pre">(tm._reports)</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-mlclassificationreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.MLClassificationReport</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-mlregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.MLRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-olsregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.OLSRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-poissonregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.PoissonRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-negativebinomialregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.NegativeBinomialRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-binomialregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.BinomialRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-countregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.CountRegressionReport</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-olsreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.OLSReport</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-edareport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.EDAReport</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-votingselectionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.VotingSelectionReport</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-statisticaltestreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.StatisticalTestReport</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-causalreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.CausalReport</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -118,11 +115,10 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span>
 <span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">minmax_scale</span><span class="p">,</span> <span class="n">scale</span>
 <span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
-<span class="kn">from</span> <span class="nn">textwrap</span> <span class="kn">import</span> <span class="n">fill</span>
-
-<span class="c1"># from tableone import TableOne</span>
+<span class="kn">from</span> <span class="nn">pandas.api.types</span> <span class="kn">import</span> <span class="n">is_numeric_dtype</span>
+<span class="kn">from</span> <span class="nn">tableone</span> <span class="kn">import</span> <span class="n">TableOne</span>
 <span class="kn">from</span> <span class="nn">..stattests</span> <span class="kn">import</span> <span class="n">StatisticalTestReport</span>
-<span class="kn">from</span> <span class="nn">..display.print_utils</span> <span class="kn">import</span> <span class="n">print_wrapped</span><span class="p">,</span> <span class="n">format_value</span>
+<span class="kn">from</span> <span class="nn">..display.print_utils</span> <span class="kn">import</span> <span class="n">print_wrapped</span><span class="p">,</span> <span class="n">format_value</span><span class="p">,</span> <span class="n">suppress_std_output</span>
 <span class="kn">from</span> <span class="nn">..display.print_options</span> <span class="kn">import</span> <span class="n">print_options</span>
 <span class="kn">from</span> <span class="nn">..display.plot_options</span> <span class="kn">import</span> <span class="n">plot_options</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">ensure_arg_list_uniqueness</span>
@@ -130,13 +126,12 @@
 
 <span class="k">def</span> <span class="nf">safe_pearsonr</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Safely compute Pearson correlation with missing value handling.&quot;&quot;&quot;</span>
-    <span class="c1"># Get mask for pairwise complete observations</span>
     <span class="n">mask</span> <span class="o">=</span> <span class="o">~</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
-    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># Need at least 2 complete pairs</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">stats</span><span class="o">.</span><span class="n">pearsonr</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
-    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># Catch any numerical computation errors</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
 
@@ -458,7 +453,7 @@
     <span class="c1"># --------------------------------------------------------------------------</span>
     <span class="c1"># TABLE GENERATION</span>
     <span class="c1"># --------------------------------------------------------------------------</span>
-    <span class="nd">@ensure_arg_list_uniqueness</span><span class="p">()</span>
+<div class="viewcode-block" id="EDAReport.tabulate_correlation_comparison"><a class="viewcode-back" href="../../../../python_api/classes/tm_reports.html#tablemage._reports.EDAReport.tabulate_correlation_comparison">[docs]</a>    <span class="nd">@ensure_arg_list_uniqueness</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">tabulate_correlation_comparison</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">numeric_vars</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">target</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">bonferroni_correction</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
@@ -488,7 +483,6 @@
 <span class="sd">            Columns include the Pearson correlation coefficient, p-value, and</span>
 <span class="sd">            number of units considered (if dropna was True).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Input validation</span>
         <span class="n">invalid_vars</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">numeric_vars</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_numeric_vars</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">invalid_vars</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -500,7 +494,7 @@
                 <span class="sa">f</span><span class="s2">&quot;Invalid input: </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">. Must be a known numeric variable.&quot;</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="n">bonferroni_correction</span><span class="p">:</span>
-            <span class="n">p_val_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;p-value (Bonferroni corrected, n_tests=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">numeric_vars</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span>
+            <span class="n">p_val_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;p-value (Bonferroni corrected)&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">p_val_name</span> <span class="o">=</span> <span class="s2">&quot;p-value&quot;</span>
 
@@ -522,10 +516,10 @@
         <span class="n">n_decimals</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">print_options</span><span class="p">,</span> <span class="s2">&quot;_n_decimals&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
 
         <span class="n">corr_table</span><span class="p">[</span><span class="n">corr_column_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">corr_table</span><span class="p">[</span><span class="n">corr_column_name</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
-            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">format_value</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n_decimals</span><span class="p">)</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">format_value</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n_decimals</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;f&quot;</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="n">corr_table</span><span class="p">[</span><span class="n">p_val_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">corr_table</span><span class="p">[</span><span class="n">p_val_name</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
-            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">format_value</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n_decimals</span><span class="p">)</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">format_value</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n_decimals</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;e&quot;</span><span class="p">)</span>
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">has_missing</span><span class="p">:</span>
@@ -533,13 +527,13 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">corr_table</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">corr_table</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">corr_table</span>
+        <span class="k">return</span> <span class="n">corr_table</span></div>
 
-    <span class="nd">@ensure_arg_list_uniqueness</span><span class="p">()</span>
+<div class="viewcode-block" id="EDAReport.tabulate_correlation_matrix"><a class="viewcode-back" href="../../../../python_api/classes/tm_reports.html#tablemage._reports.EDAReport.tabulate_correlation_matrix">[docs]</a>    <span class="nd">@ensure_arg_list_uniqueness</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">tabulate_correlation_matrix</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">numeric_vars</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-        <span class="n">p_values</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">htest</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates a table of the Pearson correlation coefficients</span>
 <span class="sd">        between numeric variables.</span>
@@ -554,7 +548,7 @@
 <span class="sd">        numeric_vars : list[str]</span>
 <span class="sd">            List of numeric variables to compute correlations for.</span>
 
-<span class="sd">        p_values : bool, default=False</span>
+<span class="sd">        htest : bool, default=False</span>
 <span class="sd">            If True, includes p-values in the output in format: &quot;corr (p-val)&quot;</span>
 
 <span class="sd">        Returns</span>
@@ -578,7 +572,6 @@
             <span class="n">pval_str</span> <span class="o">=</span> <span class="n">format_value</span><span class="p">(</span><span class="n">pval</span><span class="p">,</span> <span class="n">n_decimals</span><span class="p">)</span>
             <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">corr_str</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">pval_str</span><span class="si">}</span><span class="s2">)&quot;</span>
 
-        <span class="c1"># Validate input variables</span>
         <span class="n">invalid_vars</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">numeric_vars</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_numeric_vars</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">invalid_vars</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -586,26 +579,22 @@
                 <span class="s2">&quot;Must be known numeric variables.&quot;</span>
             <span class="p">)</span>
 
-        <span class="c1"># Extract data as numpy array for faster computation</span>
         <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="p">[</span><span class="n">numeric_vars</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
         <span class="n">n_vars</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">numeric_vars</span><span class="p">)</span>
         <span class="n">n_decimals</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">print_options</span><span class="p">,</span> <span class="s2">&quot;_n_decimals&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
 
-        <span class="c1"># Initialize matrices for correlations and p-values</span>
         <span class="n">corr_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n_vars</span><span class="p">,</span> <span class="n">n_vars</span><span class="p">))</span>
-        <span class="n">p_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n_vars</span><span class="p">,</span> <span class="n">n_vars</span><span class="p">))</span> <span class="k">if</span> <span class="n">p_values</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">p_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n_vars</span><span class="p">,</span> <span class="n">n_vars</span><span class="p">))</span> <span class="k">if</span> <span class="n">htest</span> <span class="k">else</span> <span class="kc">None</span>
 
-        <span class="c1"># Compute correlations and p-values for upper triangle</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_vars</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_vars</span><span class="p">):</span>
                 <span class="n">corr</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">safe_pearsonr</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
                 <span class="n">corr_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">corr_matrix</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">corr</span>
-                <span class="k">if</span> <span class="n">p_values</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">htest</span><span class="p">:</span>
                     <span class="n">p_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">p_matrix</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span>
 
-        <span class="c1"># Convert to DataFrame and format values</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">p_values</span><span class="p">:</span>
-            <span class="c1"># Format correlation values only</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">htest</span><span class="p">:</span>
+
             <span class="k">def</span> <span class="nf">format_value_with_na</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
                 <span class="k">return</span> <span class="s2">&quot;NA&quot;</span> <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">else</span> <span class="n">format_value</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n_decimals</span><span class="p">)</span>
 
@@ -614,7 +603,6 @@
                 <span class="n">formatted_matrix</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">numeric_vars</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">numeric_vars</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Format correlations with p-values</span>
             <span class="n">formatted_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n_vars</span><span class="p">,</span> <span class="n">n_vars</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_vars</span><span class="p">):</span>
                 <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_vars</span><span class="p">):</span>
@@ -632,74 +620,84 @@
                 <span class="n">formatted_matrix</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">numeric_vars</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">numeric_vars</span>
             <span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">result</span>
+        <span class="k">return</span> <span class="n">result</span></div>
 
-    <span class="c1"># def tabulate_tableone(</span>
-    <span class="c1">#     self,</span>
-    <span class="c1">#     vars: list[str],</span>
-    <span class="c1">#     stratify_by: str | None,</span>
-    <span class="c1">#     show_missingness: bool = True,</span>
-    <span class="c1">#     show_htest_name: bool = True,</span>
-    <span class="c1">#     bonferroni_correction: bool = False,</span>
-    <span class="c1"># ) -&gt; TableOne:</span>
-    <span class="c1">#     &quot;&quot;&quot;</span>
-    <span class="c1">#     Generates a tableone for the given variables stratified by the given variable.</span>
+<div class="viewcode-block" id="EDAReport.tabulate_tableone"><a class="viewcode-back" href="../../../../python_api/classes/tm_reports.html#tablemage._reports.EDAReport.tabulate_tableone">[docs]</a>    <span class="k">def</span> <span class="nf">tabulate_tableone</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">vars</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">stratify_by</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">show_missingness</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">show_htest_name</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">bonferroni_correction</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TableOne</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates a tableone for the given variables stratified by the given variable.</span>
 
-    <span class="c1">#     Parameters</span>
-    <span class="c1">#     ----------</span>
-    <span class="c1">#     vars : list[str]</span>
-    <span class="c1">#         List of variables to include in the tableone.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        vars : list[str]</span>
+<span class="sd">            List of variables to include in the tableone.</span>
 
-    <span class="c1">#     stratify_by : str</span>
-    <span class="c1">#         Categorical variable to stratify by.</span>
+<span class="sd">        stratify_by : str</span>
+<span class="sd">            Categorical variable to stratify by.</span>
 
-    <span class="c1">#     show_missingness : bool</span>
-    <span class="c1">#         Default: True. If True, includes missingness information in the table.</span>
+<span class="sd">        show_missingness : bool</span>
+<span class="sd">            Default: True. If True, includes missingness information in the table.</span>
 
-    <span class="c1">#     show_htest_name : bool</span>
-    <span class="c1">#         Default: True. If True, includes the name of the hypothesis test in the table.</span>
+<span class="sd">        show_htest_name : bool</span>
+<span class="sd">            Default: True. If True, includes the name of the hypothesis test in the table.</span>
 
-    <span class="c1">#     bonferroni_correction : bool</span>
-    <span class="c1">#         Default: False. If True, applies Bonferroni correction to the p-values.</span>
+<span class="sd">        bonferroni_correction : bool</span>
+<span class="sd">            Default: False. If True, applies Bonferroni correction to the p-values.</span>
 
-    <span class="c1">#     Returns</span>
-    <span class="c1">#     -------</span>
-    <span class="c1">#     TableOne</span>
-    <span class="c1">#     &quot;&quot;&quot;</span>
-    <span class="c1">#     pval = stratify_by is not None</span>
-    <span class="c1">#     pval_adjust = &quot;bonferroni&quot; if bonferroni_correction else None</span>
-    <span class="c1">#     return TableOne(</span>
-    <span class="c1">#         data=self._df,</span>
-    <span class="c1">#         columns=vars,</span>
-    <span class="c1">#         groupby=stratify_by,</span>
-    <span class="c1">#         pval=pval,</span>
-    <span class="c1">#         pval_adjust=pval_adjust,</span>
-    <span class="c1">#         htest_name=show_htest_name,</span>
-    <span class="c1">#         missing=show_missingness,</span>
-    <span class="c1">#     )</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        TableOne</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pval</span> <span class="o">=</span> <span class="n">stratify_by</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">pval_adjust</span> <span class="o">=</span> <span class="s2">&quot;bonferroni&quot;</span> <span class="k">if</span> <span class="n">bonferroni_correction</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">TableOne</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="p">,</span>
+            <span class="n">columns</span><span class="o">=</span><span class="nb">vars</span><span class="p">,</span>
+            <span class="n">groupby</span><span class="o">=</span><span class="n">stratify_by</span><span class="p">,</span>
+            <span class="n">pval</span><span class="o">=</span><span class="n">pval</span><span class="p">,</span>
+            <span class="n">pval_adjust</span><span class="o">=</span><span class="n">pval_adjust</span><span class="p">,</span>
+            <span class="n">htest_name</span><span class="o">=</span><span class="n">show_htest_name</span><span class="p">,</span>
+            <span class="n">missing</span><span class="o">=</span><span class="n">show_missingness</span><span class="p">,</span>
+        <span class="p">)</span></div>
 
     <span class="c1"># --------------------------------------------------------------------------</span>
     <span class="c1"># PLOTTING</span>
     <span class="c1"># --------------------------------------------------------------------------</span>
-<div class="viewcode-block" id="EDAReport.plot_numeric_pairs"><a class="viewcode-back" href="../../../../python_api/classes/tm_reports.html#tablemage._reports.EDAReport.plot_numeric_pairs">[docs]</a>    <span class="nd">@ensure_arg_list_uniqueness</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">plot_numeric_pairs</span><span class="p">(</span>
+<div class="viewcode-block" id="EDAReport.plot_pairs"><a class="viewcode-back" href="../../../../python_api/classes/tm_reports.html#tablemage._reports.EDAReport.plot_pairs">[docs]</a>    <span class="nd">@ensure_arg_list_uniqueness</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">plot_pairs</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">numeric_vars</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">stratify_by</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="nb">vars</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">htest</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Plots pairwise relationships between numeric variables.</span>
+<span class="sd">        Plots pairwise relationships among the specified variables</span>
+<span class="sd">        (numeric or categorical).</span>
+
+<span class="sd">        Diagonal plots show distributions of single variables,</span>
+<span class="sd">        lower panels show one type of plot, upper panels another.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        numeric_vars : list[str]</span>
-<span class="sd">            Default: None. A list of numeric variables.</span>
-<span class="sd">            If None, all numeric variables are considered.</span>
+<span class="sd">        df : pd.DataFrame</span>
+<span class="sd">            Your DataFrame containing the data.</span>
 
-<span class="sd">        stratify_by : str</span>
-<span class="sd">            Default: None. Categorical var name.</span>
-<span class="sd">            If not None, the plot is stratified by this variable.</span>
+<span class="sd">        vars : list[str] | None</span>
+<span class="sd">            Default: None. A list of variable names (numeric or categorical).</span>
+<span class="sd">            If None, all columns are considered.</span>
+
+<span class="sd">        htest : bool</span>
+<span class="sd">            Default: True. If True, includes correlation coefficients and p-values</span>
+<span class="sd">            for numeric-numeric pairs, chi-squared test results for</span>
+<span class="sd">            categorical-categorical pairs, and</span>
+<span class="sd">            either t-test or ANOVA results for numeric-categorical pairs</span>
+<span class="sd">            in the upper triangle.</span>
 
 <span class="sd">        figsize : tuple[float, float]</span>
 <span class="sd">            Default: (7, 7). The size of the figure.</span>
@@ -708,315 +706,447 @@
 <span class="sd">        -------</span>
 <span class="sd">        plt.Figure</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">font_adjustment</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">font_adjustment</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_df</span>
 
-        <span class="k">if</span> <span class="n">numeric_vars</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">numeric_vars</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_numeric_vars</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">numeric_vars</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">6</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;No more than 6 numeric variables may be &quot;</span> <span class="o">+</span> <span class="s2">&quot;plotted at the same time.&quot;</span>
-            <span class="p">)</span>
+        <span class="k">if</span> <span class="nb">vars</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">vars</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">stratify_by</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">grid</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">PairGrid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="p">[</span><span class="n">numeric_vars</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">())</span>
-            <span class="n">right_adjust</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">grid</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">PairGrid</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="p">[</span><span class="n">numeric_vars</span> <span class="o">+</span> <span class="p">[</span><span class="n">stratify_by</span><span class="p">]]</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span>
-                <span class="n">hue</span><span class="o">=</span><span class="n">stratify_by</span><span class="p">,</span>
-                <span class="n">palette</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_color_palette</span><span class="p">[</span>
-                    <span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="p">[</span><span class="n">stratify_by</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
-                <span class="p">],</span>
-            <span class="p">)</span>
-            <span class="n">right_adjust</span> <span class="o">=</span> <span class="mf">0.85</span>
-
-        <span class="n">grid</span><span class="o">.</span><span class="n">map_diag</span><span class="p">(</span>
-            <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">,</span>
-            <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_color</span><span class="p">,</span>
-            <span class="n">edgecolor</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_edgecolor</span><span class="p">,</span>
-            <span class="n">kde</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">alpha</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_alpha</span><span class="p">,</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">vars</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Plotting too many variables is unwieldy. Try &lt;= 10.&quot;</span><span class="p">)</span>
+        <span class="n">df_plot</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="nb">vars</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+        <span class="n">n_vars</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">vars</span><span class="p">)</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
+            <span class="n">n_vars</span><span class="p">,</span> <span class="n">n_vars</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
+        <span class="k">if</span> <span class="n">n_vars</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">axes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">axes</span><span class="p">]])</span>
+        <span class="n">right_adjust</span> <span class="o">=</span> <span class="mf">1.0</span>
 
-        <span class="k">if</span> <span class="n">stratify_by</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">grid</span><span class="o">.</span><span class="n">map_upper</span><span class="p">(</span>
-                <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+        <span class="k">def</span> <span class="nf">diag_plot</span><span class="p">(</span><span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">,</span> <span class="n">series</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Plot on the diagonal: distribution of a single variable.&quot;&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">series</span><span class="p">):</span>
+                    <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span>
+                        <span class="n">x</span><span class="o">=</span><span class="n">series</span><span class="p">,</span>
+                        <span class="n">kde</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_color</span><span class="p">,</span>
+                        <span class="n">edgecolor</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_edgecolor</span><span class="p">,</span>
+                        <span class="n">alpha</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_alpha</span><span class="p">,</span>
+                        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span>
+                        <span class="n">x</span><span class="o">=</span><span class="n">series</span><span class="p">,</span>
+                        <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_color</span><span class="p">,</span>
+                        <span class="n">alpha</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_alpha</span><span class="p">,</span>
+                        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                        <span class="n">order</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">series</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">unique</span><span class="p">()),</span>
+                    <span class="p">)</span>
+                    <span class="c1"># Rotate category labels</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">axis</span> <span class="o">==</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">series</span><span class="p">):</span>
+                    <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span>
+                        <span class="n">y</span><span class="o">=</span><span class="n">series</span><span class="p">,</span>
+                        <span class="n">kde</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_color</span><span class="p">,</span>
+                        <span class="n">edgecolor</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_edgecolor</span><span class="p">,</span>
+                        <span class="n">alpha</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_alpha</span><span class="p">,</span>
+                        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Count&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span>
+                        <span class="n">y</span><span class="o">=</span><span class="n">series</span><span class="p">,</span>
+                        <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_color</span><span class="p">,</span>
+                        <span class="n">alpha</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_alpha</span><span class="p">,</span>
+                        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                        <span class="n">order</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">series</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">unique</span><span class="p">()),</span>
+                    <span class="p">)</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Count&quot;</span><span class="p">)</span>
+                    <span class="c1"># Rotate category labels</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_yticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
+
+        <span class="nd">@suppress_std_output</span><span class="p">()</span>
+        <span class="k">def</span> <span class="nf">upper_plot</span><span class="p">(</span><span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">xname</span><span class="p">,</span> <span class="n">yname</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Plot on the upper triangle (i &lt; j)&quot;&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">and</span> <span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+                <span class="c1"># pearson corr</span>
+                <span class="n">r</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">pearsonr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
                     <span class="mf">0.5</span><span class="p">,</span>
                     <span class="mf">0.5</span><span class="p">,</span>
-                    <span class="sa">f</span><span class="s2">&quot;ρ = </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">pearsonr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">print_options</span><span class="o">.</span><span class="n">_n_decimals</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;p = </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">pearsonr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">print_options</span><span class="o">.</span><span class="n">_n_decimals</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;r = </span><span class="si">{</span><span class="n">r</span><span class="si">:</span><span class="s2">.</span><span class="si">{</span><span class="n">print_options</span><span class="o">.</span><span class="n">_n_decimals</span><span class="si">}</span><span class="s2">f</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;p = </span><span class="si">{</span><span class="n">p</span><span class="si">:</span><span class="s2">.</span><span class="si">{</span><span class="n">print_options</span><span class="o">.</span><span class="n">_n_decimals</span><span class="si">}</span><span class="s2">g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                     <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
                     <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
-                    <span class="n">transform</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span>
+                    <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span>
                     <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_title_font_size</span> <span class="o">-</span> <span class="n">font_adjustment</span><span class="p">,</span>
                 <span class="p">)</span>
-            <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">grid</span><span class="o">.</span><span class="n">map_upper</span><span class="p">(</span>
-                <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_dot_size</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_dot_color</span>
-            <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+                <span class="c1"># test equal means</span>
+                <span class="n">report</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_equal_means</span><span class="p">(</span><span class="n">numeric_var</span><span class="o">=</span><span class="n">xname</span><span class="p">,</span> <span class="n">stratify_by</span><span class="o">=</span><span class="n">yname</span><span class="p">)</span>
+                <span class="n">test_type</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">_description</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">_pval</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+                    <span class="mf">0.5</span><span class="p">,</span>
+                    <span class="mf">0.5</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">test_type</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;p = </span><span class="si">{</span><span class="n">p</span><span class="si">:</span><span class="s2">.</span><span class="si">{</span><span class="n">print_options</span><span class="o">.</span><span class="n">_n_decimals</span><span class="si">}</span><span class="s2">g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                    <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                    <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span>
+                    <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_title_font_size</span> <span class="o">-</span> <span class="n">font_adjustment</span><span class="p">,</span>
+                <span class="p">)</span>
 
-        <span class="n">grid</span><span class="o">.</span><span class="n">map_lower</span><span class="p">(</span>
-            <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_dot_size</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_dot_color</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">and</span> <span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+                <span class="c1"># test equal means</span>
+                <span class="n">report</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_equal_means</span><span class="p">(</span><span class="n">numeric_var</span><span class="o">=</span><span class="n">yname</span><span class="p">,</span> <span class="n">stratify_by</span><span class="o">=</span><span class="n">xname</span><span class="p">)</span>
+                <span class="n">test_type</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">_description</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">_pval</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+                    <span class="mf">0.5</span><span class="p">,</span>
+                    <span class="mf">0.5</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">test_type</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;p = </span><span class="si">{</span><span class="n">p</span><span class="si">:</span><span class="s2">.</span><span class="si">{</span><span class="n">print_options</span><span class="o">.</span><span class="n">_n_decimals</span><span class="si">}</span><span class="s2">g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                    <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                    <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span>
+                    <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_title_font_size</span> <span class="o">-</span> <span class="n">font_adjustment</span><span class="p">,</span>
+                <span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># chi2</span>
+                <span class="n">report</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chi2</span><span class="p">(</span><span class="n">categorical_var_1</span><span class="o">=</span><span class="n">xname</span><span class="p">,</span> <span class="n">categorical_var_2</span><span class="o">=</span><span class="n">yname</span><span class="p">)</span>
+                <span class="n">test_type</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">_description</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">_pval</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+                    <span class="mf">0.5</span><span class="p">,</span>
+                    <span class="mf">0.5</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">test_type</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;p = </span><span class="si">{</span><span class="n">p</span><span class="si">:</span><span class="s2">.</span><span class="si">{</span><span class="n">print_options</span><span class="o">.</span><span class="n">_n_decimals</span><span class="si">}</span><span class="s2">g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                    <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                    <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span>
+                    <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_title_font_size</span> <span class="o">-</span> <span class="n">font_adjustment</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">lower_plot</span><span class="p">(</span><span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">xname</span><span class="p">,</span> <span class="n">yname</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Plot on the lower triangle (i &gt; j).&quot;&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">and</span> <span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+                <span class="c1"># scatter plot</span>
+                <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span>
+                    <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+                    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+                    <span class="n">facecolor</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_dot_facecolor</span><span class="p">,</span>
+                    <span class="n">edgecolor</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_dot_edgecolor</span><span class="p">,</span>
+                    <span class="n">size</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_dot_size</span><span class="p">,</span>
+                    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                    <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+                <span class="c1"># numeric vs categorical -&gt; boxplot with categories on y-axis</span>
+                <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span>
+                    <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+                    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+                    <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_color</span><span class="p">,</span>
+                    <span class="n">flierprops</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+                        <span class="s2">&quot;markersize&quot;</span><span class="p">:</span> <span class="n">plot_options</span><span class="o">.</span><span class="n">_dot_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="p">},</span>
+                    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                    <span class="n">order</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">df_plot</span><span class="p">[</span><span class="n">yname</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">unique</span><span class="p">()),</span>
+                    <span class="n">boxprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                        <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_color</span><span class="p">,</span>
+                        <span class="n">alpha</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_alpha</span><span class="p">,</span>
+                        <span class="n">linewidth</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_line_width</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_yticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="ow">not</span> <span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">and</span> <span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+                <span class="c1"># categorical vs numeric -&gt; boxplot with categories on x-axis</span>
+                <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span>
+                    <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+                    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+                    <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_color</span><span class="p">,</span>
+                    <span class="n">flierprops</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+                        <span class="s2">&quot;markersize&quot;</span><span class="p">:</span> <span class="n">plot_options</span><span class="o">.</span><span class="n">_dot_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="p">},</span>
+                    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                    <span class="n">order</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">df_plot</span><span class="p">[</span><span class="n">xname</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">unique</span><span class="p">()),</span>
+                    <span class="n">boxprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                        <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_color</span><span class="p">,</span>
+                        <span class="n">alpha</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_alpha</span><span class="p">,</span>
+                        <span class="n">linewidth</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_line_width</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">freq</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">crosstab</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+                <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span>
+                    <span class="n">freq</span><span class="p">,</span>
+                    <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">annot_kws</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;fontsize&quot;</span><span class="p">:</span> <span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_major_ticklabel_font_size</span>
+                        <span class="o">-</span> <span class="n">font_adjustment</span><span class="p">,</span>
+                    <span class="p">},</span>
+                    <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;d&quot;</span><span class="p">,</span>
+                    <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">cmap</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_cmap</span><span class="p">,</span>
+                    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_yticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_vars</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_vars</span><span class="p">):</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+                <span class="n">this_x</span> <span class="o">=</span> <span class="n">df_plot</span><span class="p">[</span><span class="nb">vars</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span>
+                <span class="n">this_y</span> <span class="o">=</span> <span class="n">df_plot</span><span class="p">[</span><span class="nb">vars</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">j</span><span class="p">:</span>
+                    <span class="c1"># we will use y if i is half of all vars</span>
+                    <span class="n">axis</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">n_vars</span> <span class="o">//</span> <span class="mi">2</span> <span class="k">else</span> <span class="s2">&quot;y&quot;</span>
+                    <span class="n">diag_plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">df_plot</span><span class="p">[</span><span class="nb">vars</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">htest</span><span class="p">:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">upper_plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">this_x</span><span class="p">,</span> <span class="n">this_y</span><span class="p">,</span> <span class="nb">vars</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="nb">vars</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                        <span class="k">except</span><span class="p">:</span>
+                            <span class="n">lower_plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">this_x</span><span class="p">,</span> <span class="n">this_y</span><span class="p">,</span> <span class="nb">vars</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="nb">vars</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">lower_plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">this_x</span><span class="p">,</span> <span class="n">this_y</span><span class="p">,</span> <span class="nb">vars</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="nb">vars</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">lower_plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">this_x</span><span class="p">,</span> <span class="n">this_y</span><span class="p">,</span> <span class="nb">vars</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="nb">vars</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_vars</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_vars</span><span class="p">):</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">j</span><span class="p">:</span>
+                    <span class="c1"># diag -&gt; no axis labels</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">n_vars</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="c1"># bottom row -&gt; show x-axis label</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span>
+                        <span class="nb">vars</span><span class="p">[</span><span class="n">j</span><span class="p">],</span>
+                        <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_title_font_size</span> <span class="o">-</span> <span class="n">font_adjustment</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+
+                <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="c1"># first column -&gt; show y-axis label</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span>
+                        <span class="nb">vars</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                        <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_title_font_size</span> <span class="o">-</span> <span class="n">font_adjustment</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">ticklabel_format</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;sci&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">scilimits</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">get_offset_text</span><span class="p">()</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span>
+                        <span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_minor_ticklabel_font_size</span> <span class="o">-</span> <span class="n">font_adjustment</span>
+                    <span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">ticklabel_format</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;sci&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">scilimits</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">get_offset_text</span><span class="p">()</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span>
+                        <span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_minor_ticklabel_font_size</span> <span class="o">-</span> <span class="n">font_adjustment</span>
+                    <span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+                <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span>
+                    <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span>
+                    <span class="n">which</span><span class="o">=</span><span class="s2">&quot;major&quot;</span><span class="p">,</span>
+                    <span class="n">labelsize</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_major_ticklabel_font_size</span>
+                    <span class="o">-</span> <span class="n">font_adjustment</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span>
+                    <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span>
+                    <span class="n">which</span><span class="o">=</span><span class="s2">&quot;minor&quot;</span><span class="p">,</span>
+                    <span class="n">labelsize</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_minor_ticklabel_font_size</span>
+                    <span class="o">-</span> <span class="n">font_adjustment</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span>
+            <span class="n">left</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">wspace</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="n">right_adjust</span>
         <span class="p">)</span>
-
-        <span class="n">grid</span><span class="o">.</span><span class="n">add_legend</span><span class="p">()</span>
-
-        <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">flat</span><span class="p">:</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">ticklabel_format</span><span class="p">(</span>
-                <span class="n">style</span><span class="o">=</span><span class="s2">&quot;sci&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">scilimits</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_scilimits</span>
-            <span class="p">)</span>
-
-            <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">offsetText</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span>
-                <span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_major_ticklabel_font_size</span> <span class="o">-</span> <span class="n">font_adjustment</span>
-            <span class="p">)</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">offsetText</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span>
-                <span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_major_ticklabel_font_size</span> <span class="o">-</span> <span class="n">font_adjustment</span>
-            <span class="p">)</span>
-
-            <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span>
-                <span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_title_font_size</span> <span class="o">-</span> <span class="n">font_adjustment</span>
-            <span class="p">)</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span>
-                <span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_title_font_size</span> <span class="o">-</span> <span class="n">font_adjustment</span>
-            <span class="p">)</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span>
-                <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span>
-                <span class="n">which</span><span class="o">=</span><span class="s2">&quot;major&quot;</span><span class="p">,</span>
-                <span class="n">labelsize</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_major_ticklabel_font_size</span>
-                <span class="o">-</span> <span class="n">font_adjustment</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span>
-                <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span>
-                <span class="n">which</span><span class="o">=</span><span class="s2">&quot;minor&quot;</span><span class="p">,</span>
-                <span class="n">labelsize</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_minor_ticklabel_font_size</span>
-                <span class="o">-</span> <span class="n">font_adjustment</span><span class="p">,</span>
-            <span class="p">)</span>
-
-        <span class="n">fig</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">figure</span>
-        <span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="o">*</span><span class="n">figsize</span><span class="p">)</span>
-        <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">wspace</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="n">right_adjust</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">stratify_by</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">legend</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">legends</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">legend</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span>
-                <span class="n">legend</span><span class="o">.</span><span class="n">get_title</span><span class="p">()</span><span class="o">.</span><span class="n">get_text</span><span class="p">(),</span>
-                <span class="n">prop</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_title_font_size</span><span class="p">},</span>
-            <span class="p">)</span>
-            <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">legend</span><span class="o">.</span><span class="n">get_texts</span><span class="p">():</span>
-                <span class="n">text</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="n">fill</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">get_text</span><span class="p">(),</span> <span class="mi">10</span><span class="p">))</span>
-                <span class="n">text</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_title_font_size</span> <span class="o">-</span> <span class="n">font_adjustment</span><span class="p">)</span>
-        <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">fig</span></div>
 
-<div class="viewcode-block" id="EDAReport.plot_distribution_stratified"><a class="viewcode-back" href="../../../../python_api/classes/tm_reports.html#tablemage._reports.EDAReport.plot_distribution_stratified">[docs]</a>    <span class="nd">@ensure_arg_list_uniqueness</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">plot_distribution_stratified</span><span class="p">(</span>
+<div class="viewcode-block" id="EDAReport.plot"><a class="viewcode-back" href="../../../../python_api/classes/tm_reports.html#tablemage._reports.EDAReport.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">numeric_var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">stratify_by</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">strategy</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span>
-            <span class="s2">&quot;stacked_kde_density&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;stacked_hist_kde_density&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;stacked_hist_kde_frequency&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;violin&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;violin_swarm&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;violin_strip&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;box&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;box_swarm&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;box_strip&quot;</span><span class="p">,</span>
-        <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;box&quot;</span><span class="p">,</span>
+        <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">y</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
         <span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Plots the distributions (density) of a given numeric variable</span>
-<span class="sd">        stratified by a categorical variable. Note that NaNs will be dropped,</span>
-<span class="sd">        which may yield different ranges for different</span>
-<span class="sd">        stratify_by inputs, depending on their levels of missingness.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;General purpose plot method for single variable distributions and</span>
+<span class="sd">        relationships between two variables. Variables may be numeric or categorical.</span>
+
+<span class="sd">        If both numeric, scatter plot is produced.</span>
+<span class="sd">        If one numeric and one categorical, boxplot is produced.</span>
+<span class="sd">        If both categorical, cross tab heatmap is produced.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        numeric_var : str</span>
-<span class="sd">            Numeric variable of interest.</span>
+<span class="sd">        x : str</span>
+<span class="sd">            The name of the variable to plot on the x-axis.</span>
 
-<span class="sd">        stratify_by : str</span>
-<span class="sd">            Categorical variable to stratify by.</span>
-
-<span class="sd">        strategy : Literal[&#39;stacked_kde_density&#39;, &#39;stacked_hist_kde_density&#39;,</span>
-<span class="sd">            &#39;stacked_hist_kde_frequency&#39;, &#39;violin&#39;, &#39;violin_swarm&#39;, &#39;violin_strip&#39;,</span>
-<span class="sd">            &#39;box&#39;, &#39;box_swarm&#39;, &#39;box_strip&#39;]</span>
-<span class="sd">            Default: &#39;box&#39;. The strategy for plotting the distribution.</span>
+<span class="sd">        y : str | None</span>
+<span class="sd">            Default: None. The name of the variable to plot on the y-axis.</span>
 
 <span class="sd">        figsize : tuple[float, float]</span>
-<span class="sd">            Default: (5, 5). The size of the figure.</span>
+<span class="sd">            Default: (5, 5). The size of the figure. Only used if ax is None.</span>
 
 <span class="sd">        ax : plt.Axes | None</span>
-<span class="sd">            Default: None. If not None, the plot is drawn on the input Axes.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        plt.Figure</span>
+<span class="sd">            Default: None. The axes to plot on. If None, a new figure is created.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">fig</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># drop rows with missing values in either x or y</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+
+        <span class="n">x_series</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+        <span class="n">y_series</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="k">if</span> <span class="n">y</span> <span class="k">else</span> <span class="kc">None</span>
+
         <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+            <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">figure</span>
 
-        <span class="n">local_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="p">[[</span><span class="n">numeric_var</span><span class="p">,</span> <span class="n">stratify_by</span><span class="p">]]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">x_series</span><span class="p">):</span>
+                <span class="c1"># plot a histogram through sns.histplot</span>
+                <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span>
+                    <span class="n">x_series</span><span class="p">,</span>
+                    <span class="n">bins</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+                    <span class="n">kde</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_color</span><span class="p">,</span>
+                    <span class="n">edgecolor</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_edgecolor</span><span class="p">,</span>
+                    <span class="n">alpha</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_alpha</span><span class="p">,</span>
+                    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="c1"># set y axis label</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Frequency&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># plot a bar plot through sns.countplot</span>
+                <span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span>
+                    <span class="n">x</span><span class="o">=</span><span class="n">x_series</span><span class="p">,</span>
+                    <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_color</span><span class="p">,</span>
+                    <span class="n">alpha</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_alpha</span><span class="p">,</span>
+                    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                    <span class="n">order</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">x_series</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">unique</span><span class="p">()),</span>
+                <span class="p">)</span>
+                <span class="c1"># Rotate category labels</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">strategy</span> <span class="ow">in</span> <span class="p">[</span>
-            <span class="s2">&quot;stacked_hist_kde_frequency&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;stacked_hist_kde_density&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;stacked_kde_density&quot;</span><span class="p">,</span>
-        <span class="p">]:</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">category</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">local_df</span><span class="p">[</span><span class="n">stratify_by</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()):</span>
-                <span class="n">subset</span> <span class="o">=</span> <span class="n">local_df</span><span class="p">[</span><span class="n">local_df</span><span class="p">[</span><span class="n">stratify_by</span><span class="p">]</span> <span class="o">==</span> <span class="n">category</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s2">&quot;stacked_hist_kde_density&quot;</span><span class="p">:</span>
-                    <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span>
-                        <span class="n">subset</span><span class="p">[</span><span class="n">numeric_var</span><span class="p">],</span>
-                        <span class="n">bins</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
-                        <span class="n">kde</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">label</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">category</span><span class="p">),</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># numeric-numeric</span>
+            <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_numeric_dtype</span><span class="p">(</span>
+                <span class="n">x_series</span>
+            <span class="p">)</span> <span class="ow">and</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">y_series</span><span class="p">):</span>
+                <span class="c1"># scatter plot</span>
+                <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span>
+                    <span class="n">x</span><span class="o">=</span><span class="n">x_series</span><span class="p">,</span>
+                    <span class="n">y</span><span class="o">=</span><span class="n">y_series</span><span class="p">,</span>
+                    <span class="n">facecolor</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_dot_facecolor</span><span class="p">,</span>
+                    <span class="n">edgecolor</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_dot_edgecolor</span><span class="p">,</span>
+                    <span class="n">size</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_dot_size</span><span class="p">,</span>
+                    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                    <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="c1"># numeric-categorical</span>
+            <span class="k">elif</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_numeric_dtype</span><span class="p">(</span>
+                <span class="n">x_series</span>
+            <span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">y_series</span><span class="p">):</span>
+                <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span>
+                    <span class="n">x</span><span class="o">=</span><span class="n">x_series</span><span class="p">,</span>
+                    <span class="n">y</span><span class="o">=</span><span class="n">y_series</span><span class="p">,</span>
+                    <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_color</span><span class="p">,</span>
+                    <span class="n">flierprops</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">},</span>
+                    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                    <span class="n">order</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">y_series</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">unique</span><span class="p">()),</span>
+                    <span class="n">boxprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                        <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_color</span><span class="p">,</span>
                         <span class="n">alpha</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_alpha</span><span class="p">,</span>
-                        <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;density&quot;</span><span class="p">,</span>
-                        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-                        <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_color_palette</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                        <span class="n">edgecolor</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_edgecolor</span><span class="p">,</span>
-                    <span class="p">)</span>
-                <span class="k">elif</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s2">&quot;stacked_hist_kde_frequency&quot;</span><span class="p">:</span>
-                    <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span>
-                        <span class="n">subset</span><span class="p">[</span><span class="n">numeric_var</span><span class="p">],</span>
-                        <span class="n">bins</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
-                        <span class="n">kde</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">label</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">category</span><span class="p">),</span>
+                        <span class="n">linewidth</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_line_width</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">get_yticklabels</span><span class="p">(),</span>
+                    <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span>
+                    <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
+                    <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_major_ticklabel_font_size</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="c1"># categorical-numeric</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_numeric_dtype</span><span class="p">(</span>
+                <span class="n">x_series</span>
+            <span class="p">)</span> <span class="ow">and</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">y_series</span><span class="p">):</span>
+                <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span>
+                    <span class="n">x</span><span class="o">=</span><span class="n">x_series</span><span class="p">,</span>
+                    <span class="n">y</span><span class="o">=</span><span class="n">y_series</span><span class="p">,</span>
+                    <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_color</span><span class="p">,</span>
+                    <span class="n">flierprops</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">},</span>
+                    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                    <span class="n">order</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">x_series</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">unique</span><span class="p">()),</span>
+                    <span class="n">boxprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                        <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_color</span><span class="p">,</span>
                         <span class="n">alpha</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_alpha</span><span class="p">,</span>
-                        <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;frequency&quot;</span><span class="p">,</span>
-                        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-                        <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_color_palette</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                        <span class="n">edgecolor</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_edgecolor</span><span class="p">,</span>
-                    <span class="p">)</span>
-                <span class="k">elif</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s2">&quot;stacked_kde_density&quot;</span><span class="p">:</span>
-                    <span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">subset</span><span class="p">[</span><span class="n">numeric_var</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">category</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+                        <span class="n">linewidth</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_line_width</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span>
+                    <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span>
+                    <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
+                    <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_major_ticklabel_font_size</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="c1"># categorical-categorical</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">freq</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">crosstab</span><span class="p">(</span><span class="n">y_series</span><span class="p">,</span> <span class="n">x_series</span><span class="p">)</span>
+                <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span>
+                    <span class="n">freq</span><span class="p">,</span>
+                    <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">annot_kws</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;fontsize&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                    <span class="p">},</span>
+                    <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;d&quot;</span><span class="p">,</span>
+                    <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">cmap</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_cmap</span><span class="p">,</span>
+                    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">get_yticklabels</span><span class="p">(),</span>
+                    <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span>
+                    <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
+                    <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_major_ticklabel_font_size</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span>
+                    <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span>
+                    <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
+                    <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_major_ticklabel_font_size</span><span class="p">,</span>
+                <span class="p">)</span>
 
-            <span class="n">legend</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-            <span class="n">legend</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">stratify_by</span><span class="p">)</span>
-
+        <span class="k">try</span><span class="p">:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">ticklabel_format</span><span class="p">(</span>
                 <span class="n">style</span><span class="o">=</span><span class="s2">&quot;sci&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">scilimits</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_scilimits</span>
             <span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">ticklabel_format</span><span class="p">(</span>
+                <span class="n">style</span><span class="o">=</span><span class="s2">&quot;sci&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">scilimits</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_scilimits</span>
+            <span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
 
-        <span class="k">elif</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s2">&quot;violin_swarm&quot;</span><span class="p">:</span>
-            <span class="n">sns</span><span class="o">.</span><span class="n">violinplot</span><span class="p">(</span>
-                <span class="n">data</span><span class="o">=</span><span class="n">local_df</span><span class="p">,</span>
-                <span class="n">x</span><span class="o">=</span><span class="n">stratify_by</span><span class="p">,</span>
-                <span class="n">y</span><span class="o">=</span><span class="n">numeric_var</span><span class="p">,</span>
-                <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-                <span class="n">inner</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_color</span><span class="p">,</span>
-                <span class="n">edgecolor</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_edgecolor</span><span class="p">,</span>
-                <span class="n">alpha</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_alpha</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="n">sns</span><span class="o">.</span><span class="n">swarmplot</span><span class="p">(</span>
-                <span class="n">data</span><span class="o">=</span><span class="n">local_df</span><span class="p">,</span>
-                <span class="n">x</span><span class="o">=</span><span class="n">stratify_by</span><span class="p">,</span>
-                <span class="n">y</span><span class="o">=</span><span class="n">numeric_var</span><span class="p">,</span>
-                <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_dot_color</span><span class="p">,</span>
-                <span class="n">size</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_dot_size</span><span class="p">,</span>
-                <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-            <span class="p">)</span>
-
-        <span class="k">elif</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s2">&quot;violin&quot;</span><span class="p">:</span>
-            <span class="n">sns</span><span class="o">.</span><span class="n">violinplot</span><span class="p">(</span>
-                <span class="n">data</span><span class="o">=</span><span class="n">local_df</span><span class="p">,</span>
-                <span class="n">x</span><span class="o">=</span><span class="n">stratify_by</span><span class="p">,</span>
-                <span class="n">y</span><span class="o">=</span><span class="n">numeric_var</span><span class="p">,</span>
-                <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-                <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_color</span><span class="p">,</span>
-                <span class="n">edgecolor</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_color</span><span class="p">,</span>
-                <span class="n">inner</span><span class="o">=</span><span class="s2">&quot;box&quot;</span><span class="p">,</span>
-                <span class="n">alpha</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_alpha</span><span class="p">,</span>
-            <span class="p">)</span>
-
-        <span class="k">elif</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s2">&quot;violin_strip&quot;</span><span class="p">:</span>
-            <span class="n">sns</span><span class="o">.</span><span class="n">violinplot</span><span class="p">(</span>
-                <span class="n">data</span><span class="o">=</span><span class="n">local_df</span><span class="p">,</span>
-                <span class="n">x</span><span class="o">=</span><span class="n">stratify_by</span><span class="p">,</span>
-                <span class="n">y</span><span class="o">=</span><span class="n">numeric_var</span><span class="p">,</span>
-                <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-                <span class="n">inner</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_color</span><span class="p">,</span>
-                <span class="n">edgecolor</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_edgecolor</span><span class="p">,</span>
-                <span class="n">alpha</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_alpha</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="n">sns</span><span class="o">.</span><span class="n">stripplot</span><span class="p">(</span>
-                <span class="n">data</span><span class="o">=</span><span class="n">local_df</span><span class="p">,</span>
-                <span class="n">x</span><span class="o">=</span><span class="n">stratify_by</span><span class="p">,</span>
-                <span class="n">y</span><span class="o">=</span><span class="n">numeric_var</span><span class="p">,</span>
-                <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_dot_color</span><span class="p">,</span>
-                <span class="n">size</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_dot_size</span><span class="p">,</span>
-                <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-            <span class="p">)</span>
-
-        <span class="k">elif</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s2">&quot;box_swarm&quot;</span><span class="p">:</span>
-            <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span>
-                <span class="n">data</span><span class="o">=</span><span class="n">local_df</span><span class="p">,</span>
-                <span class="n">x</span><span class="o">=</span><span class="n">stratify_by</span><span class="p">,</span>
-                <span class="n">y</span><span class="o">=</span><span class="n">numeric_var</span><span class="p">,</span>
-                <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-                <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_color</span><span class="p">,</span>
-                <span class="n">edgecolor</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_edgecolor</span><span class="p">,</span>
-                <span class="n">fill</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="n">sns</span><span class="o">.</span><span class="n">swarmplot</span><span class="p">(</span>
-                <span class="n">data</span><span class="o">=</span><span class="n">local_df</span><span class="p">,</span>
-                <span class="n">x</span><span class="o">=</span><span class="n">stratify_by</span><span class="p">,</span>
-                <span class="n">y</span><span class="o">=</span><span class="n">numeric_var</span><span class="p">,</span>
-                <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_dot_color</span><span class="p">,</span>
-                <span class="n">size</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_dot_size</span><span class="p">,</span>
-                <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-            <span class="p">)</span>
-
-        <span class="k">elif</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s2">&quot;box_strip&quot;</span><span class="p">:</span>
-            <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span>
-                <span class="n">data</span><span class="o">=</span><span class="n">local_df</span><span class="p">,</span>
-                <span class="n">x</span><span class="o">=</span><span class="n">stratify_by</span><span class="p">,</span>
-                <span class="n">y</span><span class="o">=</span><span class="n">numeric_var</span><span class="p">,</span>
-                <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-                <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_color</span><span class="p">,</span>
-                <span class="n">fill</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="n">sns</span><span class="o">.</span><span class="n">stripplot</span><span class="p">(</span>
-                <span class="n">data</span><span class="o">=</span><span class="n">local_df</span><span class="p">,</span>
-                <span class="n">x</span><span class="o">=</span><span class="n">stratify_by</span><span class="p">,</span>
-                <span class="n">y</span><span class="o">=</span><span class="n">numeric_var</span><span class="p">,</span>
-                <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_dot_color</span><span class="p">,</span>
-                <span class="n">size</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_dot_size</span><span class="p">,</span>
-                <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-            <span class="p">)</span>
-
-        <span class="k">elif</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s2">&quot;box&quot;</span><span class="p">:</span>
-            <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span>
-                <span class="n">data</span><span class="o">=</span><span class="n">local_df</span><span class="p">,</span>
-                <span class="n">x</span><span class="o">=</span><span class="n">stratify_by</span><span class="p">,</span>
-                <span class="n">y</span><span class="o">=</span><span class="n">numeric_var</span><span class="p">,</span>
-                <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-                <span class="n">color</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_bar_color</span><span class="p">,</span>
-                <span class="n">fill</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-            <span class="p">)</span>
-
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid input: </span><span class="si">{</span><span class="n">strategy</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-
-        <span class="n">ax</span><span class="o">.</span><span class="n">ticklabel_format</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;sci&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">scilimits</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_scilimits</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Distribution of </span><span class="si">{</span><span class="n">numeric_var</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="n">ax</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_title_font_size</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_title_font_size</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_title_font_size</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span>
             <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span>
             <span class="n">which</span><span class="o">=</span><span class="s2">&quot;major&quot;</span><span class="p">,</span>
@@ -1028,41 +1158,8 @@
             <span class="n">labelsize</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_minor_ticklabel_font_size</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">fig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">fig</span></div>
-
-<div class="viewcode-block" id="EDAReport.plot_distribution"><a class="viewcode-back" href="../../../../python_api/classes/tm_reports.html#tablemage._reports.EDAReport.plot_distribution">[docs]</a>    <span class="nd">@ensure_arg_list_uniqueness</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">plot_distribution</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">density</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
-        <span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Plots the distribution of the variable.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        var : str</span>
-<span class="sd">            Variable name.</span>
-
-<span class="sd">        density : bool</span>
-<span class="sd">            Default: False. If True, plots the density rather than the</span>
-<span class="sd">            frequency.</span>
-
-<span class="sd">        figsize : tuple[float, float]</span>
-<span class="sd">            Default: (5, 5). The size of the figure. Only used if ax is None.</span>
-
-<span class="sd">        ax : plt.Axes | None</span>
-<span class="sd">            Default: None. If not None, the plot is drawn on the input Axes.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        plt.Figure</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">plot_distribution</span><span class="p">(</span><span class="n">density</span><span class="o">=</span><span class="n">density</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EDAReport.plot_pca"><a class="viewcode-back" href="../../../../python_api/classes/tm_reports.html#tablemage._reports.EDAReport.plot_pca">[docs]</a>    <span class="nd">@ensure_arg_list_uniqueness</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">plot_pca</span><span class="p">(</span>
@@ -1241,7 +1338,7 @@
 
         <span class="n">title_str</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">numeric_vars</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PCA(</span><span class="si">{</span><span class="n">title_str</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="n">wrap</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">ticklabel_format</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;sci&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">scilimits</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">ticklabel_format</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;sci&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">scilimits</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_scilimits</span><span class="p">)</span>
 
         <span class="n">ax</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_title_font_size</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_title_font_size</span><span class="p">)</span>
@@ -1273,13 +1370,13 @@
             <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">fig</span></div>
 
-    <span class="nd">@ensure_arg_list_uniqueness</span><span class="p">()</span>
+<div class="viewcode-block" id="EDAReport.plot_correlation_heatmap"><a class="viewcode-back" href="../../../../python_api/classes/tm_reports.html#tablemage._reports.EDAReport.plot_correlation_heatmap">[docs]</a>    <span class="nd">@ensure_arg_list_uniqueness</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">plot_correlation_heatmap</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">numeric_vars</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">p_values</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">cmap</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">plt</span><span class="o">.</span><span class="n">Colormap</span> <span class="o">=</span> <span class="s2">&quot;coolwarm&quot;</span><span class="p">,</span>
-        <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+        <span class="n">htest</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">plt</span><span class="o">.</span><span class="n">Colormap</span> <span class="o">=</span> <span class="n">plot_options</span><span class="o">.</span><span class="n">_cmap</span><span class="p">,</span>
+        <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span>
         <span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Plots a heatmap of the correlation matrix of the numeric variables.</span>
@@ -1290,7 +1387,7 @@
 <span class="sd">            List of numeric variables to include in the heatmap.</span>
 <span class="sd">            If None, all numeric variables are considered.</span>
 
-<span class="sd">        p_values : bool</span>
+<span class="sd">        htest : bool</span>
 <span class="sd">            If True, displays correlation coefficients with their</span>
 <span class="sd">            corresponding p-values in parentheses.</span>
 
@@ -1314,8 +1411,8 @@
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;Format correlation and p-value pair.&quot;&quot;&quot;</span>
             <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">corr</span><span class="p">)</span> <span class="ow">or</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">pval</span><span class="p">):</span>
                 <span class="k">return</span> <span class="s2">&quot;NA&quot;</span>
-            <span class="n">corr_str</span> <span class="o">=</span> <span class="n">format_value</span><span class="p">(</span><span class="n">corr</span><span class="p">,</span> <span class="n">n_decimals</span><span class="p">)</span>
-            <span class="n">pval_str</span> <span class="o">=</span> <span class="n">format_value</span><span class="p">(</span><span class="n">pval</span><span class="p">,</span> <span class="n">n_decimals</span><span class="p">)</span>
+            <span class="n">corr_str</span> <span class="o">=</span> <span class="n">format_value</span><span class="p">(</span><span class="n">corr</span><span class="p">,</span> <span class="n">n_decimals</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;e&quot;</span><span class="p">)</span>
+            <span class="n">pval_str</span> <span class="o">=</span> <span class="n">format_value</span><span class="p">(</span><span class="n">pval</span><span class="p">,</span> <span class="n">n_decimals</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;e&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">corr_str</span><span class="si">}</span><span class="se">\n</span><span class="s2">(p=</span><span class="si">{</span><span class="n">pval_str</span><span class="si">}</span><span class="s2">)&quot;</span>
 
         <span class="k">if</span> <span class="n">numeric_vars</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1334,7 +1431,7 @@
 
         <span class="n">n_decimals</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">print_options</span><span class="p">,</span> <span class="s2">&quot;_n_decimals&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">p_values</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">htest</span><span class="p">:</span>
             <span class="c1"># Use pandas corr() which handles missing values with pairwise deletion</span>
             <span class="n">corr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="p">[</span><span class="n">numeric_vars</span><span class="p">]</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
 
@@ -1342,7 +1439,7 @@
             <span class="k">def</span> <span class="nf">format_value_with_na</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
                 <span class="k">return</span> <span class="s2">&quot;NA&quot;</span> <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">else</span> <span class="n">format_value</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n_decimals</span><span class="p">)</span>
 
-            <span class="n">corr_formatted</span> <span class="o">=</span> <span class="n">corr</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">format_value_with_na</span><span class="p">)</span>
+            <span class="n">corr_formatted</span> <span class="o">=</span> <span class="n">corr</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">format_value_with_na</span><span class="p">))</span>
 
             <span class="c1"># Create a mask for missing values to show them differently</span>
             <span class="n">mask</span> <span class="o">=</span> <span class="n">corr</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span>
@@ -1351,7 +1448,7 @@
                 <span class="n">corr</span><span class="p">,</span>
                 <span class="n">annot</span><span class="o">=</span><span class="n">corr_formatted</span><span class="p">,</span>
                 <span class="n">annot_kws</span><span class="o">=</span><span class="p">{</span>
-                    <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_title_font_size</span><span class="p">,</span>
+                    <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_major_ticklabel_font_size</span><span class="p">,</span>
                     <span class="s2">&quot;ha&quot;</span><span class="p">:</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;va&quot;</span><span class="p">:</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span>
                 <span class="p">},</span>
@@ -1379,7 +1476,7 @@
                         <span class="n">corr_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
                         <span class="n">p_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
                         <span class="n">annot_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                            <span class="n">format_value</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">n_decimals</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(p=1.0000)&quot;</span>
+                            <span class="n">format_value</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">n_decimals</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;f&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(p=1.0)&quot;</span>
                         <span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">corr</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">safe_pearsonr</span><span class="p">(</span>
@@ -1409,11 +1506,6 @@
                 <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                 <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span>  <span class="c1"># Mask NA values</span>
             <span class="p">)</span>
-
-        <span class="c1"># customize appearance</span>
-        <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Correlation Heatmap&quot;</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_title_font_size</span><span class="p">)</span>
-
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span>
             <span class="n">numeric_vars</span><span class="p">,</span>
             <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span>
@@ -1422,7 +1514,8 @@
         <span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span>
             <span class="n">numeric_vars</span><span class="p">,</span>
-            <span class="n">rotation</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span>
+            <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
             <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_major_ticklabel_font_size</span><span class="p">,</span>
         <span class="p">)</span>
 
@@ -1430,7 +1523,7 @@
             <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-        <span class="k">return</span> <span class="n">fig</span>
+        <span class="k">return</span> <span class="n">fig</span></div>
 
     <span class="c1"># --------------------------------------------------------------------------</span>
     <span class="c1"># STATISTICAL TESTING</span>
@@ -1454,14 +1547,21 @@
 <span class="sd">        -------</span>
 <span class="sd">        StatisticalTestResult</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">stratify_by</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_categorical_vars</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">stratify_by</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_categorical_vars</span>
+            <span class="ow">and</span> <span class="n">stratify_by</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_numeric_vars</span>
+        <span class="p">):</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="p">[</span><span class="n">stratify_by</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">20</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;Invalid input: </span><span class="si">{</span><span class="n">stratify_by</span><span class="si">}</span><span class="s2">. &quot;</span>
                     <span class="s2">&quot;Must be a categorical variable or numeric variable with &lt;= 20 unique values.&quot;</span>
                 <span class="p">)</span>
 
-        <span class="n">groups</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">stratify_by</span><span class="p">)[</span><span class="n">numeric_var</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="n">groups</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">stratify_by</span><span class="p">,</span> <span class="n">observed</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="n">numeric_var</span><span class="p">]</span>
+            <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">groups</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">&quot;Invalid input: stratify_by. Must have at least two unique values.&quot;</span>
@@ -1471,7 +1571,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">anova</span><span class="p">(</span><span class="n">numeric_var</span><span class="p">,</span> <span class="n">stratify_by</span><span class="p">,</span> <span class="s2">&quot;auto&quot;</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">test_normality</span><span class="p">(</span>
+<div class="viewcode-block" id="EDAReport.test_normality"><a class="viewcode-back" href="../../../../python_api/classes/tm_reports.html#tablemage._reports.EDAReport.test_normality">[docs]</a>    <span class="k">def</span> <span class="nf">test_normality</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">numeric_var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">method</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;shapiro&quot;</span><span class="p">,</span> <span class="s2">&quot;kstest&quot;</span><span class="p">,</span> <span class="s2">&quot;anderson&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;shapiro&quot;</span><span class="p">,</span>
@@ -1539,9 +1639,9 @@
             <span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid input: </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid input: </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">test_categorical_independence</span><span class="p">(</span>
+<div class="viewcode-block" id="EDAReport.test_categorical_independence"><a class="viewcode-back" href="../../../../python_api/classes/tm_reports.html#tablemage._reports.EDAReport.test_categorical_independence">[docs]</a>    <span class="k">def</span> <span class="nf">test_categorical_independence</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">categorical_var_1</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">categorical_var_2</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1562,9 +1662,9 @@
 <span class="sd">        StatisticalTestReport</span>
 <span class="sd">            A structured report of the statistical test results.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">chi2</span><span class="p">(</span><span class="n">categorical_var_1</span><span class="p">,</span> <span class="n">categorical_var_2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">chi2</span><span class="p">(</span><span class="n">categorical_var_1</span><span class="p">,</span> <span class="n">categorical_var_2</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">chi2</span><span class="p">(</span>
+<div class="viewcode-block" id="EDAReport.chi2"><a class="viewcode-back" href="../../../../python_api/classes/tm_reports.html#tablemage._reports.EDAReport.chi2">[docs]</a>    <span class="k">def</span> <span class="nf">chi2</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">categorical_var_1</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">categorical_var_2</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1618,7 +1718,7 @@
             <span class="n">descriptive_statistic_description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">null_hypothesis_description</span><span class="o">=</span><span class="s2">&quot;The two variables are independent&quot;</span><span class="p">,</span>
             <span class="n">alternative_hypothesis_description</span><span class="o">=</span><span class="s2">&quot;The two variables are not independent&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="EDAReport.anova"><a class="viewcode-back" href="../../../../python_api/classes/tm_reports.html#tablemage._reports.EDAReport.anova">[docs]</a>    <span class="k">def</span> <span class="nf">anova</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -1972,7 +2072,7 @@
                 <span class="n">group_1</span><span class="p">,</span> <span class="n">group_2</span><span class="p">,</span> <span class="n">equal_var</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">trim</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="s2">&quot;two-sided&quot;</span>
             <span class="p">)</span>
             <span class="k">return</span> <span class="n">StatisticalTestReport</span><span class="p">(</span>
-                <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Yuen&#39;s (20% trimmed mean) t-test&quot;</span><span class="p">,</span>
+                <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Yuen&#39;s (20% trimmed) t-test&quot;</span><span class="p">,</span>
                 <span class="n">statistic</span><span class="o">=</span><span class="n">ttest_result</span><span class="o">.</span><span class="n">statistic</span><span class="p">,</span>
                 <span class="n">pval</span><span class="o">=</span><span class="n">ttest_result</span><span class="o">.</span><span class="n">pvalue</span><span class="p">,</span>
                 <span class="n">descriptive_statistic</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">group_1</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">-</span> <span class="n">group_2</span><span class="o">.</span><span class="n">mean</span><span class="p">()),</span>
@@ -2052,7 +2152,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_numeric_summary_statistics</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">print_options</span><span class="o">.</span><span class="n">_n_decimals</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">value_counts</span><span class="p">(</span>
+<div class="viewcode-block" id="EDAReport.value_counts"><a class="viewcode-back" href="../../../../python_api/classes/tm_reports.html#tablemage._reports.EDAReport.value_counts">[docs]</a>    <span class="k">def</span> <span class="nf">value_counts</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">categorical_var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">normalize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the value counts for a given categorical variable as a</span>
@@ -2078,7 +2178,7 @@
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_categorical_eda_dict</span><span class="p">[</span><span class="n">categorical_var</span><span class="p">]</span><span class="o">.</span><span class="n">counts</span><span class="p">(</span><span class="n">normalize</span><span class="p">)</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">specific</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CategoricalEDA</span> <span class="o">|</span> <span class="n">NumericEDA</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the CategoricalEDA or NumericEDA object associated with</span>

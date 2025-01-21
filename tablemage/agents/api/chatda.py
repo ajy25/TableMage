@@ -8,14 +8,15 @@ from .._src import (
     ToolingContext,
     print_debug,
 )
-from ..._src.display.print_utils import suppress_logging
 from .._src.agents_src.single_agent import SingleAgent
 from .._src.agents_src.prompt.single_agent_system_prompt import DEFAULT_SYSTEM_PROMPT
 from .._src.options import options
 
 
-class ConversationalAgent:
-    """Class for interacting with the LLMs for data analysis on tabular data."""
+class ChatDA:
+    """Chat Data Agent. \
+    Class for interacting with the LLMs for data analysis on tabular data.
+    """
 
     def __init__(
         self,
@@ -32,7 +33,7 @@ class ConversationalAgent:
         python_only: bool = False,
         tools_only: bool = False,
     ):
-        """Initializes the ConversationalAgent object.
+        """Initializes the ChatDA object.
 
         Parameters
         ----------

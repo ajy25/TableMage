@@ -632,7 +632,7 @@ class EDAReport:
                         color=plot_options._bar_color,
                         alpha=plot_options._bar_alpha,
                         ax=ax,
-                        order=sorted(series.unique()),
+                        order=sorted(series.astype(str).unique()),
                     )
                     # Rotate category labels
                     ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
@@ -646,14 +646,16 @@ class EDAReport:
                         alpha=plot_options._bar_alpha,
                         ax=ax,
                     )
+                    ax.set_ylabel("Count")
                 else:
                     sns.countplot(
                         y=series,
                         color=plot_options._bar_color,
                         alpha=plot_options._bar_alpha,
                         ax=ax,
-                        order=sorted(series.unique()),
+                        order=sorted(series.astype(str).unique()),
                     )
+                    ax.set_ylabel("Count")
                     # Rotate category labels
                     ax.set_yticklabels(ax.get_yticklabels(), rotation=45, ha="right")
 
@@ -742,7 +744,7 @@ class EDAReport:
                         "markersize": plot_options._dot_size + 1,
                     },
                     ax=ax,
-                    order=sorted(df_plot[yname].unique()),
+                    order=sorted(df_plot[yname].astype(str).unique()),
                     boxprops=dict(
                         color=plot_options._bar_color,
                         alpha=plot_options._bar_alpha,
@@ -762,7 +764,7 @@ class EDAReport:
                         "markersize": plot_options._dot_size + 1,
                     },
                     ax=ax,
-                    order=sorted(df_plot[xname].unique()),
+                    order=sorted(df_plot[xname].astype(str).unique()),
                     boxprops=dict(
                         color=plot_options._bar_color,
                         alpha=plot_options._bar_alpha,
@@ -930,7 +932,7 @@ class EDAReport:
                     color=plot_options._bar_color,
                     alpha=plot_options._bar_alpha,
                     ax=ax,
-                    order=sorted(x_series.unique()),
+                    order=sorted(x_series.astype(str).unique()),
                 )
                 # Rotate category labels
                 ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
@@ -960,7 +962,7 @@ class EDAReport:
                     color=plot_options._bar_color,
                     flierprops={"alpha": 0.3},
                     ax=ax,
-                    order=sorted(y_series.unique()),
+                    order=sorted(y_series.astype(str).unique()),
                     boxprops=dict(
                         color=plot_options._bar_color,
                         alpha=plot_options._bar_alpha,
@@ -983,7 +985,7 @@ class EDAReport:
                     color=plot_options._bar_color,
                     flierprops={"alpha": 0.3},
                     ax=ax,
-                    order=sorted(x_series.unique()),
+                    order=sorted(x_series.astype(str).unique()),
                     boxprops=dict(
                         color=plot_options._bar_color,
                         alpha=plot_options._bar_alpha,

@@ -672,13 +672,26 @@ class DataHandler:
             bins=thresholds_with_infs,
             labels=level_names,
             right=leq,
+            ordered=False,
         )
         self._working_df_test[feature_name] = pd.cut(
             self._working_df_test[numeric_var],
             bins=thresholds_with_infs,
             labels=level_names,
             right=leq,
+            ordered=False,
         )
+
+        # if the level names are all numeric, force new columns to be numeric
+        if all(
+            [isinstance(name, int) or isinstance(name, float) for name in level_names]
+        ):
+            self._working_df_train[feature_name] = self._working_df_train[
+                feature_name
+            ].astype(float)
+            self._working_df_test[feature_name] = self._working_df_test[
+                feature_name
+            ].astype(float)
 
         if self._verbose:
             print_wrapped(

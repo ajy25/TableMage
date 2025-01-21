@@ -23,7 +23,7 @@ Benchmarking questions with categories.
 2. `./benchmarking/dataanalysisqa/generate_labels.py`:
 Script to produce labels/ground truth. Also see `./benchmarking/dataanalysisqa/label_scripts`.
 
-3. `./benchmarking/dataanalysisqa/tablemage_results.py`: Script to reproduce TableMage ConversationalAgent results. NOTE: We used cloud compute providers for LLM inference. As such, you may obtain different results, as we have no control over model deprecations/updates and random seeds.
+3. `./benchmarking/dataanalysisqa/tablemage_results.py`: Script to reproduce TableMage ChatDA results. NOTE: We used cloud compute providers for LLM inference. As such, you may obtain different results, as we have no control over model deprecations/updates and random seeds.
 
 4. `./benchmarking/dataanalysisqa/reformat_result.py`: 
 Script for reformatting answers. If you want to benchmark your own agent, you simply need to add a directory in the results folder, following the structure detailed in `./benchmarking/dataanalysisqa/tablemage_results.py`. 

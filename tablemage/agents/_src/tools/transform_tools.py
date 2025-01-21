@@ -28,10 +28,10 @@ class _ImputeInput(BaseModel):
 
 @tooling_decorator
 def _impute_function(
-    context: ToolingContext,
     vars: str,
     numeric_strategy: str = "5nn",
     categorical_strategy: str = "missing",
+    context: ToolingContext = None,
 ) -> str:
     context.add_thought(
         "I am going to impute missing values in the dataset using the following strategies: "
@@ -74,9 +74,9 @@ class _DropHighlyMissingVarsInput(BaseModel):
 
 @tooling_decorator
 def _drop_highly_missing_vars_function(
-    context: ToolingContext,
     threshold: float = 0.2,
     ignore_vars: str = "",
+    context: ToolingContext = None,
 ) -> str:
     threshold = float(threshold)
 

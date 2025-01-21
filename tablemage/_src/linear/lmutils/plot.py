@@ -228,7 +228,7 @@ def plot_pearson_vs_observation(
 
     ax.set_xlabel("Observation Number")
     ax.set_ylabel("Standardized Residuals")
-    ax.set_title("Pearson Residuals vs. Observation Number")
+    ax.set_title("Pearson Residuals vs Observation Number")
     ax.ticklabel_format(style="sci", axis="both", scilimits=plot_options._scilimits)
 
     ax.title.set_fontsize(plot_options._title_font_size)
@@ -249,6 +249,7 @@ def plot_pearson_vs_observation(
         fig.tight_layout()
         plt.close()
     return fig
+
 
 def plot_residuals_vs_var(
     predictor: str,

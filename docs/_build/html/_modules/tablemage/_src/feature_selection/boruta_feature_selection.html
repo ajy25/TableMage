@@ -70,14 +70,11 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html">Reports <code class="xref py py-mod docutils literal notranslate"><span class="pre">(tm._reports)</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-mlclassificationreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.MLClassificationReport</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-mlregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.MLRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-olsregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.OLSRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-poissonregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.PoissonRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-negativebinomialregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.NegativeBinomialRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-binomialregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.BinomialRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-countregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.CountRegressionReport</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-olsreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.OLSReport</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-edareport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.EDAReport</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-votingselectionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.VotingSelectionReport</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-statisticaltestreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.StatisticalTestReport</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../python_api/classes/tm_reports.html#tm-reports-causalreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.CausalReport</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -127,12 +124,11 @@
 <div class="viewcode-block" id="BorutaFSR"><a class="viewcode-back" href="../../../../python_api/classes/tm_fs.html#tablemage.fs.BorutaFSR">[docs]</a><span class="k">class</span> <span class="nc">BorutaFSR</span><span class="p">(</span><span class="n">BaseFSR</span><span class="p">):</span>
 <div class="viewcode-block" id="BorutaFSR.__init__"><a class="viewcode-back" href="../../../../python_api/classes/tm_fs.html#tablemage.fs.BorutaFSR.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">estimator</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span>
-            <span class="s2">&quot;decision_tree&quot;</span><span class="p">,</span> <span class="s2">&quot;random_forest&quot;</span><span class="p">,</span> <span class="s2">&quot;xgboost&quot;</span>
-        <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;random_forest&quot;</span><span class="p">,</span>
+        <span class="n">estimator</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;random_forest&quot;</span><span class="p">,</span> <span class="s2">&quot;xgboost&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;random_forest&quot;</span><span class="p">,</span>
         <span class="n">n_estimators</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
         <span class="n">max_depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
         <span class="n">model_random_state</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span><span class="p">,</span>
+        <span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -140,8 +136,8 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        estimator : Literal[&quot;decision_tree&quot;, &quot;random_forest&quot;, &quot;xgboost&quot;]</span>
-<span class="sd">            Default: &quot;random_forest&quot;. The estimator to use for Boruta. Default</span>
+<span class="sd">        estimator : Literal[&quot;random_forest&quot;, &quot;xgboost&quot;]</span>
+<span class="sd">            Default: &quot;random_forest&quot;. The estimator to use for Boruta. Default \</span>
 <span class="sd">            hyperparameters are used for the estimator.</span>
 
 <span class="sd">        n_estimators : int</span>
@@ -153,6 +149,9 @@
 <span class="sd">        model_random_state : int</span>
 <span class="sd">            Default: 42. The random state to use for the estimator.</span>
 
+<span class="sd">        n_jobs : int</span>
+<span class="sd">            Default: -1. The number of jobs to run in parallel.</span>
+
 <span class="sd">        name : str | None</span>
 <span class="sd">            Default: None. If None, then outputs the default name.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -161,22 +160,19 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
         <span class="n">sk_estimator</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="n">estimator</span> <span class="o">==</span> <span class="s2">&quot;decision_tree&quot;</span><span class="p">:</span>
-            <span class="n">sk_estimator</span> <span class="o">=</span> <span class="n">DecisionTreeRegressor</span><span class="p">(</span>
-                <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">model_random_state</span>
-            <span class="p">)</span>
-        <span class="k">elif</span> <span class="n">estimator</span> <span class="o">==</span> <span class="s2">&quot;random_forest&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">estimator</span> <span class="o">==</span> <span class="s2">&quot;random_forest&quot;</span><span class="p">:</span>
             <span class="n">sk_estimator</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span>
                 <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span>
                 <span class="n">random_state</span><span class="o">=</span><span class="n">model_random_state</span><span class="p">,</span>
+                <span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">elif</span> <span class="n">estimator</span> <span class="o">==</span> <span class="s2">&quot;xgboost&quot;</span><span class="p">:</span>
             <span class="n">sk_estimator</span> <span class="o">=</span> <span class="n">XGBRegressor</span><span class="p">(</span>
-                <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">model_random_state</span>
+                <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">model_random_state</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;estimator must be one of &#39;decision_tree&#39;, &#39;random_forest&#39;, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;estimator must be one of &#39;random_forest&#39;, &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;or &#39;xgboost&#39;. Got: </span><span class="si">{</span><span class="n">estimator</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 
@@ -222,9 +218,7 @@
 <div class="viewcode-block" id="BorutaFSC"><a class="viewcode-back" href="../../../../python_api/classes/tm_fs.html#tablemage.fs.BorutaFSC">[docs]</a><span class="k">class</span> <span class="nc">BorutaFSC</span><span class="p">(</span><span class="n">BaseFSC</span><span class="p">):</span>
 <div class="viewcode-block" id="BorutaFSC.__init__"><a class="viewcode-back" href="../../../../python_api/classes/tm_fs.html#tablemage.fs.BorutaFSC.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">estimator</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span>
-            <span class="s2">&quot;decision_tree&quot;</span><span class="p">,</span> <span class="s2">&quot;random_forest&quot;</span><span class="p">,</span> <span class="s2">&quot;xgboost&quot;</span>
-        <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;random_forest&quot;</span><span class="p">,</span>
+        <span class="n">estimator</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;random_forest&quot;</span><span class="p">,</span> <span class="s2">&quot;xgboost&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;random_forest&quot;</span><span class="p">,</span>
         <span class="n">n_estimators</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
         <span class="n">max_depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
         <span class="n">model_random_state</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span><span class="p">,</span>
@@ -235,7 +229,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        estimator : Literal[&quot;decision_tree&quot;, &quot;random_forest&quot;, &quot;xgboost&quot;]</span>
+<span class="sd">        estimator : Literal[&quot;random_forest&quot;, &quot;xgboost&quot;]</span>
 <span class="sd">            Default: &quot;random_forest&quot;. The estimator to use for Boruta. Default</span>
 <span class="sd">            hyperparameters are used for the estimator.</span>
 
@@ -256,13 +250,7 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
         <span class="n">sk_estimator</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="n">estimator</span> <span class="o">==</span> <span class="s2">&quot;decision_tree&quot;</span><span class="p">:</span>
-            <span class="n">sk_estimator</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span>
-                <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span>
-                <span class="n">random_state</span><span class="o">=</span><span class="n">model_random_state</span><span class="p">,</span>
-                <span class="n">class_weight</span><span class="o">=</span><span class="s2">&quot;balanced&quot;</span><span class="p">,</span>
-            <span class="p">)</span>
-        <span class="k">elif</span> <span class="n">estimator</span> <span class="o">==</span> <span class="s2">&quot;random_forest&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">estimator</span> <span class="o">==</span> <span class="s2">&quot;random_forest&quot;</span><span class="p">:</span>
             <span class="n">sk_estimator</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span>
                 <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span>
                 <span class="n">random_state</span><span class="o">=</span><span class="n">model_random_state</span><span class="p">,</span>
@@ -274,7 +262,7 @@
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;estimator must be one of &#39;decision_tree&#39;, &#39;random_forest&#39;, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;estimator must be one of &#39;random_forest&#39;, &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;or &#39;xgboost&#39;. Got: </span><span class="si">{</span><span class="n">estimator</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 

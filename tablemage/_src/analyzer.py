@@ -28,7 +28,7 @@ from .utils import ensure_arg_list_uniqueness
 
 class Analyzer:
     """Analyzer is a class designed for conducting exploratory data analysis (EDA),
-    regression analysis, and machine learning modeling on wide format tabular data.
+    regression analysis, and machine learning modeling on tabular data.
 
     An Analyzer object can be initialized from a single DataFrame which is then
     split into train and test DataFrames, or, alternatively, from pre-split
@@ -302,7 +302,6 @@ class Analyzer:
         self,
         target: str | None = None,
         predictors: list[str] | None = None,
-        formula: str | None = None,
         alpha: float = 0.0,
         l1_weight: float = 0.0,
     ) -> OLSReport:
@@ -359,7 +358,6 @@ class Analyzer:
         self,
         target: str | None = None,
         predictors: list[str] | None = None,
-        formula: str | None = None,
         alpha: float = 0.0,
         l1_weight: float = 0.0,
         threshold_strategy: Literal["f1", "roc"] | None = None,

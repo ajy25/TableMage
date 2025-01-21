@@ -70,14 +70,11 @@
 <li class="toctree-l2"><a class="reference internal" href="python_api/classes/tm_reports.html">Reports <code class="xref py py-mod docutils literal notranslate"><span class="pre">(tm._reports)</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="python_api/classes/tm_reports.html#tm-reports-mlclassificationreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.MLClassificationReport</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="python_api/classes/tm_reports.html#tm-reports-mlregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.MLRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python_api/classes/tm_reports.html#tm-reports-olsregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.OLSRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python_api/classes/tm_reports.html#tm-reports-poissonregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.PoissonRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python_api/classes/tm_reports.html#tm-reports-negativebinomialregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.NegativeBinomialRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python_api/classes/tm_reports.html#tm-reports-binomialregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.BinomialRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python_api/classes/tm_reports.html#tm-reports-countregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.CountRegressionReport</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python_api/classes/tm_reports.html#tm-reports-olsreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.OLSReport</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="python_api/classes/tm_reports.html#tm-reports-edareport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.EDAReport</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="python_api/classes/tm_reports.html#tm-reports-votingselectionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.VotingSelectionReport</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="python_api/classes/tm_reports.html#tm-reports-statisticaltestreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.StatisticalTestReport</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python_api/classes/tm_reports.html#tm-reports-causalreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.CausalReport</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -119,6 +116,7 @@
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
+ | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#K"><strong>K</strong></a>
@@ -205,11 +203,25 @@
       <li><a href="python_api/classes/tm_reports.html#tablemage._reports.EDAReport.categorical_stats">categorical_stats() (tablemage._reports.EDAReport method)</a>
 </li>
       <li><a href="python_api/classes/tm_reports.html#tablemage._reports.EDAReport.categorical_vars">categorical_vars() (tablemage._reports.EDAReport method)</a>
+
+      <ul>
+        <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.categorical_vars">(tablemage.Analyzer method)</a>
 </li>
-      <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.classify">classify() (tablemage.Analyzer method)</a>
+      </ul></li>
+      <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.causal">causal() (tablemage.Analyzer method)</a>
+</li>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.CausalReport">CausalReport (class in tablemage._reports)</a>
+</li>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.EDAReport.chi2">chi2() (tablemage._reports.EDAReport method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.classify">classify() (tablemage.Analyzer method)</a>
+</li>
+      <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.cluster">cluster() (tablemage.Analyzer method)</a>
+</li>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.OLSReport.coefs">coefs() (tablemage._reports.OLSReport method)</a>
+</li>
       <li><a href="python_api/classes/tm_reports.html#tablemage._reports.MLClassificationReport.cv_metrics">cv_metrics() (tablemage._reports.MLClassificationReport method)</a>
 
       <ul>
@@ -224,10 +236,16 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.drop_highly_missing_vars">drop_highly_missing_vars() (tablemage.Analyzer method)</a>
+      <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.df_all">df_all() (tablemage.Analyzer method)</a>
+</li>
+      <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.df_test">df_test() (tablemage.Analyzer method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.df_train">df_train() (tablemage.Analyzer method)</a>
+</li>
+      <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.drop_highly_missing_vars">drop_highly_missing_vars() (tablemage.Analyzer method)</a>
+</li>
       <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.dropna">dropna() (tablemage.Analyzer method)</a>
 </li>
   </ul></td>
@@ -238,9 +256,15 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.eda">eda() (tablemage.Analyzer method)</a>
 </li>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.EDAReport">EDAReport (class in tablemage._reports)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.EDAReport">EDAReport (class in tablemage._reports)</a>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.CausalReport.effect">effect() (tablemage._reports.CausalReport method)</a>
+</li>
+      <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.engineer_categorical_var">engineer_categorical_var() (tablemage.Analyzer method)</a>
+</li>
+      <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.engineer_numeric_var">engineer_numeric_var() (tablemage.Analyzer method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -327,6 +351,14 @@
   </ul></td>
 </tr></table>
 
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.OLSReport.get_outlier_indices">get_outlier_indices() (tablemage._reports.OLSReport method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -358,9 +390,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.impute">impute() (tablemage.Analyzer method)</a>
 </li>
-      <li><a href="python_api/classes/tm_ml.html#tablemage.ml.LinearC.is_binary">is_binary() (tablemage.ml.LinearC method)</a>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.MLClassificationReport.is_binary">is_binary() (tablemage._reports.MLClassificationReport method)</a>
 
       <ul>
+        <li><a href="python_api/classes/tm_ml.html#tablemage.ml.LinearC.is_binary">(tablemage.ml.LinearC method)</a>
+</li>
         <li><a href="python_api/classes/tm_ml.html#tablemage.ml.MLPC.is_binary">(tablemage.ml.MLPC method)</a>
 </li>
         <li><a href="python_api/classes/tm_ml.html#tablemage.ml.SVMC.is_binary">(tablemage.ml.SVMC method)</a>
@@ -410,13 +444,15 @@
 </li>
       <li><a href="python_api/classes/tm_fs.html#tablemage.fs.LassoFSR">LassoFSR (class in tablemage.fs)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python_api/classes/tm_ml.html#tablemage.ml.LinearC">LinearC (class in tablemage.ml)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python_api/classes/tm_ml.html#tablemage.ml.LinearR">LinearR (class in tablemage.ml)</a>
 </li>
       <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.load_data_checkpoint">load_data_checkpoint() (tablemage.Analyzer method)</a>
+</li>
+      <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.logit">logit() (tablemage.Analyzer method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -428,6 +464,8 @@
 
       <ul>
         <li><a href="python_api/classes/tm_reports.html#tablemage._reports.MLRegressionReport.metrics">(tablemage._reports.MLRegressionReport method)</a>
+</li>
+        <li><a href="python_api/classes/tm_reports.html#tablemage._reports.OLSReport.metrics">(tablemage._reports.OLSReport method)</a>
 </li>
       </ul></li>
       <li><a href="python_api/classes/tm_reports.html#tablemage._reports.MLClassificationReport.metrics_by_class">metrics_by_class() (tablemage._reports.MLClassificationReport method)</a>
@@ -447,6 +485,8 @@
       <ul>
         <li><a href="python_api/classes/tm_reports.html#tablemage._reports.MLRegressionReport.model">(tablemage._reports.MLRegressionReport method)</a>
 </li>
+        <li><a href="python_api/classes/tm_reports.html#tablemage._reports.OLSReport.model">(tablemage._reports.OLSReport method)</a>
+</li>
       </ul></li>
   </ul></td>
 </tr></table>
@@ -454,18 +494,30 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.CausalReport.n_units">n_units() (tablemage._reports.CausalReport method)</a>
+</li>
       <li><a href="python_api/classes/tm_reports.html#tablemage._reports.EDAReport.numeric_stats">numeric_stats() (tablemage._reports.EDAReport method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python_api/classes/tm_reports.html#tablemage._reports.EDAReport.numeric_vars">numeric_vars() (tablemage._reports.EDAReport method)</a>
+
+      <ul>
+        <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.numeric_vars">(tablemage.Analyzer method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.ols">ols() (tablemage.Analyzer method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.OLSReport">OLSReport (class in tablemage._reports)</a>
+</li>
       <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.onehot">onehot() (tablemage.Analyzer method)</a>
 </li>
   </ul></td>
@@ -474,19 +526,41 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.EDAReport.plot">plot() (tablemage._reports.EDAReport method)</a>
+</li>
       <li><a href="python_api/classes/tm_reports.html#tablemage._reports.MLClassificationReport.plot_confusion_matrix">plot_confusion_matrix() (tablemage._reports.MLClassificationReport method)</a>
 </li>
-      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.EDAReport.plot_distribution">plot_distribution() (tablemage._reports.EDAReport method)</a>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.EDAReport.plot_correlation_heatmap">plot_correlation_heatmap() (tablemage._reports.EDAReport method)</a>
 </li>
-      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.EDAReport.plot_distribution_stratified">plot_distribution_stratified() (tablemage._reports.EDAReport method)</a>
-</li>
-      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.EDAReport.plot_numeric_pairs">plot_numeric_pairs() (tablemage._reports.EDAReport method)</a>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.OLSReport.plot_diagnostics">plot_diagnostics() (tablemage._reports.OLSReport method)</a>
 </li>
       <li><a href="python_api/classes/tm_reports.html#tablemage._reports.MLRegressionReport.plot_obs_vs_pred">plot_obs_vs_pred() (tablemage._reports.MLRegressionReport method)</a>
+
+      <ul>
+        <li><a href="python_api/classes/tm_reports.html#tablemage._reports.OLSReport.plot_obs_vs_pred">(tablemage._reports.OLSReport method)</a>
+</li>
+      </ul></li>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.EDAReport.plot_pairs">plot_pairs() (tablemage._reports.EDAReport method)</a>
 </li>
       <li><a href="python_api/classes/tm_reports.html#tablemage._reports.EDAReport.plot_pca">plot_pca() (tablemage._reports.EDAReport method)</a>
 </li>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.OLSReport.plot_qq">plot_qq() (tablemage._reports.OLSReport method)</a>
+</li>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.OLSReport.plot_residuals_hist">plot_residuals_hist() (tablemage._reports.OLSReport method)</a>
+</li>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.OLSReport.plot_residuals_vs_fitted">plot_residuals_vs_fitted() (tablemage._reports.OLSReport method)</a>
+</li>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.OLSReport.plot_residuals_vs_leverage">plot_residuals_vs_leverage() (tablemage._reports.OLSReport method)</a>
+</li>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.OLSReport.plot_residuals_vs_var">plot_residuals_vs_var() (tablemage._reports.OLSReport method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python_api/classes/tm_reports.html#tablemage._reports.MLClassificationReport.plot_roc_curve">plot_roc_curve() (tablemage._reports.MLClassificationReport method)</a>
+</li>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.MLClassificationReport.plot_roc_curves">plot_roc_curves() (tablemage._reports.MLClassificationReport method)</a>
+</li>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.OLSReport.plot_scale_location">plot_scale_location() (tablemage._reports.OLSReport method)</a>
 </li>
       <li><a href="python_api/classes/tm_ml.html#tablemage.ml.LinearC.predictors">predictors() (tablemage.ml.LinearC method)</a>
 
@@ -508,10 +582,12 @@
         <li><a href="python_api/classes/tm_ml.html#tablemage.ml.TreesR.predictors">(tablemage.ml.TreesR method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.StatisticalTestReport.pval">pval() (tablemage._reports.StatisticalTestReport method)</a>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.CausalReport.pval">pval() (tablemage._reports.CausalReport method)</a>
+
+      <ul>
+        <li><a href="python_api/classes/tm_reports.html#tablemage._reports.StatisticalTestReport.pval">(tablemage._reports.StatisticalTestReport method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -522,6 +598,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.remove_data_checkpoint">remove_data_checkpoint() (tablemage.Analyzer method)</a>
+</li>
       <li><a href="python_api/classes/tm_ml.html#tablemage.ml.RobustLinearR">RobustLinearR (class in tablemage.ml)</a>
 </li>
   </ul></td>
@@ -534,7 +612,15 @@
 </li>
       <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.scale">scale() (tablemage.Analyzer method)</a>
 </li>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.CausalReport.se">se() (tablemage._reports.CausalReport method)</a>
+</li>
+      <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.select_features">select_features() (tablemage.Analyzer method)</a>
+</li>
       <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.select_vars">select_vars() (tablemage.Analyzer method)</a>
+</li>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.OLSReport.set_outlier_threshold">set_outlier_threshold() (tablemage._reports.OLSReport method)</a>
+</li>
+      <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.shape">shape() (tablemage.Analyzer method)</a>
 </li>
       <li><a href="python_api/classes/tm_ml.html#tablemage.ml.LinearC.sklearn_estimator">sklearn_estimator() (tablemage.ml.LinearC method)</a>
 
@@ -602,6 +688,10 @@
 </li>
       <li><a href="python_api/classes/tm_reports.html#tablemage._reports.StatisticalTestReport">StatisticalTestReport (class in tablemage._reports)</a>
 </li>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.OLSReport.statsmodels_summary">statsmodels_summary() (tablemage._reports.OLSReport method)</a>
+</li>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.OLSReport.step">step() (tablemage._reports.OLSReport method)</a>
+</li>
       <li><a href="python_api/classes/tm_ml.html#tablemage.ml.SVMC">SVMC (class in tablemage.ml)</a>
 </li>
       <li><a href="python_api/classes/tm_ml.html#tablemage.ml.SVMR">SVMR (class in tablemage.ml)</a>
@@ -612,12 +702,26 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.EDAReport.tabulate_correlation_comparison">tabulate_correlation_comparison() (tablemage._reports.EDAReport method)</a>
+</li>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.EDAReport.tabulate_correlation_matrix">tabulate_correlation_matrix() (tablemage._reports.EDAReport method)</a>
+</li>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.EDAReport.tabulate_tableone">tabulate_tableone() (tablemage._reports.EDAReport method)</a>
+</li>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.EDAReport.test_categorical_independence">test_categorical_independence() (tablemage._reports.EDAReport method)</a>
+</li>
       <li><a href="python_api/classes/tm_reports.html#tablemage._reports.EDAReport.test_equal_means">test_equal_means() (tablemage._reports.EDAReport method)</a>
 </li>
-      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.VotingSelectionReport.top_features">top_features() (tablemage._reports.VotingSelectionReport method)</a>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.OLSReport.test_lr">test_lr() (tablemage._reports.OLSReport method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.EDAReport.test_normality">test_normality() (tablemage._reports.EDAReport method)</a>
+</li>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.OLSReport.test_partialf">test_partialf() (tablemage._reports.OLSReport method)</a>
+</li>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.VotingSelectionReport.top_features">top_features() (tablemage._reports.VotingSelectionReport method)</a>
+</li>
       <li><a href="python_api/classes/tm_ml.html#tablemage.ml.TreesC">TreesC (class in tablemage.ml)</a>
 </li>
       <li><a href="python_api/classes/tm_ml.html#tablemage.ml.TreesR">TreesR (class in tablemage.ml)</a>
@@ -630,10 +734,18 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.VotingSelectionReport.votes">votes() (tablemage._reports.VotingSelectionReport method)</a>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.EDAReport.value_counts">value_counts() (tablemage._reports.EDAReport method)</a>
+
+      <ul>
+        <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.value_counts">(tablemage.Analyzer method)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python_api/classes/tm_analyzer.html#tablemage.Analyzer.vars">vars() (tablemage.Analyzer method)</a>
+</li>
+      <li><a href="python_api/classes/tm_reports.html#tablemage._reports.VotingSelectionReport.votes">votes() (tablemage._reports.VotingSelectionReport method)</a>
+</li>
       <li><a href="python_api/classes/tm_reports.html#tablemage._reports.VotingSelectionReport">VotingSelectionReport (class in tablemage._reports)</a>
 </li>
   </ul></td>

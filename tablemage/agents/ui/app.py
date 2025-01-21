@@ -10,7 +10,7 @@ path_to_add = str(ui_path.parent.parent.parent)
 sys.path.append(path_to_add)
 
 
-from tablemage.agents.api import ConversationalAgent
+from tablemage.agents.api import ChatDA
 
 
 from tablemage.agents._src.io.canvas import (
@@ -20,7 +20,7 @@ from tablemage.agents._src.io.canvas import (
     CanvasThought,
 )
 
-agent: ConversationalAgent = None
+agent: ChatDA = None
 
 
 def chat(msg: str) -> str:
@@ -77,7 +77,7 @@ def upload_dataset():
         if uploaded_data.columns[0] == "Unnamed: 0":
             uploaded_data = uploaded_data.drop(columns="Unnamed: 0")
 
-        agent = ConversationalAgent(uploaded_data, memory_size=500, test_size=test_size)
+        agent = ChatDA(uploaded_data, memory_size=500, test_size=test_size)
 
         return jsonify({"message": "Dataset uploaded successfully"}), 200
     except Exception as e:

@@ -609,7 +609,16 @@ class DataEmitter:
                 bins=thresholds_with_infs,
                 labels=level_names,
                 right=leq,
+                ordered=False,
             )
+            # if the level names are all numeric, force new columns to be numeric
+            if all(
+                [
+                    isinstance(name, int) or isinstance(name, float)
+                    for name in level_names
+                ]
+            ):
+                X[feature_name] = X[feature_name].astype(float)
             return X
 
         self._working_df_train[feature_name] = pd.cut(
@@ -617,13 +626,26 @@ class DataEmitter:
             bins=thresholds_with_infs,
             labels=level_names,
             right=leq,
+            ordered=False,
         )
         self._working_df_test[feature_name] = pd.cut(
             self._working_df_test[numeric_var],
             bins=thresholds_with_infs,
             labels=level_names,
             right=leq,
+            ordered=False,
         )
+
+        # if the level names are all numeric, force new columns to be numeric
+        if all(
+            [isinstance(name, int) or isinstance(name, float) for name in level_names]
+        ):
+            self._working_df_train[feature_name] = self._working_df_train[
+                feature_name
+            ].astype(float)
+            self._working_df_test[feature_name] = self._working_df_test[
+                feature_name
+            ].astype(float)
 
         (
             self._categorical_vars,
@@ -741,8 +763,8 @@ class DataEmitter:
         if self._highly_missing_vars_dropped is None:
             self._highly_missing_vars_dropped = vars_to_drop
         else:
-            self._highly_missing_vars_dropped = self._highly_missing_vars_dropped.add(
-                vars_to_drop
+            self._highly_missing_vars_dropped = (
+                self._highly_missing_vars_dropped.extend(vars_to_drop)
             )
 
         self._working_df_train = self._working_df_train.drop(vars_to_drop, axis=1)

@@ -81,7 +81,7 @@ for subdir in subdirs:
 
         target = df.columns[0]
 
-        agent = tm.agents.ConversationalAgent(
+        agent = tm.agents.ChatDA(
             df=df,
             test_size=0.4,
             split_seed=42,

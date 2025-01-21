@@ -69,10 +69,10 @@ Statistical modeling is sometimes preferred over machine learning modeling
 because it provides interpretable results.
 
 TableMage improves the statistical modeling process by providing low-code 
-functions for linear regression and generalized linear models. 
+functions for linear regression analysis. 
 
 See 
-:meth:`tablemage.Analyzer.lm` and :meth:`tablemage.Analyzer.glm` for details.
+:meth:`tablemage.Analyzer.ols` and :meth:`tablemage.Analyzer.logit` for details.
 
 
 .. rubric:: Machine Learning Modeling

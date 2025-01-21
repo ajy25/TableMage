@@ -18,7 +18,10 @@ class _TTestInput(BaseModel):
 
 @tooling_decorator
 def _t_test_function(
-    context: ToolingContext, numeric_var: str, binary_var: str, test: str = "welch"
+    numeric_var: str,
+    binary_var: str,
+    test: str = "welch",
+    context: ToolingContext = None,
 ) -> str:
     context.add_thought(
         "I am going to perform a t-test on the variable {numeric_var} split by the binary variable {binary_var}.".format(
@@ -66,10 +69,10 @@ class _AnovaTestInput(BaseModel):
 
 @tooling_decorator
 def _anova_test_function(
-    context: ToolingContext,
     numeric_var: str,
     categorical_var: str,
     test: str = "anova_oneway",
+    context: ToolingContext = None,
 ) -> str:
     context.add_thought(
         "I am going to perform an ANOVA test on the variable {numeric_var} split by the categorical variable {categorical_var}.".format(
@@ -110,9 +113,9 @@ class _TestNormalityInput(BaseModel):
 
 @tooling_decorator
 def _test_normality_function(
-    context: ToolingContext,
     numeric_var: str,
     test: str = "shapiro",
+    context: ToolingContext = None,
 ) -> str:
     context.add_thought(
         "I am going to test whether the variable {numeric_var} is normally distributed.".format(
@@ -151,7 +154,7 @@ class _Chi2TestInput(BaseModel):
 
 
 @tooling_decorator
-def _chi2_test_function(context: ToolingContext, x: str, y: str) -> str:
+def _chi2_test_function(x: str, y: str, context: ToolingContext = None) -> str:
     context.add_thought(
         "I am going to perform a chi-squared test of independence between the variables {x} and {y}.".format(
             x=x, y=y
@@ -193,7 +196,7 @@ class _PlotInput(BaseModel):
 
 
 @tooling_decorator
-def _plot_function(context: ToolingContext, x: str, y: str = "") -> str:
+def _plot_function(x: str, y: str = "", context: ToolingContext = None) -> str:
     if y == "":
         context.add_thought(
             "I am going to plot the distribution of the variable: {x}.".format(x=x)
@@ -252,8 +255,8 @@ class _PlotPairsInput(BaseModel):
 
 @tooling_decorator
 def _plot_pairs_function(
-    context: ToolingContext,
     vars: str,
+    context: ToolingContext = None,
 ) -> str:
     vars_list = [var.strip() for var in vars.split(",")]
     context.add_thought(
@@ -290,9 +293,9 @@ class _CorrelationComparisonInput(BaseModel):
 
 @tooling_decorator
 def _correlation_comparison_function(
-    context: ToolingContext,
     target: str,
     numeric_vars: str = "",
+    context: ToolingContext = None,
 ) -> str:
     if target not in context.data_container.analyzer.eda("all").numeric_vars():
         raise ValueError("The target variable must be numeric.")
@@ -339,7 +342,7 @@ class _CorrelationMatrixInput(BaseModel):
 
 @tooling_decorator
 def _correlation_matrix_function(
-    context: ToolingContext, numeric_vars: str = ""
+    numeric_vars: str = "", context: ToolingContext = None
 ) -> str:
     if numeric_vars == "":
         # use all numeric variables

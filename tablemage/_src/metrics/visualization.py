@@ -66,11 +66,11 @@ def plot_obs_vs_pred(
     if model_name is not None:
         ax.set_title(
             f"{model_name}: Observed vs Predicted | "
-            f"ρ = {round(pearsonr(y_pred, y_true)[0], 3)}"
+            f"r = {round(pearsonr(y_pred, y_true)[0], 3)}"
         )
     else:
         ax.set_title(
-            "Observed vs Predicted | " + f"ρ = {round(pearsonr(y_pred, y_true)[0], 3)}"
+            "Observed vs Predicted | " + f"r = {round(pearsonr(y_pred, y_true)[0], 3)}"
         )
     ax.ticklabel_format(style="sci", axis="both", scilimits=plot_options._scilimits)
     ax.yaxis.get_offset_text().set_fontsize(ax.yaxis.get_ticklabels()[0].get_fontsize())

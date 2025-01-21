@@ -116,8 +116,8 @@ tm.use_agents()
 # load table
 df = ...
 
-# initialize a ConversationalAgent object
-agent = tm.agents.ConversationalAgent(df, test_size=0.2)
+# initialize a ChatDA object
+agent = tm.agents.ChatDA(df, test_size=0.2)
 
 # chat with the agent
 print(agent.chat("Compute the summary statistics for the numeric variables."))

@@ -222,7 +222,7 @@ class _SingleDatasetLogitReport:
         -------
         plt.Figure
         """
-        return plot_scale_location(
+        fig = plot_scale_location(
             y_pred=self._y_pred_logit,
             std_residuals=self._stdresiduals,
             show_outliers=show_outliers,
@@ -232,6 +232,10 @@ class _SingleDatasetLogitReport:
             figsize=figsize,
             ax=ax,
         )
+        if ax is None:
+            ax = fig.gca()
+        ax.set_ylabel("Pearson Residuals")
+        return fig
 
     def plot_residuals_vs_leverage(
         self,
@@ -356,11 +360,11 @@ class _SingleDatasetLogitReport:
             figsize=figsize,
             ax=ax,
         )
-    
+
     def plot_pearson_vs_observation(
         self,
         show_outliers: bool = True,
-        figsize: tuple[float, float] = (7.0, 5.0),
+        figsize: tuple[float, float] = (5.0, 5.0),
         ax: plt.Axes | None = None,
     ) -> plt.Figure:
         """Plots Pearson residuals against observation number.
@@ -371,7 +375,7 @@ class _SingleDatasetLogitReport:
             Default: True. If True, highlights the outliers in red.
 
         figsize : tuple[float, float]
-            Default: (7.0, 5.0). Determines the size of the returned figure.
+            Default: (5.0, 5.0). Determines the size of the returned figure.
 
         ax : plt.Axes
             Default: None. The axes on which to plot the figure. If None,
@@ -382,7 +386,7 @@ class _SingleDatasetLogitReport:
         plt.Figure
             The resulting plot as a figure.
         """
-        return plot_pearson_vs_observation(
+        fig = plot_pearson_vs_observation(
             std_residuals=self._stdresiduals,
             df_idx=self._X_eval_df.index,
             outliers_idx=self._outliers_df_idx,
@@ -391,7 +395,11 @@ class _SingleDatasetLogitReport:
             include_text=self._include_text,
             figsize=figsize,
             ax=ax,
-        ) 
+        )
+        if ax is None:
+            ax = fig.gca()
+        ax.set_ylabel("Pearson Residuals")
+        return fig
 
     def plot_diagnostics(
         self, show_outliers: bool = False, figsize: tuple[float, float] = (7.0, 7.0)
@@ -425,7 +433,7 @@ class _SingleDatasetLogitReport:
 
         decrease_font_sizes_axs(axs, 2, 2, 0)
 
-        plt.close()
+        plt.close(fig)
         return fig
 
     def _compute_outliers(self):
@@ -759,12 +767,12 @@ class LogitReport:
             )
         else:
             raise ValueError('The dataset must be either "train" or "test".')
-        
+
     def plot_pearson_vs_observation(
         self,
         dataset: Literal["train", "test"],
         show_outliers: bool = True,
-        figsize: tuple[float, float] = (7.0, 5.0),
+        figsize: tuple[float, float] = (5.0, 5.0),
         ax: plt.Axes | None = None,
     ) -> plt.Figure:
         """Plots Pearson residuals against observation number.
@@ -775,7 +783,7 @@ class LogitReport:
             Default: True. If True, highlights the outliers in red.
 
         figsize : tuple[float, float]
-            Default: (7.0, 5.0). Determines the size of the returned figure.
+            Default: (5.0, 5.0). Determines the size of the returned figure.
 
         ax : plt.Axes
             Default: None. The axes on which to plot the figure. If None,
@@ -801,7 +809,6 @@ class LogitReport:
             )
         else:
             raise ValueError('The dataset must be either "train" or "test".')
-
 
     def plot_scale_location(
         self,
@@ -1094,7 +1101,22 @@ class LogitReport:
         divider = "\n" + color_text("-" * max_width, "none") + "\n"
         divider_invisible = "\n" + " " * max_width + "\n"
 
-        title_message = bold_text("Logistic Regression Report")
+        if self._model.alpha == 0:
+            title_message = bold_text("Logistic Regression Report")
+        else:
+            if self._model.l1_weight == 0:
+                title_message = bold_text(
+                    f"Logistic Regression Report (l2_penalty={self._model.alpha})"
+                )
+            elif self._model.l1_weight == 1:
+                title_message = bold_text(
+                    f"Logistic Regression Report (l1_penalty={self._model.alpha})"
+                )
+            else:
+                title_message = bold_text(
+                    f"Elastic Net Report (alpha={self._model.alpha}, "
+                    f"l1_ratio={self._model.l1_weight})"
+                )
 
         target_var = "'" + self._target + "'"
         target_message = f"{bold_text('Target variable:')}\n"
@@ -1106,7 +1128,7 @@ class LogitReport:
         )
 
         predictors_message = (
-            f"{bold_text(f'Predictor variables ({self._model._n_predictors}):')}\n"
+            f"{bold_text(f'Predictor variables ({len(self._predictors)}):')}\n"
         )
         predictors_message += fill_ignore_format(
             list_to_string(self._predictors),

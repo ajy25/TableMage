@@ -33,7 +33,7 @@ class HyperparameterSearcher:
     def __init__(
         self,
         estimator: BaseEstimator,
-        method: Literal["optuna", "grid"],
+        method: Literal["optuna", "grid"] | None,
         hyperparam_grid: Mapping[str, Iterable | optuna.distributions.BaseDistribution],
         inner_cv: int | BaseCrossValidator = 5,
         inner_cv_seed: int = 42,
@@ -46,8 +46,9 @@ class HyperparameterSearcher:
         ----------
         estimator : BaseEstimator
 
-        method : str
+        method : str | None
             Must be an element in ['optuna', 'grid'].
+            If method is None, no hyperparameter search is conducted.
 
         hyperparam_grid : Mapping[str, Iterable | BaseDistribution]
             Specification of the set/distribution of hyperparameters to
@@ -86,6 +87,7 @@ class HyperparameterSearcher:
         else:
             raise ValueError("Invalid input: inner_cv.")
 
+        self._method = method
         self._fit_message = ""
         self._hyperparam_grid = hyperparam_grid
 
@@ -146,6 +148,10 @@ class HyperparameterSearcher:
                 cv=self.inner_cv,
                 **kwargs,
             )
+        elif method is None:
+            self._searcher = estimator
+            self._fit_message = "Search method: None, 1 total fit."
+            self._total_fits = 1
         else:
             raise ValueError("Invalid input: method. Must be 'optuna' or 'grid'.")
 
@@ -178,8 +184,12 @@ class HyperparameterSearcher:
                 type="PROGRESS",
             )
         ignore_warnings(self._searcher.fit)(X, y)
-        self._best_estimator = self._searcher.best_estimator_
-        self._best_params = self._searcher.best_params_
+        if self._method is None:
+            self._best_estimator = self._searcher
+            self._best_params = self._searcher.get_params()
+        else:
+            self._best_estimator = self._searcher.best_estimator_
+            self._best_params = self._searcher.best_params_
         return self._best_estimator
 
     def best_estimator(self) -> BaseEstimator:
@@ -210,13 +220,27 @@ class HyperparameterSearcher:
         dict
             Dictionary representation of the object.
         """
-        return {
+        output = {
             "estimator_name": self._estimator_name,
-            "hyperparameter_search_strategy": type(self._searcher).__name__,
-            "hyperparameter_cv_num": self._k_folds,
-            "hyperparameter_grid": {
-                key: str(value) for key, value in self._hyperparam_grid.items()
-            },
-            "total_fits": self._total_fits,
-            "best_params": self._best_params,
         }
+
+        if self._method == "optuna":
+            output["hyperparameter_search_strategy"] = (
+                "Optuna Tree-structured Parzen Estimator"
+            )
+            output["distribution_search_space"] = {
+                key: str(value) for key, value in self._hyperparam_grid.items()
+            }
+            output["n_trials"] = self._searcher.n_trials
+            output["k_folds"] = self._k_folds
+        elif self._method == "grid":
+            output["hyperparameter_search_strategy"] = "Grid Search"
+            output["grid_search_space"] = {
+                key: str(value) for key, value in self._hyperparam_grid.items()
+            }
+            output["k_folds"] = self._k_folds
+        else:
+            output["hyperparameter_search_strategy"] = "None"
+
+        output["best_params"] = self._best_params
+        return output

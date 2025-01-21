@@ -88,7 +88,7 @@ for dataset_name in dataset_name_to_filestem.keys():
     dataset_df = pd.read_csv(
         curr_dir / "datasets" / (dataset_name_to_filestem[dataset_name])
     )
-    agent = tm.agents.ConversationalAgent(
+    agent = tm.agents.ChatDA(
         df=dataset_df,
         test_size=0.2,
         split_seed=42,

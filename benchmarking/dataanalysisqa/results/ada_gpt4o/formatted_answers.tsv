@@ -1,0 +1,101 @@
+Question ID	Formatted Answer
+1	n_passengers_survived=342.000
+2	n_male=577.000, n_female=314.000
+3	mean=29.699, median=28.000, std=14.526
+4	n_unique=3.000
+5	mean=32.204
+6	corr=-0.549
+7	yes_or_no=yes
+8	yes_or_no=yes
+9	yes_or_no=yes
+10	auroc=0.765
+11	mean=180921.196, std=79442.503
+12	mean=1509.619
+13	mean=1978.589
+14	name=PoolQC, n_missing=1453.000
+15	totalsf_coef=109.277, totalsf_significant_yes_or_no=yes, intercept=15955.121
+16	r2=0.612, rmse=49768.440
+17	yes_or_no=yes
+18	corr=0.717, pval=0.000
+19	yes_or_no=no
+20	mean=171941.729
+21	n_low=114.000, n_medium=1231.000, n_high=115.000
+22	r2=0.642, rmse=48711.918
+23	mean=13.001, std=0.812
+24	mean=2.336, std=1.117
+25	skew=-0.051, kurtosis=-0.862
+26	corr=0.094
+27	auroc_class_0_vs_class_1=0.636, auroc_class_0_vs_class_2=0.844, auroc_class_1_vs_class_2=0.871
+28	median=634.929
+29	value=14.390
+30	class_0_count=59.000, class_1_count=71.000, class_2_count=48.000
+31	r2=0.718
+32	mean=14.127, std=3.524
+33	corr=-0.730
+34	yes_or_no=yes
+35	yes_or_no=yes
+36	coef=-2.006
+37	coef=-0.336
+38	difference=-515.586
+39	value=25.220
+40	n_outliers=14.000
+41	mean_income=45.219
+42	n_married=245.000
+43	mean=2.958
+44	difference=550.800
+45	n_ethnicities=3.000
+46	n_high=55.000
+47	yes_or_no=no
+48	r2=0.418
+49	coef=-2.210
+50	yes_or_no=no
+51	n_sex_classes=3.000
+52	mean=0.408
+53	variance=0.049
+54	mean=0.439
+55	corr=0.575, pval=0.000
+56	yes_or_no=no
+57	yes_or_no=yes
+58	median=0.078
+59	n_yes=2089.000
+60	mae=0.066
+61	yes_or_no=no
+62	mean=0.258, std=0.040
+63	yes_or_no=no
+64	yes_or_no=yes
+65	mean=0.190, std=0.207
+66	rmse=1140.712
+67	n_outliers=10.000
+68	mean=139.531, kurtosis=-0.936
+69	median=-0.120
+70	variable=number_of_runs
+71	mean=1248.528
+72	mean=23.446
+73	mean=17.690
+74	n_rows=242.000, mean=93.971
+75	corr=-0.417, pval=0.000
+76	coef=-0.001, r2=0.154
+77	n_examples=147.000
+78	yes_or_no=yes
+79	n_examples=289.000
+80	yes_or_no=no
+81	yes_or_no=no
+82	n_types=8.000
+83	n_insurance_providers=5.000
+84	insurance_provider=Medicare
+85	yes_or_no=no
+86	r2=0.000, rmse=14104.311
+87	yes_or_no=no
+88	coef=-6.960, intercept=25870.208
+89	variance=0.068
+90	mean=25539.316
+91	medical_condition=Obesity, mean=25805.971
+92	mean=5.843, median=5.800
+93	value=7.200
+94	n_species=3.000
+95	mean=5.006
+96	corr=0.963, pval=0.000
+97	mean=5.793, std=4.713
+98	mean=0.363
+99	yes_or_no=yes
+100	n_large=75.000

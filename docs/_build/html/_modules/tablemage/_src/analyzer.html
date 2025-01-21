@@ -70,14 +70,11 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../python_api/classes/tm_reports.html">Reports <code class="xref py py-mod docutils literal notranslate"><span class="pre">(tm._reports)</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../python_api/classes/tm_reports.html#tm-reports-mlclassificationreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.MLClassificationReport</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python_api/classes/tm_reports.html#tm-reports-mlregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.MLRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../python_api/classes/tm_reports.html#tm-reports-olsregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.OLSRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../python_api/classes/tm_reports.html#tm-reports-poissonregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.PoissonRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../python_api/classes/tm_reports.html#tm-reports-negativebinomialregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.NegativeBinomialRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../python_api/classes/tm_reports.html#tm-reports-binomialregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.BinomialRegressionReport</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../python_api/classes/tm_reports.html#tm-reports-countregressionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.CountRegressionReport</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python_api/classes/tm_reports.html#tm-reports-olsreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.OLSReport</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python_api/classes/tm_reports.html#tm-reports-edareport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.EDAReport</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python_api/classes/tm_reports.html#tm-reports-votingselectionreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.VotingSelectionReport</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python_api/classes/tm_reports.html#tm-reports-statisticaltestreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.StatisticalTestReport</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python_api/classes/tm_reports.html#tm-reports-causalreport"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tm._reports.CausalReport</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -128,7 +125,6 @@
     <span class="n">LogitReport</span><span class="p">,</span>
     <span class="n">MNLogitLinearModel</span><span class="p">,</span>
     <span class="n">MNLogitReport</span><span class="p">,</span>
-    <span class="n">parse_and_transform_rlike</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">.exploratory</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">EDAReport</span><span class="p">,</span>
@@ -141,7 +137,7 @@
 
 <div class="viewcode-block" id="Analyzer"><a class="viewcode-back" href="../../../python_api/classes/tm_analyzer.html#tablemage.Analyzer">[docs]</a><span class="k">class</span> <span class="nc">Analyzer</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Analyzer is a class designed for conducting exploratory data analysis (EDA),</span>
-<span class="sd">    regression analysis, and machine learning modeling on wide format tabular data.</span>
+<span class="sd">    regression analysis, and machine learning modeling on tabular data.</span>
 
 <span class="sd">    An Analyzer object can be initialized from a single DataFrame which is then</span>
 <span class="sd">    split into train and test DataFrames, or, alternatively, from pre-split</span>
@@ -309,7 +305,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid input: dataset = </span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
 
-    <span class="nd">@ensure_arg_list_uniqueness</span><span class="p">()</span>
+<div class="viewcode-block" id="Analyzer.causal"><a class="viewcode-back" href="../../../python_api/classes/tm_analyzer.html#tablemage.Analyzer.causal">[docs]</a>    <span class="nd">@ensure_arg_list_uniqueness</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">causal</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">treatment</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -344,9 +340,9 @@
             <span class="n">outcome</span><span class="o">=</span><span class="n">outcome</span><span class="p">,</span>
             <span class="n">confounders</span><span class="o">=</span><span class="n">confounders</span><span class="p">,</span>
             <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
 
-    <span class="nd">@ensure_arg_list_uniqueness</span><span class="p">()</span>
+<div class="viewcode-block" id="Analyzer.select_features"><a class="viewcode-back" href="../../../python_api/classes/tm_analyzer.html#tablemage.Analyzer.select_features">[docs]</a>    <span class="nd">@ensure_arg_list_uniqueness</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">select_features</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">target</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -387,15 +383,6 @@
                         <span class="s2">&quot;Feature selection methods for classification &quot;</span>
                         <span class="o">+</span> <span class="s2">&quot;should be instances of BaseFSC.&quot;</span>
                     <span class="p">)</span>
-        <span class="k">elif</span> <span class="n">target</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">numeric_vars</span><span class="p">():</span>
-            <span class="k">for</span> <span class="n">fs</span> <span class="ow">in</span> <span class="n">feature_selectors</span><span class="p">:</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">BaseFSR</span><span class="p">):</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                        <span class="s2">&quot;Feature selection methods for regression &quot;</span>
-                        <span class="o">+</span> <span class="s2">&quot;should be instances of BaseFSR.&quot;</span>
-                    <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Target variable </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2"> not found in data.&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">predictors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">predictors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">vars</span><span class="p">()</span>
@@ -406,6 +393,10 @@
             <span class="k">if</span> <span class="n">predictor</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">vars</span><span class="p">():</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Predictor </span><span class="si">{</span><span class="n">predictor</span><span class="si">}</span><span class="s2"> not found in data.&quot;</span><span class="p">)</span>
 
+        <span class="c1"># remove target from predictors, if present</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">predictors</span><span class="p">:</span>
+            <span class="n">predictors</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">VotingSelectionReport</span><span class="p">(</span>
             <span class="n">selectors</span><span class="o">=</span><span class="n">feature_selectors</span><span class="p">,</span>
             <span class="n">dataemitter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">train_test_emitter</span><span class="p">(</span>
@@ -413,14 +404,13 @@
                 <span class="n">X_vars</span><span class="o">=</span><span class="n">predictors</span><span class="p">,</span>
             <span class="p">),</span>
             <span class="n">max_n_features</span><span class="o">=</span><span class="n">max_n_features</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
 
-    <span class="nd">@ensure_arg_list_uniqueness</span><span class="p">()</span>
+<div class="viewcode-block" id="Analyzer.ols"><a class="viewcode-back" href="../../../python_api/classes/tm_analyzer.html#tablemage.Analyzer.ols">[docs]</a>    <span class="nd">@ensure_arg_list_uniqueness</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">ols</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">target</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">predictors</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">formula</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">l1_weight</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OLSReport</span><span class="p">:</span>
@@ -437,10 +427,6 @@
 <span class="sd">            Default: None.</span>
 <span class="sd">            If None, all variables except target will be used as predictors.</span>
 
-<span class="sd">        formula : str | None</span>
-<span class="sd">            Default: None. If not None, uses formula to specify the regression</span>
-<span class="sd">            (overrides target and predictors).</span>
-
 <span class="sd">        alpha : float</span>
 <span class="sd">            Default: 0. Regularization strength. Must be a positive float.</span>
 
@@ -453,87 +439,34 @@
 <span class="sd">            The OLSReport object contains a variety of OLS regression methods,</span>
 <span class="sd">            including summary statistics, model coefficients, and data visualizations.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">formula</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;target must be specified if formula is None.&quot;</span><span class="p">)</span>
-
-        <span class="k">elif</span> <span class="n">formula</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">target</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">numeric_vars</span><span class="p">():</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Target variable </span><span class="si">{</span><span class="n">quote_and_color</span><span class="p">(</span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;yellow&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> &quot;</span>
-                    <span class="o">+</span> <span class="s2">&quot;is not numeric.&quot;</span>
-                <span class="p">)</span>
-            <span class="k">if</span> <span class="n">predictors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">predictors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">vars</span><span class="p">()</span>
-                <span class="k">if</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">predictors</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-                        <span class="n">print_wrapped</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">&quot;Removing target variable </span><span class="si">{</span><span class="n">quote_and_color</span><span class="p">(</span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;yellow&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> &quot;</span>
-                            <span class="o">+</span> <span class="s2">&quot;from predictors.&quot;</span><span class="p">,</span>
-                            <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;WARNING&quot;</span><span class="p">,</span>
-                        <span class="p">)</span>
-                    <span class="n">predictors</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">OLSReport</span><span class="p">(</span>
-                <span class="n">OLSLinearModel</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">l1_weight</span><span class="o">=</span><span class="n">l1_weight</span><span class="p">),</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="p">,</span>
-                <span class="n">target</span><span class="p">,</span>
-                <span class="n">predictors</span><span class="p">,</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">numeric_vars</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Target variable </span><span class="si">{</span><span class="n">quote_and_color</span><span class="p">(</span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;yellow&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;is not numeric.&quot;</span>
             <span class="p">)</span>
+        <span class="k">if</span> <span class="n">predictors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">predictors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">vars</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">predictors</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
+                    <span class="n">print_wrapped</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Removing target variable </span><span class="si">{</span><span class="n">quote_and_color</span><span class="p">(</span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;yellow&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> &quot;</span>
+                        <span class="o">+</span> <span class="s2">&quot;from predictors.&quot;</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;WARNING&quot;</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="n">predictors</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
 
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">y_series_train</span><span class="p">,</span> <span class="n">y_scaler</span><span class="p">,</span> <span class="n">X_df_train</span> <span class="o">=</span> <span class="n">parse_and_transform_rlike</span><span class="p">(</span>
-                    <span class="n">formula</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">df_train</span><span class="p">()</span>
-                <span class="p">)</span>
-                <span class="n">y_series_test</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">X_df_test</span> <span class="o">=</span> <span class="n">parse_and_transform_rlike</span><span class="p">(</span>
-                    <span class="n">formula</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">df_test</span><span class="p">()</span>
-                <span class="p">)</span>
-            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid formula: </span><span class="si">{</span><span class="n">formula</span><span class="si">}</span><span class="s2">. Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">OLSReport</span><span class="p">(</span>
+            <span class="n">OLSLinearModel</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">l1_weight</span><span class="o">=</span><span class="n">l1_weight</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="p">,</span>
+            <span class="n">target</span><span class="p">,</span>
+            <span class="n">predictors</span><span class="p">,</span>
+        <span class="p">)</span></div>
 
-            <span class="c1"># ensure missing values are dropped</span>
-            <span class="n">y_X_df_combined_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">y_series_train</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">X_df_train</span><span class="p">)</span>
-            <span class="n">y_X_df_combined_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">y_series_test</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">X_df_test</span><span class="p">)</span>
-            <span class="n">y_X_df_combined_train</span> <span class="o">=</span> <span class="n">y_X_df_combined_train</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
-            <span class="n">y_X_df_combined_test</span> <span class="o">=</span> <span class="n">y_X_df_combined_test</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
-            <span class="p">(</span>
-                <span class="n">y_X_df_combined_train</span><span class="p">,</span>
-                <span class="n">y_X_df_combined_test</span><span class="p">,</span>
-            <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">_force_train_test_var_agreement</span><span class="p">(</span>
-                <span class="n">y_X_df_combined_train</span><span class="p">,</span> <span class="n">y_X_df_combined_test</span>
-            <span class="p">)</span>
-
-            <span class="n">predictors</span> <span class="o">=</span> <span class="n">y_X_df_combined_train</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
-            <span class="n">target</span> <span class="o">=</span> <span class="n">y_series_train</span><span class="o">.</span><span class="n">name</span>
-            <span class="n">predictors</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">target</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">numeric_vars</span><span class="p">():</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Target variable </span><span class="si">{</span><span class="n">quote_and_color</span><span class="p">(</span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;yellow&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> &quot;</span>
-                    <span class="o">+</span> <span class="s2">&quot;is not numeric.&quot;</span>
-                <span class="p">)</span>
-
-            <span class="n">datahandler</span> <span class="o">=</span> <span class="n">DataHandler</span><span class="p">(</span>
-                <span class="n">y_X_df_combined_train</span><span class="p">,</span> <span class="n">y_X_df_combined_test</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
-            <span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">y_scaler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">datahandler</span><span class="o">.</span><span class="n">add_scaler</span><span class="p">(</span><span class="n">y_scaler</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">scaler</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">datahandler</span><span class="o">.</span><span class="n">add_scaler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">scaler</span><span class="p">(</span><span class="n">target</span><span class="p">),</span> <span class="n">target</span><span class="p">)</span>
-
-            <span class="k">return</span> <span class="n">OLSReport</span><span class="p">(</span>
-                <span class="n">OLSLinearModel</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">l1_weight</span><span class="o">=</span><span class="n">l1_weight</span><span class="p">),</span>
-                <span class="n">datahandler</span><span class="p">,</span>
-                <span class="n">target</span><span class="p">,</span>
-                <span class="n">predictors</span><span class="p">,</span>
-            <span class="p">)</span>
-
-    <span class="nd">@ensure_arg_list_uniqueness</span><span class="p">()</span>
+<div class="viewcode-block" id="Analyzer.logit"><a class="viewcode-back" href="../../../python_api/classes/tm_analyzer.html#tablemage.Analyzer.logit">[docs]</a>    <span class="nd">@ensure_arg_list_uniqueness</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">logit</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">target</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">predictors</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">formula</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">l1_weight</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">threshold_strategy</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;roc&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -551,10 +484,6 @@
 <span class="sd">            Default: None.</span>
 <span class="sd">            If None, all variables except target will be used as predictors.</span>
 
-<span class="sd">        formula : str | None</span>
-<span class="sd">            Default: None. If not None, uses formula to specify the regression</span>
-<span class="sd">            (overrides target and predictors).</span>
-
 <span class="sd">        alpha : float</span>
 <span class="sd">            Default: 0. Regularization strength. Must be a positive float.</span>
 
@@ -570,101 +499,40 @@
 <span class="sd">        LogitReport | MNLogitReport</span>
 <span class="sd">            The appropriate regression report object is returned.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">formula</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;target must be specified if formula is None.&quot;</span><span class="p">)</span>
-
-        <span class="k">elif</span> <span class="n">formula</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">predictors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">predictors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">vars</span><span class="p">()</span>
-                <span class="k">if</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">predictors</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-                        <span class="n">print_wrapped</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">&quot;Removing target variable &quot;</span>
-                            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">quote_and_color</span><span class="p">(</span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;yellow&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> &quot;</span>
-                            <span class="o">+</span> <span class="s2">&quot;from predictors.&quot;</span><span class="p">,</span>
-                            <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;WARNING&quot;</span><span class="p">,</span>
-                        <span class="p">)</span>
-                    <span class="n">predictors</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
-            <span class="c1"># decide between binary and multinomial logit</span>
-            <span class="n">df_all</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">df_all</span><span class="p">()</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_all</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">LogitReport</span><span class="p">(</span>
-                    <span class="n">LogitLinearModel</span><span class="p">(</span>
-                        <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
-                        <span class="n">l1_weight</span><span class="o">=</span><span class="n">l1_weight</span><span class="p">,</span>
-                        <span class="n">threshold_strategy</span><span class="o">=</span><span class="n">threshold_strategy</span><span class="p">,</span>
-                    <span class="p">),</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="p">,</span>
-                    <span class="n">target</span><span class="p">,</span>
-                    <span class="n">predictors</span><span class="p">,</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">MNLogitReport</span><span class="p">(</span>
-                    <span class="n">MNLogitLinearModel</span><span class="p">(</span>
-                        <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
-                        <span class="n">l1_weight</span><span class="o">=</span><span class="n">l1_weight</span><span class="p">,</span>
-                        <span class="n">threshold_strategy</span><span class="o">=</span><span class="n">threshold_strategy</span><span class="p">,</span>
-                    <span class="p">),</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="p">,</span>
-                    <span class="n">target</span><span class="p">,</span>
-                    <span class="n">predictors</span><span class="p">,</span>
-                <span class="p">)</span>
-
+        <span class="k">if</span> <span class="n">predictors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">predictors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">vars</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">predictors</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
+                    <span class="n">print_wrapped</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Removing target variable &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">quote_and_color</span><span class="p">(</span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;yellow&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> &quot;</span> <span class="o">+</span> <span class="s2">&quot;from predictors.&quot;</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;WARNING&quot;</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="n">predictors</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+        <span class="c1"># decide between binary and multinomial logit</span>
+        <span class="n">df_all</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">df_all</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_all</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">LogitReport</span><span class="p">(</span>
+                <span class="n">LogitLinearModel</span><span class="p">(</span>
+                    <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+                    <span class="n">l1_weight</span><span class="o">=</span><span class="n">l1_weight</span><span class="p">,</span>
+                    <span class="n">threshold_strategy</span><span class="o">=</span><span class="n">threshold_strategy</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="p">,</span>
+                <span class="n">target</span><span class="p">,</span>
+                <span class="n">predictors</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">y_series_train</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">X_df_train</span> <span class="o">=</span> <span class="n">parse_and_transform_rlike</span><span class="p">(</span>
-                    <span class="n">formula</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">df_train</span><span class="p">()</span>
-                <span class="p">)</span>
-                <span class="n">y_series_test</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">X_df_test</span> <span class="o">=</span> <span class="n">parse_and_transform_rlike</span><span class="p">(</span>
-                    <span class="n">formula</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">df_test</span><span class="p">()</span>
-                <span class="p">)</span>
-            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid formula: </span><span class="si">{</span><span class="n">formula</span><span class="si">}</span><span class="s2">. Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-
-            <span class="c1"># ensure missing values are dropped</span>
-            <span class="n">y_X_df_combined_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">y_series_train</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">X_df_train</span><span class="p">)</span>
-            <span class="n">y_X_df_combined_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">y_series_test</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">X_df_test</span><span class="p">)</span>
-            <span class="n">y_X_df_combined_train</span> <span class="o">=</span> <span class="n">y_X_df_combined_train</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
-            <span class="n">y_X_df_combined_test</span> <span class="o">=</span> <span class="n">y_X_df_combined_test</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
-            <span class="p">(</span>
-                <span class="n">y_X_df_combined_train</span><span class="p">,</span>
-                <span class="n">y_X_df_combined_test</span><span class="p">,</span>
-            <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">_force_train_test_var_agreement</span><span class="p">(</span>
-                <span class="n">y_X_df_combined_train</span><span class="p">,</span> <span class="n">y_X_df_combined_test</span>
-            <span class="p">)</span>
-
-            <span class="n">predictors</span> <span class="o">=</span> <span class="n">y_X_df_combined_train</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
-            <span class="n">target</span> <span class="o">=</span> <span class="n">y_series_train</span><span class="o">.</span><span class="n">name</span>
-            <span class="n">predictors</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
-
-            <span class="n">datahandler</span> <span class="o">=</span> <span class="n">DataHandler</span><span class="p">(</span>
-                <span class="n">y_X_df_combined_train</span><span class="p">,</span> <span class="n">y_X_df_combined_test</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
-            <span class="p">)</span>
-
-            <span class="c1"># decide between binary and multinomial logit</span>
-            <span class="n">df_all</span> <span class="o">=</span> <span class="n">datahandler</span><span class="o">.</span><span class="n">df_all</span><span class="p">()</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_all</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">LogitReport</span><span class="p">(</span>
-                    <span class="n">LogitLinearModel</span><span class="p">(</span>
-                        <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
-                        <span class="n">l1_weight</span><span class="o">=</span><span class="n">l1_weight</span><span class="p">,</span>
-                        <span class="n">threshold_strategy</span><span class="o">=</span><span class="n">threshold_strategy</span><span class="p">,</span>
-                    <span class="p">),</span>
-                    <span class="n">datahandler</span><span class="p">,</span>
-                    <span class="n">target</span><span class="p">,</span>
-                    <span class="n">predictors</span><span class="p">,</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">MNLogitReport</span><span class="p">(</span>
-                    <span class="n">MNLogitLinearModel</span><span class="p">(</span>
-                        <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
-                        <span class="n">l1_weight</span><span class="o">=</span><span class="n">l1_weight</span><span class="p">,</span>
-                        <span class="n">threshold_strategy</span><span class="o">=</span><span class="n">threshold_strategy</span><span class="p">,</span>
-                    <span class="p">),</span>
-                    <span class="n">datahandler</span><span class="p">,</span>
-                    <span class="n">target</span><span class="p">,</span>
-                    <span class="n">predictors</span><span class="p">,</span>
-                <span class="p">)</span>
+            <span class="k">return</span> <span class="n">MNLogitReport</span><span class="p">(</span>
+                <span class="n">MNLogitLinearModel</span><span class="p">(</span>
+                    <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+                    <span class="n">l1_weight</span><span class="o">=</span><span class="n">l1_weight</span><span class="p">,</span>
+                    <span class="n">threshold_strategy</span><span class="o">=</span><span class="n">threshold_strategy</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="p">,</span>
+                <span class="n">target</span><span class="p">,</span>
+                <span class="n">predictors</span><span class="p">,</span>
+            <span class="p">)</span></div>
 
     <span class="c1"># --------------------------------------------------------------------------</span>
     <span class="c1"># MACHINE LEARNING</span>
@@ -803,7 +671,7 @@
             <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">cluster</span><span class="p">(</span>
+<div class="viewcode-block" id="Analyzer.cluster"><a class="viewcode-back" href="../../../python_api/classes/tm_analyzer.html#tablemage.Analyzer.cluster">[docs]</a>    <span class="k">def</span> <span class="nf">cluster</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">models</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">BaseClust</span><span class="p">],</span>
         <span class="n">features</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -834,7 +702,7 @@
             <span class="n">datahandler</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="p">,</span>
             <span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span>
             <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
 
     <span class="c1"># --------------------------------------------------------------------------</span>
     <span class="c1"># DATAHANDLER METHODS</span>
@@ -872,7 +740,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">save_data_checkpoint</span><span class="p">(</span><span class="n">checkpoint_name</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
-    <span class="k">def</span> <span class="nf">remove_data_checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checkpoint_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Analyzer&quot;</span><span class="p">:</span>
+<div class="viewcode-block" id="Analyzer.remove_data_checkpoint"><a class="viewcode-back" href="../../../python_api/classes/tm_analyzer.html#tablemage.Analyzer.remove_data_checkpoint">[docs]</a>    <span class="k">def</span> <span class="nf">remove_data_checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checkpoint_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Analyzer&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Deletes a saved checkpoint.</span>
 
 <span class="sd">        Parameters</span>
@@ -886,9 +754,9 @@
 <span class="sd">            Returns self for method chaining.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">remove_data_checkpoint</span><span class="p">(</span><span class="n">checkpoint_name</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
-    <span class="k">def</span> <span class="nf">engineer_numeric_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">formula</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Analyzer&quot;</span><span class="p">:</span>
+<div class="viewcode-block" id="Analyzer.engineer_numeric_var"><a class="viewcode-back" href="../../../python_api/classes/tm_analyzer.html#tablemage.Analyzer.engineer_numeric_var">[docs]</a>    <span class="k">def</span> <span class="nf">engineer_numeric_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">formula</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Analyzer&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Engineers a new variable/feature based on a formula. The formula</span>
 <span class="sd">        can only involve numeric variables. Creates another numeric variable.</span>
 
@@ -931,9 +799,9 @@
 <span class="sd">            Returns self for method chaining.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">engineer_numeric_feature</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">formula</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
-    <span class="k">def</span> <span class="nf">engineer_categorical_var</span><span class="p">(</span>
+<div class="viewcode-block" id="Analyzer.engineer_categorical_var"><a class="viewcode-back" href="../../../python_api/classes/tm_analyzer.html#tablemage.Analyzer.engineer_categorical_var">[docs]</a>    <span class="k">def</span> <span class="nf">engineer_categorical_var</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">numeric_var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -978,14 +846,22 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">engineer_categorical_feature</span><span class="p">(</span>
             <span class="n">name</span><span class="p">,</span> <span class="n">numeric_var</span><span class="p">,</span> <span class="n">level_names</span><span class="p">,</span> <span class="n">thresholds</span><span class="p">,</span> <span class="n">leq</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="Analyzer.scale"><a class="viewcode-back" href="../../../python_api/classes/tm_analyzer.html#tablemage.Analyzer.scale">[docs]</a>    <span class="nd">@ensure_arg_list_uniqueness</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">scale</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">include_vars</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">exclude_vars</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">strategy</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;standardize&quot;</span><span class="p">,</span> <span class="s2">&quot;minmax&quot;</span><span class="p">,</span> <span class="s2">&quot;log&quot;</span><span class="p">,</span> <span class="s2">&quot;log1p&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;standardize&quot;</span><span class="p">,</span>
+        <span class="n">strategy</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span>
+            <span class="s2">&quot;standardize&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;minmax&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;log&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;log1p&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;robust_standardize&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;normal_quantile&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uniform_quantile&quot;</span><span class="p">,</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;standardize&quot;</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Analyzer&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Scales the variables.</span>
 
@@ -999,7 +875,7 @@
 <span class="sd">            Default: None. List of variables to exclude from scaling.</span>
 <span class="sd">            If None, no variables are excluded.</span>
 
-<span class="sd">        strategy : Literal[&quot;standardize&quot;, &quot;minmax&quot;, &quot;log&quot;, &quot;log1p&quot;]</span>
+<span class="sd">        strategy : str</span>
 <span class="sd">            Default: &#39;standardize&#39;. The scaling strategy.</span>
 
 <span class="sd">        Returns</span>
@@ -1043,7 +919,7 @@
 <span class="sd">            - &#39;5nn&#39;: impute with 5-nearest neighbors.</span>
 <span class="sd">            - &#39;10nn&#39;: impute with 10-nearest neighbors.</span>
 
-<span class="sd">        categorical_strategy : Literal[&#39;most_frequent&#39;]</span>
+<span class="sd">        categorical_strategy : Literal[&#39;most_frequent&#39;, &#39;missing&#39;]</span>
 <span class="sd">            Default: &#39;most_frequent&#39;.</span>
 <span class="sd">            Strategy for imputing missing values in categorical variables.</span>
 <span class="sd">            - &#39;most_frequent&#39;: impute with most frequent value.</span>
@@ -1135,6 +1011,7 @@
         <span class="n">include_vars</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">exclude_vars</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">dropfirst</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">keep_original</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Analyzer&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;One-hot encodes the specified variables (columns).</span>
 
@@ -1151,13 +1028,19 @@
 <span class="sd">        dropfirst : bool</span>
 <span class="sd">            Default: True. If True, drops the first one-hot encoded column.</span>
 
+<span class="sd">        keep_original : bool</span>
+<span class="sd">            Default: False. If True, keeps the original variables in the DataFrame.</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Analyzer</span>
 <span class="sd">            Returns self for method chaining.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">onehot</span><span class="p">(</span>
-            <span class="n">include_vars</span><span class="o">=</span><span class="n">include_vars</span><span class="p">,</span> <span class="n">exclude_vars</span><span class="o">=</span><span class="n">exclude_vars</span><span class="p">,</span> <span class="n">dropfirst</span><span class="o">=</span><span class="n">dropfirst</span>
+            <span class="n">include_vars</span><span class="o">=</span><span class="n">include_vars</span><span class="p">,</span>
+            <span class="n">exclude_vars</span><span class="o">=</span><span class="n">exclude_vars</span><span class="p">,</span>
+            <span class="n">dropfirst</span><span class="o">=</span><span class="n">dropfirst</span><span class="p">,</span>
+            <span class="n">keep_original</span><span class="o">=</span><span class="n">keep_original</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
@@ -1229,10 +1112,10 @@
 <div class="viewcode-block" id="Analyzer.force_binary"><a class="viewcode-back" href="../../../python_api/classes/tm_analyzer.html#tablemage.Analyzer.force_binary">[docs]</a>    <span class="nd">@ensure_arg_list_uniqueness</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">force_binary</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="nb">vars</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-        <span class="n">pos_labels</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">ignore_multiclass</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">rename</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">pos_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">ignore_multiclass</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">rename</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Analyzer&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Forces variables to be binary (0 and 1 valued numeric variables).</span>
 <span class="sd">        Does nothing if the data contains more than two classes unless</span>
@@ -1241,19 +1124,19 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        vars : list[str]</span>
-<span class="sd">            Name of variables to force to binary.</span>
+<span class="sd">        vars : str</span>
+<span class="sd">            Name of variable to force to binary.</span>
 
-<span class="sd">        pos_labels : list[str]</span>
-<span class="sd">            Default: None. The positive labels.</span>
-<span class="sd">            If None, the first class for each var is the positive label.</span>
+<span class="sd">        pos_labels : str</span>
+<span class="sd">            Default: None. The positive label.</span>
+<span class="sd">            If None, the most common class is labeled as the positive class.</span>
 
 <span class="sd">        ignore_multiclass : bool</span>
 <span class="sd">            Default: False. If True, all classes except pos_label are labeled with</span>
 <span class="sd">            zero. Otherwise raises ValueError.</span>
 
 <span class="sd">        rename : bool</span>
-<span class="sd">            Default: False. If True, the variables are renamed to</span>
+<span class="sd">            Default: True. If True, the variable is renamed to</span>
 <span class="sd">            {var}::{pos_label}.</span>
 
 <span class="sd">        Returns</span>
@@ -1261,9 +1144,12 @@
 <span class="sd">        Analyzer</span>
 <span class="sd">            Returns self for method chaining.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">pos_label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># set the positive label to the most common class</span>
+            <span class="n">pos_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">df_all</span><span class="p">()[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">force_binary</span><span class="p">(</span>
-            <span class="nb">vars</span><span class="o">=</span><span class="nb">vars</span><span class="p">,</span>
-            <span class="n">pos_labels</span><span class="o">=</span><span class="n">pos_labels</span><span class="p">,</span>
+            <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="n">var</span><span class="p">],</span>
+            <span class="n">pos_labels</span><span class="o">=</span><span class="p">[</span><span class="n">pos_label</span><span class="p">],</span>
             <span class="n">ignore_multiclass</span><span class="o">=</span><span class="n">ignore_multiclass</span><span class="p">,</span>
             <span class="n">rename</span><span class="o">=</span><span class="n">rename</span><span class="p">,</span>
         <span class="p">)</span>
@@ -1279,7 +1165,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span>
 
-    <span class="k">def</span> <span class="nf">numeric_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="Analyzer.numeric_vars"><a class="viewcode-back" href="../../../python_api/classes/tm_analyzer.html#tablemage.Analyzer.numeric_vars">[docs]</a>    <span class="k">def</span> <span class="nf">numeric_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the numeric variables in the working train DataFrame.</span>
 
 <span class="sd">        Returns</span>
@@ -1287,9 +1173,9 @@
 <span class="sd">        list[str]</span>
 <span class="sd">            The numeric variables.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">numeric_vars</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">numeric_vars</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">categorical_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="Analyzer.categorical_vars"><a class="viewcode-back" href="../../../python_api/classes/tm_analyzer.html#tablemage.Analyzer.categorical_vars">[docs]</a>    <span class="k">def</span> <span class="nf">categorical_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the categorical variables in the working train DataFrame.</span>
 
 <span class="sd">        Returns</span>
@@ -1297,9 +1183,9 @@
 <span class="sd">        list[str]</span>
 <span class="sd">            The categorical variables.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">categorical_vars</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">categorical_vars</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="Analyzer.vars"><a class="viewcode-back" href="../../../python_api/classes/tm_analyzer.html#tablemage.Analyzer.vars">[docs]</a>    <span class="k">def</span> <span class="nf">vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the variables in the working train DataFrame.</span>
 
 <span class="sd">        Returns</span>
@@ -1307,9 +1193,9 @@
 <span class="sd">        list[str]</span>
 <span class="sd">            The variables.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">vars</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">vars</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<div class="viewcode-block" id="Analyzer.shape"><a class="viewcode-back" href="../../../python_api/classes/tm_analyzer.html#tablemage.Analyzer.shape">[docs]</a>    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the shape of the working train DataFrame.</span>
 
 <span class="sd">        Parameters</span>
@@ -1327,9 +1213,9 @@
         <span class="k">elif</span> <span class="n">dataset</span> <span class="o">==</span> <span class="s2">&quot;test&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">_working_df_test</span><span class="o">.</span><span class="n">shape</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid input: dataset = </span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid input: dataset = </span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">value_counts</span><span class="p">(</span>
+<div class="viewcode-block" id="Analyzer.value_counts"><a class="viewcode-back" href="../../../python_api/classes/tm_analyzer.html#tablemage.Analyzer.value_counts">[docs]</a>    <span class="k">def</span> <span class="nf">value_counts</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;both&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;both&quot;</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the value counts of a variable in the working train DataFrame.</span>
@@ -1354,9 +1240,9 @@
         <span class="k">elif</span> <span class="n">dataset</span> <span class="o">==</span> <span class="s2">&quot;both&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">df_all</span><span class="p">()[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid input: dataset = </span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid input: dataset = </span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">df_train</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="Analyzer.df_train"><a class="viewcode-back" href="../../../python_api/classes/tm_analyzer.html#tablemage.Analyzer.df_train">[docs]</a>    <span class="k">def</span> <span class="nf">df_train</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the working train DataFrame.</span>
 
 <span class="sd">        Returns</span>
@@ -1364,9 +1250,9 @@
 <span class="sd">        pd.DataFrame</span>
 <span class="sd">            The working train DataFrame.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">df_train</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">df_train</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">df_test</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="Analyzer.df_test"><a class="viewcode-back" href="../../../python_api/classes/tm_analyzer.html#tablemage.Analyzer.df_test">[docs]</a>    <span class="k">def</span> <span class="nf">df_test</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the working test DataFrame.</span>
 
 <span class="sd">        Returns</span>
@@ -1374,9 +1260,9 @@
 <span class="sd">        pd.DataFrame</span>
 <span class="sd">            The working test DataFrame.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">df_test</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">df_test</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">df_all</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="Analyzer.df_all"><a class="viewcode-back" href="../../../python_api/classes/tm_analyzer.html#tablemage.Analyzer.df_all">[docs]</a>    <span class="k">def</span> <span class="nf">df_all</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the working DataFrame.</span>
 
 <span class="sd">        Returns</span>
@@ -1384,7 +1270,7 @@
 <span class="sd">        pd.DataFrame</span>
 <span class="sd">            The working DataFrame.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">df_all</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">df_all</span><span class="p">()</span></div>
 
     <span class="c1"># --------------------------------------------------------------------------</span>
     <span class="c1"># MAGIC METHODS</span>
