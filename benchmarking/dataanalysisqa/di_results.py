@@ -58,20 +58,20 @@ for dataset_name in dataset_name_to_filestem.keys():
     )
 
     prompt = """\
-    I am providing you with a dataset located at path {file_path}. \
-    I will then give you instructions for analyzing the dataset.
+I am providing you with a dataset located at path {file_path}. \
+I will then give you instructions for analyzing the dataset.
 
-    Here are some rules: \
-    (1) Immediately split the dataset into 80/20 train/test sets using sklearn’s train_test_split function, with random seed 42. \
-    (2) If you are explicitly asked to transform the dataset (e.g., scaling, imputation, feature engineering), keep the changes for future questions. \
-    (3) When transforming data (e.g., feature scaling), always fit on the train dataset and transform the test dataset based on the train dataset. \
-    (4) When fitting models, always fit on the train dataset and predict on the test dataset. \
-    (5) For exploratory analysis (e.g., statistical testing, summary statistics), always consider the entire dataset. \
-    (6) Temporarily drop rows with missing values in variables of interest prior to each analysis step. \
-    (7) Return a sentence for each query describing your findings, round numeric answers to 3 decimal places. \
-    (8) Use significance level 0.05 for statistical tests. \
+Here are some rules: \
+(1) Immediately split the dataset into 80/20 train/test sets using sklearn’s train_test_split function, with random seed 42. \
+(2) If you are explicitly asked to transform the dataset (e.g., scaling, imputation, feature engineering), keep the changes for future questions. \
+(3) When transforming data (e.g., feature scaling), always fit on the train dataset and transform the test dataset based on the train dataset. \
+(4) When fitting models, always fit on the train dataset and predict on the test dataset. \
+(5) For exploratory analysis (e.g., statistical testing, summary statistics), always consider the entire dataset. \
+(6) Temporarily drop rows with missing values in variables of interest prior to each analysis step. \
+(7) Return a sentence for each query describing your findings, round numeric answers to 3 decimal places. \
+(8) Use significance level 0.05 for statistical tests. \
 
-    {task}
+{task}
     """
 
     mi = DataInterpreter()

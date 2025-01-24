@@ -376,6 +376,40 @@ def build_correlation_matrix_tool(context: ToolingContext) -> FunctionTool:
     )
 
 
+class _ValueCountsInput(BaseModel):
+    categorical_var: str = Field(
+        description="The categorical variable to tabulate value counts for."
+    )
+
+
+def _value_counts_function(
+    categorical_var: str,
+    context: ToolingContext = None,
+):
+    df_output = context._data_container.analyzer.eda("all").value_counts(
+        categorical_var
+    )
+    context.add_thought(
+        "I am going to generate value counts for the variable: {var}.".format(
+            var=categorical_var
+        )
+    )
+    context.add_code("analyzer.eda().value_counts('{var}')".format(var=categorical_var))
+    return context.add_table(df_output, add_to_vectorstore=True)
+
+
+def build_value_counts_tool(context: ToolingContext) -> FunctionTool:
+    return FunctionTool.from_defaults(
+        fn=partial(_value_counts_function, context=context),
+        name="value_counts_function",
+        description="""\
+Generates value counts for a categorical variable. \
+Returns a JSON string containing the value counts.\
+""",
+        fn_schema=_ValueCountsInput,
+    )
+
+
 class _BlankInput(BaseModel):
     pass
 

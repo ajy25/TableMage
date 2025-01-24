@@ -22,7 +22,7 @@ local_tests_llm
 
 storage/
 
-benchmarking/ml/datasets/*
+# benchmarking/ml/datasets/*
 # benchmarking/ml/results/*
 benchmarking/ml/api_key.txt
 

@@ -42,6 +42,7 @@ from ..tools.eda_tools import (
     build_categorical_summary_statistics_tool,
     build_correlation_comparison_tool,
     build_correlation_matrix_tool,
+    build_value_counts_tool,
 )
 from ..tools.linear_regression_tools import build_ols_tool, build_logit_tool
 from ..tools.data_tools import build_dataset_summary_tool
@@ -179,6 +180,7 @@ def build_agent(
             build_categorical_summary_statistics_tool(context),
             build_correlation_comparison_tool(context),
             build_correlation_matrix_tool(context),
+            build_value_counts_tool(context),
             build_ols_tool(context),
             build_logit_tool(context),
             build_drop_highly_missing_vars_tool(context),

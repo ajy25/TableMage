@@ -27,22 +27,21 @@ from .utils import ensure_arg_list_uniqueness
 
 
 class Analyzer:
-    """Analyzer is a class designed for conducting exploratory data analysis (EDA),
-    regression analysis, and machine learning modeling on tabular data.
+    """Analyzer is the high-level interface class of TableMage.
 
-    An Analyzer object can be initialized from a single DataFrame which is then
-    split into train and test DataFrames, or, alternatively, from pre-split
-    train and test DataFrames. The object can then be used to conduct
-    a variety of analyses,
-    including exploratory data analysis (the eda() method),
-    regression analysis (ols() and logit() methods),
+    An Analyzer object can be initialized from a single DataFrame which is then \
+    split into train and test DataFrames, or, alternatively, from pre-split \
+    train and test DataFrames. The object can then be used to conduct \
+    a variety of analyses, \
+    including exploratory data analysis (the eda() method), \
+    regression analysis (ols() and logit() methods), \
     and machine learning modeling (classify() and regress() methods).
 
-    The Analyzer object also handles data preprocessing tasks, such as scaling,
-    imputing missing values, dropping rows with missing values, one-hot encoding,
-    and selecting variables. These methods can be chained together for easy data
-    transformation. The Analyzer object remembers how the data was transformed,
-    enabling proper fitting and transforming of cross validation splits of the
+    The Analyzer object also handles data preprocessing tasks, such as scaling, \
+    imputing missing values, dropping rows with missing values, one-hot encoding, \
+    and selecting variables. These methods can be chained together for easy data \
+    transformation. The Analyzer object remembers how the data was transformed, \
+    enabling proper fitting and transforming of cross validation splits of the \
     train dataset.
     """
 
@@ -61,9 +60,9 @@ class Analyzer:
         Parameters
         ----------
         df : pd.DataFrame | None
-            The DataFrame to be analyzed. Must be in wide format, i.e. with shape
-            (n_units, n_vars). If df_test is provided, then the df is treated as the
-            train DataFrame. Otherwise, the df is split into train and test DataFrames
+            The DataFrame to be analyzed. Must be in wide format, i.e. with shape \
+            (n_units, n_vars). If df_test is provided, then the df is treated as the \
+            train DataFrame. Otherwise, the df is split into train and test DataFrames \
             according to the test_size parameter.
 
         df_test : pd.DataFrame | None
@@ -71,23 +70,23 @@ class Analyzer:
             If not None, then treats df as the train DataFrame.
 
         test_size : float
-            Default: 0. Proportion of the DataFrame to withhold for
-            testing. If test_size = 0, then the train DataFrame and the
-            test DataFrame will both be the same as the input df.
+            Default: 0. Proportion of the DataFrame to withhold for \
+            testing. If test_size = 0, then the train DataFrame and the \
+            test DataFrame will both be the same as the input df. \
             If df_test is provided, then test_size is ignored.
 
         id_column : str | None
-            Default: None. The name of the column containing unique identifiers.
-            If not None, then the column will be set as the index of the DataFrame.
+            Default: None. The name of the column containing unique identifiers. \
+            If not None, then the column will be set as the index of the DataFrame. \
             If None, then the input index will be used as the index of the DataFrame.
 
         split_seed : int
-            Default: 42.
-            Used only for the train test split.
+            Default: 42. \
+            Used only for the train test split. \
             If df_test is provided, then split_seed is ignored.
 
         verbose : bool
-            Default: False. If True, prints helpful update messages for certain
+            Default: False. If True, prints helpful update messages for certain \
             Analyzer function calls.
 
         name : str
@@ -172,8 +171,8 @@ class Analyzer:
     # EDA + FEATURE SELECTION + CAUSAL EFFECT ESTIMATION + REGRESSION ANALYSIS
     # --------------------------------------------------------------------------
     def eda(self, dataset: Literal["train", "test", "all"] = "all") -> EDAReport:
-        """Constructs an EDAReport object for the working train
-        DataFrame, the working test DataFrame, or both DataFrames combined.
+        """Constructs an EDAReport object for the working train \
+        dataset, the working test dataset, or both datasets combined.
 
         Parameters
         ----------
@@ -183,8 +182,8 @@ class Analyzer:
         Returns
         -------
         EDAReport
-            The EDAReport object contains a variety of exploratory data
-            analysis methods, including summary statistics for numeric and
+            The EDAReport object contains a variety of exploratory data \
+            analysis methods, including summary statistics for numeric and \
             categorical variables, t-tests, and data visualizations.
         """
         if dataset == "train":
@@ -204,7 +203,9 @@ class Analyzer:
         confounders: list[str],
         dataset: Literal["train", "test", "all"] = "all",
     ) -> CausalModel:
-        """Returns a CausalModel object for estimating causal effects.
+        """Returns a CausalModel object for estimating causal effects. \
+        The CausalModel object contains rudimentary methods for \
+        causal effect estimation (weighted least squares, IPW estimator).
 
         Parameters
         ----------
@@ -241,8 +242,8 @@ class Analyzer:
         feature_selectors: list[BaseFSR] | list[BaseFSC] | None = None,
         max_n_features: int | None = None,
     ) -> VotingSelectionReport:
-        """Selects the most important features using a variety of feature selection
-        methods. The feature selection methods can be used to select the most
+        """Selects the most important features using a variety of feature selection \
+        methods. The feature selection methods can be used to select the most \
         important predictors for regression or classification.
 
         Parameters
@@ -251,15 +252,15 @@ class Analyzer:
             The target variable.
 
         predictors : list[str] | None
-            Default: None. The predictors to select from.
+            Default: None. The predictors to select from. \
             If None, uses all variables except the target as predictors.
 
         feature_selectors : list[BaseFSR] | list[BaseFSC] | None
-            Default: None. The feature selection methods to use.
+            Default: None. The feature selection methods to use. \
             If None, uses all feature selection methods.
 
         max_n_features : int | None
-            Default: None. Maximum number of features to select.
+            Default: None. Maximum number of features to select. \
             If None, then all features with at least 50% support are selected.
 
         Returns
@@ -305,9 +306,7 @@ class Analyzer:
         alpha: float = 0.0,
         l1_weight: float = 0.0,
     ) -> OLSReport:
-        """Performs OLS regression.
-        If formula is provided, performs regression with OLS via formula.
-        Units with missing data will be dropped.
+        """Performs OLS regression. Units with missing data will be dropped.
 
         Parameters
         ----------
@@ -315,7 +314,7 @@ class Analyzer:
             Default: None. The variable to be predicted.
 
         predictors : list[str]
-            Default: None.
+            Default: None. \
             If None, all variables except target will be used as predictors.
 
         alpha : float
@@ -327,7 +326,7 @@ class Analyzer:
         Returns
         -------
         OLSReport
-            The OLSReport object contains a variety of OLS regression methods,
+            The OLSReport object contains a variety of OLS regression methods, \
             including summary statistics, model coefficients, and data visualizations.
         """
         if target not in self._datahandler.numeric_vars():
@@ -362,9 +361,7 @@ class Analyzer:
         l1_weight: float = 0.0,
         threshold_strategy: Literal["f1", "roc"] | None = None,
     ) -> LogitReport | MNLogitReport:
-        """Performs logistic regression.
-        if formula is provided, performs logistic regression via formula.
-        Units with missing data will be dropped.
+        """Performs logistic regression. Units with missing data will be dropped.
 
         Parameters
         ----------
@@ -402,7 +399,7 @@ class Analyzer:
                 predictors.remove(target)
         # decide between binary and multinomial logit
         df_all = self._datahandler.df_all()
-        if len(df_all[target].unique()) == 2:
+        if len(df_all[target].dropna().unique()) == 2:
             return LogitReport(
                 LogitLinearModel(
                     alpha=alpha,

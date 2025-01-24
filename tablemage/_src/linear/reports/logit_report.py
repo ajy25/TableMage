@@ -1086,11 +1086,14 @@ class LogitReport:
         -------
         dict
         """
-        return {
-            "coefficients": self.coefs().to_dict("index"),
+        output = {
             "train_metrics": self.metrics("train").to_dict("index"),
             "test_metrics": self.metrics("test").to_dict("index"),
         }
+        if hasattr(self, "coefs"):
+            if callable(self.coefs):
+                output["coefficients"] = self.coefs().to_dict("index")
+        return output
 
     def __str__(self) -> str:
         max_width = print_options._max_line_width

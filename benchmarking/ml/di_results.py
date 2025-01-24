@@ -16,7 +16,7 @@ subdir_stems_to_consider = [
 
 
 curr_dir = Path(__file__).resolve().parent
-output_dir = curr_dir / "results" / "di_gpt4o_mini_results"
+output_dir = curr_dir / "results" / "di_gpt4o"
 output_dir.mkdir(exist_ok=True)
 datasets_dir = curr_dir / "datasets"
 subdirs = sorted([x for x in datasets_dir.iterdir() if x.is_dir()])
@@ -45,14 +45,14 @@ for subdir in subdirs:
         target = df.columns[0]
 
         prompt = """\
-        The dataset is at {file_path}.
-        You must perform a 60/40 train/test split using sklearn’s train_test_split function, with random seed 42.
+The dataset is at {file_path}.
+You must perform a 60/40 train/test split using sklearn’s train_test_split function, with random seed 42.
 
-        Predict the variable `{target}` with machine learning {task}. \
-        Report the test {metric} of the best possible model you can train. \
-        Prior to training, consider employing feature selection and/or feature scaling/transformation to improve model performance. \
-        Only report the test {metric} value, rounded to 3 decimal points.
-        """
+Predict the variable `{target}` with machine learning {task}. \
+Please train the best possible model to accomplish this task. \
+Report the test {metric} of the best possible model you can train. \
+Only report the test {metric} value, rounded to 3 decimal points.
+"""
 
         async def main():
             mi = DataInterpreter()

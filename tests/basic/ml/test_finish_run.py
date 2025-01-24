@@ -69,6 +69,9 @@ def test_regression_run_cv(setup_data):
     report = analyzer.regress(
         models=[
             tm.ml.LinearR(
+                type="ols",
+            ),
+            tm.ml.LinearR(
                 type="l2",
                 n_trials=1,
             ),
@@ -84,6 +87,7 @@ def test_regression_run_cv(setup_data):
         outer_cv=2,
     )
     report._to_dict()
+    str(report)
 
 
 def test_regression_run_fs(setup_data):
@@ -91,6 +95,9 @@ def test_regression_run_fs(setup_data):
     analyzer = tm.Analyzer(setup_data["df_house_mini"], test_size=0.4, verbose=False)
     report = analyzer.regress(
         models=[
+            tm.ml.LinearR(
+                type="ols",
+            ),
             tm.ml.LinearR(
                 type="l2",
                 n_trials=1,
@@ -107,6 +114,7 @@ def test_regression_run_fs(setup_data):
         feature_selectors=[tm.fs.KBestFSR("r_regression", 2)],
     )
     report._to_dict()
+    str(report)
 
 
 def test_regression_run_cv_fs(setup_data):
@@ -114,6 +122,9 @@ def test_regression_run_cv_fs(setup_data):
     analyzer = tm.Analyzer(setup_data["df_house_mini"], test_size=0.4, verbose=False)
     report = analyzer.regress(
         models=[
+            tm.ml.LinearR(
+                type="ols",
+            ),
             tm.ml.LinearR(
                 type="l2",
                 n_trials=1,
@@ -136,12 +147,16 @@ def test_regression_run_cv_fs(setup_data):
     report.plot_obs_vs_pred("LinearR(l2)", "train")
 
     report._to_dict()
+    str(report)
 
 
 def test_classification_run_simple(setup_data):
     analyzer = tm.Analyzer(setup_data["df_house_mini"], test_size=0.4, verbose=False)
     report = analyzer.classify(
         models=[
+            tm.ml.LinearC(
+                type="no_penalty",
+            ),
             tm.ml.LinearC(
                 type="l2",
                 n_trials=1,
@@ -167,3 +182,4 @@ def test_classification_run_simple(setup_data):
     report.plot_roc_curves("test")
 
     report._to_dict()
+    str(report)

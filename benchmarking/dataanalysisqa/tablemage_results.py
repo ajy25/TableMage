@@ -13,7 +13,7 @@ tm.use_agents()
 
 
 # set model name
-model_name = "llama3.1_8b"
+model_name = "llama3.3_70b"
 
 # set subset of datasets to generate answers for (must have already ran on all datasets)
 # leave empty to generate answers for all datasets

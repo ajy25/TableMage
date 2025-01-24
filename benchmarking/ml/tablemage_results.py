@@ -1,7 +1,6 @@
 from pathlib import Path
 import sys
 import pandas as pd
-import time
 
 repo_root = Path(__file__).resolve().parent.parent.parent
 
@@ -16,7 +15,7 @@ tm.use_agents()
 print("TableMage loaded.")
 
 
-model_name = "gpt4o"
+model_name = "llama3.3_70b"
 
 subdir_stems_to_consider = [  # optionally comment out any of these
     "classification_mixed",
@@ -86,20 +85,19 @@ for subdir in subdirs:
             test_size=0.4,
             split_seed=42,
             tool_rag_top_k=5,
-            react=True,
+            react=False,
             tools_only=True,
             system_prompt="""\
 You are a helpful assistant. \
 You have access to tools for training and evaluating machine learning models. \
-Use your tools to help the user train the best possible model for the given dataset.
+Use your tools to help the user train the best possible model for the given dataset. \
 """,
         )
 
         response = agent.chat(
             f"Predict the variable `{target}` with machine learning {task}. "
+            "Please train the best possible model to accomplish this task. "
             f"Report the test {metric} of the best possible model you can train. "
-            "Prior to training, consider employing feature selection and/or "
-            "feature scaling/transformation to improve model performance. "
             f"Only report the test {metric} value, rounded to 3 decimal points."
         )
         print(

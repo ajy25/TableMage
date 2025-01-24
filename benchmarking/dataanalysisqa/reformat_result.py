@@ -139,7 +139,7 @@ for row in joined_df.iterrows():
     question_ids.append(question_id)
     formatted_answers.append(output)
 
-    time.sleep(2)
+    time.sleep(0.5)
 
 
 formatted_answers_df = pd.DataFrame(

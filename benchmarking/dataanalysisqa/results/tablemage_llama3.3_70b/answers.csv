@@ -1,0 +1,105 @@
+Question ID,Unformatted Answer
+1,There were 342 passengers who survived.
+2,There are 577 male passengers and 314 female passengers.
+3,"The mean of ""Age"" is 29.699, the median is 28.0, and the standard deviation is 14.526."
+4,"There are 3 different values of ""Pclass""."
+5,"The average ""Fare"" price is 32.204."
+6,"The correlation between ""Pclass"" and ""Fare"" is -0.549."
+7,"Yes, there is a statistically significant difference in fare price between those who survived and those who did not. The p-value is 2.6993323503141917e-11, which is less than 0.05, indicating that the difference is statistically significant. The mean fare price for those who survived is 26.28 more than for those who did not."
+8,"Yes, there is a statistically significant difference in fare price between men and women. The p-value is 5.388057409693917e-07, which is less than 0.05, indicating that the difference is statistically significant. The mean fare price for women is $18.96 more than for men."
+9,"The mean fare price for young passengers is $33.35, and the mean fare price for old passengers is $46.36. The p-value of the t-test is 0.045, which is less than 0.05, indicating that the difference in fare price between young and old passengers is statistically significant."
+10,"The test AUROC score for the logistic regression model using ""Pclass"", ""Age_categorical"", and ""Fare"" to predict survival is 0.783."
+11,"The average ""SalePrice"" is 180921.196 and the standard deviation is 79442.503."
+12,"The mean of the new variable ""TotalSF"" is 1509.619."
+13,"The mean of ""GarageYrBlt"" after imputing missing values with the median is 1978.589."
+14,"The variable with the highest missingness is ""PoolQC"" with 0 missing values."
+15,"The coefficient of ""TotalSF"" is 104.459, and it is statistically significant with a p-value of 0.0. The intercept value is 22485.391."
+16,The train R-squared is 0.612 and the test RMSE is 49768.44.
+17,"Yes, there is a statistically significant difference in ""SalePrice"" between the values of ""LotShape"" with a p-value of 6.447523852014698e-25."
+18,"The correlation between ""SalePrice"" and ""TotalSF"" is 0.717, and the p-value is 1.184e-230."
+19,"The distribution of ""SalePrice"" is not normal, as the p-value of the Shapiro-Wilk test is 3.2061412312022114e-33, which is less than 0.05."
+20,"The average ""SalePrice"" among houses considered in the ""Medium"" price range is 171,941.729."
+21,"The value counts of ""PriceRange"" are:
+
+* Low: 114 (7.8%)
+* Medium: 1231 (84.3%)
+* High: 115 (7.9%)"
+22,"The train R-squared is 0.642 and the test RMSE is 48,711.918."
+23,"The mean of ""alcohol"" is 13.001 and the standard deviation is 0.812."
+24,"The mean of ""malic_acid"" is 2.336 and the standard deviation is 1.117."
+25,"The skew of ""alcohol"" is -0.051 and the kurtosis is -0.862."
+26,"The correlation between ""alcohol"" and ""malic_acid"" is 0.094."
+27,The test one-vs-one AUROC for the logistic regression model is 1.0.
+28,"The median of the newly engineered variable ""meaningless"" is 634.929."
+29,"The third largest value of ""alcohol"" is 14.13."
+30,"There are 16 of each ""wine_class"" class in the dataset."
+31,The test R-squared is -0.034.
+32,The average of the mean radius is 14.127 and the standard deviation is 3.524.
+33,The correlation between the mean radius and the breast cancer indicator variable is -0.730.
+34,"The p-value is less than 0.05, indicating that there is a statistically significant difference in mean radius between those with and those without breast cancer."
+35,"The p-value is less than 0.05, indicating that there is a statistically significant difference in area error between those with and those without breast cancer."
+36,The coefficient for mean radius is -2.006.
+37,The coefficient for mean area is -0.336.
+38,The difference in the mean area between those with and those without breast cancer is -1.454.
+39,The fifth largest mean radius value is 0.858.
+40,"The interquartile range of ""mean radius"" is not provided, but there are 14 outliers."
+41,The average income is 45.219.
+42,There are 245 individuals who are married.
+43,The average number of cards is 2.958.
+44,The difference between the two groups' average ratings is 550.8.
+45,There are 3 ethnicities in the dataset.
+46,There are 55 high income earners.
+47,"The average number of cards does differ between the categories of ""income_categories"". The average number of cards for the low income category is 2.983, for the medium income category is 2.895, and for the high income category is 2.964."
+48,The test R-squared is 0.418.
+49,"The coefficient for ""Age"" is -2.21."
+50,"The p-value is 0.9045413912126736, which is greater than the significance level of 0.05. Therefore, there is no statistically significant difference in means in ""Limit"" between ""Student"" levels."
+51,"There are 3 different classes of ""Sex"" in the dataset."
+52,The mean diameter is 0.408.
+53,The variance of shucked weight is 0.049.
+54,"The average diameter for those with ""Sex"" set to ""M"" is 0.439."
+55,"The correlation between diameter and rings is 0.575, and the p-value is 0.000."
+56,"The Shapiro-Wilk test was used to determine if the diameter is normally distributed. The p-value is very low (1.65e-28), which indicates that the null hypothesis (the data is normally distributed) can be rejected. Therefore, the diameter is not normally distributed."
+57,"The one-way ANOVA test was used to determine if there is a statistically significant difference in average ""Diameter"" between the ""Sex"" categories. The p-value is very low (0.0), which indicates that the null hypothesis (all group means are equal) can be rejected. Therefore, there is a statistically significant difference in average ""Diameter"" between the ""Sex"" categories."
+58,"The median of the new variable ""Area"" is 0.078."
+59,"There are 2089 examples with ""Yes"" for ""LargeArea""."
+60,"The test mean absolute error for the linear regression model to predict shucked weight with ""LargeArea"" and ""Area"" is 0.066."
+61,"The chi-squared test was used to determine if ""LargeArea"" and ""Sex"" are statistically independent. The p-value is very low (2.23e-232), which indicates that the null hypothesis (the two variables are independent) can be rejected. Therefore, ""LargeArea"" and ""Sex"" are not statistically independent."
+62,The mean batting average is 0.258 and the standard deviation is 0.040.
+63,"The Shapiro-Wilk test indicates that the batting average does not adhere to a normal distribution, with a p-value of 1.1919341599317021e-09. The Kolmogorov-Smirnov test and the Anderson-Darling test were unable to be performed."
+64,"The correlation between batting average and salary is 0.279, with a p-value of 1.949e-07. This indicates that there is a statistically significant positive correlation between batting average and salary."
+65,The new mean of the salary is 0.190 and the new standard deviation is 0.207.
+66,The test RMSE of the model is 1140.712.
+67,"The interquartile range of batting_average is not provided, but there are 10 outliers based on 1.5 times the interquartile range."
+68,"The mean of the new variable ""hits_and_runs"" is 139.531 and the kurtosis is -0.932."
+69,"The median of the standardized ""hits_and_runs"" is -0.144."
+70,"The variable most highly correlated with salary_in_thousands_of_dollars is number_of_runs, with a correlation of 0.643."
+71,The average salary is 1248.529.
+72,"The average miles per gallon (""mpg"") is 23.446."
+73,The average miles per gallon for cars of model year 70 is 17.690.
+74,There are 242 cars of model year 75 or later. The mean horsepower of these cars is 93.971.
+75,"The correlation coefficient between acceleration and weight is -0.417, and the p-value is 0.0. This suggests a moderate negative correlation between the two variables."
+76,The coefficient for weight is -0.001. The model's train R-squared is 0.154.
+77,There are 147 heavy observations.
+78,"Yes, there is a statistically significant difference in average miles per gallon between heavy and light vehicles. The p-value is very small (less than 0.001), indicating that the difference is highly significant."
+79,"There are 392 ""weak"" vehicles."
+80,"Yes, the variables ""powerful"" and ""heavy"" are statistically independent. The p-value is 1.0, which is greater than the typical significance level of 0.05, indicating that we fail to reject the null hypothesis of independence."
+81,"No, the model year is not normally distributed. The p-value is very small (less than 0.05), indicating that we reject the null hypothesis of normality."
+82,There are 8 different blood types in the dataset. The most common blood type is A- and the least common is O-.
+83,There are 5 different insurance providers in the dataset. The most common insurance provider is Cigna and the least common is Aetna.
+84,The insurance provider associated with the highest average billing amount is not available as the 'Insurance_Provider' column does not exist in the dataset.
+85,"There is no statistically significant difference in average billing amount between males and females, as the p-value (0.255) is greater than the typical significance level of 0.05."
+86,"The train R-squared of the model is 0.0, indicating that the model does not explain any of the variation in the billing amount. The test RMSE is 14104.311, which means that the model's predictions are off by approximately 14104 units on average."
+87,"The variables blood type and gender are not statistically independent, as the p-value (0.047) is less than the typical significance level of 0.05. This suggests that there is a significant association between blood type and gender."
+88,"The coefficient associated with age is -6.96, indicating that for every one-unit increase in age, the billing amount decreases by approximately 6.96 units. The intercept value is 25870.208, which represents the expected billing amount when age is zero."
+89,The variance of the billing amount after min-max scaling is 0.067.
+90,The average billing amount is 0.503.
+91,"The medical condition associated with the highest billing amount is Obesity, with an average billing amount of 0.508."
+92,"The mean of ""SepalLengthCm"" is 5.843 and the median is 5.800."
+93,"The tenth largest ""SepalLengthCm"" value is 7.2."
+94,There are 3 different species categories.
+95,"The mean ""SepalLengthCm"" for species ""Iris-setosa"" is 5.006."
+96,"The correlation coefficient between ""PetalWidthCm"" and ""PetalLengthCm"" is 0.963, and the p-value is 0.0."
+97,"The mean of ""PetalAreaCm"" is 5.793 and the standard deviation is 4.713."
+98,"The mean ""PetalAreaCm"" for species ""Iris-setosa"" is 0.363."
+99,"The correlation coefficient between ""SepalLengthCm"" and ""PetalAreaCm"" is 0.857, and the p-value is 0.0. Since the p-value is less than 0.05, there is a statistically significant correlation between the two variables."
+100,"There are 100 ""large"" observations."

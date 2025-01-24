@@ -275,7 +275,7 @@ class MNLogitReport:
         divider = "\n" + color_text("-" * max_width, "none") + "\n"
         divider_invisible = "\n" + " " * max_width + "\n"
 
-        title_message = bold_text("Logistic Regression Report")
+        title_message = bold_text("Multinomial Logistic Regression Report")
 
         target_var = "'" + self._target + "'"
         target_message = f"{bold_text('Target variable:')}\n"
