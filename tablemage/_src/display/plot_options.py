@@ -165,7 +165,6 @@ class _PlotOptions:
         """
         self._scilimits = scilimits
 
-
     def set_to_defaults(self):
         """Resets all plot options to their default values."""
         self._style: Literal["whitegrid", "darkgrid", "white", "dark", "ticks"] = (
@@ -231,7 +230,6 @@ class _PlotOptions:
         self._cmap = "Grays"
 
         self._on_sns_update()
-
 
     def _on_sns_update(self):
         """Updates the style and context of seaborn plots."""

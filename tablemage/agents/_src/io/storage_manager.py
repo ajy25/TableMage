@@ -179,9 +179,11 @@ class StorageManager:
             )
         else:
             text_description += "\n"
-            text_description += "A detailed description is not available. " + \
-                "You must not describe the image to the user. " + \
-                "Instead, simply inform the user that the image has been plotted."
+            text_description += (
+                "A detailed description is not available. "
+                + "You must not describe the image to the user. "
+                + "Instead, simply inform the user that the image has been plotted."
+            )
 
         text_description = (
             f"Path to image: {img_path}\n\n" + f"Description: {text_description}"
