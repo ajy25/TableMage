@@ -8,7 +8,7 @@
 
 
 
-TableMage is a Python package for low-code/no-code data science.
+TableMage is a Python package for low-code/conversational clinical data science.
 TableMage can help you quickly explore tabular datasets, 
 easily perform regression analyses, 
 and effortlessly compute performance metrics for your favorite machine learning models.
@@ -16,7 +16,7 @@ and effortlessly compute performance metrics for your favorite machine learning 
 
 ## Installation and dependencies
 
-We recommend installing TableMage in a virtual environment.
+We recommend installing TableMage in a new virtual environment.
 
 To install TableMage:
 ```

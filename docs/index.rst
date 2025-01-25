@@ -1,9 +1,6 @@
 TableMage
 =========
-TableMage is a Python package for low-code data science.
-
-
-
+TableMage is a Python package for low-code clinical data science.
 
 
 .. toctree::
@@ -12,7 +9,7 @@ TableMage is a Python package for low-code data science.
 
    
    intro
-   getting_started/install
+   getting_started
    python_api/api_reference
    contributors/contributors
    

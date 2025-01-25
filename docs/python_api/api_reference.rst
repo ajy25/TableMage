@@ -1,6 +1,6 @@
 Python API Reference
 ====================
-TableMage is a Python library for rapid low-code data science.
+TableMage is a Python library for rapid low-code clinical data science.
 
 
 .. toctree::

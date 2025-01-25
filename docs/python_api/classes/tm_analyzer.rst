@@ -8,7 +8,7 @@ Analyzer :py:mod:`(tm.Analyzer)`
 `tablemage.Analyzer` is a high-level class that provides low-code tools for data analysis.
 
 
-.. autoclass:: Analyzer
+.. autoclass:: tablemage.Analyzer
     :members: 
         __init__, 
         eda,
