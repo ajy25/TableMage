@@ -320,12 +320,12 @@ class EDAReport:
                 [eda.summary_statistics for eda in self._categorical_eda_dict.values()],
                 axis=1,
             ).T
-            self._categorical_summary_statistics["n"] = (
-                self._categorical_summary_statistics["n"].astype(int)
-            )
-            self._categorical_summary_statistics["n_missing"] = (
-                self._categorical_summary_statistics["n_missing"].astype(int)
-            )
+            self._categorical_summary_statistics[
+                "n"
+            ] = self._categorical_summary_statistics["n"].astype(int)
+            self._categorical_summary_statistics[
+                "n_missing"
+            ] = self._categorical_summary_statistics["n_missing"].astype(int)
             self._categorical_summary_statistics.index.name = "Variable"
 
         if len(self._numeric_vars) > 0:
@@ -336,9 +336,9 @@ class EDAReport:
             self._numeric_summary_statistics["n"] = self._numeric_summary_statistics[
                 "n"
             ].astype(int)
-            self._numeric_summary_statistics["n_missing"] = (
-                self._numeric_summary_statistics["n_missing"].astype(int)
-            )
+            self._numeric_summary_statistics[
+                "n_missing"
+            ] = self._numeric_summary_statistics["n_missing"].astype(int)
             self._numeric_summary_statistics.index.name = "Variable"
 
     # --------------------------------------------------------------------------

@@ -5,47 +5,6 @@ from .tooling_utils import tooling_decorator
 from .tooling_context import ToolingContext
 
 
-# pandas query tool
-class PandasQueryInput(BaseModel):
-    query: str = Field(
-        description="The natural language query. "
-        + "For example, 'Show me the top 5 rows with higest miles per gallon'."
-    )
-
-
-@tooling_decorator
-def _pandas_query_function(query: str, context: ToolingContext) -> str:
-    context.add_thought(
-        f"I am going to write and run Python code to answer the query: {query}."
-    )
-    context.add_code("df = analyzer.df_all()")
-    response = context._data_container.pd_query_engine.query(query)
-    pandas_instructions_str = response.metadata["pandas_instruction_str"]
-    context.add_code(pandas_instructions_str)
-    raw_pandas_output = response.metadata["raw_pandas_output"]
-    context.add_thought(f"The output of the query is:\n{raw_pandas_output}.")
-    return str(response)
-
-
-def build_pandas_query_tool(context: ToolingContext) -> FunctionTool:
-    return FunctionTool.from_defaults(
-        fn=partial(_pandas_query_function, context=context),
-        name="pandas_query_function",
-        description="""Tool for querying the dataset/dataframe using natural language.
-The tool will write and run pandas code to answer the query.
-Example use cases:
-- Filtering rows based on a condition (e.g. largest, smallest).
-- Selecting specific columns.
-- Finding mean/median/mode of a column.
-- Any other operation that can be performed using pandas commands.
-The user CANNOT see the output of this query.
-New variables will NOT be persisted in the dataset.
-USE THIS TOOL AS A LAST RESORT, i.e. only if no other tools are relevant to your desired operation.
-        """,
-        fn_schema=PandasQueryInput,
-    )
-
-
 # dataset summary tool
 class _BlankInput(BaseModel):
     pass
@@ -82,12 +41,12 @@ def _dataset_summary_function(context: ToolingContext) -> str:
             context._data_container.analyzer.datahandler().numeric_vars()
         ),
     }
-    output_dict["numeric_vars"] = (
-        context._data_container.analyzer.datahandler().numeric_vars()
-    )
-    output_dict["categorical_vars"] = (
-        context._data_container.analyzer.datahandler().categorical_vars()
-    )
+    output_dict[
+        "numeric_vars"
+    ] = context._data_container.analyzer.datahandler().numeric_vars()
+    output_dict[
+        "categorical_vars"
+    ] = context._data_container.analyzer.datahandler().categorical_vars()
     return context.add_dict(output_dict)
 
 

@@ -4,7 +4,7 @@ from llama_index.llms.groq import Groq
 from ..api_key_utils import find_key
 
 
-def build_groq(model: str | None = None, temperature: float = 0.0) -> Groq:
+def build_groq(model: str | None = None, temperature: float = 0.1) -> Groq:
     """Builds a Groq object using LlamaIndex.
     If no Groq API key is found in the .env file, raises a ValueError.
 
@@ -15,7 +15,7 @@ def build_groq(model: str | None = None, temperature: float = 0.0) -> Groq:
         Must support function calling.
 
     temperature : float
-        The temperature of the model, by default 0.0.
+        The temperature of the model, by default 0.1.
 
     Returns
     -------

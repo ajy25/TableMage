@@ -41,9 +41,10 @@ def use_agents():
             type="UPDATE",
             level="INFO",
         )
-    except Exception:
+    except Exception as e:
         print_wrapped(
-            text="Could not import the 'tablemage.agents' module.",
+            text="Could not import the 'tablemage.agents' module. "
+            "Exception: {}".format(e),
             type="WARNING",
             level="INFO",
         )

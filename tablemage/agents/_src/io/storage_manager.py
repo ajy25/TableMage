@@ -56,13 +56,13 @@ class ObjectWrappingNode:
 
 
 class StorageManager:
-    def __init__(self, multimodal: bool = True, vectorstore: bool = False):
+    def __init__(self, multimodal: bool = False, vectorstore: bool = False):
         """Initializes the StorageManager object.
 
         Parameters
         ----------
         multimodal : bool
-            Whether to use a multimodal LLM, by default True.
+            Whether to use a multimodal LLM, by default False.
 
         vectorstore : bool
             Whether to store data in a vector store, by default False.
@@ -166,7 +166,7 @@ class StorageManager:
         str
             Path to the image.
         """
-        img_path = img_store_path / f"{self._img_counter}.png"
+        img_path = img_store_path / f"{self._img_counter}.jpeg"
 
         fig.savefig(img_path, dpi=400)
         self._img_counter += 1

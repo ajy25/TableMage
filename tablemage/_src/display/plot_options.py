@@ -167,9 +167,9 @@ class _PlotOptions:
 
     def set_to_defaults(self):
         """Resets all plot options to their default values."""
-        self._style: Literal["whitegrid", "darkgrid", "white", "dark", "ticks"] = (
-            "whitegrid"
-        )
+        self._style: Literal[
+            "whitegrid", "darkgrid", "white", "dark", "ticks"
+        ] = "whitegrid"
         """Style to use for plots. (Seaborn)"""
 
         self._context: Literal["paper", "notebook", "talk", "poster"] = "paper"

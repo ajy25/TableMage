@@ -344,9 +344,9 @@
     const uploadBtn = document.querySelector('.upload-btn');
 
     // Trigger file input when custom label is clicked
-    document.querySelector('.file-label').addEventListener('click', () => {
-      csvUploadInput.click();
-    });
+    // document.querySelector('.file-label').addEventListener('click', () => {
+    //   csvUploadInput.click();
+    // });
 
     // Attach single event listener to upload button
     uploadBtn.addEventListener('click', uploadDataset);
@@ -427,9 +427,8 @@
           body: formData,
         });
         const data = await response.json();
-        uploadStatus.textContent = "";
+        uploadStatus.textContent = `ChatDA is analyzing file "${file.name}".`;;
         if (data.message) {
-          alert(data.message);
           fetchAnalysisHistory();
         } else if (data.error) {
           alert("Error: " + data.error);

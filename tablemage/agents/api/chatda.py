@@ -32,6 +32,7 @@ class ChatDA:
         tool_rag_top_k: int = 5,
         python_only: bool = False,
         tools_only: bool = False,
+        multimodal: bool = False,
     ):
         """Initializes the ChatDA object.
 
@@ -68,12 +69,17 @@ class ChatDA:
             The top-k value to use for the RAG-based tooling. Default is 5.
 
         python_only : bool
-            If True, only the Python environment is provided.
+            If True, only the Python environment is provided. \
             Default is False.
 
         tools_only : bool
-            If True, only the tools are provided. Otherwise, the
-            Python environment is also provided, ignoring RAG. Default is False.
+            If True, only the non-coding tools are provided. \
+            Otherwise, the Python environment is also provided. \
+            python_only and tools_only cannot be True at the same time.
+
+        multimodal : bool
+            If True, multimodal LLM is used only for interpreting figures. \
+            Default is False.
         """
         self._data_container = DataContainer()
         self._data_container.set_analyzer(
@@ -88,7 +94,9 @@ class ChatDA:
             "Data container initialized with the Analyzer built from the "
             "provided DataFrame."
         )
-        self._vectorstore_manager = StorageManager(multimodal=False, vectorstore=False)
+        self._vectorstore_manager = StorageManager(
+            multimodal=multimodal, vectorstore=False
+        )
         self._canvas_queue = CanvasQueue()
         self._context = ToolingContext(
             data_container=self._data_container,
@@ -110,7 +118,7 @@ class ChatDA:
             tools_only=tools_only,
         )
         print_debug(
-            f"Agent initialized. Agent type: {self._single_agent.__class__.__name__}"
+            f"Agent initialized. Agent type: {self._single_agent.__class__.__name__}."
         )
 
     def chat(self, message: str) -> str:

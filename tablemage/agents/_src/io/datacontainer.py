@@ -1,5 +1,4 @@
 import pandas as pd
-from llama_index.experimental.query_engine import PandasQueryEngine
 from llama_index.core.indices import VectorStoreIndex
 from llama_index.core.schema import TextNode
 import logging
@@ -152,14 +151,8 @@ class DataContainer:
         self.analyzer = analyzer
         self.df = self.analyzer.datahandler().df_all()
         self.variable_info = VariableInfo(vars=self.df.columns.to_list())
-        self.pd_query_engine = PandasQueryEngine(
-            df=self.df, llm=options.llm_build_function(), verbose=True
-        )
 
     def update_df(self):
         """Update the DataFrame based on the Analyzer's state."""
         self.df = self.analyzer.datahandler().df_all()
         self.variable_info = VariableInfo(vars=self.df.columns.to_list())
-        self.pd_query_engine = PandasQueryEngine(
-            df=self.df, llm=options.llm_build_function(), verbose=True
-        )

@@ -160,6 +160,9 @@ def build_agent(
         )
     )
 
+    if python_only and tools_only:
+        raise ValueError("Both python_only and tools_only cannot be True.")
+
     if python_only:
         tools = []
 

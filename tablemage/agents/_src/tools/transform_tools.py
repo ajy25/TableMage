@@ -179,12 +179,12 @@ def _load_state_function(state_name: str, context: ToolingContext) -> str:
             context._data_container.analyzer.datahandler().numeric_vars()
         ),
     }
-    output_dict["numeric_vars"] = (
-        context._data_container.analyzer.datahandler().numeric_vars()
-    )
-    output_dict["categorical_vars"] = (
-        context._data_container.analyzer.datahandler().categorical_vars()
-    )
+    output_dict[
+        "numeric_vars"
+    ] = context._data_container.analyzer.datahandler().numeric_vars()
+    output_dict[
+        "categorical_vars"
+    ] = context._data_container.analyzer.datahandler().categorical_vars()
     return f"Dataset state {state_name} loaded. Dataset summary: " + str(output_dict)
 
 
@@ -228,12 +228,12 @@ def _revert_to_original_function(context: ToolingContext) -> str:
             context._data_container.analyzer.datahandler().numeric_vars()
         ),
     }
-    output_dict["numeric_vars"] = (
-        context._data_container.analyzer.datahandler().numeric_vars()
-    )
-    output_dict["categorical_vars"] = (
-        context._data_container.analyzer.datahandler().categorical_vars()
-    )
+    output_dict[
+        "numeric_vars"
+    ] = context._data_container.analyzer.datahandler().numeric_vars()
+    output_dict[
+        "categorical_vars"
+    ] = context._data_container.analyzer.datahandler().categorical_vars()
     return "Dataset reverted to original state. Dataset summary: " + str(output_dict)
 
 

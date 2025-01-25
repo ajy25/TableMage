@@ -225,9 +225,9 @@ class HyperparameterSearcher:
         }
 
         if self._method == "optuna":
-            output["hyperparameter_search_strategy"] = (
-                "Optuna Tree-structured Parzen Estimator"
-            )
+            output[
+                "hyperparameter_search_strategy"
+            ] = "Optuna Tree-structured Parzen Estimator"
             output["distribution_search_space"] = {
                 key: str(value) for key, value in self._hyperparam_grid.items()
             }

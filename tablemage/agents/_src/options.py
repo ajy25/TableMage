@@ -43,7 +43,7 @@ class _AgentsOptions:
         self,
         llm_type: Literal["openai", "groq", "ollama"],
         model_name: str | None = None,
-        temperature: float = 0.0,
+        temperature: float = 0.1,
     ) -> None:
         """Sets the LLM type.
 
@@ -71,12 +71,12 @@ class _AgentsOptions:
             )
         elif llm_type == "groq":
             if not key_exists("groq"):
-                raise ValueError("GROQ API key not found in .env file.")
+                raise ValueError("Groq API key not found in .env file.")
             self._llm_build_function = partial(
                 build_groq, temperature=temperature, model=model_name
             )
             print_debug(
-                "GROQ LLM build function has been set to: "
+                "Groq LLM build function has been set to: "
                 + str(self._llm_build_function)
             )
         elif llm_type == "ollama":
@@ -86,7 +86,12 @@ class _AgentsOptions:
         else:
             raise ValueError("Invalid LLM type specified.")
 
-    def set_multimodal_llm(self, llm_type: Literal["openai"]) -> None:
+    def set_multimodal_llm(
+        self,
+        llm_type: Literal["openai"],
+        model_name: str | None = None,
+        temperature: float = 0.1,
+    ) -> None:
         """Sets the multimodal LLM type.
 
         Parameters
@@ -97,7 +102,9 @@ class _AgentsOptions:
         if llm_type == "openai":
             if not key_exists("openai"):
                 raise ValueError("OpenAI API key not found in .env file.")
-            self._multimodal_llm_build_function = build_openai_multimodal
+            self._multimodal_llm_build_function = partial(
+                build_openai_multimodal, temperature=temperature, model=model_name
+            )
         else:
             raise ValueError("Invalid multimodal LLM type specified.")
 

@@ -1,7 +1,7 @@
 from llama_index.llms.ollama import Ollama
 
 
-def build_ollama(model: str | None = None, temperature: float = 0.0) -> Ollama:
+def build_ollama(model: str | None = None, temperature: float = 0.1) -> Ollama:
     """Builds an Ollama object using LlamaIndex.
 
     Parameters
@@ -11,7 +11,7 @@ def build_ollama(model: str | None = None, temperature: float = 0.0) -> Ollama:
         Must support function calling.
 
     temperature : float
-        The temperature of the model, by default 0.0.
+        The temperature of the model, by default 0.1.
 
     Returns
     -------
