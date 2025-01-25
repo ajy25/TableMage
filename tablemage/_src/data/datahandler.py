@@ -1182,7 +1182,10 @@ class DataHandler:
             self._working_df_test[var] = scaler.transform(
                 self._working_df_test[var].to_numpy()
             )
-            self._numeric_var_to_scalers[var].append(scaler)
+            if var not in self._numeric_var_to_scalers:
+                self._numeric_var_to_scalers[var] = [scaler]
+            else:
+                self._numeric_var_to_scalers[var].append(scaler)
 
         if self._verbose:
             print_wrapped(

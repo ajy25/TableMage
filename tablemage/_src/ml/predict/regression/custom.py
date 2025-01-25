@@ -4,6 +4,7 @@ from sklearn.pipeline import Pipeline
 from .base import BaseR
 from ....metrics import RegressionScorer
 from ....display.print_utils import print_wrapped, quote_and_color
+from ..predict_utils import InverseTransformRegressor
 
 
 class CustomR(BaseR):
@@ -175,8 +176,7 @@ class CustomR(BaseR):
                 "custom_prep_data",
                 self._dataemitter.sklearn_preprocessing_transformer(),
             )
-            new_pipeline = Pipeline(steps=[new_step, ("model", self._best_estimator)])
-            return new_pipeline
+            pipeline = Pipeline(steps=[new_step, ("model", self._best_estimator)])
         else:
             pipeline = Pipeline(
                 steps=[
@@ -187,7 +187,12 @@ class CustomR(BaseR):
                     ("model", self._best_estimator),
                 ]
             )
-            return pipeline
+        if self._dataemitter.y_scaler() is not None:
+            pipeline = InverseTransformRegressor(
+                model=pipeline,
+                inverse_func=self._dataemitter.y_scaler().inverse_transform,
+            )
+        return pipeline
 
     def hyperparam_searcher(self):
         """Raises NotImplementedError. Not implemented for CustomR."""

@@ -70,7 +70,7 @@ class BaseR(BasePredictModel):
         1. The train data is emitted. This means that the data is preprocessed based on
         user specifications AND necessary automatic preprocessing steps. That is,
         the DataEmitter will automatically drop observations with missing
-        entries and encode categorical variables IF NOT SPECIFIED BY USER.
+        entries and encode categorical variables if not specified by user.
         2. The hyperparameter search is performed. The best estimator is saved and
         evaluated on the train data.
         3. The test data is emitted. Preprocessing steps were previously
@@ -263,10 +263,9 @@ class BaseR(BasePredictModel):
         have full control over how the data is being transformed for future
         reproducibility and predictions.
 
-        It is not recommended to use TableMage for ML production.
+        It is not recommended to use TableMage for production/model environment.
         We recommend using TableMage to quickly identify promising models
-        and then manually implementing and training
-        the best model in a production environment.
+        and then manually implementing and retraining the best model.
 
         Returns
         -------
@@ -284,10 +283,9 @@ class BaseR(BasePredictModel):
             2. Hyperparameter search object.
             3. The best model determined from the hyperparameter search process.
 
-        It is not recommended to use TableMage for ML production.
+        It is not recommended to use TableMage for production/model environment.
         We recommend using TableMage to quickly identify promising models
-        and then manually implementing and training
-        the best model in a production environment.
+        and then manually implementing and retraining the best model.
 
         Returns
         -------
@@ -322,7 +320,6 @@ class BaseR(BasePredictModel):
                     ("model", self._hyperparam_searcher._searcher),
                 ]
             )
-
         if self._dataemitter.y_scaler() is not None:
             pipeline = InverseTransformRegressor(
                 model=pipeline,

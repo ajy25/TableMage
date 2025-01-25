@@ -2,11 +2,9 @@ import pytest
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import RobustScaler
-from sklearn.impute import KNNImputer
 import pathlib
 import sys
-import matplotlib.pyplot as plt
+
 
 parent_dir = pathlib.Path(__file__).resolve().parent.parent.parent.parent
 sys.path.append(str(parent_dir))
@@ -41,7 +39,7 @@ def test_simple_target_scaling_ols(setup_data):
     rmse = report.metrics("test").loc["rmse"]
 
     # let's scale the target variable
-    analyzer.scale("SalePrice", strategy="standardize")
+    analyzer.scale(["SalePrice"], strategy="standardize")
     report = analyzer.ols("SalePrice", predictors=["GrLivArea", "YearBuilt"])
     rmse_scaled = report.metrics("test").loc["rmse"]
 
@@ -49,7 +47,7 @@ def test_simple_target_scaling_ols(setup_data):
     assert np.allclose(rmse_scaled, rmse)
 
     # let's scale the target variable with minmax
-    analyzer.scale("SalePrice", strategy="minmax")
+    analyzer.scale(["SalePrice"], strategy="minmax")
     report = analyzer.ols("SalePrice", predictors=["GrLivArea", "YearBuilt"])
     rmse_scaled = report.metrics("test").loc["rmse"]
 
@@ -72,7 +70,7 @@ def test_simple_target_scaling_ml(setup_data):
     rmse = report.metrics("test").loc["rmse"]
 
     # let's scale the target variable
-    analyzer.scale("SalePrice", strategy="standardize")
+    analyzer.scale(["SalePrice"], strategy="standardize")
     report = analyzer.regress(
         target="SalePrice",
         predictors=["GrLivArea", "YearBuilt"],
@@ -84,7 +82,7 @@ def test_simple_target_scaling_ml(setup_data):
     assert np.allclose(rmse_scaled, rmse)
 
     # let's scale the target variable with minmax
-    analyzer.scale("SalePrice", strategy="minmax")
+    analyzer.scale(["SalePrice"], strategy="minmax")
     report = analyzer.regress(
         target="SalePrice",
         predictors=["GrLivArea", "YearBuilt"],

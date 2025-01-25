@@ -940,7 +940,37 @@ class DataEmitter:
                 continue
 
             if X is not None:
-                for scaler in self._numeric_var_to_scalers[var]:
+                # check if _scale_call_num is defined
+                if not hasattr(self, "_scale_call_num"):
+                    self._scale_call_num = 0
+
+                # _scale_call_num helps us figure out which scaler to use at this step
+                scaler_list = self._numeric_var_to_scalers[var]
+
+                if strategy == "standardize":
+                    target_scaler_class = StandardizeSingleVar
+                elif strategy == "minmax":
+                    target_scaler_class = MinMaxSingleVar
+                elif strategy == "log":
+                    target_scaler_class = LogTransformSingleVar
+                elif strategy == "log1p":
+                    target_scaler_class = Log1PTransformSingleVar
+                elif strategy == "robust_standardize":
+                    target_scaler_class = RobustStandardizeSingleVar
+                elif strategy == "normal_quantile":
+                    target_scaler_class = NormalQuantileTransformSingleVar
+                elif strategy == "uniform_quantile":
+                    target_scaler_class = UniformQuantileTransformSingleVar
+                else:
+                    raise ValueError("Invalid scaling strategy.")
+
+                # find the _scale_call_num-th scaler of the target class
+                scaler = None
+                for s in scaler_list:
+                    if isinstance(s, target_scaler_class):
+                        scaler = s
+                        break
+                if scaler is not None:
                     X[var] = scaler.transform(X[var].to_numpy())
                 continue
 
@@ -962,14 +992,16 @@ class DataEmitter:
             else:
                 raise ValueError("Invalid scaling strategy.")
 
-            self._numeric_var_to_scalers[var].append(scaler)
-
             self._working_df_train[var] = scaler.transform(
                 self._working_df_train[var].to_numpy()
             )
             self._working_df_test[var] = scaler.transform(
                 self._working_df_test[var].to_numpy()
             )
+            if var not in self._numeric_var_to_scalers:
+                self._numeric_var_to_scalers[var] = [scaler]
+            else:
+                self._numeric_var_to_scalers[var].append(scaler)
 
         return X
 
@@ -1492,11 +1524,9 @@ class DataEmitter:
         new_emitter = self.copy()
         del new_emitter._working_df_train
         del new_emitter._working_df_test
-
         custom_transformer = FunctionTransformer(
             new_emitter.custom_transform, validate=False, check_inverse=False
         )
-
         return custom_transformer
 
     def copy(self) -> "DataEmitter":

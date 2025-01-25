@@ -48,6 +48,13 @@ class _PrintOptions:
             else:
                 self._logger.debug(msg)
 
+    def set_to_default(self):
+        """Resets all options to their default values."""
+        self._n_decimals = 3
+        self._max_line_width = 88
+        self.reset_logger()
+        self.reset_secondary_logger()
+
     def set_max_line_width(self, width: int):
         """Sets the maximum line width for wrapping text.
 

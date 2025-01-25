@@ -1,4 +1,5 @@
 from sklearn.base import BaseEstimator, TransformerMixin, RegressorMixin
+from sklearn.pipeline import Pipeline
 
 
 class ColumnSelector(BaseEstimator, TransformerMixin):
@@ -15,7 +16,7 @@ class ColumnSelector(BaseEstimator, TransformerMixin):
 
 
 class InverseTransformRegressor(BaseEstimator, RegressorMixin):
-    def __init__(self, model=None, inverse_func=None):
+    def __init__(self, model: Pipeline | None = None, inverse_func=None):
         self.model = model
         self.inverse_func = inverse_func
 
