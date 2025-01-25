@@ -113,6 +113,7 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">adjustText</span> <span class="kn">import</span> <span class="n">adjust_text</span>
+<span class="kn">from</span> <span class="nn">statsmodels.regression.linear_model</span> <span class="kn">import</span> <span class="n">OLSResults</span><span class="p">,</span> <span class="n">RegressionResultsWrapper</span>
 <span class="kn">from</span> <span class="nn">...data</span> <span class="kn">import</span> <span class="n">DataHandler</span><span class="p">,</span> <span class="n">DataEmitter</span>
 <span class="kn">from</span> <span class="nn">...metrics.visualization</span> <span class="kn">import</span> <span class="n">plot_obs_vs_pred</span><span class="p">,</span> <span class="n">decrease_font_sizes_axs</span>
 <span class="kn">from</span> <span class="nn">..ols</span> <span class="kn">import</span> <span class="n">OLSLinearModel</span>
@@ -127,6 +128,7 @@
     <span class="n">plot_qq</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">...display.print_options</span> <span class="kn">import</span> <span class="n">print_options</span>
+<span class="kn">from</span> <span class="nn">...display.plot_options</span> <span class="kn">import</span> <span class="n">plot_options</span>
 <span class="kn">from</span> <span class="nn">...display.print_utils</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">print_wrapped</span><span class="p">,</span>
     <span class="n">color_text</span><span class="p">,</span>
@@ -216,7 +218,7 @@
             <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_y_pred</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_outliers_residual_mask</span><span class="p">],</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_y_true</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_outliers_residual_mask</span><span class="p">],</span>
-                <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                <span class="n">s</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_dot_size</span><span class="p">,</span>
                 <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_include_text</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_outliers</span> <span class="o">&lt;=</span> <span class="n">MAX_N_OUTLIERS_TEXT</span><span class="p">:</span>
@@ -230,7 +232,7 @@
                                 <span class="bp">self</span><span class="o">.</span><span class="n">_y_true</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_outliers_residual_mask</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
                             <span class="p">),</span>
                             <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span>
-                            <span class="n">fontsize</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                            <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_options</span><span class="o">.</span><span class="n">_axis_minor_ticklabel_font_size</span><span class="p">,</span>
                         <span class="p">)</span>
                     <span class="p">)</span>
                 <span class="n">adjust_text</span><span class="p">(</span><span class="n">annotations</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
@@ -425,7 +427,14 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_train</span><span class="p">:</span>
             <span class="n">print_wrapped</span><span class="p">(</span><span class="n">TRAIN_ONLY_MESSAGE</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;WARNING&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
-        <span class="n">leverage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">estimator</span><span class="o">.</span><span class="n">_results</span><span class="o">.</span><span class="n">get_influence</span><span class="p">()</span><span class="o">.</span><span class="n">hat_matrix_diag</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">estimator</span><span class="p">,</span> <span class="n">RegressionResultsWrapper</span><span class="p">):</span>
+            <span class="n">leverage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">estimator</span><span class="o">.</span><span class="n">_results</span><span class="o">.</span><span class="n">get_influence</span><span class="p">()</span><span class="o">.</span><span class="n">hat_matrix_diag</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Leverage/influence statistics are not available for regularized models. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;The statsmodels output type is </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">estimator</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">plot_residuals_vs_leverage</span><span class="p">(</span>
             <span class="n">leverage</span><span class="o">=</span><span class="n">leverage</span><span class="p">,</span>
@@ -496,22 +505,16 @@
 <span class="sd">        plt.Figure</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">plot_obs_vs_pred</span><span class="p">(</span><span class="n">show_outliers</span><span class="o">=</span><span class="n">show_outliers</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">plot_residuals_vs_fitted</span><span class="p">(</span><span class="n">show_outliers</span><span class="o">=</span><span class="n">show_outliers</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_train</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_train</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">estimator</span><span class="p">,</span> <span class="n">OLSResults</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">plot_residuals_vs_leverage</span><span class="p">(</span><span class="n">show_outliers</span><span class="o">=</span><span class="n">show_outliers</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">plot_scale_location</span><span class="p">(</span><span class="n">show_outliers</span><span class="o">=</span><span class="n">show_outliers</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">plot_qq</span><span class="p">(</span><span class="n">show_outliers</span><span class="o">=</span><span class="n">show_outliers</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-
         <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">wspace</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-
         <span class="n">decrease_font_sizes_axs</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-
-        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">fig</span>
 
     <span class="k">def</span> <span class="nf">set_outlier_threshold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threshold</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;_SingleDatasetOLSReport&quot;</span><span class="p">:</span>
@@ -768,7 +771,7 @@
             <span class="n">OLSLinearModel</span><span class="p">(</span>
                 <span class="n">alpha</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span>
                 <span class="n">l1_weight</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">l1_weight</span><span class="p">,</span>
-                <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">_name</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;__reduced(step_direction=</span><span class="si">{</span><span class="n">direction</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">_name</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; (reduced, direction=</span><span class="si">{</span><span class="n">direction</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
             <span class="p">),</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="p">,</span>  <span class="c1"># only used for y var scaler</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="p">,</span>  <span class="c1"># ignored</span>
@@ -791,6 +794,11 @@
 <span class="sd">        -------</span>
 <span class="sd">        StatisticalTestReport</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">estimator</span><span class="p">,</span> <span class="n">RegressionResultsWrapper</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Partial F-tests are not available for regularized models. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;The model type is </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">estimator</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
         <span class="c1"># Determine which report is the reduced model</span>
 
         <span class="c1"># Get the models from each report</span>
@@ -857,6 +865,10 @@
 <span class="sd">        -------</span>
 <span class="sd">        StatisticalTestReport</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">estimator</span><span class="p">,</span> <span class="n">RegressionResultsWrapper</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Partial F-tests are not available for regularized models.&quot;</span>
+            <span class="p">)</span>
         <span class="c1"># Determine which report is the reduced model</span>
 
         <span class="c1"># Get the models from each report</span>
@@ -1391,7 +1403,7 @@
         <span class="p">)</span>
 
         <span class="n">predictors_message</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">bold_text</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Predictor variables (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">_n_predictors</span><span class="si">}</span><span class="s1">):&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">bold_text</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Predictor variables (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_predictors</span><span class="p">)</span><span class="si">}</span><span class="s1">):&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
         <span class="n">predictors_message</span> <span class="o">+=</span> <span class="n">fill_ignore_format</span><span class="p">(</span>
             <span class="n">list_to_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_predictors</span><span class="p">),</span>
@@ -1509,7 +1521,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Andrew Yang.</p>
+    <p>&#169; Copyright 2025, Andrew Yang.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

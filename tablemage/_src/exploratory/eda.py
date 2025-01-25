@@ -1266,7 +1266,7 @@ class EDAReport:
         self,
         numeric_vars: list[str] | None = None,
         htest: bool = False,
-        cmap: str | plt.Colormap = plot_options._cmap,
+        cmap: str | plt.Colormap | None = None,
         figsize: tuple[float, float] = (7, 7),
         ax: plt.Axes | None = None,
     ) -> plt.Figure:
@@ -1282,8 +1282,9 @@ class EDAReport:
             If True, displays correlation coefficients with their
             corresponding p-values in parentheses.
 
-        cmap : str | plt.Colormap
+        cmap : str | plt.Colormap | None
             The colormap to use for the heatmap visualization.
+            If None, uses a default colormap.
 
         figsize : tuple[float, float]
             The size of the figure (width, height) in inches.
@@ -1297,6 +1298,8 @@ class EDAReport:
         plt.Figure
             The figure containing the correlation heatmap.
         """
+        if cmap is None:
+            cmap = plot_options._cmap
 
         def format_corr_pval(corr: float, pval: float, n_decimals: int = 4) -> str:
             """Format correlation and p-value pair."""

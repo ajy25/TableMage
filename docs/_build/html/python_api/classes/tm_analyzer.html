@@ -47,6 +47,11 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/install.html">Package Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/install.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/install.html#supported-python-versions">Supported Python Versions</a></li>
+</ul>
+</li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api_reference.html">Python API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Analyzer <code class="xref py py-mod docutils literal notranslate"><span class="pre">(tm.Analyzer)</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="tm_ml.html">Machine Learning Models <code class="xref py py-mod docutils literal notranslate"><span class="pre">(tm.ml)</span></code></a><ul>
@@ -116,21 +121,9 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="tablemage.Analyzer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tablemage.</span></span><span class="sig-name descname"><span class="pre">Analyzer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Unnamed</span> <span class="pre">Dataset'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer" title="Permalink to this definition"></a></dt>
-<dd><p>Analyzer is a class designed for conducting exploratory data analysis (EDA),
-regression analysis, and machine learning modeling on tabular data.</p>
-<p>An Analyzer object can be initialized from a single DataFrame which is then
-split into train and test DataFrames, or, alternatively, from pre-split
-train and test DataFrames. The object can then be used to conduct
-a variety of analyses,
-including exploratory data analysis (the eda() method),
-regression analysis (ols() and logit() methods),
-and machine learning modeling (classify() and regress() methods).</p>
-<p>The Analyzer object also handles data preprocessing tasks, such as scaling,
-imputing missing values, dropping rows with missing values, one-hot encoding,
-and selecting variables. These methods can be chained together for easy data
-transformation. The Analyzer object remembers how the data was transformed,
-enabling proper fitting and transforming of cross validation splits of the
-train dataset.</p>
+<dd><p>Analyzer is the high-level interface class of TableMage.</p>
+<p>An Analyzer object can be initialized from a single DataFrame which is then     split into train and test DataFrames, or, alternatively, from pre-split     train and test DataFrames. The object can then be used to conduct     a variety of analyses,     including exploratory data analysis (the eda() method),     regression analysis (ols() and logit() methods),     and machine learning modeling (classify() and regress() methods).</p>
+<p>The Analyzer object also handles data preprocessing tasks, such as scaling,     imputing missing values, dropping rows with missing values, one-hot encoding,     and selecting variables. These methods can be chained together for easy data     transformation. The Analyzer object remembers how the data was transformed,     enabling proper fitting and transforming of cross validation splits of the     train dataset.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="tablemage.Analyzer.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Unnamed</span> <span class="pre">Dataset'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.__init__" title="Permalink to this definition"></a></dt>
@@ -138,24 +131,13 @@ train dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> (<em>pd.DataFrame</em><em> | </em><em>None</em>) – The DataFrame to be analyzed. Must be in wide format, i.e. with shape
-(n_units, n_vars). If df_test is provided, then the df is treated as the
-train DataFrame. Otherwise, the df is split into train and test DataFrames
-according to the test_size parameter.</p></li>
+<li><p><strong>df</strong> (<em>pd.DataFrame</em><em> | </em><em>None</em>) – The DataFrame to be analyzed. Must be in wide format, i.e. with shape             (n_units, n_vars). If df_test is provided, then the df is treated as the             train DataFrame. Otherwise, the df is split into train and test DataFrames             according to the test_size parameter.</p></li>
 <li><p><strong>df_test</strong> (<em>pd.DataFrame</em><em> | </em><em>None</em>) – Default: None.
 If not None, then treats df as the train DataFrame.</p></li>
-<li><p><strong>test_size</strong> (<em>float</em>) – Default: 0. Proportion of the DataFrame to withhold for
-testing. If test_size = 0, then the train DataFrame and the
-test DataFrame will both be the same as the input df.
-If df_test is provided, then test_size is ignored.</p></li>
-<li><p><strong>id_column</strong> (<em>str</em><em> | </em><em>None</em>) – Default: None. The name of the column containing unique identifiers.
-If not None, then the column will be set as the index of the DataFrame.
-If None, then the input index will be used as the index of the DataFrame.</p></li>
-<li><p><strong>split_seed</strong> (<em>int</em>) – Default: 42.
-Used only for the train test split.
-If df_test is provided, then split_seed is ignored.</p></li>
-<li><p><strong>verbose</strong> (<em>bool</em>) – Default: False. If True, prints helpful update messages for certain
-Analyzer function calls.</p></li>
+<li><p><strong>test_size</strong> (<em>float</em>) – Default: 0. Proportion of the DataFrame to withhold for             testing. If test_size = 0, then the train DataFrame and the             test DataFrame will both be the same as the input df.             If df_test is provided, then test_size is ignored.</p></li>
+<li><p><strong>id_column</strong> (<em>str</em><em> | </em><em>None</em>) – Default: None. The name of the column containing unique identifiers.             If not None, then the column will be set as the index of the DataFrame.             If None, then the input index will be used as the index of the DataFrame.</p></li>
+<li><p><strong>split_seed</strong> (<em>int</em>) – Default: 42.             Used only for the train test split.             If df_test is provided, then split_seed is ignored.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Default: False. If True, prints helpful update messages for certain             Analyzer function calls.</p></li>
 <li><p><strong>name</strong> (<em>str</em>) – Default: ‘Unnamed Dataset’. Name of the dataset the Analyzer is
 initialized for.</p></li>
 </ul>
@@ -180,7 +162,7 @@ initialized for.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="tablemage.Analyzer.causal">
 <span class="sig-name descname"><span class="pre">causal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">treatment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outcome</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confounders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'train'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'test'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'all'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'all'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">CausalModel</span></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.causal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.causal" title="Permalink to this definition"></a></dt>
-<dd><p>Returns a CausalModel object for estimating causal effects.</p>
+<dd><p>Returns a CausalModel object for estimating causal effects.         The CausalModel object contains rudimentary methods for         causal effect estimation (weighted least squares, IPW estimator).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -347,16 +329,13 @@ missing values. If None, no variables are excluded.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="tablemage.Analyzer.eda">
 <span class="sig-name descname"><span class="pre">eda</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'train'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'test'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'all'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'all'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="tm_reports.html#tablemage._reports.EDAReport" title="tablemage._src.exploratory.eda.EDAReport"><span class="pre">EDAReport</span></a></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.eda"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.eda" title="Permalink to this definition"></a></dt>
-<dd><p>Constructs an EDAReport object for the working train
-DataFrame, the working test DataFrame, or both DataFrames combined.</p>
+<dd><p>Constructs an EDAReport object for the working train         dataset, the working test dataset, or both datasets combined.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>dataset</strong> (<em>Literal</em><em>[</em><em>'train'</em><em>, </em><em>'test'</em><em>, </em><em>'all'</em><em>]</em>) – The dataset to be analyzed. By default, analyzes all data.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The EDAReport object contains a variety of exploratory data
-analysis methods, including summary statistics for numeric and
-categorical variables, t-tests, and data visualizations.</p>
+<dd class="field-even"><p>The EDAReport object contains a variety of exploratory data             analysis methods, including summary statistics for numeric and             categorical variables, t-tests, and data visualizations.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="tm_reports.html#tablemage._reports.EDAReport" title="tablemage._reports.EDAReport">EDAReport</a></p>
@@ -564,9 +543,7 @@ If None, loads the original train and test DataFrames.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="tablemage.Analyzer.logit">
 <span class="sig-name descname"><span class="pre">logit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predictors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l1_weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold_strategy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'f1'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'roc'</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tablemage._src.linear.reports.logit_report.LogitReport</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tablemage._src.linear.reports.mnlogit_report.MNLogitReport</span></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.logit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.logit" title="Permalink to this definition"></a></dt>
-<dd><p>Performs logistic regression.
-if formula is provided, performs logistic regression via formula.
-Units with missing data will be dropped.</p>
+<dd><p>Performs logistic regression. Units with missing data will be dropped.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -605,22 +582,18 @@ classification. If None, the threshold is set to 0.5.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="tablemage.Analyzer.ols">
 <span class="sig-name descname"><span class="pre">ols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predictors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l1_weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="tm_reports.html#tablemage._reports.OLSReport" title="tablemage._src.linear.reports.ols_report.OLSReport"><span class="pre">OLSReport</span></a></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.ols"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.ols" title="Permalink to this definition"></a></dt>
-<dd><p>Performs OLS regression.
-If formula is provided, performs regression with OLS via formula.
-Units with missing data will be dropped.</p>
+<dd><p>Performs OLS regression. Units with missing data will be dropped.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>target</strong> (<em>str</em><em> | </em><em>None</em>) – Default: None. The variable to be predicted.</p></li>
-<li><p><strong>predictors</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Default: None.
-If None, all variables except target will be used as predictors.</p></li>
+<li><p><strong>predictors</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Default: None.             If None, all variables except target will be used as predictors.</p></li>
 <li><p><strong>alpha</strong> (<em>float</em>) – Default: 0. Regularization strength. Must be a positive float.</p></li>
 <li><p><strong>l1_weight</strong> (<em>float</em>) – Default: 0. The weight of the L1 penalty. Must be a float between 0 and 1.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The OLSReport object contains a variety of OLS regression methods,
-including summary statistics, model coefficients, and data visualizations.</p>
+<dd class="field-even"><p>The OLSReport object contains a variety of OLS regression methods,             including summary statistics, model coefficients, and data visualizations.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="tm_reports.html#tablemage._reports.OLSReport" title="tablemage._reports.OLSReport">OLSReport</a></p>
@@ -742,19 +715,14 @@ If None, no variables are excluded.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="tablemage.Analyzer.select_features">
 <span class="sig-name descname"><span class="pre">select_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predictors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_selectors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tablemage._src.feature_selection.base_feature_selection.BaseFSR</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tablemage._src.feature_selection.base_feature_selection.BaseFSC</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_n_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="tm_reports.html#tablemage._reports.VotingSelectionReport" title="tablemage._src.feature_selection.voteselect_report.VotingSelectionReport"><span class="pre">VotingSelectionReport</span></a></span></span><a class="reference internal" href="../../_modules/tablemage/_src/analyzer.html#Analyzer.select_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tablemage.Analyzer.select_features" title="Permalink to this definition"></a></dt>
-<dd><p>Selects the most important features using a variety of feature selection
-methods. The feature selection methods can be used to select the most
-important predictors for regression or classification.</p>
+<dd><p>Selects the most important features using a variety of feature selection         methods. The feature selection methods can be used to select the most         important predictors for regression or classification.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>target</strong> (<em>str</em>) – The target variable.</p></li>
-<li><p><strong>predictors</strong> (<em>list</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>) – Default: None. The predictors to select from.
-If None, uses all variables except the target as predictors.</p></li>
-<li><p><strong>feature_selectors</strong> (<em>list</em><em>[</em><em>BaseFSR</em><em>] </em><em>| </em><em>list</em><em>[</em><em>BaseFSC</em><em>] </em><em>| </em><em>None</em>) – Default: None. The feature selection methods to use.
-If None, uses all feature selection methods.</p></li>
-<li><p><strong>max_n_features</strong> (<em>int</em><em> | </em><em>None</em>) – Default: None. Maximum number of features to select.
-If None, then all features with at least 50% support are selected.</p></li>
+<li><p><strong>predictors</strong> (<em>list</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>) – Default: None. The predictors to select from.             If None, uses all variables except the target as predictors.</p></li>
+<li><p><strong>feature_selectors</strong> (<em>list</em><em>[</em><em>BaseFSR</em><em>] </em><em>| </em><em>list</em><em>[</em><em>BaseFSC</em><em>] </em><em>| </em><em>None</em>) – Default: None. The feature selection methods to use.             If None, uses all feature selection methods.</p></li>
+<li><p><strong>max_n_features</strong> (<em>int</em><em> | </em><em>None</em>) – Default: None. Maximum number of features to select.             If None, then all features with at least 50% support are selected.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -854,7 +822,7 @@ If None, no variables are excluded.</p></li>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Andrew Yang.</p>
+    <p>&#169; Copyright 2025, Andrew Yang.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

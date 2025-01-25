@@ -1,8 +1,10 @@
 Reports :py:mod:`(tm._reports)`
 ===============================
 
-Report objects are outputted by the :meth:`.eda`, :meth:`.ols`, :meth:`.logit`, 
-:meth:`.regress`, and :meth:`.classify` methods of the :class:`Analyzer` class. 
+Report objects are outputted by the :meth:`tablemage.Analyzer.eda`, 
+:meth:`tablemage.Analyzer.ols`, :meth:`tablemage.Analyzer.logit`, 
+:meth:`tablemage.Analyzer.regress`, 
+and :meth:`tablemage.Analyzer.classify` methods of the :class:`tablemage.Analyzer` class. 
 They may contain information about model performance, feature importance, or other
 relevant statistics. They also have methods for plotting relevant diagnostic figures.
 
@@ -13,7 +15,7 @@ relevant statistics. They also have methods for plotting relevant diagnostic fig
 :py:mod:`tm._reports.MLClassificationReport`
 --------------------------------------------
 
-.. autoclass:: MLClassificationReport
+.. autoclass:: tablemage._reports.MLClassificationReport
     :members:
         model, 
         metrics, 
@@ -31,7 +33,7 @@ relevant statistics. They also have methods for plotting relevant diagnostic fig
 :py:mod:`tm._reports.MLRegressionReport`
 ----------------------------------------
 
-.. autoclass:: MLRegressionReport
+.. autoclass:: tablemage._reports.MLRegressionReport
     :members:
         model, 
         metrics, 
@@ -43,7 +45,7 @@ relevant statistics. They also have methods for plotting relevant diagnostic fig
 :py:mod:`tm._reports.OLSReport`
 -------------------------------
 
-.. autoclass:: OLSReport
+.. autoclass:: tablemage._reports.OLSReport
     :members:
         model,
         metrics, 
@@ -67,7 +69,7 @@ relevant statistics. They also have methods for plotting relevant diagnostic fig
 :py:mod:`tm._reports.EDAReport`
 -------------------------------
 
-.. autoclass:: EDAReport
+.. autoclass:: tablemage._reports.EDAReport
     :members:
         tabulate_correlation_comparison,
         tabulate_correlation_matrix,
@@ -92,22 +94,23 @@ relevant statistics. They also have methods for plotting relevant diagnostic fig
 :py:mod:`tm._reports.VotingSelectionReport`
 -------------------------------------------
 
-.. autoclass:: VotingSelectionReport
+.. autoclass:: tablemage._reports.VotingSelectionReport
     :members:
         top_features, all_features, votes
 
 :py:mod:`tm._reports.StatisticalTestReport`
 -------------------------------------------
 
-.. autoclass:: StatisticalTestReport
+.. autoclass:: tablemage._reports.StatisticalTestReport
     :members:
-        pval, statistic
+        pval, 
+        statistic
         
 
 :py:mod:`tm._reports.CausalReport`
 ----------------------------------
 
-.. autoclass:: CausalReport
+.. autoclass:: tablemage._reports.CausalReport
     :members:
         effect,
         se,

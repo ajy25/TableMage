@@ -12,6 +12,7 @@ TableMage is a Python package for low-code data science.
 
    
    intro
+   getting_started/install
    python_api/api_reference
    contributors/contributors
    

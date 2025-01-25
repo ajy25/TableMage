@@ -7,70 +7,7 @@ class _PlotOptions:
 
     def __init__(self):
         """Initializes the a _PlotOptions object with default settings."""
-
-        self._style: Literal["whitegrid", "darkgrid", "white", "dark", "ticks"] = (
-            "whitegrid"
-        )
-        """Style to use for plots. (Seaborn)"""
-
-        self._context: Literal["paper", "notebook", "talk", "poster"] = "paper"
-        """Context to use for plots. (Seaborn)"""
-
-        self._dot_size = 2
-        """Size of the dots in scatter plots. ("size" param in Seaborn, \
-        "s" param in Matplotlib)
-        """
-
-        self._dot_s = 3
-        """Size of the dots in scatter plots. ("s" param in Seaborn)"""
-
-        self._dot_color = "black"
-        """Color of the dots in scatter plots. (Matplotlib)"""
-
-        self._dot_facecolor = "none"
-        """Face color of the dots in scatter plots. (Seaborn)"""
-
-        self._dot_edgecolor = "black"
-        """Edge color of the dots in scatter plots. (Seaborn)"""
-
-        self._line_width = 1.0
-        """Width of the lines in line plots. (Matplotlib)"""
-
-        self._line_color = "black"
-        """Color of the lines in line plots. (Matplotlib)"""
-
-        self._reference_line_color = "gray"
-
-        self._bar_alpha = 0.3
-        """Transparency of bars/bins. (Matplotlib)"""
-
-        self._bar_color = "black"
-        """Color of the bars/bins. (Matplotlib)"""
-
-        self._bar_edgecolor = "none"
-        """Color of the edges of the bars/bins. (Matplotlib)"""
-
-        self._color_palette = sns.color_palette("muted")
-        """Color palette to use for plots. (Seaborn)"""
-
-        self._title_font_size = 10
-        """Font size of the title of the plot. (Matplotlib)"""
-
-        self._axis_title_font_size = 8
-        """Font size of the axis titles of the plot. (Matplotlib)"""
-
-        self._axis_major_ticklabel_font_size = 7
-        """Font size of the major axis ticklabels of the plot. (Matplotlib)"""
-
-        self._axis_minor_ticklabel_font_size = 6
-        """Font size of the minor axis ticklabels of the plot. (Matplotlib)"""
-
-        self._scilimits = (-3, 3)
-        """Scientific limits for the axis labels. (Matplotlib)"""
-
-        self._cmap = "Grays"
-
-        self._on_sns_update()
+        self.set_to_defaults()
 
     def set_style(
         self, style: Literal["whitegrid", "darkgrid", "white", "dark", "ticks"]
@@ -227,6 +164,74 @@ class _PlotOptions:
             Tuple of the form (min, max) where min and max are integers.
         """
         self._scilimits = scilimits
+
+
+    def set_to_defaults(self):
+        """Resets all plot options to their default values."""
+        self._style: Literal["whitegrid", "darkgrid", "white", "dark", "ticks"] = (
+            "whitegrid"
+        )
+        """Style to use for plots. (Seaborn)"""
+
+        self._context: Literal["paper", "notebook", "talk", "poster"] = "paper"
+        """Context to use for plots. (Seaborn)"""
+
+        self._dot_size = 2
+        """Size of the dots in scatter plots. ("size" param in Seaborn, \
+        "s" param in Matplotlib)
+        """
+
+        self._dot_s = 3
+        """Size of the dots in scatter plots. ("s" param in Seaborn)"""
+
+        self._dot_color = "black"
+        """Color of the dots in scatter plots. (Matplotlib)"""
+
+        self._dot_facecolor = "none"
+        """Face color of the dots in scatter plots. (Seaborn)"""
+
+        self._dot_edgecolor = "black"
+        """Edge color of the dots in scatter plots. (Seaborn)"""
+
+        self._line_width = 1.0
+        """Width of the lines in line plots. (Matplotlib)"""
+
+        self._line_color = "black"
+        """Color of the lines in line plots. (Matplotlib)"""
+
+        self._reference_line_color = "gray"
+
+        self._bar_alpha = 0.3
+        """Transparency of bars/bins. (Matplotlib)"""
+
+        self._bar_color = "black"
+        """Color of the bars/bins. (Matplotlib)"""
+
+        self._bar_edgecolor = "none"
+        """Color of the edges of the bars/bins. (Matplotlib)"""
+
+        self._color_palette = sns.color_palette("muted")
+        """Color palette to use for plots. (Seaborn)"""
+
+        self._title_font_size = 10
+        """Font size of the title of the plot. (Matplotlib)"""
+
+        self._axis_title_font_size = 8
+        """Font size of the axis titles of the plot. (Matplotlib)"""
+
+        self._axis_major_ticklabel_font_size = 7
+        """Font size of the major axis ticklabels of the plot. (Matplotlib)"""
+
+        self._axis_minor_ticklabel_font_size = 6
+        """Font size of the minor axis ticklabels of the plot. (Matplotlib)"""
+
+        self._scilimits = (-3, 3)
+        """Scientific limits for the axis labels. (Matplotlib)"""
+
+        self._cmap = "Grays"
+
+        self._on_sns_update()
+
 
     def _on_sns_update(self):
         """Updates the style and context of seaborn plots."""

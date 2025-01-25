@@ -25,11 +25,11 @@ cd TableMage
 pip install .
 ```
 
-For notes regarding dependencies, please refer to `./dev_notes/dependencies.md`. 
-TableMage supports Python versions 3.10 through 3.12.
+TableMage officially supports Python versions 3.10 through 3.12.
 
-**Note for MacOS users:** You might run into an error involving XGBoost, one of TableMage's dependencies, when using TableMage for the first time.
-To resolve this error, you'll need to install libomp: `brew install libomp`. This requries [Homebrew](https://brew.sh/).
+> [!NOTE]
+> **For MacOS users:** You might run into an error involving XGBoost, one of TableMage's dependencies, when using TableMage for the first time.
+> To resolve this error, you'll need to install libomp: `brew install libomp`. This requries [Homebrew](https://brew.sh/).
 
 ## Quick start (low-code)
 
@@ -79,9 +79,6 @@ y_pred = reg_report.model('LinearR(l2)').predict(new_df)
 joblib.dump(reg_report.model('LinearR(l2)'), 'l2_pipeline.joblib')
 ```
 
-Check out the `./demo` directory for detailed examples and walkthroughs of other functionality, 
-including exploratory data analysis, regression analysis, and causal inference.
-
 
 ## Quick start (no-code)
 
@@ -122,6 +119,11 @@ agent = tm.agents.ChatDA(df, test_size=0.2)
 # chat with the agent
 print(agent.chat("Compute the summary statistics for the numeric variables."))
 ```
+
+> [!NOTE]
+> You must be connected to the internet to use the `agents` module, even if you are using Ollama to run a locally-hosted LLM.
+> TableMage's agent, ChatDA, relies on FastEmbed for retriever augmented generation, but it may need to download the FastEmbed model from the internet prior to use.
+> ChatDA can be run with a local LLM and FastEmbed, ensuring total data privacy.
 
 ## Notes
 

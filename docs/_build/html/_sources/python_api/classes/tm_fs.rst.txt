@@ -2,16 +2,16 @@ Feature Selectors :py:mod:`(tm.fs)`
 =========================================
 
 
-.. currentmodule:: tablemage.fs
+.. currentmodule:: tablemage
 
 The `tablemage.fs` module contains the feature selectors used by the 
-:func:`.regress` and :func:`.classify` methods of the :class:`Analyzer` class. 
+:func:`tablemage.Analyzer.regress` and :func:`tablemage.Analyzer.classify` methods of the :class:`tablemage.Analyzer` class. 
         
 
 :py:mod:`tm.fs.KBestFSR`
 ------------------------
 
-.. autoclass:: KBestFSR
+.. autoclass:: tablemage.fs.KBestFSR
     :members: 
         __init__
 
@@ -19,21 +19,21 @@ The `tablemage.fs` module contains the feature selectors used by the
 :py:mod:`tm.fs.LassoFSR`
 ------------------------
 
-.. autoclass:: LassoFSR
+.. autoclass:: tablemage.fs.LassoFSR
     :members: 
         __init__
 
 :py:mod:`tm.fs.BorutaFSR`
 -------------------------
 
-.. autoclass:: BorutaFSR
+.. autoclass:: tablemage.fs.BorutaFSR
     :members: 
         __init__
 
 :py:mod:`tm.fs.KBestFSC`
 ------------------------
 
-.. autoclass:: KBestFSC
+.. autoclass:: tablemage.fs.KBestFSC
     :members: 
         __init__
 
@@ -41,13 +41,13 @@ The `tablemage.fs` module contains the feature selectors used by the
 :py:mod:`tm.fs.LassoFSC`
 ------------------------
 
-.. autoclass:: LassoFSC
+.. autoclass:: tablemage.fs.LassoFSC
     :members: 
         __init__
 
 :py:mod:`tm.fs.BorutaFSC`
 -------------------------
 
-.. autoclass:: BorutaFSC
+.. autoclass:: tablemage.fs.BorutaFSC
     :members: 
         __init__

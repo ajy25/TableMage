@@ -2,11 +2,11 @@ Machine Learning Models :py:mod:`(tm.ml)`
 =========================================
 
 
-.. currentmodule:: tablemage.ml
+.. currentmodule:: tablemage
 
 The `tablemage.ml` module contains the machine learning models used by the 
-:func:`.regress` and :func:`.classify` methods of the :class:`Analyzer` class. 
-These models are designed to be used in a similar way to the models in the `sklearn` 
+:func:`tablemage.Analyzer.regress` and :func:`tablemage.Analyzer.classify` methods of the :class:`tablemage.Analyzer` class. 
+These models are designed to be used in a similar way to the models in the `scikit-learn` 
 package, but with additional functionality for feature selection, 
 hyperparameter optimization, and cross-validation.
         
@@ -14,7 +14,7 @@ hyperparameter optimization, and cross-validation.
 :py:mod:`tm.ml.LinearR`
 -----------------------
 
-.. autoclass:: LinearR
+.. autoclass:: tablemage.ml.LinearR
     :members: 
         __init__, 
         specify_data, 
@@ -31,7 +31,7 @@ hyperparameter optimization, and cross-validation.
 :py:mod:`tm.ml.RobustLinearR`
 -----------------------------
 
-.. autoclass:: RobustLinearR
+.. autoclass:: tablemage.ml.RobustLinearR
     :members: 
         __init__, 
         specify_data, 
@@ -48,7 +48,7 @@ hyperparameter optimization, and cross-validation.
 :py:mod:`tm.ml.TreesR`
 ----------------------
 
-.. autoclass:: TreesR
+.. autoclass:: tablemage.ml.TreesR
     :members: 
         __init__, 
         specify_data, 
@@ -65,7 +65,7 @@ hyperparameter optimization, and cross-validation.
 :py:mod:`tm.ml.SVMR`
 --------------------
 
-.. autoclass:: SVMR
+.. autoclass:: tablemage.ml.SVMR
     :members: 
         __init__, 
         specify_data, 
@@ -82,7 +82,7 @@ hyperparameter optimization, and cross-validation.
 :py:mod:`tm.ml.MLPR`
 --------------------
 
-.. autoclass:: MLPR
+.. autoclass:: tablemage.ml.MLPR
     :members: 
         __init__, 
         specify_data, 
@@ -100,7 +100,7 @@ hyperparameter optimization, and cross-validation.
 :py:mod:`tm.ml.LinearC`
 -----------------------
 
-.. autoclass:: LinearC
+.. autoclass:: tablemage.ml.LinearC
     :members: 
         __init__, 
         specify_data, 
@@ -118,7 +118,7 @@ hyperparameter optimization, and cross-validation.
 :py:mod:`tm.ml.TreesC`
 ----------------------
 
-.. autoclass:: TreesC
+.. autoclass:: tablemage.ml.TreesC
     :members: 
         __init__, 
         specify_data, 
@@ -136,7 +136,7 @@ hyperparameter optimization, and cross-validation.
 :py:mod:`tm.ml.SVMC`
 --------------------
 
-.. autoclass:: SVMC
+.. autoclass:: tablemage.ml.SVMC
     :members: 
         __init__, 
         specify_data, 
@@ -154,7 +154,7 @@ hyperparameter optimization, and cross-validation.
 :py:mod:`tm.ml.MLPC`
 --------------------
 
-.. autoclass:: MLPC
+.. autoclass:: tablemage.ml.MLPC
     :members: 
         __init__, 
         specify_data, 

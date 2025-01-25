@@ -136,22 +136,21 @@
 
 
 <div class="viewcode-block" id="Analyzer"><a class="viewcode-back" href="../../../python_api/classes/tm_analyzer.html#tablemage.Analyzer">[docs]</a><span class="k">class</span> <span class="nc">Analyzer</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analyzer is a class designed for conducting exploratory data analysis (EDA),</span>
-<span class="sd">    regression analysis, and machine learning modeling on tabular data.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analyzer is the high-level interface class of TableMage.</span>
 
-<span class="sd">    An Analyzer object can be initialized from a single DataFrame which is then</span>
-<span class="sd">    split into train and test DataFrames, or, alternatively, from pre-split</span>
-<span class="sd">    train and test DataFrames. The object can then be used to conduct</span>
-<span class="sd">    a variety of analyses,</span>
-<span class="sd">    including exploratory data analysis (the eda() method),</span>
-<span class="sd">    regression analysis (ols() and logit() methods),</span>
+<span class="sd">    An Analyzer object can be initialized from a single DataFrame which is then \</span>
+<span class="sd">    split into train and test DataFrames, or, alternatively, from pre-split \</span>
+<span class="sd">    train and test DataFrames. The object can then be used to conduct \</span>
+<span class="sd">    a variety of analyses, \</span>
+<span class="sd">    including exploratory data analysis (the eda() method), \</span>
+<span class="sd">    regression analysis (ols() and logit() methods), \</span>
 <span class="sd">    and machine learning modeling (classify() and regress() methods).</span>
 
-<span class="sd">    The Analyzer object also handles data preprocessing tasks, such as scaling,</span>
-<span class="sd">    imputing missing values, dropping rows with missing values, one-hot encoding,</span>
-<span class="sd">    and selecting variables. These methods can be chained together for easy data</span>
-<span class="sd">    transformation. The Analyzer object remembers how the data was transformed,</span>
-<span class="sd">    enabling proper fitting and transforming of cross validation splits of the</span>
+<span class="sd">    The Analyzer object also handles data preprocessing tasks, such as scaling, \</span>
+<span class="sd">    imputing missing values, dropping rows with missing values, one-hot encoding, \</span>
+<span class="sd">    and selecting variables. These methods can be chained together for easy data \</span>
+<span class="sd">    transformation. The Analyzer object remembers how the data was transformed, \</span>
+<span class="sd">    enabling proper fitting and transforming of cross validation splits of the \</span>
 <span class="sd">    train dataset.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -170,9 +169,9 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        df : pd.DataFrame | None</span>
-<span class="sd">            The DataFrame to be analyzed. Must be in wide format, i.e. with shape</span>
-<span class="sd">            (n_units, n_vars). If df_test is provided, then the df is treated as the</span>
-<span class="sd">            train DataFrame. Otherwise, the df is split into train and test DataFrames</span>
+<span class="sd">            The DataFrame to be analyzed. Must be in wide format, i.e. with shape \</span>
+<span class="sd">            (n_units, n_vars). If df_test is provided, then the df is treated as the \</span>
+<span class="sd">            train DataFrame. Otherwise, the df is split into train and test DataFrames \</span>
 <span class="sd">            according to the test_size parameter.</span>
 
 <span class="sd">        df_test : pd.DataFrame | None</span>
@@ -180,23 +179,23 @@
 <span class="sd">            If not None, then treats df as the train DataFrame.</span>
 
 <span class="sd">        test_size : float</span>
-<span class="sd">            Default: 0. Proportion of the DataFrame to withhold for</span>
-<span class="sd">            testing. If test_size = 0, then the train DataFrame and the</span>
-<span class="sd">            test DataFrame will both be the same as the input df.</span>
+<span class="sd">            Default: 0. Proportion of the DataFrame to withhold for \</span>
+<span class="sd">            testing. If test_size = 0, then the train DataFrame and the \</span>
+<span class="sd">            test DataFrame will both be the same as the input df. \</span>
 <span class="sd">            If df_test is provided, then test_size is ignored.</span>
 
 <span class="sd">        id_column : str | None</span>
-<span class="sd">            Default: None. The name of the column containing unique identifiers.</span>
-<span class="sd">            If not None, then the column will be set as the index of the DataFrame.</span>
+<span class="sd">            Default: None. The name of the column containing unique identifiers. \</span>
+<span class="sd">            If not None, then the column will be set as the index of the DataFrame. \</span>
 <span class="sd">            If None, then the input index will be used as the index of the DataFrame.</span>
 
 <span class="sd">        split_seed : int</span>
-<span class="sd">            Default: 42.</span>
-<span class="sd">            Used only for the train test split.</span>
+<span class="sd">            Default: 42. \</span>
+<span class="sd">            Used only for the train test split. \</span>
 <span class="sd">            If df_test is provided, then split_seed is ignored.</span>
 
 <span class="sd">        verbose : bool</span>
-<span class="sd">            Default: False. If True, prints helpful update messages for certain</span>
+<span class="sd">            Default: False. If True, prints helpful update messages for certain \</span>
 <span class="sd">            Analyzer function calls.</span>
 
 <span class="sd">        name : str</span>
@@ -281,8 +280,8 @@
     <span class="c1"># EDA + FEATURE SELECTION + CAUSAL EFFECT ESTIMATION + REGRESSION ANALYSIS</span>
     <span class="c1"># --------------------------------------------------------------------------</span>
 <div class="viewcode-block" id="Analyzer.eda"><a class="viewcode-back" href="../../../python_api/classes/tm_analyzer.html#tablemage.Analyzer.eda">[docs]</a>    <span class="k">def</span> <span class="nf">eda</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EDAReport</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructs an EDAReport object for the working train</span>
-<span class="sd">        DataFrame, the working test DataFrame, or both DataFrames combined.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructs an EDAReport object for the working train \</span>
+<span class="sd">        dataset, the working test dataset, or both datasets combined.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -292,8 +291,8 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        EDAReport</span>
-<span class="sd">            The EDAReport object contains a variety of exploratory data</span>
-<span class="sd">            analysis methods, including summary statistics for numeric and</span>
+<span class="sd">            The EDAReport object contains a variety of exploratory data \</span>
+<span class="sd">            analysis methods, including summary statistics for numeric and \</span>
 <span class="sd">            categorical variables, t-tests, and data visualizations.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">dataset</span> <span class="o">==</span> <span class="s2">&quot;train&quot;</span><span class="p">:</span>
@@ -313,7 +312,9 @@
         <span class="n">confounders</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
         <span class="n">dataset</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CausalModel</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a CausalModel object for estimating causal effects.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a CausalModel object for estimating causal effects. \</span>
+<span class="sd">        The CausalModel object contains rudimentary methods for \</span>
+<span class="sd">        causal effect estimation (weighted least squares, IPW estimator).</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -350,8 +351,8 @@
         <span class="n">feature_selectors</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">BaseFSR</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">BaseFSC</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">max_n_features</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VotingSelectionReport</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Selects the most important features using a variety of feature selection</span>
-<span class="sd">        methods. The feature selection methods can be used to select the most</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Selects the most important features using a variety of feature selection \</span>
+<span class="sd">        methods. The feature selection methods can be used to select the most \</span>
 <span class="sd">        important predictors for regression or classification.</span>
 
 <span class="sd">        Parameters</span>
@@ -360,15 +361,15 @@
 <span class="sd">            The target variable.</span>
 
 <span class="sd">        predictors : list[str] | None</span>
-<span class="sd">            Default: None. The predictors to select from.</span>
+<span class="sd">            Default: None. The predictors to select from. \</span>
 <span class="sd">            If None, uses all variables except the target as predictors.</span>
 
 <span class="sd">        feature_selectors : list[BaseFSR] | list[BaseFSC] | None</span>
-<span class="sd">            Default: None. The feature selection methods to use.</span>
+<span class="sd">            Default: None. The feature selection methods to use. \</span>
 <span class="sd">            If None, uses all feature selection methods.</span>
 
 <span class="sd">        max_n_features : int | None</span>
-<span class="sd">            Default: None. Maximum number of features to select.</span>
+<span class="sd">            Default: None. Maximum number of features to select. \</span>
 <span class="sd">            If None, then all features with at least 50% support are selected.</span>
 
 <span class="sd">        Returns</span>
@@ -414,9 +415,7 @@
         <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">l1_weight</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OLSReport</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Performs OLS regression.</span>
-<span class="sd">        If formula is provided, performs regression with OLS via formula.</span>
-<span class="sd">        Units with missing data will be dropped.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Performs OLS regression. Units with missing data will be dropped.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -424,7 +423,7 @@
 <span class="sd">            Default: None. The variable to be predicted.</span>
 
 <span class="sd">        predictors : list[str]</span>
-<span class="sd">            Default: None.</span>
+<span class="sd">            Default: None. \</span>
 <span class="sd">            If None, all variables except target will be used as predictors.</span>
 
 <span class="sd">        alpha : float</span>
@@ -436,7 +435,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        OLSReport</span>
-<span class="sd">            The OLSReport object contains a variety of OLS regression methods,</span>
+<span class="sd">            The OLSReport object contains a variety of OLS regression methods, \</span>
 <span class="sd">            including summary statistics, model coefficients, and data visualizations.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">target</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">numeric_vars</span><span class="p">():</span>
@@ -471,9 +470,7 @@
         <span class="n">l1_weight</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">threshold_strategy</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;roc&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LogitReport</span> <span class="o">|</span> <span class="n">MNLogitReport</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Performs logistic regression.</span>
-<span class="sd">        if formula is provided, performs logistic regression via formula.</span>
-<span class="sd">        Units with missing data will be dropped.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Performs logistic regression. Units with missing data will be dropped.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -511,7 +508,7 @@
                 <span class="n">predictors</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
         <span class="c1"># decide between binary and multinomial logit</span>
         <span class="n">df_all</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">df_all</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_all</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_all</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">LogitReport</span><span class="p">(</span>
                 <span class="n">LogitLinearModel</span><span class="p">(</span>
                     <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
@@ -1294,7 +1291,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Andrew Yang.</p>
+    <p>&#169; Copyright 2025, Andrew Yang.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

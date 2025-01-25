@@ -1375,7 +1375,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">numeric_vars</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">htest</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">cmap</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">plt</span><span class="o">.</span><span class="n">Colormap</span> <span class="o">=</span> <span class="n">plot_options</span><span class="o">.</span><span class="n">_cmap</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">plt</span><span class="o">.</span><span class="n">Colormap</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span>
         <span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
@@ -1391,8 +1391,9 @@
 <span class="sd">            If True, displays correlation coefficients with their</span>
 <span class="sd">            corresponding p-values in parentheses.</span>
 
-<span class="sd">        cmap : str | plt.Colormap</span>
+<span class="sd">        cmap : str | plt.Colormap | None</span>
 <span class="sd">            The colormap to use for the heatmap visualization.</span>
+<span class="sd">            If None, uses a default colormap.</span>
 
 <span class="sd">        figsize : tuple[float, float]</span>
 <span class="sd">            The size of the figure (width, height) in inches.</span>
@@ -1406,6 +1407,8 @@
 <span class="sd">        plt.Figure</span>
 <span class="sd">            The figure containing the correlation heatmap.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">cmap</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cmap</span> <span class="o">=</span> <span class="n">plot_options</span><span class="o">.</span><span class="n">_cmap</span>
 
         <span class="k">def</span> <span class="nf">format_corr_pval</span><span class="p">(</span><span class="n">corr</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">pval</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n_decimals</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;Format correlation and p-value pair.&quot;&quot;&quot;</span>
@@ -2233,7 +2236,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Andrew Yang.</p>
+    <p>&#169; Copyright 2025, Andrew Yang.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
