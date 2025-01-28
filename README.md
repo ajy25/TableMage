@@ -80,7 +80,7 @@ joblib.dump(reg_report.model('LinearR(l2)'), 'l2_pipeline.joblib')
 ```
 
 
-## Quick start (no-code)
+## Quick start (conversational)
 
 First, install the required additional dependencies.
 ```
@@ -94,13 +94,29 @@ tm.use_agents()                                             # import the agents 
 tm.agents.set_key("openai", "add-your-api-key-here")        # set API key
 ```
 
-You can open up a chat user interface by running the following code and clicking on the URL that appears in the terminal.
-Your conversation with the AI agent appears on the left, while the AI agent's analyses (figures made, tables produced, TableMage commands used) appear on the right.
+You can open up a chat user interface by running the following code 
+and navigating to the URL that appears in the terminal.
+Your conversation with the ChatDA, the AI agent, appears on the left, 
+while ChatDA's analyses (figures made, tables produced, TableMage commands used) 
+appear on the right.
 
 ```python
 import tablemage as tm
 tm.use_agents()
-tm.agents.App().run()
+tm.agents.options.set_llm(
+    llm_type="openai", 
+    model_name="gpt-4o-mini", 
+    temperature=0.1
+)
+# optionally, multimodal ChatDA can interpret figures
+tm.agents.options.set_multimodal_llm(
+    llm_type="openai",
+    model_name="gpt-4o-mini",
+    temperature=0.1
+)                           # multimodal LLM must be specified for multimodal ChatDA
+tm.agents.App(
+    multimodal=True         # additional parameters can be set, e.g. memory type, 
+).run(debug=False)          # disabling/enabling Python environment, etc.
 ```
 
 Or, you can chat with the AI agent directly in Python:
@@ -109,12 +125,20 @@ Or, you can chat with the AI agent directly in Python:
 import pandas as pd
 import tablemage as tm
 tm.use_agents()
+tm.agents.options.set_llm(
+    llm_type="openai", 
+    model_name="gpt-4o-mini", 
+    temperature=0.1
+)
 
 # load table
 df = ...
 
 # initialize a ChatDA object
-agent = tm.agents.ChatDA(df, test_size=0.2)
+agent = tm.agents.ChatDA(
+    df,                     # additional parameters can be set, e.g. memory type, 
+    test_size=0.2           # disabling/enabling Python environment, etc.
+)
 
 # chat with the agent
 print(agent.chat("Compute the summary statistics for the numeric variables."))

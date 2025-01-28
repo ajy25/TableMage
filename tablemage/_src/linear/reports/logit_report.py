@@ -521,6 +521,15 @@ class LogitReport:
         """
         return self._model
 
+    def positive_class(self) -> str:
+        """Returns the positive class label.
+
+        Returns
+        -------
+        str
+        """
+        return self._model.positive_class()
+
     def metrics(self, dataset: Literal["train", "test", "both"]) -> pd.DataFrame:
         """Returns a DataFrame containing the goodness-of-fit statistics
         for the model.
@@ -1087,6 +1096,7 @@ class LogitReport:
         dict
         """
         output = {
+            "positive_class": self.positive_class(),
             "train_metrics": self.metrics("train").to_dict("index"),
             "test_metrics": self.metrics("test").to_dict("index"),
         }

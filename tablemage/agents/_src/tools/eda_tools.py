@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field
 from functools import partial
 from .tooling_context import ToolingContext
 from .tooling_utils import tooling_decorator
+from .._debug.logger import print_debug
 
 
 # t-test tool
@@ -377,24 +378,26 @@ def build_correlation_matrix_tool(context: ToolingContext) -> FunctionTool:
 
 
 class _ValueCountsInput(BaseModel):
-    categorical_var: str = Field(
-        description="The categorical variable to tabulate value counts for."
+    var: str = Field(
+        description="The variable to tabulate value counts for. "
+        "Must be categorical variable or numeric variable with "
+        "a small number of unique values."
     )
 
 
+@tooling_decorator
 def _value_counts_function(
-    categorical_var: str,
+    var: str,
     context: ToolingContext = None,
 ):
-    df_output = context._data_container.analyzer.eda("all").value_counts(
-        categorical_var
+    print_debug(
+        "I am going to generate value counts for the variable: {var}.".format(var=var)
     )
     context.add_thought(
-        "I am going to generate value counts for the variable: {var}.".format(
-            var=categorical_var
-        )
+        "I am going to generate value counts for the variable: {var}.".format(var=var)
     )
-    context.add_code("analyzer.eda().value_counts('{var}')".format(var=categorical_var))
+    context.add_code("analyzer.eda().value_counts('{var}')".format(var=var))
+    df_output = context._data_container.analyzer.eda("all").value_counts(var)
     return context.add_table(df_output, add_to_vectorstore=True)
 
 

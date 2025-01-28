@@ -446,5 +446,10 @@ class LogitLinearModel:
             raise ValueError("Invalid format")
         return output_df
 
+    def positive_class(self) -> str:
+        """Returns the positive class label name as a string. \
+        That is, the class label that is being predicted by the model."""
+        return self._y_label_order[1] if self._y_label_order is not None else "1"
+
     def __str__(self):
         return self._name

@@ -924,7 +924,7 @@ class EDAReport:
                     ax=ax,
                 )
                 # set y axis label
-                ax.set_ylabel("Frequency")
+                ax.set_ylabel("Count")
             else:
                 # plot a bar plot through sns.countplot
                 sns.countplot(
@@ -936,6 +936,7 @@ class EDAReport:
                 )
                 # Rotate category labels
                 ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
+                ax.set_ylabel("Count")
 
         else:
             # numeric-numeric
@@ -2046,16 +2047,14 @@ class EDAReport:
         """
         return self._numeric_summary_statistics.round(print_options._n_decimals)
 
-    def value_counts(
-        self, categorical_var: str, normalize: bool = False
-    ) -> pd.DataFrame:
+    def value_counts(self, var: str, normalize: bool = False) -> pd.DataFrame:
         """Returns the value counts for a given categorical variable as a
         DataFrame, with first column as the unique values and the second
         column as the counts.
 
         Parameters
         ----------
-        categorical_var : str
+        var : str
             Categorical variable name.
 
         normalize : bool
@@ -2065,14 +2064,19 @@ class EDAReport:
         -------
         pd.DataFrame
         """
-        if categorical_var not in self._categorical_vars:
-            raise ValueError(
-                f"Invalid input: {categorical_var}. "
-                + "Must be a known categorical variable."
-            )
-        return pd.DataFrame(
-            self._categorical_eda_dict[categorical_var].counts(normalize)
-        ).reset_index()
+        if var not in self._categorical_vars:
+            # allow numeric variables to be passed in if they have <= 20 unique values
+            if var not in self._numeric_vars:
+                raise ValueError(
+                    f"Invalid input: {var}. " + "Must be a known variable."
+                )
+            elif self._df[var].nunique() > 20:
+                raise ValueError(
+                    f"Invalid input: {var}. "
+                    + "Must be a categorical variable or numeric variable "
+                    + "with <= 20 unique values."
+                )
+        return self._df[var].value_counts(normalize=normalize).to_frame()
 
     def specific(self, var: str) -> CategoricalEDA | NumericEDA:
         """Returns the CategoricalEDA or NumericEDA object associated with
