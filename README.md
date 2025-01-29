@@ -1,6 +1,6 @@
 # TableMage &nbsp; 🧙‍♂️📊
 
-![Python Versions](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue)
+![Python Versions](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 ![Tests Passing](https://github.com/ajy25/TableMage/actions/workflows/test.yml/badge.svg)
@@ -24,7 +24,7 @@ cd TableMage
 pip install .
 ```
 
-TableMage officially supports Python versions 3.10 through 3.13.
+TableMage supports Python versions 3.10 through 3.12.
 
 > [!NOTE]
 > **For MacOS users:** You might run into an error involving [XGBoost](https://xgboost.readthedocs.io/en/stable/#), one of TableMage's dependencies, when using TableMage for the first time.
