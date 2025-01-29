@@ -1,17 +1,16 @@
-# TableMage
+# TableMage &nbsp; 🧙‍♂️📊
 
-![Python Versions](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)
+![Python Versions](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 ![Tests Passing](https://github.com/ajy25/TableMage/actions/workflows/test.yml/badge.svg)
 [![Documentation Status](https://readthedocs.org/projects/tablemage/badge/?version=latest)](https://tablemage.readthedocs.io/en/latest/?badge=latest)
 
 
-
 TableMage is a Python package for low-code/conversational clinical data science.
 TableMage can help you quickly explore tabular datasets, 
-easily perform regression analyses, 
-and effortlessly compute performance metrics for your favorite machine learning models.
+easily perform regression analyses,
+and effortlessly benchmark machine learning models.
 
 
 ## Installation and dependencies
@@ -25,10 +24,10 @@ cd TableMage
 pip install .
 ```
 
-TableMage officially supports Python versions 3.10 through 3.12.
+TableMage officially supports Python versions 3.10 through 3.13.
 
 > [!NOTE]
-> **For MacOS users:** You might run into an error involving XGBoost, one of TableMage's dependencies, when using TableMage for the first time.
+> **For MacOS users:** You might run into an error involving [XGBoost](https://xgboost.readthedocs.io/en/stable/#), one of TableMage's dependencies, when using TableMage for the first time.
 > To resolve this error, you'll need to install libomp: `brew install libomp`. This requries [Homebrew](https://brew.sh/).
 
 ## Quick start (low-code)
@@ -46,37 +45,46 @@ df = ...
 # initialize an Analyzer object
 analyzer = tm.Analyzer(df, test_size=0.2)
 
-# preprocess data
-analyzer.dropna(
-    include_vars=['y']
-).impute(
-    exclude_vars=['y']
-).scale(
-    exclude_vars=['y']
+# preprocess data, taking care to exclude the target variable 'y' from the operations
+analyzer.drop_highly_missing_vars(  # drop variables with more than 30% missing values
+    exclude_vars=['y'], threshold=0.3
+).impute(                           # impute missing values
+    exclude_vars=['y'], numeric_strategy='5nn', categorical_strategy='most_frequent'
+).scale(                            # scale numeric variables
+    exclude_vars=['y'], strategy='standardize'
 )
 
-# train regressors (hyperparameter tuning is preset and automatic)
-reg_report = analyzer.regress(
-    models=[
-        tm.ml.LinearR('l2'),
-        tm.ml.TreesR('random_forest'),
-        tm.ml.TreesR('xgboost'),
+# train regressors
+reg_report = analyzer.regress(  # categorical variables are automatically one-hot encoded
+    models=[                    # hyperparameter tuning is preset and automatic
+        tm.ml.LinearR('l2', name='ridge'),
+        tm.ml.TreesR('random_forest', name='rf'),
+        tm.ml.TreesR('xgboost', name='xgb'),
     ],
-    target='y',
+    target='y',                 # automatically drops examples with missing values in target variable
+    predictors=None,            # None signifies all variables except target variable
     feature_selectors=[
-        tm.fs.BorutaFSR()   # select features
+        tm.fs.BorutaFSR()       # select subset of predictors prior to training
     ]
 )
 
-# compare model performance
+# view model metrics
 print(reg_report.metrics('test'))
 
 # predict on new data
-new_df = ...
-y_pred = reg_report.model('LinearR(l2)').predict(new_df)
+new_df = analyzer.datahandler()._orig_df_test.copy().drop(columns=['y'])
+display(new_df.head())
+ridge_model = reg_report.model('ridge').sklearn_pipeline()
+y_pred = ridge_model.predict(new_df)
 
-# save model as sklearn pipeline
-joblib.dump(reg_report.model('LinearR(l2)'), 'l2_pipeline.joblib')
+# save as sklearn pipeline
+joblib.dump(ridge_model, 'ridge.joblib')
+
+# load and predict
+ridge_model = joblib.load('ridge.joblib')
+y_pred_from_save = ridge_model.predict(new_df)
+
+assert np.allclose(y_pred, y_pred_from_save)
 ```
 
 
@@ -149,6 +157,6 @@ print(agent.chat("Compute the summary statistics for the numeric variables."))
 > TableMage's agent, ChatDA, relies on FastEmbed for retriever augmented generation, but it may need to download the FastEmbed model from the internet prior to use.
 > ChatDA can be run with a local LLM and FastEmbed, ensuring total data privacy.
 
-## Notes
+## Updates
 
 TableMage is under active development.

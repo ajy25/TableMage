@@ -764,7 +764,6 @@ class DataHandler:
         new_len_test = self._working_df_test.shape[0]
 
         if self._verbose:
-            shapes_dict = self._shapes_str_formatted()
             print_wrapped(
                 f"Dropped {orig_len_train - new_len_train} rows with missing values "
                 + f"from train and {orig_len_test - new_len_test} rows from test.",
@@ -1006,6 +1005,9 @@ class DataHandler:
             exclude_vars_set = set(exclude_vars)
             numeric_vars = list(set(numeric_vars) - exclude_vars_set)
             categorical_vars = list(set(categorical_vars) - exclude_vars_set)
+
+        numeric_vars = sorted(numeric_vars)
+        categorical_vars = sorted(categorical_vars)
 
         if len(numeric_vars) == 0 and len(categorical_vars) == 0:
             raise ValueError("No variables were provided.")
@@ -1592,7 +1594,7 @@ class DataHandler:
             )
 
         categorical_mapped = self._compute_categories(df, categorical_vars)
-        return categorical_vars, numeric_vars, categorical_mapped
+        return sorted(categorical_vars), sorted(numeric_vars), categorical_mapped
 
     def _force_train_test_var_agreement(
         self, df_train: pd.DataFrame, df_test: pd.DataFrame

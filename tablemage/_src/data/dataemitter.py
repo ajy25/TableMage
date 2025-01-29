@@ -746,7 +746,7 @@ class DataEmitter:
         """
         if X is not None:
             prev_vars = X.columns.to_list()
-            kept_vars = list(set(prev_vars) - self._highly_missing_vars_dropped)
+            kept_vars = list(set(prev_vars) - set(self._highly_missing_vars_dropped))
             return X[kept_vars]
 
         if include_vars is None:
@@ -838,12 +838,13 @@ class DataEmitter:
         numeric_vars = self._numeric_vars
         categorical_vars = self._categorical_vars
         var_set = set(vars)
-        numeric_vars = list(var_set & set(numeric_vars))
-        categorical_vars = list(var_set & set(categorical_vars))
+        numeric_vars = sorted(list(var_set & set(numeric_vars)))
+        categorical_vars = sorted(list(var_set & set(categorical_vars)))
 
         if X is not None:
             if len(numeric_vars) > 0:
                 if self._numeric_imputer is not None:
+                    print(numeric_vars)
                     X[numeric_vars] = self._numeric_imputer.transform(X[numeric_vars])
             if len(categorical_vars) > 0:
                 if self._numeric_imputer is not None:
@@ -1396,7 +1397,7 @@ class DataEmitter:
         numeric_vars = df.select_dtypes(include=["number"]).columns.to_list()
 
         categorical_mapped = self._compute_categories(df, categorical_vars)
-        return categorical_vars, numeric_vars, categorical_mapped
+        return sorted(categorical_vars), sorted(numeric_vars), categorical_mapped
 
     def _add_scaler(self, scaler: BaseSingleVarScaler, var: str) -> "DataEmitter":
         """Adds a scaler for the target variable.

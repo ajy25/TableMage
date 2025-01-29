@@ -96,6 +96,10 @@ class Analyzer:
 
         self._verbose = verbose
 
+        df = df.copy()
+        if df_test is not None:
+            df_test = df_test.copy()
+
         # force column names to str
         df.columns = df.columns.astype(str)
 
