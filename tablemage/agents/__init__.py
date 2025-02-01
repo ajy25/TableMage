@@ -18,7 +18,6 @@ options : An instance of _AgentsOptions which dictates LLM settings for ChatDA.
 set_key : A function to set the API key for ChatDA.
 """
 
-
 from .ui.app import ChatDA_UserInterface
 from .api.chatda import ChatDA
 from ._src.options import options

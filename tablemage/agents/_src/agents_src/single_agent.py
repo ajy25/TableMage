@@ -77,6 +77,7 @@ def build_agent(
     react: bool = False,
     python_only: bool = False,
     tools_only: bool = False,
+    verbose: bool = True,
 ) -> FunctionCallingAgent | ReActAgent:
     """Builds an agent.
 
@@ -122,6 +123,9 @@ def build_agent(
         If True, only the tools are provided.
         Otherwise, the Python environment is also provided, ignoring RAG.
         Default is False.
+
+    verbose : bool
+        If True, prints debug messages. Default is True.
 
     Returns
     -------
@@ -233,7 +237,7 @@ def build_agent(
             agent = ReActAgent.from_tools(
                 llm=llm,
                 tool_retriever=tool_retriever,
-                verbose=True,
+                verbose=verbose,
                 system_prompt=system_prompt,
                 memory=memory_obj,
                 max_iterations=20,
@@ -243,7 +247,7 @@ def build_agent(
                 agent = OpenAIAgent.from_tools(
                     llm=llm,
                     tool_retriever=tool_retriever,
-                    verbose=True,
+                    verbose=verbose,
                     system_prompt=system_prompt,
                     memory=memory_obj,
                 )
@@ -251,7 +255,7 @@ def build_agent(
                 agent = FunctionCallingAgent.from_tools(
                     llm=llm,
                     tool_retriever=tool_retriever,
-                    verbose=True,
+                    verbose=verbose,
                     system_prompt=system_prompt,
                     memory=memory_obj,
                 )
@@ -260,7 +264,7 @@ def build_agent(
             agent = ReActAgent.from_tools(
                 llm=llm,
                 tools=tools + tools_to_persist,
-                verbose=True,
+                verbose=verbose,
                 system_prompt=system_prompt,
                 memory=memory_obj,
                 max_iterations=10,
@@ -270,7 +274,7 @@ def build_agent(
                 agent = OpenAIAgent.from_tools(
                     llm=llm,
                     tools=tools + tools_to_persist,
-                    verbose=True,
+                    verbose=verbose,
                     system_prompt=system_prompt,
                     memory=memory_obj,
                 )
@@ -278,7 +282,7 @@ def build_agent(
                 agent = FunctionCallingAgent.from_tools(
                     llm=llm,
                     tools=tools + tools_to_persist,
-                    verbose=True,
+                    verbose=verbose,
                     system_prompt=system_prompt,
                     memory=memory_obj,
                 )
@@ -298,6 +302,7 @@ class SingleAgent:
         system_prompt: str = DEFAULT_SYSTEM_PROMPT,
         python_only: bool = False,
         tools_only: bool = False,
+        verbose: bool = True,
     ):
         """Initializes the SingleAgent object."""
         if not isinstance(llm, FunctionCallingLLM):
@@ -318,6 +323,7 @@ class SingleAgent:
             system_prompt=system_prompt,
             python_only=python_only,
             tools_only=tools_only,
+            verbose=verbose,
         )
 
         self._build_agent_kwargs = {

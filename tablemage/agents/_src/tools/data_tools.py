@@ -41,12 +41,12 @@ def _dataset_summary_function(context: ToolingContext) -> str:
             context._data_container.analyzer.datahandler().numeric_vars()
         ),
     }
-    output_dict[
-        "numeric_vars"
-    ] = context._data_container.analyzer.datahandler().numeric_vars()
-    output_dict[
-        "categorical_vars"
-    ] = context._data_container.analyzer.datahandler().categorical_vars()
+    output_dict["numeric_vars"] = (
+        context._data_container.analyzer.datahandler().numeric_vars()
+    )
+    output_dict["categorical_vars"] = (
+        context._data_container.analyzer.datahandler().categorical_vars()
+    )
     return context.add_dict(output_dict)
 
 

@@ -915,7 +915,6 @@ class DataEmitter:
                         "in an impute step. "
                     )
             if len(numeric_vars) > 0:
-                print("pipeline: ", numeric_vars)
                 if self._numeric_imputer is not None:
                     X[numeric_vars] = self._numeric_imputer.transform(X[numeric_vars])
             if len(categorical_vars) > 0:
@@ -928,7 +927,6 @@ class DataEmitter:
         # impute numeric variables
         imputer = None
         if len(numeric_vars) > 0:
-            print(numeric_vars)
             if numeric_strategy == "5nn":
                 imputer = KNNImputer(n_neighbors=5, keep_empty_features=True)
             elif numeric_strategy == "10nn":

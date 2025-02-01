@@ -62,9 +62,9 @@ class DataHandler:
         df_train = df_train.copy()
         df_test = df_test[df_train.columns].copy()
 
-        self._checkpoint_name_to_df: dict[
-            str, tuple[pd.DataFrame, pd.DataFrame]
-        ] = dict()
+        self._checkpoint_name_to_df: dict[str, tuple[pd.DataFrame, pd.DataFrame]] = (
+            dict()
+        )
         self._verbose = verbose
 
         # force bool to int, object to category

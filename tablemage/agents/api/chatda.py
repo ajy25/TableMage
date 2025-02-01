@@ -33,6 +33,7 @@ class ChatDA:
         python_only: bool = False,
         tools_only: bool = False,
         multimodal: bool = False,
+        verbose: bool = True,
     ):
         """Initializes the ChatDA object.
 
@@ -80,6 +81,9 @@ class ChatDA:
         multimodal : bool
             If True, multimodal LLM is used only for interpreting figures. \
             Default is False.
+
+        verbose : bool
+            If True, prints agent thoughts and tool outputs. Default is True.
         """
         self._data_container = DataContainer()
         self._data_container.set_analyzer(
@@ -116,6 +120,7 @@ class ChatDA:
             system_prompt=system_prompt,
             python_only=python_only,
             tools_only=tools_only,
+            verbose=verbose,
         )
         print_debug(
             f"Agent initialized. Agent type: {self._single_agent.__class__.__name__}."

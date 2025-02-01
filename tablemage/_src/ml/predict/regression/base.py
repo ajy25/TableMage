@@ -460,9 +460,9 @@ class BaseR(BasePredictModel):
         output = {"name": self._name, "predictors": self._predictors}
 
         if self.feature_importance() is not None:
-            output[
-                self._feature_importance_type_str
-            ] = self.feature_importance().to_dict()
+            output[self._feature_importance_type_str] = (
+                self.feature_importance().to_dict()
+            )
 
         if self._hyperparam_searcher is not None:
             output["fitting_details"] = self._hyperparam_searcher._to_dict()

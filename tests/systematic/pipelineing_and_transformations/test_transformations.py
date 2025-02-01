@@ -235,9 +235,9 @@ def test_checkpoint_handling(setup_data):
     # randomly remove 10% of the data for each variable
     np.random.seed(42)
     for col in df.columns:
-        df.loc[
-            np.random.choice(df.index, int(len(df) * 0.1), replace=False), col
-        ] = np.nan
+        df.loc[np.random.choice(df.index, int(len(df) * 0.1), replace=False), col] = (
+            np.nan
+        )
 
     analyzer = tm.Analyzer(df=df, test_size=0.0)
     analyzer.impute(

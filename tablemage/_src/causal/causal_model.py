@@ -75,7 +75,7 @@ class CausalModel:
                 "Treatment variable must be binary with 0 and 1 values. "
                 "You can easily convert "
             )
-        
+
         if dataset == "train":
             self._emitter = temp_datahandler.train_test_emitter(
                 y_var=outcome,
