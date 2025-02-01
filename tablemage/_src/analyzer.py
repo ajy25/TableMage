@@ -214,7 +214,7 @@ class Analyzer:
         Parameters
         ----------
         treatment : str
-            The treatment variable.
+            The treatment variable. Must be binary numeric (0 or 1-valued).
 
         outcome : str
             The outcome variable.
@@ -441,7 +441,7 @@ class Analyzer:
         outer_cv: int | None = None,
         outer_cv_seed: int = 42,
     ) -> MLRegressionReport:
-        """Conducts a comprehensive regression ML model benchmarking exercise.
+        """Conducts a comprehensive regression ML model benchmarking exercise. \
         Observations with missing data will be dropped.
 
         Parameters
@@ -457,15 +457,15 @@ class Analyzer:
             If None, uses all variables except target as predictors.
 
         feature_selectors : list[BaseFSR]
-            The feature selectors for voting selection. Feature selectors
-            can be used to select the most important predictors.
-            Feature selectors can also be specified at the model level. If
-            specified here, the same feature selectors will be used for all
+            The feature selectors for voting selection. Feature selectors \
+            can be used to select the most important predictors. \
+            Feature selectors can also be specified at the model level. If \
+            specified here, the same feature selectors will be used for all \
             models.
 
-        max_n_features : int
-            Default: None. Maximum number of predictors to utilize.
-            Ignored if feature_selectors is None.
+        max_n_features : int | None
+            Default: None. Maximum number of predictors to utilize. \
+            Ignored if feature_selectors is None. \
             If None, then all features with at least 50% support are selected.
 
         outer_cv : int
@@ -506,7 +506,7 @@ class Analyzer:
         outer_cv: int | None = None,
         outer_cv_seed: int = 42,
     ) -> MLClassificationReport:
-        """Conducts a comprehensive classification ML model benchmarking exercise.
+        """Conducts a comprehensive classification ML model benchmarking exercise. \
         Observations with missing data will be dropped.
 
         Parameters
@@ -522,17 +522,17 @@ class Analyzer:
             If None, uses all variables except target as predictors.
 
         feature_selectors : list[BaseFSR]
-            The feature selectors for voting selection. Feature selectors
-            can be used to select the most important predictors.
-            Feature selectors can also be specified at the model level. If
-            specified here, the same feature selectors will be used for all
+            The feature selectors for voting selection. Feature selectors \
+            can be used to select the most important predictors. \
+            Feature selectors can also be specified at the model level. If \
+            specified here, the same feature selectors will be used for all \
             models.
 
         max_n_features : int
-            Default: None.
-            Maximum number of predictors to utilize.
-            Ignored if feature_selectors is None.
-            If None, then all features with at least 50% support are selected.
+            Default: None. \
+            Maximum number of predictors to utilize. \
+            Ignored if feature_selectors is None. \
+            If None, then all features with at least 50% support are selected. \
 
         outer_cv : int
             Default: None.
@@ -577,14 +577,14 @@ class Analyzer:
             Models to be evaluated.
 
         features : list[str] | None
-            Default: None. The features to cluster on.
+            Default: None. The features to cluster on. \
             If None, uses all the variables.
 
         dataset : Literal['train', 'all']
-            Dataset to fit models on. If "train", only fits models on training data.
-            Then, cluster predictions can be made on test data.
-            If "all", fits models on all data.
-            By default, fits models on all data.
+            Dataset to fit models on. If "train", only fits models on training data. \
+            Then, cluster predictions can be made on test data. \
+            If "all", fits models on all data. \
+            By default, fits models on all data. 
         """
         if features is None:
             features = self._datahandler.vars()
@@ -604,8 +604,8 @@ class Analyzer:
 
         Parameters
         ----------
-        checkpoint_name : str
-            Default: None. The name of the checkpoint to load.
+        checkpoint_name : str | None
+            Default: None. The name of the checkpoint to load. \
             If None, loads the original train and test DataFrames.
 
         Returns
@@ -649,7 +649,7 @@ class Analyzer:
         return self
 
     def engineer_numeric_var(self, name: str, formula: str) -> "Analyzer":
-        """Engineers a new variable/feature based on a formula. The formula
+        """Engineers a new variable/feature based on a formula. The formula \
         can only involve numeric variables. Creates another numeric variable.
 
         Parameters
@@ -658,9 +658,9 @@ class Analyzer:
             The name of the new variable engineered.
 
         formula : str
-            Formula for the new feature. For example, "x1 + x2" would create
-            a new feature that is the sum of the columns x1 and x2 in the DataFrame.
-            All variables used must be numeric.
+            Formula for the new feature. For example, "x1 + x2" would create \
+            a new feature that is the sum of the columns x1 and x2 in the DataFrame. \
+            All variables used must be numeric. \
             Handles the following operations:
             - Addition (+)
             - Subtraction (-)
@@ -672,7 +672,7 @@ class Analyzer:
             - Exponential (exp)
             - Square root (sqrt)
 
-            If the i-th unit is missing a value in any of the variables used in the
+            If the i-th unit is missing a value in any of the variables used in the \
             formula, then the i-th unit of the new feature will be missing.
 
         Examples
@@ -712,15 +712,15 @@ class Analyzer:
             The name of the numeric variable.
 
         level_names : list[str]
-            The names of the levels of the new categorical variable.
+            The names of the levels of the new categorical variable. \
             The first level is the lowest level, and the last level is the highest level.
 
         thresholds : list[float]
-            The (upper) thresholds for the levels of the new categorical variable.
-            The thresholds must be in ascending order.
-            For example, if thresholds = [0, 10, 20],
-            and level_names = ["Low", "Medium", "High", "Very High"],
-            then the new variable will have the following levels:
+            The (upper) thresholds for the levels of the new categorical variable. \
+            The thresholds must be in ascending order. \
+            For example, if thresholds = [0, 10, 20], \
+            and level_names = ["Low", "Medium", "High", "Very High"], \
+            then the new variable will have the following levels: \
 
             - "Low" for values less than 0,
             - "Medium" for other values less than 10,
@@ -759,12 +759,12 @@ class Analyzer:
 
         Parameters
         ----------
-        include_vars : list[str]
-            Default: None. List of variables to scale.
+        include_vars : list[str] | None
+            Default: None. List of variables to scale. \
             If None, scales values in all columns.
 
-        exclude_vars : list[str]
-            Default: None. List of variables to exclude from scaling.
+        exclude_vars : list[str] | None
+            Default: None. List of variables to exclude from scaling. \
             If None, no variables are excluded.
 
         strategy : str
@@ -790,29 +790,29 @@ class Analyzer:
         numeric_strategy: Literal["median", "mean", "5nn", "10nn"] = "median",
         categorical_strategy: Literal["most_frequent", "missing"] = "most_frequent",
     ) -> "Analyzer":
-        """Imputes missing values. The imputer is fit on the train DataFrame
+        """Imputes missing values. The imputer is fit on the train DataFrame \
         and transforms both train and test DataFrames.
 
         Parameters
         ----------
-        include_vars : list[str]
-            Default: None. List of variables to impute missing values.
+        include_vars : list[str] | None
+            Default: None. List of variables to impute missing values. \
             If None, imputes missing values in all columns.
 
-        exclude_vars : list[str]
-            Default: None. List of variables to exclude from imputing missing values.
+        exclude_vars : list[str] | None
+            Default: None. List of variables to exclude from imputing missing values. \
             If None, no variables are excluded.
 
         numeric_strategy : Literal['median', 'mean', '5nn', '10nn']
-            Default: 'median'.
-            Strategy for imputing missing values in numeric variables.
+            Default: 'median'. \
+            Strategy for imputing missing values in numeric variables. 
             - 'median': impute with median.
             - 'mean': impute with mean.
             - '5nn': impute with 5-nearest neighbors.
             - '10nn': impute with 10-nearest neighbors.
 
         categorical_strategy : Literal['most_frequent', 'missing']
-            Default: 'most_frequent'.
+            Default: 'most_frequent'. \
             Strategy for imputing missing values in categorical variables.
             - 'most_frequent': impute with most frequent value.
             - 'missing': impute with 'missing'.
@@ -836,19 +836,19 @@ class Analyzer:
         include_vars: list[str] | None = None,
         exclude_vars: list[str] | None = None,
     ) -> "Analyzer":
-        """Drops observations (rows) with missing values on both the train
+        """Drops observations (rows) with missing values on both the train \
         and test DataFrames.
 
         Parameters
         ----------
-        include_vars : list[str]
-            Default: None.
-            List of columns along which to drop rows with missing values.
+        include_vars : list[str] | None
+            Default: None. \
+            List of columns along which to drop rows with missing values. \
             If None, drops rows with missing values in all columns.
 
-        exclude_vars : list[str]
-            Default: None.
-            List of columns along which to exclude from dropping rows with
+        exclude_vars : list[str] | None
+            Default: None. \
+            List of columns along which to exclude from dropping rows with \
             missing values. If None, no variables are excluded.
 
         Returns
@@ -874,17 +874,17 @@ class Analyzer:
         Parameters
         ----------
         include_vars : list[str] | None
-            Default: None. If not None, only drops columns with more than 50% missing
-            values in the specified variables. Otherwise, drops columns with more than
+            Default: None. If not None, only drops columns with more than 50% missing \
+            values in the specified variables. Otherwise, drops columns with more than \
             50% missing values in all variables.
 
         exclude_vars : list[str] | None
-            Default: None. If not None, excludes the specified variables from the
+            Default: None. If not None, excludes the specified variables from the \
             list of variables to drop (which is set to all variables by default).
 
         threshold : float
-            Default: 0.5. Proportion of missing values above which a column is dropped.
-            For example, if threshold = 0.2, then columns with more than 20% missing
+            Default: 0.5. Proportion of missing values above which a column is dropped. \
+            For example, if threshold = 0.2, then columns with more than 20% missing \
             values are dropped.
 
         Returns
@@ -910,11 +910,11 @@ class Analyzer:
         Parameters
         ----------
         include_vars : list[str]
-            Default: None. List of variables to one-hot encode.
+            Default: None. List of variables to one-hot encode. \
             If None, one-hot encodes all categorical variables.
 
         exclude_vars : list[str]
-            Default: None. List of variables to exclude from one-hot encoding.
+            Default: None. List of variables to exclude from one-hot encoding. \
             If None, no variables are excluded.
 
         dropfirst : bool
@@ -947,11 +947,11 @@ class Analyzer:
         Parameters
         ----------
         include_vars : list[str]
-            Default: None. List of variables to include.
+            Default: None. List of variables to include. \
             If None, includes all variables.
 
         exclude_vars : list[str]
-            Default: None. List of variables to exclude.
+            Default: None. List of variables to exclude. \
             If None, no variables are excluded.
 
         Returns
@@ -1009,9 +1009,9 @@ class Analyzer:
         ignore_multiclass: bool = True,
         rename: bool = True,
     ) -> "Analyzer":
-        """Forces variables to be binary (0 and 1 valued numeric variables).
-        Does nothing if the data contains more than two classes unless
-        ignore_multiclass is True and pos_label is specified,
+        """Forces variables to be binary (0 and 1 valued numeric variables). \
+        Does nothing if the data contains more than two classes unless \
+        ignore_multiclass is True and pos_label is specified, \
         in which case all classes except pos_label are labeled with zero.
 
         Parameters
@@ -1020,15 +1020,15 @@ class Analyzer:
             Name of variable to force to binary.
 
         pos_labels : str
-            Default: None. The positive label.
+            Default: None. The positive label. \
             If None, the most common class is labeled as the positive class.
 
         ignore_multiclass : bool
-            Default: False. If True, all classes except pos_label are labeled with
+            Default: False. If True, all classes except pos_label are labeled with \
             zero. Otherwise raises ValueError.
 
         rename : bool
-            Default: True. If True, the variable is renamed to
+            Default: True. If True, the variable is renamed to \
             {var}::{pos_label}.
 
         Returns
@@ -1164,9 +1164,6 @@ class Analyzer:
         """
         return self._datahandler.df_all()
 
-    # --------------------------------------------------------------------------
-    # MAGIC METHODS
-    # --------------------------------------------------------------------------
     def __len__(self) -> int:
         """Returns the number of units (rows) in working train DataFrame."""
         return len(self._datahandler)

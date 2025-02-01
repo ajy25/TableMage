@@ -14,7 +14,7 @@ from .._src.options import options
 
 
 class ChatDA:
-    """Chat Data Agent. \
+    """Chat Data Analyst. \
     Class for interacting with the LLMs for data analysis on tabular data.
     """
 

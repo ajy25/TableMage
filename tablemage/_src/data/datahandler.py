@@ -505,14 +505,26 @@ class DataHandler:
                 )
             return out
 
-    def is_binary(self, var: str) -> bool:
+    def is_binary(self, var: str, is_numeric: bool = False) -> bool:
         """Checks if a given variable is binary (i.e., it only has two unique values).
+
+        Parameters
+        ----------
+        var : str
+            Name of the variable.
+
+        is_numeric : bool
+            Whether the variable is numeric binary (i.e., has only 0 and 1 values). \
+            Default: False.
 
         Returns
         -------
         bool
             True if the input variable is binary.
         """
+        if is_numeric:
+            unique_vals = self.df_all()[var].unique()
+            return len(unique_vals) == 2 and 0 in unique_vals and 1 in unique_vals
         return len(self.df_all()[var].unique()) == 2
 
     # --------------------------------------------------------------------------

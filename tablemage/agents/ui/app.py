@@ -176,7 +176,7 @@ def serve_file(filename):
     return jsonify({"error": f"File '{filename}' not found."}), 404
 
 
-class App:
+class ChatDA_UserInterface:
     def __init__(
         self,
         split_seed: int | None = None,

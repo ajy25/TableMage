@@ -157,9 +157,15 @@ class CausalReport:
             "  '" + self._outcome_var + "'", "purple"
         )
 
-        confounders_message = bold_text("Confounders:\n") + fill_ignore_format(
-            list_to_string(self._confounders), initial_indent=2, subsequent_indent=2
-        )
+        confounders_message = bold_text("Confounders:\n")
+        if len(self._confounders) == 0:
+            confounders_message += fill_ignore_format(
+                color_text("None", "yellow"), initial_indent=2, subsequent_indent=2
+            )
+        else:
+            confounders_message += fill_ignore_format(
+                list_to_string(self._confounders), initial_indent=2, subsequent_indent=2
+            )
 
         method_message = bold_text("Method:\n") + fill_ignore_format(
             color_text(self._method, "blue"), initial_indent=2, subsequent_indent=2

@@ -44,6 +44,10 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#installation">Installation</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../../python_api/api_reference.html">Python API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../python_api/classes/tm_analyzer.html">Analyzer <code class="xref py py-mod docutils literal notranslate"><span class="pre">(tm.Analyzer)</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../python_api/classes/tm_ml.html">Machine Learning Models <code class="xref py py-mod docutils literal notranslate"><span class="pre">(tm.ml)</span></code></a><ul>
@@ -204,6 +208,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">df_test</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">df_test</span> <span class="o">=</span> <span class="n">df_test</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
         <span class="c1"># force column names to str</span>
         <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
@@ -1269,9 +1277,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="o">.</span><span class="n">df_all</span><span class="p">()</span></div>
 
-    <span class="c1"># --------------------------------------------------------------------------</span>
-    <span class="c1"># MAGIC METHODS</span>
-    <span class="c1"># --------------------------------------------------------------------------</span>
     <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the number of units (rows) in working train DataFrame.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_datahandler</span><span class="p">)</span>

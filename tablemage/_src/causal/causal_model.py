@@ -68,6 +68,14 @@ class CausalModel:
         self._treatment = treatment
         self._outcome = outcome
         self._confounders = confounders
+
+        # ensure that the treatment variable is binary
+        if not temp_datahandler.is_binary(treatment, is_numeric=True):
+            raise ValueError(
+                "Treatment variable must be binary with 0 and 1 values. "
+                "You can easily convert "
+            )
+        
         if dataset == "train":
             self._emitter = temp_datahandler.train_test_emitter(
                 y_var=outcome,
@@ -233,8 +241,6 @@ class CausalModel:
             "treatment variable and confounders as predictors."
         )
         df_X, df_y = self._X_df, self._y_series
-
-        print(df_X.columns.to_list())
 
         model = SimpleOLS(y=df_y, X=df_X, robust=robust_se)
 

@@ -1,5 +1,5 @@
 Feature Selectors :py:mod:`(tm.fs)`
-=========================================
+===================================
 
 
 .. currentmodule:: tablemage

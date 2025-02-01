@@ -140,6 +140,9 @@ class DataEmitter:
             self._categorical_to_categories,
         ) = self._compute_categorical_numeric_vars(self._working_df_train)
 
+        self._orig_numeric_vars = self._numeric_vars.copy()
+        self._orig_categorical_vars = self._categorical_vars.copy()
+
         self._numeric_var_to_scalers: dict[str, list[BaseSingleVarScaler]] = {
             var: [] for var in self._numeric_vars
         }
@@ -541,7 +544,19 @@ class DataEmitter:
         feature_name = rename_var(feature_name)
 
         if X is not None:
-            X[feature_name] = parse_formula(formula, X)
+            try:
+                X[feature_name] = parse_formula(formula, X)
+            except Exception as e:
+                raise ValueError(
+                    f"Error parsing formula {formula} for feature {feature_name}. "
+                    "Please ensure that the formula does not involve "
+                    "the target variable. The original error message is: " + str(e),
+                )
+            (
+                self._categorical_vars,
+                self._numeric_vars,
+                _,
+            ) = self._compute_categorical_numeric_vars(df=X)
             return X
 
         self._working_df_train[feature_name] = parse_formula(
@@ -557,6 +572,7 @@ class DataEmitter:
         ) = self._compute_categorical_numeric_vars(self._working_df_train)
         return None
 
+    @ensure_arg_list_uniqueness()
     def _engineer_categorical_feature(
         self,
         feature_name: str,
@@ -604,6 +620,8 @@ class DataEmitter:
         thresholds_with_infs = [-np.inf] + thresholds + [np.inf]
 
         if X is not None:
+            if numeric_var not in X.columns:
+                raise ValueError(f"Variable {numeric_var} not found in DataFrame.")
             X[feature_name] = pd.cut(
                 X[numeric_var],
                 bins=thresholds_with_infs,
@@ -619,6 +637,11 @@ class DataEmitter:
                 ]
             ):
                 X[feature_name] = X[feature_name].astype(float)
+            (
+                self._categorical_vars,
+                self._numeric_vars,
+                _,
+            ) = self._compute_categorical_numeric_vars(df=X)
             return X
 
         self._working_df_train[feature_name] = pd.cut(
@@ -655,6 +678,7 @@ class DataEmitter:
 
         return None
 
+    @ensure_arg_list_uniqueness()
     def _onehot(
         self,
         vars: list[str] | None = None,
@@ -687,7 +711,20 @@ class DataEmitter:
             vars = self._categorical_vars
 
         if X is not None:
-            return self._onehot_helper(X, vars=vars, dropfirst=dropfirst, fit=False)
+            for var in vars:
+                if var not in X.columns:
+                    raise ValueError(
+                        f"Variable {var} not found in DataFrame. "
+                        "Please ensure that the target variable is not included "
+                        "in the original one-hot encoding step."
+                    )
+            X = self._onehot_helper(X, vars=vars, dropfirst=dropfirst, fit=False)
+            (
+                self._categorical_vars,
+                self._numeric_vars,
+                _,
+            ) = self._compute_categorical_numeric_vars(df=X)
+            return X
 
         self._working_df_train = self._onehot_helper(
             self._working_df_train,
@@ -710,6 +747,7 @@ class DataEmitter:
         ) = self._compute_categorical_numeric_vars(self._working_df_train)
         return None
 
+    @ensure_arg_list_uniqueness()
     def _drop_highly_missing_vars(
         self,
         include_vars: list[str] | None = None,
@@ -747,7 +785,20 @@ class DataEmitter:
         if X is not None:
             prev_vars = X.columns.to_list()
             kept_vars = list(set(prev_vars) - set(self._highly_missing_vars_dropped))
-            return X[kept_vars]
+            for var in kept_vars:
+                if var not in X.columns:
+                    raise ValueError(
+                        f"Variable {var} not found in DataFrame. "
+                        "Please ensure that the target variable is not included "
+                        "in the original drop highly missing step."
+                    )
+            X = X[kept_vars]
+            (
+                self._categorical_vars,
+                self._numeric_vars,
+                _,
+            ) = self._compute_categorical_numeric_vars(df=X)
+            return X
 
         if include_vars is None:
             prev_vars = self._working_df_train.columns.to_list()
@@ -776,6 +827,7 @@ class DataEmitter:
         ) = self._compute_categorical_numeric_vars(self._working_df_train)
         return self
 
+    @ensure_arg_list_uniqueness()
     def _dropna(
         self, vars: list[str], X: pd.DataFrame | None = None
     ) -> pd.DataFrame | None:
@@ -795,12 +847,25 @@ class DataEmitter:
             If X is None, returns None. Otherwise, returns the imputed DataFrame.
         """
         if X is not None:
+            vars_to_skip = []
+            for var in vars:
+                if var not in X.columns:
+                    print_wrapped(
+                        f"Variable {var} not in DataFrame. "
+                        "This is likely due to the target variable being included "
+                        "in a dropna step. "
+                        f"Skipping dropna step for variable {var}.",
+                        type="WARNING",
+                    )
+                    vars_to_skip.append(var)
+            vars = list(set(vars) - set(vars_to_skip))
             return X.dropna(subset=vars)
 
         self._working_df_train = self._working_df_train.dropna(subset=vars)
         self._working_df_test = self._working_df_test.dropna(subset=vars)
         return None
 
+    @ensure_arg_list_uniqueness()
     def _impute(
         self,
         vars: list[str],
@@ -842,9 +907,16 @@ class DataEmitter:
         categorical_vars = sorted(list(var_set & set(categorical_vars)))
 
         if X is not None:
+            for var in vars:
+                if var not in X.columns:
+                    raise ValueError(
+                        f"Variable {var} not in DataFrame. "
+                        "This is likely due to the target variable being included "
+                        "in an impute step. "
+                    )
             if len(numeric_vars) > 0:
+                print("pipeline: ", numeric_vars)
                 if self._numeric_imputer is not None:
-                    print(numeric_vars)
                     X[numeric_vars] = self._numeric_imputer.transform(X[numeric_vars])
             if len(categorical_vars) > 0:
                 if self._numeric_imputer is not None:
@@ -856,6 +928,7 @@ class DataEmitter:
         # impute numeric variables
         imputer = None
         if len(numeric_vars) > 0:
+            print(numeric_vars)
             if numeric_strategy == "5nn":
                 imputer = KNNImputer(n_neighbors=5, keep_empty_features=True)
             elif numeric_strategy == "10nn":
@@ -901,6 +974,7 @@ class DataEmitter:
 
         return None
 
+    @ensure_arg_list_uniqueness()
     def _scale(
         self,
         vars: list[str],
@@ -920,8 +994,7 @@ class DataEmitter:
         Parameters
         ----------
         vars : list[str]
-            List of variables to scale. If None, scales all numeric
-            variables.
+            List of variables to scale. If None, scales all numeric variables.
 
         strategy : str
 
@@ -941,6 +1014,8 @@ class DataEmitter:
                 continue
 
             if X is not None:
+                if var not in X.columns:
+                    continue
                 # check if _scale_call_num is defined
                 if not hasattr(self, "_scale_call_num"):
                     self._scale_call_num = 0
@@ -1025,7 +1100,17 @@ class DataEmitter:
             If X is None, returns None. Otherwise, returns the transformed DataFrame.
         """
         if X is not None:
-            return X[vars]
+            vars_subset = []
+            for var in vars:
+                if var in X.columns:
+                    vars_subset.append(var)
+            X = X[vars_subset]
+            (
+                self._categorical_vars,
+                self._numeric_vars,
+                _,
+            ) = self._compute_categorical_numeric_vars(df=X)
+            return X
 
         self._working_df_test = self._working_df_test[vars]
         self._working_df_train = self._working_df_train[vars]
@@ -1052,7 +1137,20 @@ class DataEmitter:
             If X is None, returns None. Otherwise, returns the transformed DataFrame.
         """
         if X is not None:
-            return X.drop(vars, axis="columns")
+            for var in vars:
+                if var not in X.columns:
+                    raise ValueError(
+                        f"Variable {var} not found in DataFrame. "
+                        "Please ensure that the target variable is not included "
+                        "in the original drop step."
+                    )
+            X = X.drop(vars, axis="columns")
+            (
+                self._categorical_vars,
+                self._numeric_vars,
+                _,
+            ) = self._compute_categorical_numeric_vars(df=X)
+            return X
 
         self._working_df_test = self._working_df_test.drop(vars, axis="columns")
         self._working_df_train = self._working_df_train.drop(vars, axis="columns")
@@ -1082,8 +1180,6 @@ class DataEmitter:
             If X is None, returns None. Otherwise, returns the transformed DataFrame.
         """
         for var in vars:
-            if var not in self._working_df_train.columns:
-                raise ValueError(f"Invalid variable name: {var}.")
             try:
                 if X is not None:
                     X[var] = X[var].apply(lambda x: float(x) if pd.notna(x) else np.nan)
@@ -1094,9 +1190,17 @@ class DataEmitter:
                 self._working_df_test[var] = self._working_df_test[var].apply(
                     lambda x: float(x) if pd.notna(x) else np.nan
                 )
-            except Exception:
+            except Exception as e:
                 pass
-        return X
+            if var not in self._numeric_vars and var not in self._categorical_vars:
+                raise ValueError(f"Invalid variable name: {var}.")
+        if X is not None:
+            (
+                self._categorical_vars,
+                self._numeric_vars,
+                _,
+            ) = self._compute_categorical_numeric_vars(df=X)
+            return X
 
     def _force_binary(
         self,
@@ -1141,21 +1245,30 @@ class DataEmitter:
                 "pos_labels must be specified if ignore_multiclass is True."
             )
 
-        vars_to_renamed = {}
-        for i, var in enumerate(vars):
-            if var not in self._working_df_train.columns:
-                raise ValueError(f"Invalid variable name: {var}.")
+        if X is not None:
+            for i, var in enumerate(vars):
+                pos_label = self._vars_to_pos_labels[var]
+                X[var] = X[var].apply(lambda x: 1 if x == pos_label else 0)
+                if rename:
+                    X = X.rename(columns={var: self._vars_to_renamed[var]})
+            (
+                self._categorical_vars,
+                self._numeric_vars,
+                _,
+            ) = self._compute_categorical_numeric_vars(df=X)
+            return X
 
+        if not hasattr(self, "_vars_to_renamed"):
+            self._vars_to_renamed = {}
+        if not hasattr(self, "_vars_to_pos_labels"):
+            self._vars_to_pos_labels = {}
+
+        for i, var in enumerate(vars):
             if pos_labels is None:
                 unique_vals = self._working_df_train[var].unique()
                 if len(unique_vals) > 2:
                     continue
                 pos_label = unique_vals[0]
-
-                if X is not None:
-                    X[var] = X[var].apply(lambda x: 1 if x == pos_label else 0)
-                    continue
-
                 self._working_df_train[var] = self._working_df_train[var].apply(
                     lambda x: 1 if x == pos_label else 0
                 )
@@ -1169,29 +1282,21 @@ class DataEmitter:
                     if not ignore_multiclass:
                         continue
                 pos_label = pos_labels[i]
-
-                if X is not None:
-                    X[var] = X[var].apply(lambda x: 1 if x == pos_label else 0)
-                    continue
-
                 self._working_df_train[var] = self._working_df_train[var].apply(
                     lambda x: 1 if x == pos_label else 0
                 )
                 self._working_df_test[var] = self._working_df_test[var].apply(
                     lambda x: 1 if x == pos_label else 0
                 )
-
-            vars_to_renamed[var] = f"{var}::{pos_label}"
-
-        if X is not None:
-            return X
+            self._vars_to_pos_labels[var] = pos_label
+            self._vars_to_renamed[var] = f"{var}::{pos_label}"
 
         if rename:
             self._working_df_train = self._working_df_train.rename(
-                columns=vars_to_renamed
+                columns=self._vars_to_renamed
             )
             self._working_df_test = self._working_df_test.rename(
-                columns=vars_to_renamed
+                columns=self._vars_to_renamed
             )
 
         (
@@ -1223,10 +1328,21 @@ class DataEmitter:
         """
         if not isinstance(vars, list):
             vars = [vars]
+
+        if X is not None:
+            for var in vars:
+                if X is not None:
+                    X[var] = X[var].apply(lambda x: str(x) if pd.notna(x) else np.nan)
+            (
+                self._categorical_vars,
+                self._numeric_vars,
+                _,
+            ) = self._compute_categorical_numeric_vars(df=X)
+            return X
+
         for var in vars:
-            if X is not None:
-                X[var] = X[var].apply(lambda x: str(x) if pd.notna(x) else np.nan)
-                continue
+            if var not in self._working_df_train.columns:
+                raise ValueError(f"Invalid variable name: {var}.")
             self._working_df_train[var] = self._working_df_train[var].apply(
                 lambda x: str(x) if pd.notna(x) else np.nan
             )
@@ -1234,16 +1350,11 @@ class DataEmitter:
                 lambda x: str(x) if pd.notna(x) else np.nan
             )
 
-        if X is not None:
-            return X
-
         (
             self._categorical_vars,
             self._numeric_vars,
             self._categorical_to_categories,
         ) = self._compute_categorical_numeric_vars(self._working_df_train)
-
-        return None
 
     def _compute_categories(
         self, df: pd.DataFrame, categorical_vars: list[str]
@@ -1523,8 +1634,10 @@ class DataEmitter:
             FunctionTransformer object.
         """
         new_emitter = self.copy()
-        del new_emitter._working_df_train
         del new_emitter._working_df_test
+        del new_emitter._working_df_train
+        new_emitter._categorical_vars = self._orig_categorical_vars
+        new_emitter._numeric_vars = self._orig_numeric_vars
         custom_transformer = FunctionTransformer(
             new_emitter.custom_transform, validate=False, check_inverse=False
         )

@@ -39,20 +39,14 @@ import tablemage as tm
 import pandas as pd
 import joblib
 
-# load table (we'll assume 'y' is the numeric variable to predict)
+# load table (assume 'y' is a numeric variable we wish to predict)
 df = ...
 
 # initialize an Analyzer object
 analyzer = tm.Analyzer(df, test_size=0.2)
 
 # preprocess data, taking care to exclude the target variable 'y' from the operations
-analyzer.drop_highly_missing_vars(  # drop variables with more than 30% missing values
-    exclude_vars=['y'], threshold=0.3
-).impute(                           # impute missing values
-    exclude_vars=['y'], numeric_strategy='5nn', categorical_strategy='most_frequent'
-).scale(                            # scale numeric variables
-    exclude_vars=['y'], strategy='standardize'
-)
+c
 
 # train regressors
 reg_report = analyzer.regress(  # categorical variables are automatically one-hot encoded
@@ -72,19 +66,12 @@ reg_report = analyzer.regress(  # categorical variables are automatically one-ho
 print(reg_report.metrics('test'))
 
 # predict on new data
-new_df = analyzer.datahandler()._orig_df_test.copy().drop(columns=['y'])
-display(new_df.head())
+new_df = ...
 ridge_model = reg_report.model('ridge').sklearn_pipeline()
 y_pred = ridge_model.predict(new_df)
 
 # save as sklearn pipeline
 joblib.dump(ridge_model, 'ridge.joblib')
-
-# load and predict
-ridge_model = joblib.load('ridge.joblib')
-y_pred_from_save = ridge_model.predict(new_df)
-
-assert np.allclose(y_pred, y_pred_from_save)
 ```
 
 

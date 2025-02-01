@@ -44,6 +44,10 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting_started.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../getting_started.html#installation">Installation</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../python_api/api_reference.html">Python API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../python_api/classes/tm_analyzer.html">Analyzer <code class="xref py py-mod docutils literal notranslate"><span class="pre">(tm.Analyzer)</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../python_api/classes/tm_ml.html">Machine Learning Models <code class="xref py py-mod docutils literal notranslate"><span class="pre">(tm.ml)</span></code></a><ul>
@@ -429,12 +433,12 @@
                 <span class="p">[</span><span class="n">eda</span><span class="o">.</span><span class="n">summary_statistics</span> <span class="k">for</span> <span class="n">eda</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_categorical_eda_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()],</span>
                 <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
             <span class="p">)</span><span class="o">.</span><span class="n">T</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_categorical_summary_statistics</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_categorical_summary_statistics</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-            <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_categorical_summary_statistics</span><span class="p">[</span><span class="s2">&quot;n_missing&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_categorical_summary_statistics</span><span class="p">[</span><span class="s2">&quot;n_missing&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_categorical_summary_statistics</span><span class="p">[</span>
+                <span class="s2">&quot;n&quot;</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_categorical_summary_statistics</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_categorical_summary_statistics</span><span class="p">[</span>
+                <span class="s2">&quot;n_missing&quot;</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_categorical_summary_statistics</span><span class="p">[</span><span class="s2">&quot;n_missing&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_categorical_summary_statistics</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Variable&quot;</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_numeric_vars</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -445,9 +449,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_numeric_summary_statistics</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_numeric_summary_statistics</span><span class="p">[</span>
                 <span class="s2">&quot;n&quot;</span>
             <span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_numeric_summary_statistics</span><span class="p">[</span><span class="s2">&quot;n_missing&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_numeric_summary_statistics</span><span class="p">[</span><span class="s2">&quot;n_missing&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_numeric_summary_statistics</span><span class="p">[</span>
+                <span class="s2">&quot;n_missing&quot;</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_numeric_summary_statistics</span><span class="p">[</span><span class="s2">&quot;n_missing&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_numeric_summary_statistics</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Variable&quot;</span>
 
     <span class="c1"># --------------------------------------------------------------------------</span>
@@ -1033,7 +1037,7 @@
                     <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="c1"># set y axis label</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Frequency&quot;</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Count&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># plot a bar plot through sns.countplot</span>
                 <span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span>
@@ -1045,6 +1049,7 @@
                 <span class="p">)</span>
                 <span class="c1"># Rotate category labels</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Count&quot;</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># numeric-numeric</span>
@@ -2155,16 +2160,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_numeric_summary_statistics</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">print_options</span><span class="o">.</span><span class="n">_n_decimals</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="EDAReport.value_counts"><a class="viewcode-back" href="../../../../python_api/classes/tm_reports.html#tablemage._reports.EDAReport.value_counts">[docs]</a>    <span class="k">def</span> <span class="nf">value_counts</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">categorical_var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">normalize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="EDAReport.value_counts"><a class="viewcode-back" href="../../../../python_api/classes/tm_reports.html#tablemage._reports.EDAReport.value_counts">[docs]</a>    <span class="k">def</span> <span class="nf">value_counts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">normalize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the value counts for a given categorical variable as a</span>
 <span class="sd">        DataFrame, with first column as the unique values and the second</span>
 <span class="sd">        column as the counts.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        categorical_var : str</span>
+<span class="sd">        var : str</span>
 <span class="sd">            Categorical variable name.</span>
 
 <span class="sd">        normalize : bool</span>
@@ -2174,14 +2177,19 @@
 <span class="sd">        -------</span>
 <span class="sd">        pd.DataFrame</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">categorical_var</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_categorical_vars</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Invalid input: </span><span class="si">{</span><span class="n">categorical_var</span><span class="si">}</span><span class="s2">. &quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;Must be a known categorical variable.&quot;</span>
-            <span class="p">)</span>
-        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_categorical_eda_dict</span><span class="p">[</span><span class="n">categorical_var</span><span class="p">]</span><span class="o">.</span><span class="n">counts</span><span class="p">(</span><span class="n">normalize</span><span class="p">)</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span></div>
+        <span class="k">if</span> <span class="n">var</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_categorical_vars</span><span class="p">:</span>
+            <span class="c1"># allow numeric variables to be passed in if they have &lt;= 20 unique values</span>
+            <span class="k">if</span> <span class="n">var</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_numeric_vars</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Invalid input: </span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2">. &quot;</span> <span class="o">+</span> <span class="s2">&quot;Must be a known variable.&quot;</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">20</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Invalid input: </span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2">. &quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot;Must be a categorical variable or numeric variable &quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot;with &lt;= 20 unique values.&quot;</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">)</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">specific</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CategoricalEDA</span> <span class="o">|</span> <span class="n">NumericEDA</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the CategoricalEDA or NumericEDA object associated with</span>

@@ -60,6 +60,8 @@ def test_model_pipeline_with_transformations_against_sklearn(setup_data):
         "OverallCond",
         "MSZoning",
     ]
+    X_vars = vars.copy()
+    X_vars.remove("SalePrice")
     analyzer.select_vars(vars)
     analyzer.impute(
         categorical_strategy="most_frequent",
@@ -69,7 +71,7 @@ def test_model_pipeline_with_transformations_against_sklearn(setup_data):
         strategy="minmax",
         exclude_vars=["SalePrice"],
     ).onehot(
-        dropfirst=False,
+        dropfirst=False, exclude_vars=["SalePrice"]
     ).scale(
         strategy="standardize",
     )
@@ -100,8 +102,8 @@ def test_model_pipeline_with_transformations_against_sklearn(setup_data):
     tm_ols_pipeline = ml_report_temp.model("ols_model").sklearn_pipeline()
     tm_ols_pipeline_custom = ml_report_temp.model("ols_model_custom").sklearn_pipeline()
     assert np.allclose(
-        tm_ols_pipeline.predict(df_test[vars]),
-        tm_ols_pipeline_custom.predict(df_test[vars]),
+        tm_ols_pipeline.predict(df_test[X_vars]),
+        tm_ols_pipeline_custom.predict(df_test[X_vars]),
     )
 
     ml_report = analyzer.regress(
@@ -124,15 +126,15 @@ def test_model_pipeline_with_transformations_against_sklearn(setup_data):
     )
     assert np.allclose(
         ml_report.model("ols_model")._test_scorer._y_pred,
-        tm_ols_pipeline_custom.predict(df_test[vars]),
+        tm_ols_pipeline_custom.predict(df_test[X_vars]),
     )
     assert np.allclose(
         ml_report.model("ridge_model")._test_scorer._y_pred,
-        tm_ridge_pipeline.predict(df_test[vars]),
+        tm_ridge_pipeline.predict(df_test[X_vars]),
     )
     assert np.allclose(
         ml_report.model("lasso_model")._test_scorer._y_pred,
-        tm_lasso_pipeline.predict(df_test[vars]),
+        tm_lasso_pipeline.predict(df_test[X_vars]),
     )
 
     # Define numeric and categorical columns
@@ -236,18 +238,117 @@ def test_model_pipeline_with_transformations_against_sklearn(setup_data):
     )
 
     # Fit the pipeline
-    X_vars = vars.copy()
-    X_vars.remove("SalePrice")
     sklearn_ols_pipeline.fit(df_train[X_vars], df_train["SalePrice"])
     sklearn_ridge_pipeline.fit(df_train[X_vars], df_train["SalePrice"])
     sklearn_lasso_pipeline.fit(df_train[X_vars], df_train["SalePrice"])
 
     # Compare the pipelines
-    test_y_pred_tm_ridge = tm_ridge_pipeline.predict(df_test[vars])
-    test_y_pred_tm_lasso = tm_lasso_pipeline.predict(df_test[vars])
+    test_y_pred_tm_ridge = tm_ridge_pipeline.predict(df_test[X_vars])
+    test_y_pred_tm_lasso = tm_lasso_pipeline.predict(df_test[X_vars])
 
-    test_y_pred_sklearn_ridge = sklearn_ridge_pipeline.predict(df_test[vars])
-    test_y_pred_sklearn_lasso = sklearn_lasso_pipeline.predict(df_test[vars])
+    test_y_pred_sklearn_ridge = sklearn_ridge_pipeline.predict(df_test[X_vars])
+    test_y_pred_sklearn_lasso = sklearn_lasso_pipeline.predict(df_test[X_vars])
 
     assert np.allclose(test_y_pred_tm_ridge, test_y_pred_sklearn_ridge)
     assert np.allclose(test_y_pred_tm_lasso, test_y_pred_sklearn_lasso, atol=1e-2)
+
+
+def test_pipeline_generation_all_transformations(setup_data):
+    df_train: pd.DataFrame = setup_data["df_house_train"].copy()
+    df_test: pd.DataFrame = setup_data["df_house_test"].copy()
+
+    # initialize the analyzer
+    analyzer = tm.Analyzer(df=df_train, df_test=df_test)
+    vars = [
+        "SalePrice",
+        "LotFrontage",
+        "LotArea",
+        "OverallQual",
+        "OverallCond",
+        "MSZoning",
+        "HouseStyle",
+        "1stFlrSF",
+        "2ndFlrSF",
+    ]
+    # artificially introduce 10% missing values in SalePrice
+    df_train.loc[df_train.sample(frac=0.1).index, "SalePrice"] = np.nan
+    df_test.loc[df_test.sample(frac=0.1).index, "SalePrice"] = np.nan
+
+    # step 0: drop rows with missing SalePrice
+    analyzer.dropna(include_vars=["SalePrice"])
+
+    # Step 1: select subset of variables
+    analyzer.select_vars(vars)
+
+    # Step 2: impute
+    analyzer.impute(
+        categorical_strategy="most_frequent",
+        numeric_strategy="5nn",
+        exclude_vars=["SalePrice"],
+    )
+
+    # Step 3: scale
+    analyzer.scale(strategy="minmax")
+
+    # Step 4: onehot
+    analyzer.onehot(dropfirst=False, include_vars=["HouseStyle"])
+
+    # Step 5: force binary
+    analyzer.force_binary(var="MSZoning", pos_label="RL", rename=False)
+
+    # Step 6: normalize
+    analyzer.scale(strategy="normal_quantile", exclude_vars=["SalePrice"])
+
+    # Step 7: enginner categorical
+    analyzer.engineer_categorical_var(
+        name="HighQual",
+        numeric_var="OverallQual",
+        level_names=["low", "high"],
+        thresholds=[5],
+        leq=True,
+    )
+
+    # Step 8: engineer numeric var
+    analyzer.engineer_numeric_var(
+        name="TotalSF",
+        formula="1stFlrSF + 2ndFlrSF",
+    )
+
+    # Step 9: engineer interaction
+    analyzer.engineer_numeric_var(
+        name="TotalSF_OverallQual",
+        formula="TotalSF * OverallQual",
+    )
+
+    report = analyzer.regress(
+        models=[
+            tm.ml.LinearR("ols", name="ols_model"),
+            tm.ml.CustomR(estimator=LinearRegression(), name="ols_model_custom"),
+        ],
+        target="SalePrice",
+        predictors=None,  # use all predictors
+        feature_selectors=[
+            tm.fs.KBestFSR("f_regression", k=5, name="kbest_f_regression"),
+        ],
+    )
+
+    assert report.model("ols_model")._test_scorer._y_pred.shape[0] == df_test.shape[0]
+    assert (
+        report.model("ols_model_custom")._test_scorer._y_pred.shape[0]
+        == df_test.shape[0]
+    )
+
+    X_vars = vars.copy()
+    X_vars.remove("SalePrice")
+
+    sklearn_ols_pipeline = report.model("ols_model").sklearn_pipeline()
+    sklearn_ols_pipeline_custom = report.model("ols_model_custom").sklearn_pipeline()
+
+    assert np.allclose(
+        report.model("ols_model")._test_scorer._y_pred,
+        sklearn_ols_pipeline.predict(df_test[X_vars]),
+    )
+    assert np.allclose(
+        report.model("ols_model_custom")._test_scorer._y_pred,
+        sklearn_ols_pipeline_custom.predict(df_test[X_vars]),
+    )
