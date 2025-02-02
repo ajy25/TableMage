@@ -41,7 +41,7 @@ def key_exists(
     llm_type: Literal[
         "openai",
         "groq",
-    ]
+    ],
 ) -> bool:
     """Reads the .env file and returns whether the API key for the specified LLM type exists.
 
