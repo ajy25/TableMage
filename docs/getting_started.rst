@@ -25,3 +25,14 @@ To install TableMage, follow these steps:
         brew install libomp
 
     This requires `Homebrew`. For more information, visit the `Homebrew website <https://brew.sh/>`_.
+
+
+Demo
+----
+Check out the following demo to see **TableMage** in action:
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Demo
+
+   demo.ipynb
