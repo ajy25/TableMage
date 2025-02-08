@@ -35,6 +35,6 @@ docs/l2_pipeline.joblib
 docs/_build
 
 
-metagpt
-logs
-workspace
+
+dist
+
