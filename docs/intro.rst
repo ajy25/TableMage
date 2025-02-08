@@ -3,6 +3,8 @@ Introduction
 
 .. currentmodule:: tablemage
 
+TableMage is a Python package for low-code/conversational clinical data science.
+
 Domain expertise is extremely valuable in data science and quantitative research.
 However, experts in fields such as medicine and healthcare often lack the 
 necessary statistical and computational experience to analyze data on their own.
@@ -16,12 +18,12 @@ TableMage's Python API is designed to be intuitive and easy to use, with
 low-code functions that abstract away the complexity of data science. 
 
 Below, we list the steps of a typical data science workflow and describe
-how TableMage can help at each step. 
+how TableMage's low-code API can simplify each step. 
 
 .. rubric:: Data Loading and Cleaning
 
 Data must be extracted and cleaned prior to analysis. 
-Unfortunately, TableMage does not handle data loading and cleaning. 
+TableMage does not handle data loading and cleaning. 
 TableMage works with wide format tabular data in the form of a pandas DataFrame.
 See :class:`tablemage.Analyzer` for details.
 
@@ -30,14 +32,14 @@ See :class:`tablemage.Analyzer` for details.
 
 New datasets need to be explored prior to further processing and modeling.
 Data scientists working with Python typically use pandas and matplotlib/seaborn
-to explore data. 
+to explore data.
 
-TableMage enhances the data exploration process by providing a 
-comprehensive report object that includes the following:
+TableMage simplifies the data exploration process by providing low-code tools 
+for the following tasks:
 
-1. Categorical and numeric variable summary statistics
-2. Low-code statistical testing
-3. Low-code visualizations
+1. Summary statistics
+2. Statistical testing
+3. Data visualization
 
 See :meth:`tablemage.Analyzer.eda` for details.
 
@@ -82,6 +84,8 @@ because it can handle more complex relationships in the data.
 
 TableMage simplifies the machine learning modeling process by providing
 low-code functions for classification and regression models. 
+
+
 
 See
 :meth:`tablemage.Analyzer.classify` and :meth:`tablemage.Analyzer.regress` for 

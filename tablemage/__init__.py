@@ -55,5 +55,8 @@ def use_agents():
 
 __all__ = ["Analyzer", "ml", "options", "fs", "use_agents"]
 
-__version__ = "0.1.0a1"
-__author__ = "Andrew J. Yang"
+__version__ = "0.1.0-alpha.1"
+__author__ = "Andrew Yang"
+__email__ = "andrew_j_yang@brown.edu"
+__license__ = "BSD-3-Clause"
+__description__ = "Python package for low-code/conversational clinical data science."

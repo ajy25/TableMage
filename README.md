@@ -13,7 +13,7 @@ easily perform regression analyses,
 and effortlessly benchmark machine learning models.
 
 
-## Installation and dependencies
+## Installation
 
 We recommend installing TableMage in a new virtual environment.
 
@@ -141,7 +141,7 @@ print(agent.chat("Compute the summary statistics for the numeric variables."))
 
 > [!NOTE]
 > You must be connected to the internet to use the `agents` module, even if you are using Ollama to run a locally-hosted LLM.
-> TableMage's agent, ChatDA, relies on FastEmbed for retriever augmented generation, but it may need to download the FastEmbed model from the internet prior to use.
+> TableMage's agent, ChatDA, relies on FastEmbed for retrieval augmented generation, but it may need to download the FastEmbed model from the internet prior to use.
 > ChatDA can be run with a local LLM and FastEmbed, ensuring total data privacy.
 
 ## Updates

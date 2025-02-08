@@ -29,10 +29,12 @@ To install TableMage, follow these steps:
 
 Demo
 ----
-Check out the following demo to see **TableMage** in action:
+Check out the following demo notebooks to see **TableMage** in action:
 
 .. toctree::
    :maxdepth: 1
-   :caption: Demo
+   :caption: Overview of TableMage functionality
 
    demo.ipynb
+
+   
