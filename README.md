@@ -19,9 +19,7 @@ We recommend installing TableMage in a new virtual environment.
 
 To install TableMage:
 ```
-git clone https://github.com/ajy25/TableMage.git
-cd TableMage
-pip install .
+pip install tablemage
 ```
 
 TableMage supports Python versions 3.10 through 3.12.
@@ -79,7 +77,7 @@ joblib.dump(ridge_model, 'ridge.joblib')
 
 First, install the required additional dependencies.
 ```
-pip install '.[agents]'
+pip install "tablemage[agents]"
 ```
 
 Next, add your API key. You only need to do this once; your API key will be written to a local `.env` file.
@@ -109,7 +107,7 @@ tm.agents.options.set_multimodal_llm(
     model_name="gpt-4o-mini",
     temperature=0.1
 )                           # multimodal LLM must be specified for multimodal ChatDA
-tm.agents.App(
+tm.agents.ChatDA_UserInterface(
     multimodal=True         # additional parameters can be set, e.g. memory type, 
 ).run(debug=False)          # disabling/enabling Python environment, etc.
 ```
