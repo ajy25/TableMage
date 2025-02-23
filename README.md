@@ -1,5 +1,6 @@
 # TableMage &nbsp; 🧙‍♂️📊
 
+[![DOI](https://zenodo.org/badge/751991067.svg)](https://doi.org/10.5281/zenodo.14914515)
 ![Python Versions](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -144,4 +145,29 @@ print(agent.chat("Compute the summary statistics for the numeric variables."))
 
 ## Updates
 
-TableMage is under active development.
+- February 2025: We have released TableMage on PyPI!
+
+
+## Citation
+
+If you used TableMage for your research, please consider citing the project as:
+
+```
+@software{Yang2025_TableMage,
+  author       = {Andrew Yang and
+                  Ryan Zhang and
+                  Joshua Woo},
+  title        = {ajy25/TableMage: v0.1.0-alpha},
+  month        = {feb},
+  year         = {2025},
+  publisher    = {Zenodo},
+  version      = {v0.1.0-alpha.1},
+  doi          = {10.5281/zenodo.14914516},
+  url          = {https://doi.org/10.5281/zenodo.14914516},
+  swhid        = {swh:1:dir:ede93b8f4978a8d29aae758ffe0f94881ba93d03;
+                  origin=https://doi.org/10.5281/zenodo.14914515;
+                  visit=swh:1:snp:3859b5ac6d722a6ac4b59903441460b53e904947;
+                  anchor=swh:1:rel:615c9404e535b785bf332e44dd800670a272fc4e;
+                  path=ajy25-TableMage-9fa4d06},
+}
+```
