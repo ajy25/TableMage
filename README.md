@@ -45,7 +45,13 @@ df = ...
 analyzer = tm.Analyzer(df, test_size=0.2)
 
 # preprocess data, taking care to exclude the target variable 'y' from the operations
-c
+analyzer.dropna(
+    include_vars=['y']
+).impute(
+    exclude_vars=['y']
+).scale(
+    exclude_vars=['y']
+)
 
 # train regressors
 reg_report = analyzer.regress(  # categorical variables are automatically one-hot encoded
@@ -145,7 +151,7 @@ print(agent.chat("Compute the summary statistics for the numeric variables."))
 
 ## Updates
 
-- February 2025: We have released TableMage on PyPI!
+- February 2025: We have released an alpha version of TableMage on PyPI!
 
 
 ## Citation
@@ -157,7 +163,7 @@ If you used TableMage for your research, please consider citing the project as:
   author       = {Andrew Yang and
                   Ryan Zhang and
                   Joshua Woo},
-  title        = {ajy25/TableMage: v0.1.0-alpha},
+  title        = {TableMage: Python package for low-code/conversational clinical data science},
   month        = {feb},
   year         = {2025},
   publisher    = {Zenodo},
