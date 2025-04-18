@@ -105,17 +105,21 @@ import tablemage as tm
 tm.use_agents()
 tm.agents.options.set_llm(
     llm_type="openai", 
-    model_name="gpt-4o-mini", 
+    model_name="gpt-4o", 
     temperature=0.1
 )
 # optionally, multimodal ChatDA can interpret figures
 tm.agents.options.set_multimodal_llm(
     llm_type="openai",
-    model_name="gpt-4o-mini",
+    model_name="gpt-4o",
     temperature=0.1
 )                           # multimodal LLM must be specified for multimodal ChatDA
 tm.agents.ChatDA_UserInterface(
-    multimodal=True         # additional parameters can be set, e.g. memory type, 
+    split_seed=42,
+    memory_size=500,        # higher memory_size --> higher cost but better performance
+    tools_only=True,        # if tools_only=True, Python interpreter is disabled
+    tool_rag_top_k=5,       # higher k --> higher cost but better performance
+    multimodal=True         # if multimodal=True, ChatDA can analyze figures
 ).run(debug=False)          # disabling/enabling Python environment, etc.
 ```
 
@@ -127,7 +131,7 @@ import tablemage as tm
 tm.use_agents()
 tm.agents.options.set_llm(
     llm_type="openai", 
-    model_name="gpt-4o-mini", 
+    model_name="gpt-4o", 
     temperature=0.1
 )
 
@@ -154,26 +158,4 @@ print(agent.chat("Compute the summary statistics for the numeric variables."))
 - February 2025: We have released an alpha version of TableMage on PyPI!
 
 
-## Citation
 
-If you used TableMage for your research, please consider citing the project as:
-
-```
-@software{Yang2025_TableMage,
-  author       = {Andrew Yang and
-                  Ryan Zhang and
-                  Joshua Woo},
-  title        = {TableMage: Python package for low-code/conversational clinical data science},
-  month        = {feb},
-  year         = {2025},
-  publisher    = {Zenodo},
-  version      = {v0.1.0-alpha.1},
-  doi          = {10.5281/zenodo.14914516},
-  url          = {https://doi.org/10.5281/zenodo.14914516},
-  swhid        = {swh:1:dir:ede93b8f4978a8d29aae758ffe0f94881ba93d03;
-                  origin=https://doi.org/10.5281/zenodo.14914515;
-                  visit=swh:1:snp:3859b5ac6d722a6ac4b59903441460b53e904947;
-                  anchor=swh:1:rel:615c9404e535b785bf332e44dd800670a272fc4e;
-                  path=ajy25-TableMage-9fa4d06},
-}
-```
