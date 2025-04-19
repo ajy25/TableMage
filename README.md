@@ -120,7 +120,7 @@ tm.agents.ChatDA_UserInterface(
     tools_only=True,        # if tools_only=True, Python interpreter is disabled
     tool_rag_top_k=5,       # higher k --> higher cost but better performance
     multimodal=True         # if multimodal=True, ChatDA can analyze figures
-).run(debug=False)          # disabling/enabling Python environment, etc.
+).run(debug=False)
 ```
 
 Or, you can chat with the AI agent directly in Python:
